@@ -1,0 +1,32 @@
+package Enums;
+
+public enum ZombieType {
+    BASIC,
+    CONE_HEAD,
+    BUCKED_HEAD,
+    KNIGHT,
+    BLOCK_HEAD,
+    GARGANTUAR,
+    IMP,
+    ALL_STAR,
+    ARCADE,
+    PARASOL,
+    TURQUOISE,
+    PROSPECTOR,
+    PIANIST,
+    NEWSPAPER,
+    BARREL_ROLLER,
+    RA,
+    EXPLORER,
+    TOMBRAISER,
+    DODO_RIDER,
+    HUNTER,
+    TROGLOBITE,
+    FISHERMAN,
+    SNORKEL,
+    OCTOPUS,
+    JESTER,
+    WIZARD,
+    KING,
+    DRAGON_IMP
+}

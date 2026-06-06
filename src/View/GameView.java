@@ -1,0 +1,16 @@
+package View;
+
+public class GameView {
+    public void showMap() {
+
+    }
+    public void showSunAmount() {
+
+    }
+    public void showGameStatus() {
+
+    }
+    public void showResult() {
+
+    }
+}
