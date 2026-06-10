@@ -1,12 +1,6 @@
 package controllers;
 
 public class ProfileMenuController extends MenuController{
-
-    @Override
-    protected void handleCommand(String input) {
-
-    }
-
     @Override
     protected void enterMenu(String targetMenu) {
 

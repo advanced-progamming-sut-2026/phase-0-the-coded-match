@@ -14,10 +14,7 @@ public class GameManagerController {
     private List<Sun> suns;
     private int currentTick;
     private int waveDifficulty;
-
-    public static void handleCommand(String input) {
-
-    }
+    private ZombieWaveManager zombieWave;
 
     public static void advanceTime(String input) {
 
@@ -31,19 +28,7 @@ public class GameManagerController {
 
     }
 
-    public static int calculateWaveDifficulty() {
-
-    }
-
-    public static void startWave() {
-
-    }
-
-    public static void spawnZombies(int waveDifficulty) {
-
-    }
-
-    public static boolean checkNextWave() {
+    public static String[] startWave() {
 
     }
 

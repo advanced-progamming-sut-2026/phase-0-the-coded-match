@@ -36,6 +36,10 @@ public abstract class Zombie {
 
     public abstract void attack(Plant plant);
 
+    public void takeDamage() {
+
+    }
+
     public void takeDamage(int damage) {
         if (armor != null && !armor.isDestroyed()) {
             armor.takeDamage(damage);
@@ -46,5 +50,9 @@ public abstract class Zombie {
 
     public boolean isDead() {
         return health <= 0;
+    }
+
+    public static int getWaveCost() {
+
     }
 }

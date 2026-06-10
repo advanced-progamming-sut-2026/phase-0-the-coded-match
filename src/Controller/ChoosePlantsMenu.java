@@ -1,11 +1,6 @@
-package controllers;
+package Controller;
 
 public class ChoosePlantsMenu extends MenuController{
-
-    @Override
-    protected void handleCommand(String input) {
-
-    }
 
     @Override
     protected void enterMenu(String targetMenu) {

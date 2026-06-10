@@ -1,7 +1,6 @@
-package controllers;
+package Controller;
 
 public abstract class MenuController {
-    protected abstract void handleCommand(String input);
 
     protected void showCurrentMenu() {
 
