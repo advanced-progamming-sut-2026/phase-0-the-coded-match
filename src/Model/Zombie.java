@@ -92,7 +92,4 @@ public class Zombie implements Update {
         return data.getWaveCost();
     }
 
-    public static int getWaveCost() {
-
-    }
 }
