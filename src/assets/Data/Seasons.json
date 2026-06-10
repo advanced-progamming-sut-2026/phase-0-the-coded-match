@@ -1,0 +1,77 @@
+[
+  {
+    "id": "ancient_egypt",
+    "name": "AncientEgypt",
+    "displayName": "Ancient Egypt",
+    "seasonType": "ANCIENT_EGYPT",
+    "allowedZombies": [
+      "ZombieTutorialDefault",
+      "ZombieTutorialArmor1Default",
+      "ZombieRaDefault"
+    ],
+    "unlockedPlants": [
+      "Peashooter",
+      "Sunflower",
+      "Wall-nut"
+    ],
+    "specialFeatures": [
+      {
+        "type": "GRAVES",
+        "description": "Graves block direct projectiles and have 700 health.",
+        "enabled": true
+      },
+      {
+        "type": "SANDSTORM",
+        "description": "Some zombies may enter the map through sandstorm.",
+        "enabled": true
+      }
+    ],
+    "levels": [
+      {
+        "id": "egypt_level_1",
+        "name": "Egypt Level 1",
+        "levelNumber": 1,
+        "levelType": "NORMAL",
+        "plantSelectionLimit": 8,
+        "waveCount": 5,
+        "baseWaveCost": 10,
+        "allowedZombies": [
+          "ZombieTutorialDefault",
+          "ZombieTutorialArmor1Default"
+        ],
+        "availablePlants": [
+          "Peashooter",
+          "Sunflower",
+          "Wall-nut"
+        ],
+        "map": {
+          "rows": 5,
+          "columns": 9,
+          "zombieStartColumn": 9,
+          "homeColumn": 0,
+          "defaultPathDirection": "RIGHT_TO_LEFT",
+          "tiles": [
+            {
+              "x": 4,
+              "y": 2,
+              "type": "GRAVE",
+              "hp": 700,
+              "plantable": false,
+              "walkable": true,
+              "direction": null
+            },
+            {
+              "x": 5,
+              "y": 3,
+              "type": "GRAVE",
+              "hp": 700,
+              "plantable": false,
+              "walkable": true,
+              "direction": null
+            }
+          ]
+        }
+      }
+    ]
+  }
+]
