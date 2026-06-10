@@ -1,5 +1,6 @@
 package controllers;
 
+import Model.Zombie;
 import models.*;
 
 import java.util.List;
