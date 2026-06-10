@@ -5,11 +5,6 @@ import java.util.Scanner;
 public class SignupMenuController extends MenuController {
 
     @Override
-    public void handleCommand(String input) {
-
-    }
-
-    @Override
     public void enterMenu(String targetMenu) {
 
     }

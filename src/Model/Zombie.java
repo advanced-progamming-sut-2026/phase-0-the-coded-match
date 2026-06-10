@@ -45,6 +45,10 @@ public class Zombie implements Update {
         plant.takeDamage(data.getDamage());
     }
 
+    public void takeDamage() {
+
+    }
+
     public void takeDamage(int damage) {
         if (armor != null && !armor.isDestroyed()) {
             int remainingDamage = armor.takeDamage(damage);
@@ -86,5 +90,9 @@ public class Zombie implements Update {
 
     public int getWaveCost() {
         return data.getWaveCost();
+    }
+
+    public static int getWaveCost() {
+
     }
 }

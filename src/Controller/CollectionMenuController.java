@@ -3,11 +3,6 @@ package controllers;
 public class CollectionMenuController extends MenuController{
 
     @Override
-    protected void handleCommand(String input) {
-
-    }
-
-    @Override
     protected void enterMenu(String targetMenu) {
 
     }

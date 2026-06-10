@@ -1,11 +1,6 @@
-package controllers;
+package Controller;
 
 public class MainMenuController extends MenuController{
-
-    @Override
-    public void handleCommand(String input) {
-
-    }
 
     @Override
     public void enterMenu(String targetMenu) {
