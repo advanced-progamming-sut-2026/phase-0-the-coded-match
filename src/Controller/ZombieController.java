@@ -1,20 +1,44 @@
 package Controller;
 
+import Model.Zombie;
+import Model.ZombieData;
+import Model.ZombieRepository;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class ZombieController {
 
-    public void spawnZombie() {
+    private final ZombieRepository zombieRepository;
+    private final List<Zombie> activeZombies;
 
+    public ZombieController() {
+        this.zombieRepository = new ZombieRepository("assets/Data/zombies.json");
+        this.activeZombies = new ArrayList<>();
     }
+
+    public Zombie spawnZombie(String alias, double x, int y) {
+        //TODO
+        return null;
+    }
+
     public void moveZombies() {
-
+        //TODO
     }
+
     public void attackPlants() {
-
+        // TODO
     }
-    public void killPlants() {
 
+    public void removeDeadZombies() {
+       //TODO
     }
+
     public void showZombieInfo() {
+       //TODO
+    }
 
+    public List<Zombie> getActiveZombies() {
+        return activeZombies;
     }
 }

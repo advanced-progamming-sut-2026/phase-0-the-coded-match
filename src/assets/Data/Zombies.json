@@ -12,6 +12,10 @@
     "waveCost": 1,
     "armor": null,
     "behaviorType": "BASIC_WALKER",
+    "abilities" : [
+      "WALK_FORWARD",
+      "EAT_PLANTS"
+    ],
     "description": "Basic zombie; moves and eats plants."
   },
   {
@@ -31,6 +35,11 @@
       "metal": false
     },
     "behaviorType": "BASIC_WALKER",
+    "abilities" : [
+      "WALK_FORWARD",
+      "EAT_PLANTS",
+      "HAS_CONE_ARMER"
+    ],
     "description": "Conehead zombie; cone armor absorbs damage before health."
   }
 ]

@@ -6,5 +6,6 @@ public enum ZombieEffect {
     BURNING,
     POISONED,
     HYPNOTIZED,
-    STUNNED
+    STUNNED,
+    SLOWED
 }

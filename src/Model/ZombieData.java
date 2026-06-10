@@ -16,6 +16,8 @@ public class ZombieData {
     private ZombieArmorData armor;
     private String behaviorType;
     private String description;
+    private List<String> abilities;
+
 
     public String getId() {
         return id;
@@ -68,4 +70,9 @@ public class ZombieData {
     public String getDescription() {
         return description;
     }
+
+    public List<String> getAbilities() {
+        return abilities;
+    }
+
 }
