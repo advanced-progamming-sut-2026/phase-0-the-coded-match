@@ -1,4 +1,4 @@
-package controllers;
+package Controller;
 
 import java.util.Scanner;
 
@@ -14,7 +14,7 @@ public class SignupMenuController extends MenuController {
 
     }
 
-    public static void register(String input) {
+    public static String[] register(String input) {
 
     }
 

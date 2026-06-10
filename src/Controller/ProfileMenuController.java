@@ -1,4 +1,4 @@
-package controllers;
+package Controller;
 
 public class ProfileMenuController extends MenuController{
     @Override

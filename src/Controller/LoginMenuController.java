@@ -1,4 +1,4 @@
-package controllers;
+package Controller;
 
 import java.util.Scanner;
 
@@ -27,11 +27,23 @@ public class LoginMenuController extends MenuController {
 
     }
 
-    public static void recoverPassword(String input, Scanner scanner) {
+    public static String[] recoverPassword(String input, Scanner scanner) {
 
     }
 
     public static boolean isAnswerCorrect(String answer) {
+
+    }
+
+    public static void savePlayer() {
+
+    }
+
+    public static void loadPlaye() {
+
+    }
+
+    public static void clearPlayer() {
 
     }
 }

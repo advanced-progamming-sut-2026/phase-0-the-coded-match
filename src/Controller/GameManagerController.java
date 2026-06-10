@@ -1,5 +1,6 @@
-package controllers;
+package Controller;
 
+import Model.Season;
 import Model.Zombie;
 import models.*;
 
@@ -8,7 +9,7 @@ import java.util.Scanner;
 
 public class GameManagerController {
 
-    private World currentWorld;
+    private Season currentSeason;
     private List<Lawnmower> lawnmowers;
     private List<Plant> plants;
     private List<Zombie> zombies;
@@ -74,6 +75,12 @@ public class GameManagerController {
     }
 
     public static void endGame() {
+
+    }
+    public void saveGame() {
+
+    }
+    public void loadGame() {
 
     }
 }

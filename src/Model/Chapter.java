@@ -1,7 +1,14 @@
-package models;
+package Model;
+
+import Model.Season;
 
 public class Chapter {
     private String name;
-    private World world;
+    private Season season;
     private boolean isUnlocked;
+
+    public Chapter(String name, Season season) {
+        this.name = name;
+        this.season = season;
+    }
 }
