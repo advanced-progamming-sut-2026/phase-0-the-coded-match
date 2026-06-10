@@ -13,6 +13,7 @@ public class Zombie implements Update {
     private List<ZombieEffect> effects;
     private boolean eating;
     private boolean moving;
+    private boolean isLocked;
 
     public Zombie(ZombieData data, double x, int y) {
         this.data = data;

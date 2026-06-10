@@ -12,6 +12,7 @@ public class Plant implements Update {
     private boolean boosted;
     private double cooldownRemaining;
     private List<String> activeEffects;
+    private boolean isLocked;
 
     public Plant(PlantData data, int x, int y, int level) {
         this.data = data;

@@ -1,4 +1,4 @@
-package models;
+package Model;
 
 public class Sun implements Update{
 
