@@ -93,4 +93,6 @@ public class Zombie implements Update {
         return data.getAbilities();
     }
 
+    public void shootProjectile() {}
+
 }

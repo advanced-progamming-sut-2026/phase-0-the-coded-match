@@ -1,4 +1,4 @@
-package models;
+package Model;
 
 public class GraveTile extends Tile {
 

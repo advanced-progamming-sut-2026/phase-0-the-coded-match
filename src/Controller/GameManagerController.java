@@ -17,6 +17,7 @@ public class GameManagerController {
     private int currentTick;
     private int waveDifficulty;
     private ZombieWaveManager zombieWave;
+    private List<Projectile> activeProjectiles;
 
     public static void advanceTime(String input) {
 
@@ -83,4 +84,13 @@ public class GameManagerController {
     public void loadGame() {
 
     }
+
+    public void updateProjectiles() {
+    }
+
+    private void handleProjectileCollisions() {}
+
+    private void cleanUpDestroyedProjectiles() {}
+
+    public void spawnProjectile(Projectile projectile) {}
 }

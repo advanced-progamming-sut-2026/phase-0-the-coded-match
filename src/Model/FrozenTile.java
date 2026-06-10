@@ -1,4 +1,4 @@
-package models;
+package Model;
 
 public class FrozenTile extends Tile {
     private int hp;

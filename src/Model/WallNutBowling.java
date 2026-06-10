@@ -1,4 +1,4 @@
-package model;
+package Model;
 
 public class WallNutBowling extends MiniGame{
     public WallNutBowling(int playerSunAmount, boolean isGameOver) {

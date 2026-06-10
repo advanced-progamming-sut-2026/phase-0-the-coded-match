@@ -1,4 +1,4 @@
-package model;
+package Model;
 
 public class Beghouled extends MiniGame{
     public Beghouled(int playerSunAmount, boolean isGameOver) {
