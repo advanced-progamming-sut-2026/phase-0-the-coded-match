@@ -44,6 +44,31 @@
           "Sunflower",
           "Wall-nut"
         ],
+        "conveyorPlants": [],
+        "lockedPlants": [],
+        "protectedPlants": [],
+        "wavePatterns": [
+          {
+            "waveNumber": 1,
+            "startTick": 0,
+            "waveCost": 10,
+            "zombies": [
+              {
+                "zombieAlias": "ZombieTutorialDefault",
+                "lane": 1,
+                "count": 2,
+                "delayTicks": 0
+              },
+              {
+                "zombieAlias": "ZombieTutorialArmor1Default",
+                "lane": 3,
+                "count": 1,
+                "delayTicks": 20
+              }
+            ]
+          }
+        ],
+        "specialRules": [],
         "map": {
           "rows": 5,
           "columns": 9,
@@ -70,6 +95,64 @@
               "direction": null
             }
           ]
+        }
+      },
+      {
+        "id": "egypt_conveyor_1",
+        "name": "Egypt Conveyor Belt",
+        "levelNumber": 2,
+        "levelType": "CONVEYOR_BELT",
+        "plantSelectionLimit": 0,
+        "waveCount": 3,
+        "baseWaveCost": 10,
+        "allowedZombies": [
+          "ZombieTutorialDefault",
+          "ZombieTutorialArmor1Default"
+        ],
+        "availablePlants": [],
+        "conveyorPlants": [
+          "Peashooter",
+          "Sunflower",
+          "Wall-nut"
+        ],
+        "lockedPlants": [],
+        "protectedPlants": [],
+        "wavePatterns": [
+          {
+            "waveNumber": 1,
+            "startTick": 0,
+            "waveCost": 10,
+            "zombies": [
+              {
+                "zombieAlias": "ZombieTutorialDefault",
+                "lane": 2,
+                "count": 3,
+                "delayTicks": 10
+              }
+            ]
+          }
+        ],
+        "specialRules": [
+          {
+            "type": "NO_MANUAL_PLANT_SELECTION",
+            "target": "PLANTS",
+            "value": "true",
+            "description": "Player cannot manually select plants in this level."
+          },
+          {
+            "type": "CONVEYOR_SPAWN_INTERVAL_SECONDS",
+            "target": "CONVEYOR",
+            "value": "3",
+            "description": "A random plant appears on the conveyor every 3 seconds."
+          }
+        ],
+        "map": {
+          "rows": 5,
+          "columns": 9,
+          "zombieStartColumn": 9,
+          "homeColumn": 0,
+          "defaultPathDirection": "RIGHT_TO_LEFT",
+          "tiles": []
         }
       }
     ]

@@ -12,6 +12,11 @@ public class LevelData {
     private int baseWaveCost;
     private List<String> allowedZombies;
     private List<String> availablePlants;
+    private List<String> conveyorPlants;
+    private List<String> lockedPlants;
+    private List<String> protectedPlants;
+    private List<WavePatternData> wavePatterns;
+    private List<SpecialLevelRuleData> specialRules;
     private MapData map;
 
     public String getId() {
@@ -52,5 +57,25 @@ public class LevelData {
 
     public MapData getMap() {
         return map;
+    }
+
+    public List<String> getConveyorPlants() {
+        return conveyorPlants;
+    }
+
+    public List<String> getLookedPlants() {
+        return lockedPlants;
+    }
+
+    public List<SpecialLevelRuleData> getSpecialRules() {
+        return specialRules;
+    }
+
+    public List<WavePatternData> getWavePatterns() {
+        return wavePatterns;
+    }
+
+    public List<String> getProtectedPlants() {
+        return protectedPlants;
     }
 }

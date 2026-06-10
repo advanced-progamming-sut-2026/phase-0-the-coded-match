@@ -16,7 +16,6 @@
       "DAMAGE_FIRST_ZOMBIE_IN_LANE"
     ],
     "baseAbility": "Shoots peas forward in its lane.",
-    "plantFoodEffect": "Shoots many peas rapidly.",
     "upgrades": [
       {
         "level": 2,
