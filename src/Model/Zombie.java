@@ -1,50 +1,90 @@
 package Model;
 
-import Enums.ZombieCategory;
 import Enums.ZombieEffect;
-import Enums.ZombieType;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Zombie {
-    protected ZombieType type;
-    protected ZombieCategory category;
-    protected int health;
-    protected int damage;
-    protected double speed;
-    protected int waveCost;
-    protected double x;
-    protected int y;
-    protected List<ZombieEffect> effects;
-    protected ZombieArmor armor;
+public class Zombie implements Update {
+    private ZombieData data;
+    private int currentHealth;
+    private double x;
+    private int y;
+    private ZombieArmor armor;
+    private List<ZombieEffect> effects;
+    private boolean eating;
+    private boolean moving;
 
-    public Zombie(ZombieType type, ZombieCategory category, int health, int damage,
-                  double speed, int waveCost, double x, int y) {
-        this.type = type;
-        this.category = category;
-        this.health = health;
-        this.damage = damage;
-        this.speed = speed;
-        this.waveCost = waveCost;
+    public Zombie(ZombieData data, double x, int y) {
+        this.data = data;
+        this.currentHealth = data.getHealth();
         this.x = x;
         this.y = y;
         this.effects = new ArrayList<>();
+        this.eating = false;
+        this.moving = true;
+
+        if (data.getArmor() != null) {
+            this.armor = new ZombieArmor(data.getArmor());
+        }
     }
 
-    public abstract void move();
+    @Override
+    public void update() {
+        move();
+    }
 
-    public abstract void attack(Plant plant);
+    public void move() {
+        if (!moving || eating) {
+            return;
+        }
+        x -= data.getSpeed();
+    }
+
+    public void attack(Plant plant) {
+        eating = true;
+        plant.takeDamage(data.getDamage());
+    }
 
     public void takeDamage(int damage) {
         if (armor != null && !armor.isDestroyed()) {
-            armor.takeDamage(damage);
+            int remainingDamage = armor.takeDamage(damage);
+            if (remainingDamage > 0) {
+                currentHealth = Math.max(0, currentHealth - remainingDamage);
+            }
         } else {
-            health = Math.max(0, health - damage);
+            currentHealth = Math.max(0, currentHealth - damage);
         }
     }
 
     public boolean isDead() {
-        return health <= 0;
+        return currentHealth <= 0;
+    }
+
+    public ZombieData getData() {
+        return data;
+    }
+
+    public int getCurrentHealth() {
+        return currentHealth;
+    }
+
+    public double getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public ZombieArmor getArmor() {
+        return armor;
+    }
+
+    public List<ZombieEffect> getEffects() {
+        return effects;
+    }
+
+    public int getWaveCost() {
+        return data.getWaveCost();
     }
 }
