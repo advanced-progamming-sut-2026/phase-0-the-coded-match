@@ -2,6 +2,7 @@ package Controller;
 
 public class CollectionMenuController extends MenuController{
 
+
     @Override
     protected void enterMenu(String targetMenu) {
 

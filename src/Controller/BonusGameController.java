@@ -1,11 +1,17 @@
 package Controller;
 
 public class BonusGameController {
-    void StartGame()
+    void StartGame() {
 
-    public String handleZombiesKilled()
+    }
 
-    void EndGame()
+    public String handleZombiesKilled() {
+
+    }
+
+    void EndGame() {
+
+    }
 
 
 }
