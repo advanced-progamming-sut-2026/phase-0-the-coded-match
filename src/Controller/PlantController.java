@@ -1,22 +1,39 @@
 package Controller;
 
 import Model.Plant;
+import Model.PlantData;
+import Model.PlantRepository;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PlantController {
-    public void plantPlant (Plant plant, int x, int y) {
+    private final PlantRepository plantRepository;
+    private final List<Plant> activePlants;
 
-    }
-    public void removePlant (int x, int y) {
-
-    }
-    public void upgradePlant (Plant plant) {
-
-    }
-    public void feedPlant (int x, int y) {
-
-    }
-    public void showPlantStatus () {
-
+    public PlantController() {
+        this.plantRepository = new PlantRepository("assets/Data/plants.json");
+        this.activePlants = new ArrayList<>();
     }
 
+    public Plant plantPlant(String plantName, int x, int y, int level) {
+        //TODO
+        return null;
+    }
+
+    public void removeDeadPlants() {
+        //TODO
+    }
+
+    public void updatePlants() {
+       //TODO
+    }
+
+    public void showPlantsInfo() {
+        //TODO
+    }
+
+    public List<Plant> getActivePlants() {
+        return activePlants;
+    }
 }

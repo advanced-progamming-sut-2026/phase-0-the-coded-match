@@ -1,125 +1,79 @@
 package Model;
 
-import Enums.PlantCategory;
-import Enums.PlantTag;
-import Enums.PlantType;
-
+import java.util.ArrayList;
 import java.util.List;
 
-    public abstract class Plant {
+public class Plant implements Update {
+    private PlantData data;
+    private int currentHp;
+    private int x;
+    private int y;
+    private int level;
+    private boolean boosted;
+    private double cooldownRemaining;
+    private List<String> activeEffects;
 
-        protected PlantType type;
-        protected String name;
-
-        protected PlantCategory category;
-        protected List<PlantTag> tags;
-
-        protected int cost;
-
-        protected int maxHealth;
-        protected int currentHealth;
-
-        protected int damage;
-
-        protected int level;
-
-        protected double rechargeTime;
-        protected double remainingCooldown;
-
-        protected String baseAbility;
-        protected String plantFoodEffect;
-
-        public Plant(PlantType type,
-                     String name,
-                     PlantCategory category,
-                     List<PlantTag> tags,
-                     int cost,
-                     int maxHealth,
-                     int damage,
-                     double rechargeTime,
-                     String baseAbility,
-                     String plantFoodEffect) {
-
-            this.type = type;
-            this.name = name;
-            this.category = category;
-            this.tags = tags;
-
-            this.cost = cost;
-
-            this.maxHealth = maxHealth;
-            this.currentHealth = maxHealth;
-
-            this.damage = damage;
-
-            this.level = 1;
-
-            this.rechargeTime = rechargeTime;
-            this.remainingCooldown = 0;
-
-            this.baseAbility = baseAbility;
-            this.plantFoodEffect = plantFoodEffect;
-        }
-
-        public abstract void performAction();
-
-        public abstract void activatePlantFood();
-
-        public void takeDamage(int damage) {
-            currentHealth = Math.max(0, currentHealth - damage);
-        }
-
-        public boolean isDead() {
-            return currentHealth <= 0;
-        }
-
-        public boolean isReadyToPlant() {
-            return remainingCooldown <= 0;
-        }
-
-        public void startCooldown() {
-            remainingCooldown = rechargeTime;
-        }
-
-        public void reduceCooldown(double time) {
-            remainingCooldown = Math.max(0, remainingCooldown - time);
-        }
-
-        public void levelUp() {
-            level++;
-        }
-
-        public PlantType getType() {
-            return type;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public PlantCategory getCategory() {
-            return category;
-        }
-
-        public List<PlantTag> getTags() {
-            return tags;
-        }
-
-        public int getCost() {
-            return cost;
-        }
-
-        public int getCurrentHealth() {
-            return currentHealth;
-        }
-
-        public int getDamage() {
-            return damage;
-        }
-
-        public int getLevel() {
-            return level;
-        }
+    public Plant(PlantData data, int x, int y, int level) {
+        this.data = data;
+        this.x = x;
+        this.y = y;
+        this.level = level;
+        this.currentHp = data.getBaseHp();
+        this.boosted = false;
+        this.cooldownRemaining = 0;
+        this.activeEffects = new ArrayList<>();
     }
 
+    @Override
+    public void update() {
+        // TODO
+    }
 
+    public void takeDamage(int damage) {
+        currentHp = Math.max(0, currentHp - damage);
+    }
+
+    public boolean isDead() {
+        return currentHp <= 0;
+    }
+
+    public void activatePlantFood() {
+        // TODO
+    }
+
+    public String getBehaviorType() {
+        return data.getBehaviorType();
+    }
+
+    public List<String> getAbilities() {
+        return data.getAbilities();
+    }
+
+    public PlantData getData() {
+        return data;
+    }
+
+    public int getCurrentHp() {
+        return currentHp;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public boolean isBoosted() {
+        return boosted;
+    }
+
+    public double getCooldownRemaining() {
+        return cooldownRemaining;
+    }
+}

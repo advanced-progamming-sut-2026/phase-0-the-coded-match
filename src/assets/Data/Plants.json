@@ -1,0 +1,42 @@
+[
+  {
+    "id": "peashooter",
+    "name": "Peashooter",
+    "displayName": "Peashooter",
+    "category": "SHOOTER",
+    "tags": ["DAY", "PEA"],
+    "sun_cost": 100,
+    "baseHp": 300,
+    "damage": 20,
+    "actionInterval": 1.5,
+    "recharge": 5.0,
+    "behaviorType": "STRAIGHT_SHOOTER",
+    "abilities": [
+      "SHOOT_FORWARD",
+      "DAMAGE_FIRST_ZOMBIE_IN_LANE"
+    ],
+    "baseAbility": "Shoots peas forward in its lane.",
+    "plantFoodEffect": "Shoots many peas rapidly.",
+    "upgrades": [
+      {
+        "level": 2,
+        "requiredSeedPackets": 10,
+        "requiredCoins": 1000,
+        "hpBonus": 50,
+        "damageBonus": 5,
+        "costReduction": 0,
+        "rechargeReduction": 0.5
+      },
+      {
+        "level": 3,
+        "requiredSeedPackets": 25,
+        "requiredCoins": 2500,
+        "hpBonus": 100,
+        "damageBonus": 10,
+        "costReduction": 0,
+        "rechargeReduction": 1.0
+      }
+    ],
+    "description": "Basic shooter plant."
+  }
+]
