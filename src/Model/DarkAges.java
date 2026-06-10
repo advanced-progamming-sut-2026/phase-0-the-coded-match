@@ -5,4 +5,13 @@ public class DarkAges extends Season {
     public void initializeGrid() {
 
     }
-}
+        public DarkAges(SeasonData data) {
+            super(data);
+        }
+
+        @Override
+        public void applySpecialRules() {
+            // TODO: apply dark ages rules later
+        }
+    }
+

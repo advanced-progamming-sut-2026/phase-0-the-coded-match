@@ -5,4 +5,12 @@ public class BigWaveBeach extends Season{
     public void initializeGrid() {
 
     }
+        public BigWaveBeach(SeasonData data) {
+            super(data);
+        }
+
+        @Override
+        public void applySpecialRules() {
+            // TODO
+        }
 }
