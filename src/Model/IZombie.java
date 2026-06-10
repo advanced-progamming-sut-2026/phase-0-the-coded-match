@@ -1,4 +1,4 @@
-package model;
+package Model;
 
 public class IZombie extends MiniGame{
     public IZombie(int playerSunAmount, boolean isGameOver) {

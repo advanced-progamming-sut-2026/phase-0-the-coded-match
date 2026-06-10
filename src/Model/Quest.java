@@ -1,4 +1,4 @@
-package model;
+package Model;
 
 public class Quest {
     private String questName;

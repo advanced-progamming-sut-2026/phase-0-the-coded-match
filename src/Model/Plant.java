@@ -13,6 +13,8 @@ public class Plant implements Update {
     private double cooldownRemaining;
     private List<String> activeEffects;
     private boolean isLocked;
+    private int attackCooldownTicks;
+    private int currentCooldownTimer;
 
     public Plant(PlantData data, int x, int y, int level) {
         this.data = data;
@@ -77,4 +79,6 @@ public class Plant implements Update {
     public double getCooldownRemaining() {
         return cooldownRemaining;
     }
+
+    public void shootProjectile() {}
 }

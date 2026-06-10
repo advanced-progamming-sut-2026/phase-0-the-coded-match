@@ -1,4 +1,4 @@
-package model;
+package Model;
 
 public class VaseBreaker extends MiniGame{
     public VaseBreaker(int playerSunAmount, boolean isGameOver) {

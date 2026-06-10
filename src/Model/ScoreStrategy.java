@@ -1,4 +1,4 @@
-package model;
+package Model;
 
 public interface ScoreStrategy {
     public int calculatePoints(KillContext context)

@@ -1,4 +1,4 @@
-package model;
+package Model;
 
 public abstract class MiniGame {
     private int playerSunAmount;

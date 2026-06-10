@@ -1,4 +1,4 @@
-package models;
+package Model;
 
 import Model.Collection;
 

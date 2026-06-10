@@ -1,4 +1,4 @@
-package models;
+package Model;
 
 public class WaterTile extends Tile {
     @Override

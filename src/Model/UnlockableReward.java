@@ -1,4 +1,4 @@
-package model;
+package Model;
 
 public class UnlockableReward extends Reward{
     @Override

@@ -1,4 +1,4 @@
-package model;
+package Model;
 
 public class PlacementPatternObjective extends QuestObjective{
     public PlacementPatternObjective(int targetValue, int currentValue, boolean verifyCondition) {
