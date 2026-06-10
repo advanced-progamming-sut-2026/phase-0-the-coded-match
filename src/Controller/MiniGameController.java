@@ -1,12 +1,12 @@
 package Controller;
 
 public class MiniGameController {
-    public void loadMiniGame()
+    public void loadMiniGame(){}
 
-    public String StartGame()
+    public String StartGame(){}
 
-    public void verifyWinLossConditions()
+    public void verifyWinLossConditions(){}
 
-    public String EndGame()
+    public String EndGame(){}
 
 }

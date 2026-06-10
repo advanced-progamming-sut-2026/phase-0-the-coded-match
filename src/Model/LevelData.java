@@ -63,7 +63,7 @@ public class LevelData {
         return conveyorPlants;
     }
 
-    public List<String> getLookedPlants() {
+    public List<String> getLockedPlants() {
         return lockedPlants;
     }
 

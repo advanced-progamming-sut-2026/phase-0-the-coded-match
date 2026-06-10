@@ -1,6 +1,10 @@
 package Model;
 
+import java.util.List;
+
 public class VaseBreaker extends MiniGame{
+    private List<Vase> vases;
+    private List<DroppedSeedPacket> active;
     public VaseBreaker(int playerSunAmount, boolean isGameOver) {
         super(playerSunAmount, isGameOver);
     }
@@ -17,6 +21,10 @@ public class VaseBreaker extends MiniGame{
 
     @Override
     public void checkRules() {
+
+    }
+
+    void DroppedSeedPackDisappear(){
 
     }
 }

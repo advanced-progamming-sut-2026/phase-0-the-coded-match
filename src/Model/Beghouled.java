@@ -1,6 +1,9 @@
 package Model;
 
 public class Beghouled extends MiniGame{
+    private Plant[][] grid;
+    private int matchCount;
+    private int targetMatches;
     public Beghouled(int playerSunAmount, boolean isGameOver) {
         super(playerSunAmount, isGameOver);
     }
@@ -17,6 +20,18 @@ public class Beghouled extends MiniGame{
 
     @Override
     public void checkRules() {
+
+    }
+
+    void resetGrid(){
+
+    }
+
+    void replaceTileWithCrater(){
+
+    }
+
+    void WinGame(){
 
     }
 }

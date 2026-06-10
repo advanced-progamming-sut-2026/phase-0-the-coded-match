@@ -9,7 +9,7 @@ public abstract class MiniGame {
         this.isGameOver=isGameOver;
     }
 
-    public abstract void initializeStage()
-    public abstract void processInteraction()
-    public abstract void checkRules()
+    public abstract void initializeStage();
+    public abstract void processInteraction();
+    public abstract void checkRules();
 }

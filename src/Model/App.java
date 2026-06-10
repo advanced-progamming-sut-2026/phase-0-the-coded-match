@@ -1,6 +1,6 @@
 package Model;
 
-import models.enums.Menu;
+import Enums.Menu;
 
 import java.util.ArrayList;
 

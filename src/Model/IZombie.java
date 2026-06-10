@@ -1,6 +1,10 @@
 package Model;
 
+import java.util.List;
+
 public class IZombie extends MiniGame{
+    private List<Brain> laneBrains;
+    private double redLineCoordinateX;
     public IZombie(int playerSunAmount, boolean isGameOver) {
         super(playerSunAmount, isGameOver);
     }
@@ -17,6 +21,10 @@ public class IZombie extends MiniGame{
 
     @Override
     public void checkRules() {
+
+    }
+
+    void SunCount(){
 
     }
 }

@@ -2,9 +2,15 @@ package Controller;
 
 public class ShopController {
 
-    public String ShopList()
+    public String ShopList() {
+        return null;
+    }
 
-    public String ShopDaily()
+    public String ShopDaily() {
+        return null;
+    }
 
-    public String BuyItem()
+    public String BuyItem() {
+        return null;
+    }
 }
