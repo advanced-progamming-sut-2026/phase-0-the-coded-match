@@ -1,5 +1,5 @@
 package View;
 
 public class ShopView {
-    public void checkCommand()
+    public void checkCommand() {}
 }
