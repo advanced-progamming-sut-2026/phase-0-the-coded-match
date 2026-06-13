@@ -8,12 +8,13 @@ import java.util.List;
 public class Level {
 
     private int levelNumber;
+    private boolean isUnlocked;
     private LevelType levelType;
-    private double difficulty;
+    private int difficulty;
     private GameMap gameMap;
     private List<Zombie> activeZombies;
     private List<Sun> activeSuns; //todo: suns that are on the ground
-    private int sunsCollectedCount;
+    private int collectedSunsCount;
     private Season currentSeason;
     private int currentTick;
     private ZombieWaveManager zombieWave;

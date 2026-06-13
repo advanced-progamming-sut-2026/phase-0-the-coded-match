@@ -16,7 +16,7 @@ public class User {
     private int gemsCount;
     private int chaptersCount;
     private int meowPoints;
-    private Chapter lastChapter;
+    private Level lastLevel;
     private Season lastSeason;
     private int minigamesWonCount;
     private int dailyQuestsCount;

@@ -3,25 +3,25 @@ package models;
 import java.util.List;
 
 public class Collection {
-     private List<Zombie> zombies;
-     private List<Plant> plants;
+     private List<Zombie> availableZombies;
+     private List<Plant> availablePlants;
      private List<MiniGame> unlockedMinigames;
-     private List<Chapter> unlockedChapters;
+     private List<Level> unlockedLevels;
 
-     public List<Zombie> getZombies() {
-          return zombies;
+     public List<Zombie> getAvailableZombies() {
+          return availableZombies;
      }
 
-     public void setZombies(List<Zombie> zombies) {
-          this.zombies = zombies;
+     public void setAvailableZombies(List<Zombie> availableZombies) {
+          this.availableZombies = availableZombies;
      }
 
-     public List<Plant> getPlants() {
-          return plants;
+     public List<Plant> getAvailablePlants() {
+          return availablePlants;
      }
 
-     public void setPlants(List<Plant> plants) {
-          this.plants = plants;
+     public void setAvailablePlants(List<Plant> availablePlants) {
+          this.availablePlants = availablePlants;
      }
 
      public List<MiniGame> getUnlockedMinigames() {
@@ -32,11 +32,11 @@ public class Collection {
           this.unlockedMinigames = unlockedMinigames;
      }
 
-     public List<Chapter> getUnlockedChapters() {
-          return unlockedChapters;
+     public List<Level> getUnlockedLevels() {
+          return unlockedLevels;
      }
 
-     public void setUnlockedChapters(List<Chapter> unlockedChapters) {
-          this.unlockedChapters = unlockedChapters;
+     public void setUnlockedLevels(List<Level> unlockedLevels) {
+          this.unlockedLevels = unlockedLevels;
      }
 }

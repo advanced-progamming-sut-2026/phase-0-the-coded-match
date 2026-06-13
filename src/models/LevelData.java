@@ -17,7 +17,7 @@ public class LevelData {
     private List<String> protectedPlants;
     private List<WavePatternData> wavePatterns;
     private List<SpecialLevelRuleData> specialRules;
-    private MapData map;
+    private GameMapData map;
 
     public String getId() {
         return id;
@@ -55,7 +55,7 @@ public class LevelData {
         return availablePlants;
     }
 
-    public MapData getMap() {
+    public GameMapData getMap() {
         return map;
     }
 

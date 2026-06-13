@@ -8,6 +8,7 @@ import models.*;
 import java.util.List;
 
 public class GameManagerController {
+    private Level currentLevel;
 
     public static void advanceTime(String input) {
 

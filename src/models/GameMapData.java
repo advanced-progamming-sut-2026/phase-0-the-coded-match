@@ -2,7 +2,7 @@ package models;
 
 import java.util.List;
 
-public class MapData {
+public class GameMapData {
     private int rows;
     private int columns;
     private int zombieStartColumn;

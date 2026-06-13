@@ -1,7 +1,7 @@
 package views;
 
 public class QuestView {
-    public void checkCommad () {
+    public void check() {
 
     }
 }
