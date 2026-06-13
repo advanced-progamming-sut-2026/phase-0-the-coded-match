@@ -9,16 +9,6 @@ import java.util.List;
 
 public class GameManagerController {
 
-    private Season currentSeason;
-    private List<Lawnmower> lawnmowers;
-    private List<Plant> plants;
-    private List<Zombie> zombies;
-    private List<Sun> suns;
-    private int currentTick;
-    private int waveDifficulty;
-    private ZombieWaveManager zombieWave;
-    private List<Projectile> activeProjectiles;
-
     public static void advanceTime(String input) {
 
     }
