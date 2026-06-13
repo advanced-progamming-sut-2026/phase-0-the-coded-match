@@ -4,7 +4,7 @@ package controllers;
 import models.Update;
 
 public class ZombieWaveManager implements Update {
-
+    private int waveDifficulty; //todo: im not sure about this one
 
     public static int calculateWaveDifficulty() {
 
