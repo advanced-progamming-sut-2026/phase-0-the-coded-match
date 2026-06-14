@@ -1,7 +1,6 @@
 package controllers;
 
 import models.Quest;
-import models.QuestTemplate;
 
 public class QuestController {
     public void checkQuestObjectives(){}
@@ -16,5 +15,5 @@ public class QuestController {
 
     public void notifyZombieKilled(){}
 
-    public Quest instantiateQuestFromTemplate(QuestTemplate template) {}
+
 }
