@@ -14,7 +14,7 @@ public class Level {
     private GameMap gameMap;
     private List<Zombie> activeZombies;
     private List<Sun> activeSuns; //todo: suns that are on the ground
-    private int collectedSunsCount;
+    private int collectedSunsAmount;
     private Season currentSeason;
     private int currentTick;
     private ZombieWaveManager zombieWave;

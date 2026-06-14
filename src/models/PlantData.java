@@ -6,9 +6,9 @@ public class PlantData {
     private String id;
     private String name;
     private String displayName;
-    private String category;
+    private String category; //TODO: PlantCategory/ PlantTag enum?
     private List<String> tags;
-    private int sun_cost;
+    private int sunCost;
     private int baseHp;
     private int damage;
     private double actionInterval;
@@ -41,7 +41,7 @@ public class PlantData {
     }
 
     public int getCost() {
-        return sun_cost;
+        return sunCost;
     }
 
     public int getBaseHp() {
