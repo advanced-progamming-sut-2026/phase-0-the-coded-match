@@ -2,7 +2,6 @@ package controllers;
 
 public class GameMenuController extends MenuController{
 
-
     @Override
     public void enterMenu(String targetMenu) {
 

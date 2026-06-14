@@ -23,7 +23,8 @@ public class User {
     private int questsCount;
     private int highestPointAchieved;
     private boolean stayLoggedIn;
-    private List<Collection> collections;
+    private Collection collection;
+    private GreenHouse greenHouse;
 
     public User(String username, String password, String nickname, String email, Gender gender) {
         this.username = username;
