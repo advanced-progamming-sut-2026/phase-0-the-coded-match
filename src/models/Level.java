@@ -19,6 +19,7 @@ public class Level {
     private int currentTick;
     private ZombieWaveManager zombieWave;
     private List<Projectile> activeProjectiles; //todo: here or in GameMap or not needed
+    private int plantFoodCount;
 
     public void addActiveZombie(Zombie zombie) {}
 

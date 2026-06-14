@@ -66,6 +66,10 @@ public class GameManagerController {
 
     }
 
+    public static StringBuilder showZombiesInfo() {}
+
+    public static void cheatSpawnZombies(String input) {}
+
     public static void endGame() {
 
     }

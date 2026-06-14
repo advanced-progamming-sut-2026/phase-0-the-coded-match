@@ -16,24 +16,24 @@ public class ZombieController {
         this.activeZombies = new ArrayList<>();
     }
 
-    public Zombie spawnZombie(String alias, double x, int y) {
+    public Zombie spawnZombie(String alias, double x, int y) { //in zombieWaveManager
         //TODO
         return null;
     }
 
-    public void moveZombies() {
+    public void moveZombies() { //in Zombie
         //TODO
     }
 
-    public void attackPlants() {
+    public void attackPlants() { //in Zombie
         // TODO
     }
 
-    public void removeDeadZombies() {
+    public void removeDeadZombies() { //in GameManagerController
        //TODO
     }
 
-    public void showZombieInfo() {
+    public void showZombieInfo() { //in GameManagerController
        //TODO
     }
 
