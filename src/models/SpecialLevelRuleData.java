@@ -1,11 +1,13 @@
 package models;
 
+import enums.SpecialLevelType;
+
 public class SpecialLevelRuleData {
-    private String type;
+    private SpecialLevelType type;
     private String value;
     private String description;
 
-    public String getType() {
+    public SpecialLevelType getType() {
         return type;
     }
 
