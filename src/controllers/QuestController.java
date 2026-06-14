@@ -5,7 +5,7 @@ import models.Quest;
 public class QuestController {
     public void checkQuestObjectives(){}
 
-    public String claimReward(){}
+    public String claimReward(){return null;}
 
     public void loadTemplatesFromCSV(String filePath) {}
 
