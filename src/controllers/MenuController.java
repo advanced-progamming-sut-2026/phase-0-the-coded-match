@@ -5,7 +5,7 @@ import models.App;
 
 public abstract class MenuController {
 
-    protected String[] showCurrentMenu(String[] message) {
+    public static String[] showCurrentMenu(String[] message) {
         message[0] = App.getCurrentMenu().getMenuName();
         return message;
     }
