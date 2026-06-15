@@ -2,6 +2,7 @@ package models;
 
 import enums.Gender;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class User {
@@ -16,7 +17,7 @@ public class User {
     private int gemsCount;
     private int chaptersCount;
     private int meowPoints;
-    private Level lastLevel;
+    private LevelData lastLevel;
     private Season lastSeason;
     private int minigamesWonCount;
     private int dailyQuestsCount;
@@ -25,6 +26,7 @@ public class User {
     private boolean stayLoggedIn;
     private Collection collection;
     private GreenHouse greenHouse;
+    private ArrayList<Level> unlockedLevels = new ArrayList<>();
 
     public User(String username, String password, String nickname, String email, Gender gender) {
         this.username = username;
@@ -51,4 +53,28 @@ public class User {
     public void addQuestsCount() {}
 
     public void addCollection() {}
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public LevelData getLastLevel() {
+        return lastLevel;
+    }
+
+    public void setLastLevel(LevelData lastLevel) {
+        this.lastLevel = lastLevel;
+    }
+
+    public Season getLastSeason() {
+        return lastSeason;
+    }
+
+    public void setLastSeason(Season lastSeason) {
+        this.lastSeason = lastSeason;
+    }
 }

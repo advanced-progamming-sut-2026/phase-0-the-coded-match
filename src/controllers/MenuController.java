@@ -3,6 +3,7 @@ package controllers;
 import enums.Commands;
 import enums.Menu;
 import models.App;
+import views.AppView;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -20,9 +21,9 @@ public class MenuController {
         if (!matcher.matches()) {
             return;
         }
-        String menuName = matcher.group("menuName");
+        String menuName = matcher.group("menu_name");
         if (menuName != null) {
-            Menu targetMenu = getMenuEnum(menuName);
+            Menu targetMenu = App.getMenu(menuName);
             if (canEnter(targetMenu)) { //TODO: check possible errors?
                 App.setCurrentMenu(targetMenu);
             }
@@ -30,16 +31,20 @@ public class MenuController {
     }
 
     public static void exitMenu() {
+        Menu currentMenu = App.getCurrentMenu();
 
-    }
-
-    public static Menu getMenuEnum(String menuName) {
-        for (Menu menu : Menu.values()) {
-            if (menu.getMenuName().equalsIgnoreCase(menuName)) {
-                return menu;
-            }
+        if (currentMenu == Menu.SIGNUP_MENU) {
+            AppView.isRunning = false;
+        } else if (currentMenu == Menu.LOGIN_MENU) {
+            App.setCurrentMenu(Menu.SIGNUP_MENU);
+        } else if (currentMenu == Menu.MAIN_MENU) {
+            MainMenuController.logout();
+        } else if (currentMenu == Menu.GAME_MENU || currentMenu == Menu.NEWS_MENU
+                || currentMenu == Menu.SETTINGS_MENU || currentMenu == Menu.PROFILE_MENU) { //TODO: and network menu
+            App.setCurrentMenu(Menu.MAIN_MENU);
+        } else {
+            App.setCurrentMenu(Menu.GAME_MENU);
         }
-        return null;
     }
 
     public static boolean canEnter(Menu targetMenu) {

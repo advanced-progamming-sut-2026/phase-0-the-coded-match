@@ -9,7 +9,12 @@ public enum Menu {
     NEWS_MENU("news menu"),
     PROFILE_MENU("profile menu"),
     COLLECTION_MENU("collection menu"),
-    CHOOSEPLANTS_MENU("choose plants menu");
+    CHOOSEPLANTS_MENU("choose plants menu"),
+    GREEN_HOUSE("greenhouse"),
+    TRAVEL_LOG("travel-log"),
+    LEADERBOARD("leaderboard"),
+    COIN_WALLET("coin-wallet"),
+    GEM_WALLET("gem-wallet");
 
     private final String menuName;
 

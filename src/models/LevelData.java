@@ -1,15 +1,20 @@
 package models;
 
+import enums.LevelType;
+import enums.SeasonType;
+
 import java.util.List;
 
 public class LevelData {
     private String id;
     private String name;
     private int levelNumber;
-    private String levelType;
+    private LevelType levelType;
+    private boolean isUnlocked;
     private int plantSelectionLimit;
     private int waveCount;
     private int baseWaveCost;
+    private Season type;
     private List<String> allowedZombies;
     private List<String> availablePlants;
     private List<String> conveyorPlants;
@@ -31,7 +36,7 @@ public class LevelData {
         return levelNumber;
     }
 
-    public String getLevelType() {
+    public LevelType getLevelType() {
         return levelType;
     }
 
@@ -77,5 +82,13 @@ public class LevelData {
 
     public List<String> getProtectedPlants() {
         return protectedPlants;
+    }
+
+    public boolean isUnlocked() {
+        return isUnlocked;
+    }
+
+    public Season getType() {
+        return type;
     }
 }

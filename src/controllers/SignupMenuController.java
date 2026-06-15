@@ -1,35 +1,88 @@
 package controllers;
 
+import enums.Commands;
+import enums.Gender;
+import models.App;
+import models.ScoreStrategy;
+import models.User;
+import views.SignupMenu;
+
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class SignupMenuController{
 
-    public static String[] register(String input) {
+    public static String[] register(String input, String[] message) {
+        Pattern pattern = Pattern.compile(Commands.REGISTER.getPattern());
+        Matcher matcher = pattern.matcher(input);
+        if (!matcher.matches()) {
+            return null;
+        }
 
+        String username = matcher.group("username");
+        String password = matcher.group("password");
+        String passwordConfirm = matcher.group("password_confirm");
+        String nickname = matcher.group("nickname");
+        String email = matcher.group("email");
+        String genderSt = matcher.group("gender");
+
+        if (validateUsername(username)) {
+            message[0] = "Error: username already exists.";
+        } else if (!validatePassword(password)) {
+            message[0] = "Error: password is not strong enough.";
+        } else if (!passwordIsConfirmed(password, passwordConfirm)) {
+            message[0] = "Error: password not confirmed."; //TODO: enter password again or go back to signup menu
+        } else if (!validateNickname(nickname)) {
+            message[0] = "Error: nickname is too short";
+        } else {
+            SignupMenu.registered = true;
+            Gender gender = whichGender(genderSt);
+            User user = new User(username, password, nickname, email, gender);
+            App.addUser(user);
+            message[0] = ""; //TODO: SecurityQuestions shown
+        }
+        return message;
     }
 
     public static boolean validateUsername(String username) {
-
+        return App.doesUsernameExists(username);
     }
 
     public static boolean validatePassword(String password) {
+        return password.matches(Commands.PASSWORD.getPattern());
+    }
 
+    public static boolean passwordIsConfirmed(String password, String passwordConfirm) {
+        return password.equals(passwordConfirm);
     }
 
     public static boolean validateNickname(String nickname) {
-
+        return nickname.matches(Commands.NICKNAME.getPattern());
     }
 
-    public static boolean validateEmail(String email) {
+//    public static boolean validateEmail(String email) {
+//
+//    }
 
+    public static Gender whichGender(String gender) {
+        if (gender.equalsIgnoreCase("female")) {
+            return Gender.female;
+        } else {
+            return Gender.male;
+        }
     }
 
-    public static boolean validateGender(String gender) {
-
-    }
-
-    public static void showQuestions(Scanner scanner) {
-
+    public static void answerQuestions(String input) {
+        Pattern pattern = Pattern.compile(Commands.PICK_QUESTION.getPattern());
+        Matcher matcher = pattern.matcher(input);
+        if (!matcher.matches()) {
+            return;
+        }
+        int questionNum = Integer.parseInt(matcher.group("question_number"));
+        String answer = matcher.group("answer");
+        String confirmAnswer = matcher.group("answer_confirm");
+        //TODO
     }
 
     public static String hashPassword(String password) {

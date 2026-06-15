@@ -36,5 +36,8 @@ public abstract class Season {
 
     public abstract void applySpecialRules();
 
+    public SeasonType getType() {
+        return type;
+    }
 }
 
