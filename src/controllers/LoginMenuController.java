@@ -2,17 +2,7 @@ package controllers;
 
 import java.util.Scanner;
 
-public class LoginMenuController extends MenuController {
-
-    @Override
-    public void enterMenu(String targetMenu) {
-
-    }
-
-    @Override
-    public void exitMenu() {
-
-    }
+public class LoginMenuController{
 
     public static void login(String input) {
 

@@ -1,16 +1,6 @@
 package controllers;
 
-public class GameMenuController extends MenuController{
-
-    @Override
-    public void enterMenu(String targetMenu) {
-
-    }
-
-    @Override
-    public void exitMenu() {
-
-    }
+public class GameMenuController{
 
     public static void enterChapter(String input) {
 

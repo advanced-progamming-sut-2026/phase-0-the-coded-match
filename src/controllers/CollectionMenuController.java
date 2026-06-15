@@ -1,17 +1,6 @@
 package controllers;
 
-public class CollectionMenuController extends MenuController{
-
-
-    @Override
-    protected void enterMenu(String targetMenu) {
-
-    }
-
-    @Override
-    protected void exitMenu() {
-
-    }
+public class CollectionMenuController{
 
     public static StringBuilder showAchievedPlants() {
 

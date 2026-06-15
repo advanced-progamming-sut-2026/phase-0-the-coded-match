@@ -15,15 +15,15 @@ public class App {
         return currentMenu;
     }
 
-    public void setCurrentMenu(Menu currentMenu) {
+    public static void setCurrentMenu(Menu currentMenu) {
         this.currentMenu = currentMenu;
     }
 
-    public User getCurrentUser() {
+    public static User getCurrentUser() {
         return currentUser;
     }
 
-    public void setCurrentUser(User currentUser) {
+    public static void setCurrentUser(User currentUser) {
         this.currentUser = currentUser;
     }
 
