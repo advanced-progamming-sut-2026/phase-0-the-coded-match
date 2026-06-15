@@ -1,6 +1,8 @@
-package models;
+package models.MiniGameRelated;
 
-public class Beghouled extends MiniGame{
+import models.Plant;
+
+public class Beghouled extends MiniGame {
     private Plant[][] grid;
     private int matchCount;
     private int targetMatches;

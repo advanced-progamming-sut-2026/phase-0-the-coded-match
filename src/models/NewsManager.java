@@ -16,4 +16,12 @@ public class NewsManager {
     public void removeReadNews(News news) {
         unreadNews.remove(news);
     }
+
+    public List<News> getUnreadNews(){
+        return unreadNews;
+    }
+
+    public List<News> getAllNews() {
+        return allNews;
+    }
 }

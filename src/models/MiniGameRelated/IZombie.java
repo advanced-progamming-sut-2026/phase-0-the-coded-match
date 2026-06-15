@@ -1,8 +1,10 @@
-package models;
+package models.MiniGameRelated;
+
+import models.Brain;
 
 import java.util.List;
 
-public class IZombie extends MiniGame{
+public class IZombie extends MiniGame {
     private List<Brain> laneBrains;
     private double redLineCoordinateX;
     public IZombie(int playerSunAmount, boolean isGameOver) {

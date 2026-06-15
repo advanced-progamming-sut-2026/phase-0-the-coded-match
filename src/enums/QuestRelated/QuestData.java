@@ -1,24 +1,13 @@
-package enums;
+package enums.QuestRelated;
 
-import static enums.Priority.*;
-import static enums.QuestCategory.DAILY;
-import static enums.QuestCategory.MAIN;
-import static enums.QuestCategory.CHALLENGE;
-import static enums.QuestObjective.*;
+import enums.RewardType;
+
+import static enums.QuestRelated.Priority.*;
+import static enums.QuestRelated.QuestCategory.DAILY;
+import static enums.QuestRelated.QuestCategory.MAIN;
+import static enums.QuestRelated.QuestCategory.CHALLENGE;
+import static enums.QuestRelated.QuestObjective.*;
 import static enums.RewardType.*;
-
-enum QuestCategory {
-    MAIN,
-    DAILY,
-    CHALLENGE
-}
-
-enum Priority{
-    CRITICAL,
-    HIGH,
-    MEDIUM,
-    LOW
-}
 
 public enum QuestData {
     DAILY_SUN_COLLECTOR("Daily Sun Collector", DAILY, "Collect sun_amount units of sun in a single day", COIN, BLUE, MEDIUM ),

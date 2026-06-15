@@ -1,6 +1,7 @@
 package models;
 
 import enums.Menu;
+import enums.Phases;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,9 +11,23 @@ public class App {
     private static ArrayList<User> users = new ArrayList<>();
     private static User currentUser;
     private static List<Season> allSeasons = new ArrayList<>();
+    private static Phases currentPhase = Phases.NORMAL_GAMEPLAY;
+    private static User userUndergoingReset;
 
     public static Menu getCurrentMenu() {
         return currentMenu;
+    }
+
+    public static Phases getCurrentPhase() {
+        return currentPhase;
+    }
+
+    public static void setCurrentPhase(Phases currentPhase) {
+        App.currentPhase = currentPhase;
+    }
+
+    public static ArrayList<User> getUsers(){
+        return users;
     }
 
     public static void setCurrentMenu(Menu currentMenu) {
@@ -38,6 +53,14 @@ public class App {
 
     public static void addUser(User user) {
         users.add(user);
+    }
+
+    public static void setUserUndergoingReset(User user){
+        userUndergoingReset = user;
+    }
+
+    public static User getUserUndergoingReset(){
+        return userUndergoingReset;
     }
 
     public static LevelData getLevelByNumber(int num, Season season) {

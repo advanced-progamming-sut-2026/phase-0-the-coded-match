@@ -4,6 +4,7 @@ import enums.Gender;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.*;
 
 public class User {
 
@@ -12,6 +13,7 @@ public class User {
     private String nickname;
     private String email;
     private Gender gender;
+    private Map<String, String> questions;
     private int gamesPlayedCount;
     private int coinsCount;
     private int gemsCount;
@@ -27,6 +29,7 @@ public class User {
     private Collection collection;
     private GreenHouse greenHouse;
     private ArrayList<Level> unlockedLevels = new ArrayList<>();
+    private NewsManager personalNews;
 
     public User(String username, String password, String nickname, String email, Gender gender) {
         this.username = username;
@@ -34,6 +37,8 @@ public class User {
         this.nickname = nickname;
         this.email = email;
         this.gender = gender;
+        this.questions = new HashMap<>();
+
     }
 
     public void addGamesPlayed() {}
@@ -76,5 +81,32 @@ public class User {
 
     public void setLastSeason(Season lastSeason) {
         this.lastSeason = lastSeason;
+    }
+    public void addQuestion(String question, String answer){
+        this.questions.put(question, answer);
+    }
+
+    public String getPassword(){
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setStayLoggedIn(boolean stayLoggedIn){
+        this.stayLoggedIn = stayLoggedIn;
+    }
+
+    public Map<String, String> getQuestions(){
+        return questions;
+    }
+
+    public NewsManager getPersonalNews(){
+        return personalNews;
     }
 }
