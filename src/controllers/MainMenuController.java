@@ -1,16 +1,6 @@
 package controllers;
 
-public class MainMenuController extends MenuController{
-
-    @Override
-    public void enterMenu(String targetMenu) {
-
-    }
-
-    @Override
-    public void exitMenu() {
-
-    }
+public class MainMenuController{
 
     public static void logout() {
 

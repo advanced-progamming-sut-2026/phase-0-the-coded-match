@@ -17,7 +17,6 @@ public class App {
     public static Menu getCurrentMenu() {
         return currentMenu;
     }
-
     public static Phases getCurrentPhase() {
         return currentPhase;
     }

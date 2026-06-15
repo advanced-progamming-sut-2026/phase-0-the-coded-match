@@ -1,16 +1,53 @@
 package controllers;
 
+import enums.Commands;
 import enums.Menu;
 import models.App;
 
-public abstract class MenuController {
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-    protected String[] showCurrentMenu(String[] message) {
+public class MenuController {
+
+    public static String[] showCurrentMenu(String[] message) {
         message[0] = App.getCurrentMenu().getMenuName();
         return message;
     }
 
-    protected abstract void enterMenu(String targetMenu);
+    public static void enterMenu(String input) {
+        Pattern pattern = Pattern.compile(Commands.ENTER_MENU.getPattern());
+        Matcher matcher = pattern.matcher(input);
+        if (!matcher.matches()) {
+            return;
+        }
+        String menuName = matcher.group("menuName");
+        if (menuName != null) {
+            Menu targetMenu = getMenuEnum(menuName);
+            if (canEnter(targetMenu)) { //TODO: check possible errors?
+                App.setCurrentMenu(targetMenu);
+            }
+        }
+    }
 
-    protected abstract void exitMenu();
+    public static void exitMenu() {
+
+    }
+
+    public static Menu getMenuEnum(String menuName) {
+        for (Menu menu : Menu.values()) {
+            if (menu.getMenuName().equalsIgnoreCase(menuName)) {
+                return menu;
+            }
+        }
+        return null;
+    }
+
+    public static boolean canEnter(Menu targetMenu) {
+        Menu currentMenu = App.getCurrentMenu();
+        if (currentMenu == Menu.SIGNUP_MENU && targetMenu != Menu.LOGIN_MENU) {
+            return false;
+        } else if () {
+
+        }
+    }
 }

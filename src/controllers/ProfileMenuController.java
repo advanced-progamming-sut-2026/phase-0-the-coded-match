@@ -1,15 +1,6 @@
 package controllers;
 
-public class ProfileMenuController extends MenuController{
-    @Override
-    protected void enterMenu(String targetMenu) {
-
-    }
-
-    @Override
-    protected void exitMenu() {
-
-    }
+public class ProfileMenuController{
 
     public static void changeUsername(String input) {
 

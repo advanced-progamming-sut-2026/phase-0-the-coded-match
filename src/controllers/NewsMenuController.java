@@ -4,17 +4,7 @@ import models.News;
 
 import java.util.List;
 
-public class NewsMenuController extends MenuController{
-
-    @Override
-    protected void enterMenu(String targetMenu) {
-
-    }
-
-    @Override
-    protected void exitMenu() {
-
-    }
+public class NewsMenuController{
 
     public static StringBuilder showUnreadNews() {
 

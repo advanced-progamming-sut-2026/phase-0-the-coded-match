@@ -7,17 +7,7 @@ import models.User;
 
 import java.util.Scanner;
 
-public class LoginMenuController extends MenuController {
-
-    @Override
-    public void enterMenu(String targetMenu) {
-
-    }
-
-    @Override
-    public void exitMenu() {
-
-    }
+public class LoginMenuController{
 
     public String login(String username, String password, String stayLoggedIn) {
         User target=findUserByUsername(username);

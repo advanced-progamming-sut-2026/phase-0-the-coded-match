@@ -1,8 +1,8 @@
 package enums;
 
 public enum Commands {
-    ENTER_MANU,
-    SHOW_MENU,
+    ENTER_MENU("^\\s*menu\\s+enter\\s+(?<menuName>.*)\\s*$"),
+    SHOW_MENU("^\\s*menu\\s+show\\s+current\\s*$"),
     EXIT_MENU,
     REGISTER,
     LOGIN,
@@ -27,4 +27,14 @@ public enum Commands {
     PLANT_PLANT,
     SUN_AMOUNT,
     TILE_STATUS;
+
+    private final String pattern;
+
+    Commands(String pattern) {
+        this.pattern = pattern;
+    }
+
+    public String getPattern() {
+        return pattern;
+    }
 }
