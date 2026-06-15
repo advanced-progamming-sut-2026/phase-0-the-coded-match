@@ -1,6 +1,6 @@
-package models;
+package models.MiniGameRelated;
 
-public class Zombotany extends MiniGame{
+public class Zombotany extends MiniGame {
     public Zombotany(int playerSunAmount, boolean isGameOver) {
         super(playerSunAmount, isGameOver);
     }

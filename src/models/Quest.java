@@ -1,12 +1,13 @@
 package models;
 
-import enums.QuestCategory;
-import enums.QuestObjective;
+import enums.QuestRelated.Priority;
+import enums.QuestRelated.QuestCategory;
+import enums.QuestRelated.QuestObjective;
 import enums.RewardType;
 
 public class Quest {
     private String questName;
-    private String priority;
+    private Priority priority;
     private QuestObjective objective;
     private RewardType reward;
     public boolean isCompleted;
@@ -15,7 +16,7 @@ public class Quest {
     private int currentValue;
     private int targetValue;
 
-    public Quest(String questName, String priority, QuestObjective objective, RewardType reward, boolean isCompleted,
+    public Quest(String questName, Priority priority, QuestObjective objective, RewardType reward, boolean isCompleted,
                  QuestCategory category, String missionDescription, int currentValue, int targetValue){
 
     }

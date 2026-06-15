@@ -1,8 +1,12 @@
-package models;
+package models.MiniGameRelated;
+
+import models.Plant;
+import models.RollingNut;
 
 import java.util.List;
+import java.util.Queue;
 
-public class WallNutBowling extends MiniGame{
+public class WallNutBowling extends MiniGame {
     private Queue<Plant> conveyorBelt;
     private double redLineCoordinateX;
     private List<RollingNut> activeRollingNuts;

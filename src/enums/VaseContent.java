@@ -2,6 +2,6 @@ package enums;
 
 public enum VaseContent {
     EMPTY,
-    GHOUL,
+    GARGANTUAR,
     SEED_PACKET
 }

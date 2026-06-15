@@ -26,6 +26,7 @@ public class User {
     private boolean stayLoggedIn;
     private Collection collection;
     private GreenHouse greenHouse;
+    private NewsManager personalNews;
 
     public User(String username, String password, String nickname, String email, Gender gender) {
         this.username = username;
@@ -34,6 +35,7 @@ public class User {
         this.email = email;
         this.gender = gender;
         this.questions = new HashMap<>();
+
     }
 
     public void addGamesPlayed() {}
@@ -80,5 +82,9 @@ public class User {
 
     public Map<String, String> getQuestions(){
         return questions;
+    }
+
+    public NewsManager getPersonalNews(){
+        return personalNews;
     }
 }

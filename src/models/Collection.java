@@ -1,5 +1,7 @@
 package models;
 
+import models.MiniGameRelated.MiniGame;
+
 import java.util.List;
 
 public class Collection {

@@ -8,6 +8,7 @@ import java.util.List;
 
 public class Shop {
     List<ShopItemData> storeShelves = new ArrayList<>();
+
     public Shop(){
         initializePermanentItems();
     }
