@@ -51,6 +51,17 @@ public class GameMenuController{
     }
 
     public static void cheatAddCoinOrGem(String input) {
-
+        Pattern pattern = Pattern.compile(Commands.CHEAT_ADD_CURRENCY.getPattern());
+        Matcher matcher = pattern.matcher(input);
+        if (!matcher.matches()) {
+            return;
+        }
+        int amount = Integer.parseInt(matcher.group("amount"));
+        String currency = matcher.group("currency");
+        if (currency.equals("coin")) {
+            App.getCurrentUser().setCoinsCount(App.getCurrentUser().getCoinsCount() + amount);
+        } else {
+            App.getCurrentUser().setGemsCount(App.getCurrentUser().getGemsCount() + amount);
+        }
     }
 }

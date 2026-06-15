@@ -16,7 +16,10 @@ public class SignupMenu {
             System.out.println(message[0]);
             if (registered) {
                 input = scanner.nextLine();
-                SignupMenuController.answerQuestions(input);
+                SignupMenuController.showQuestion(input, message);
+                System.out.println(message[0]);
+                input = scanner.nextLine();
+                SignupMenuController.pickQuestion(input); //TODO: doesn't seem clean.
             }
         } else {
             System.out.println("invalid command");

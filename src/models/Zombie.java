@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Zombie implements Update {
     private ZombieData data;
-    private int currentHealth;
+    private int currentHp;
     private double x;
     private int y;
     private ZombieArmor armor;
@@ -17,7 +17,7 @@ public class Zombie implements Update {
 
     public Zombie(ZombieData data, double x, int y) {
         this.data = data;
-        this.currentHealth = data.getHealth();
+        this.currentHp = data.getHealth();
         this.x = x;
         this.y = y;
         this.effects = new ArrayList<>();
@@ -50,23 +50,27 @@ public class Zombie implements Update {
         if (armor != null && !armor.isDestroyed()) {
             int remainingDamage = armor.takeDamage(damage);
             if (remainingDamage > 0) {
-                currentHealth = Math.max(0, currentHealth - remainingDamage);
+                currentHp = Math.max(0, currentHp - remainingDamage);
             }
         } else {
-            currentHealth = Math.max(0, currentHealth - damage);
+            currentHp = Math.max(0, currentHp - damage);
         }
     }
 
     public boolean isDead() {
-        return currentHealth <= 0;
+        return currentHp <= 0;
     }
 
     public ZombieData getData() {
         return data;
     }
 
-    public int getCurrentHealth() {
-        return currentHealth;
+    public int getCurrentHp() {
+        return currentHp;
+    }
+
+    public void setCurrentHp(int currentHp) {
+        this.currentHp = currentHp;
     }
 
     public double getX() {

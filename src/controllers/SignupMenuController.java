@@ -2,12 +2,11 @@ package controllers;
 
 import enums.Commands;
 import enums.Gender;
+import enums.SecurityQuestions;
 import models.App;
-import models.ScoreStrategy;
 import models.User;
 import views.SignupMenu;
 
-import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -40,7 +39,7 @@ public class SignupMenuController{
             Gender gender = whichGender(genderSt);
             User user = new User(username, password, nickname, email, gender);
             App.addUser(user);
-            message[0] = ""; //TODO: SecurityQuestions shown
+            message[0] = "";
         }
         return message;
     }
@@ -73,7 +72,24 @@ public class SignupMenuController{
         }
     }
 
-    public static void answerQuestions(String input) {
+    public static String[] showQuestion(String input, String[] message) {
+        Pattern pattern = Pattern.compile(Commands.PICK_QUESTION.getPattern());
+        Matcher matcher = pattern.matcher(input);
+        if (!matcher.matches()) {
+            message[0] = "invalid command";
+            return message;
+        }
+        int questionNum = Integer.parseInt(matcher.group("question_number"));
+        SecurityQuestions question = getQuestionByNumber(questionNum);
+        if (question == null) {
+            return message;
+        } else {
+            message[0] = question.getText();
+        }
+        return message;
+    }
+
+    public static void pickQuestion(String input) {
         Pattern pattern = Pattern.compile(Commands.PICK_QUESTION.getPattern());
         Matcher matcher = pattern.matcher(input);
         if (!matcher.matches()) {
@@ -82,7 +98,19 @@ public class SignupMenuController{
         int questionNum = Integer.parseInt(matcher.group("question_number"));
         String answer = matcher.group("answer");
         String confirmAnswer = matcher.group("answer_confirm");
-        //TODO
+        SecurityQuestions question = getQuestionByNumber(questionNum);
+        if (answer.equals(confirmAnswer)) {
+            App.getUsers().get(App.getUsers().size() - 1).addQuestion(question, answer);
+        }
+    }
+
+    public static SecurityQuestions getQuestionByNumber(int num) {
+        for (SecurityQuestions question : SecurityQuestions.values()) {
+            if (question.getNum() == num) {
+                return question;
+            }
+        }
+        return null;
     }
 
     public static String hashPassword(String password) {

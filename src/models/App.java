@@ -13,6 +13,8 @@ public class App {
     private static List<Season> allSeasons = new ArrayList<>();
     private static Phases currentPhase = Phases.NORMAL_GAMEPLAY;
     private static User userUndergoingReset;
+    private static List<Plant> allPlants = new ArrayList<>();
+    private static List<Zombie> allZombies = new ArrayList<>();
 
     public static Menu getCurrentMenu() {
         return currentMenu;
@@ -40,6 +42,22 @@ public class App {
 
     public static void setCurrentUser(User currentUser) {
         App.currentUser = currentUser;
+    }
+
+    public static List<Plant> getAllPlants() {
+        return allPlants;
+    }
+
+    public static void setAllPlants(List<Plant> allPlants) {
+        App.allPlants = allPlants;
+    }
+
+    public static List<Zombie> getAllZombies() {
+        return allZombies;
+    }
+
+    public static void setAllZombies(List<Zombie> allZombies) {
+        App.allZombies = allZombies;
     }
 
     public static boolean doesUsernameExists(String username) {

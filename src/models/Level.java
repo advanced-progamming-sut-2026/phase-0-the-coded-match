@@ -12,7 +12,6 @@ public class Level {
     private int levelNumber;
     private boolean isUnlocked;
     private LevelType levelType;
-    private int difficulty;
     private GameMapData gameMap;
     private List<Zombie> activeZombies;
     private List<Sun> activeSuns; //todo: suns that are on the ground
@@ -67,19 +66,11 @@ public class Level {
         this.levelType = levelType;
     }
 
-    public int getDifficulty() {
-        return difficulty;
-    }
-
-    public void setDifficulty(int difficulty) {
-        this.difficulty = difficulty;
-    }
-
-    public GameMap getGameMap() {
+    public GameMapData getGameMap() {
         return gameMap;
     }
 
-    public void setGameMap(GameMap gameMap) {
+    public void setGameMap(GameMapData gameMap) {
         this.gameMap = gameMap;
     }
 

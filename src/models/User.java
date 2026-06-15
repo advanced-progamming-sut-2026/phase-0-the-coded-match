@@ -1,6 +1,7 @@
 package models;
 
 import enums.Gender;
+import enums.SecurityQuestions;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +14,7 @@ public class User {
     private String nickname;
     private String email;
     private Gender gender;
-    private Map<String, String> questions;
+    private Map<SecurityQuestions, String> questions;
     private int gamesPlayedCount;
     private int coinsCount;
     private int gemsCount;
@@ -21,6 +22,7 @@ public class User {
     private int meowPoints;
     private LevelData lastLevel;
     private Season lastSeason;
+    private int difficultyLevel;
     private int minigamesWonCount;
     private int dailyQuestsCount;
     private int questsCount;
@@ -38,7 +40,7 @@ public class User {
         this.email = email;
         this.gender = gender;
         this.questions = new HashMap<>();
-
+        this.difficultyLevel = 3;
     }
 
     public void addGamesPlayed() {}
@@ -82,7 +84,8 @@ public class User {
     public void setLastSeason(Season lastSeason) {
         this.lastSeason = lastSeason;
     }
-    public void addQuestion(String question, String answer){
+
+    public void addQuestion(SecurityQuestions question, String answer){
         this.questions.put(question, answer);
     }
 
@@ -102,11 +105,35 @@ public class User {
         this.stayLoggedIn = stayLoggedIn;
     }
 
-    public Map<String, String> getQuestions(){
+    public Map<SecurityQuestions, String> getQuestions(){
         return questions;
     }
 
     public NewsManager getPersonalNews(){
         return personalNews;
+    }
+
+    public int getCoinsCount() {
+        return coinsCount;
+    }
+
+    public void setCoinsCount(int coinsCount) {
+        this.coinsCount = coinsCount;
+    }
+
+    public int getGemsCount() {
+        return gemsCount;
+    }
+
+    public void setGemsCount(int gemsCount) {
+        this.gemsCount = gemsCount;
+    }
+
+    public int getDifficultyLevel() {
+        return difficultyLevel;
+    }
+
+    public void setDifficultyLevel(int difficultyLevel) {
+        this.difficultyLevel = difficultyLevel;
     }
 }

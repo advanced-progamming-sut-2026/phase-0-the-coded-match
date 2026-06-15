@@ -11,6 +11,8 @@ public class GameMenu {
             GameMenuController.enterLevel(input);
         } else if (input.matches(Commands.GAME_MENU_MENUS.getPattern())) {
             GameMenuController.enter(input);
+        } else if (input.matches(Commands.CHEAT_ADD_CURRENCY.getPattern())) {
+            GameMenuController.cheatAddCoinOrGem(input);
         } else {
             System.out.println("invalid command");
         }
