@@ -1,11 +1,11 @@
-package models;
+package models.seasons;
 
-public class BigWaveBeach extends Season{
+public class FrostbiteCaves extends Season {
     @Override
     public void initializeGrid() {
 
     }
-        public BigWaveBeach(SeasonData data) {
+        public FrostbiteCaves(SeasonData data) {
             super(data);
         }
 
@@ -13,4 +13,5 @@ public class BigWaveBeach extends Season{
         public void applySpecialRules() {
             // TODO
         }
-}
+    }
+

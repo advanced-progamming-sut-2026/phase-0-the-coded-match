@@ -1,6 +1,7 @@
 package models;
 
 import enums.BowlingNutType;
+import models.zombies.Zombie;
 
 public class RollingNut {
     private BowlingNutType nutType;

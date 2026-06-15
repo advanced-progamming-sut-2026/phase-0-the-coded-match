@@ -2,7 +2,7 @@ package controllers;
 
 import enums.Commands;
 import models.App;
-import models.Zombie;
+import models.zombies.Zombie;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

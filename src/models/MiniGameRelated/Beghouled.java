@@ -1,6 +1,6 @@
 package models.MiniGameRelated;
 
-import models.Plant;
+import models.plants.Plant;
 
 public class Beghouled extends MiniGame {
     private Plant[][] grid;

@@ -1,4 +1,4 @@
-package models;
+package models.greenhouse;
 
 public class GreenHouse {
 

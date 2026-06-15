@@ -1,5 +1,8 @@
 package models;
 
+import models.plants.Plant;
+import models.zombies.Zombie;
+
 public class Projectile {
     private double xCoordinate;
     private double yCoordinate;

@@ -1,7 +1,7 @@
 package models;
 
 import enums.LevelType;
-import enums.SeasonType;
+import models.seasons.Season;
 
 import java.util.List;
 
