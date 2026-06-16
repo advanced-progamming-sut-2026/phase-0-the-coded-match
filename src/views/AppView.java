@@ -13,8 +13,8 @@ public class AppView {
 
     public static void run() {
         Scanner scanner = new Scanner(System.in);
-        String input = scanner.nextLine();
         while (scanner.hasNextLine() && isRunning) {
+            String input = scanner.nextLine();
             if (input.matches(Commands.SHOW_MENU.getPattern())) {
                 MenuController.showCurrentMenu(message);
                 System.out.println(message[0]);
@@ -23,7 +23,23 @@ public class AppView {
             } else if (input.matches(Commands.EXIT_MENU.getPattern())) {
                 MenuController.exitMenu();
             } else if (App.getCurrentMenu() == Menu.SIGNUP_MENU) {
-                SignupMenu.check(scanner);
+                SignupMenu.check(input, scanner);
+            } else if (App.getCurrentMenu() == Menu.LOGIN_MENU) {
+                LoginMenu.check(input);
+            } else if (App.getCurrentMenu() == Menu.MAIN_MENU) {
+                MainMenu.check(input);
+            } else if (App.getCurrentMenu() == Menu.GAME_MENU) {
+                GameMenu.check(input);
+            } else if (App.getCurrentMenu() == Menu.SETTINGS_MENU) {
+                SettingsMenu.check(input);
+            } else if (App.getCurrentMenu() == Menu.NEWS_MENU) {
+                NewsMenu.check(input);
+            } else if (App.getCurrentMenu() == Menu.PROFILE_MENU) {
+                ProfileMenu.check(input);
+            } else if (App.getCurrentMenu() == Menu.COLLECTION_MENU) {
+                CollectionMenu.check(input);
+            } else {
+                System.out.println("invalid command");
             }
         }
     }

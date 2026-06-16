@@ -33,6 +33,7 @@ public class User {
     private GreenHouse greenHouse;
     private ArrayList<Level> unlockedLevels = new ArrayList<>();
     private NewsManager personalNews;
+    private Map<String, Integer> seedPackets = new HashMap<>();
 
     public User(String username, String password, String nickname, String email, Gender gender) {
         this.username = username;
@@ -42,6 +43,7 @@ public class User {
         this.gender = gender;
         this.questions = new HashMap<>();
         this.difficultyLevel = 3;
+        this.collection = new Collection();
     }
 
     public void addGamesPlayed() {}
@@ -94,12 +96,24 @@ public class User {
         return password;
     }
 
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
     public void setPassword(String password) {
         this.password = password;
     }
 
     public String getEmail() {
         return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public void setStayLoggedIn(boolean stayLoggedIn){
@@ -136,6 +150,37 @@ public class User {
 
     public void setDifficultyLevel(int difficultyLevel) {
         this.difficultyLevel = difficultyLevel;
+    }
+
+    public int getGamesPlayedCount() {
+        return gamesPlayedCount;
+    }
+
+    public int getChaptersCount() {
+        return chaptersCount;
+    }
+
+    public int getMeowPoints() {
+        return meowPoints;
+    }
+
+    public int getSeedPacketCount(String plantName) {
+        return seedPackets.getOrDefault(plantName.toLowerCase(), 0);
+    }
+
+    public void addSeedPackets(String plantName, int count) {
+        String key = plantName.toLowerCase();
+        seedPackets.put(key, getSeedPacketCount(key) + count);
+    }
+
+    public boolean spendSeedPackets(String plantName, int count) {
+        String key = plantName.toLowerCase();
+        int current = getSeedPacketCount(key);
+        if (current < count) {
+            return false;
+        }
+        seedPackets.put(key, current - count);
+        return true;
     }
 
     public Collection getCollection(){

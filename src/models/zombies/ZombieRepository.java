@@ -1,39 +1,51 @@
 package models.zombies;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
+import java.util.ArrayList;
 import java.util.List;
 
-    public class ZombieRepository {
-        private final List<ZombieData> zombies;
+public class ZombieRepository {
+    private final List<ZombieData> zombies;
 
-        public ZombieRepository(String jsonPath) {
-            this.zombies = loadZombies(jsonPath);
-        }
-
-        private List<ZombieData> loadZombies(String jsonPath) {
-            //TODO
-            return null;
-        }
-
-        public List<ZombieData> getAllZombies() {
-            return zombies;
-        }
-
-        public ZombieData findByAlias(String alias) {
-            //TODO
-            return null;
-        }
-
-        public ZombieData findById(String id) {
-          //TODO
-            return null;
-        }
-
-        public List<ZombieData> findBySeason(String season) {
-            //TODO
-            return null;
-        }
+    public ZombieRepository(String jsonPath) {
+        this.zombies = loadZombies(jsonPath);
     }
 
+    private List<ZombieData> loadZombies(String jsonPath) {
+        return new ArrayList<>();
+    }
+
+    public List<ZombieData> getAllZombies() {
+        return zombies;
+    }
+
+    public ZombieData findByAlias(String alias) {
+        for (ZombieData zombie : zombies) {
+            if (zombie.getAlias() != null && zombie.getAlias().equalsIgnoreCase(alias)) {
+                return zombie;
+            }
+            if (zombie.getId() != null && zombie.getId().equalsIgnoreCase(alias)) {
+                return zombie;
+            }
+        }
+        return null;
+    }
+
+    public ZombieData findById(String id) {
+        for (ZombieData zombie : zombies) {
+            if (zombie.getId().equalsIgnoreCase(id)) {
+                return zombie;
+            }
+        }
+        return null;
+    }
+
+    public List<ZombieData> findBySeason(String season) {
+        List<ZombieData> result = new ArrayList<>();
+        for (ZombieData zombie : zombies) {
+            if (zombie.getSeasons() != null && zombie.getSeasons().contains(season)) {
+                result.add(zombie);
+            }
+        }
+        return result;
+    }
+}

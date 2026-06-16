@@ -1,8 +1,6 @@
 package models.plants;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
+import java.util.ArrayList;
 import java.util.List;
 
 public class PlantRepository {
@@ -13,8 +11,7 @@ public class PlantRepository {
     }
 
     private List<PlantData> loadPlants(String jsonPath) {
-        //TODO
-        return null;
+        return new ArrayList<>();
     }
 
     public List<PlantData> getAllPlants() {
@@ -22,22 +19,41 @@ public class PlantRepository {
     }
 
     public PlantData findByName(String name) {
-        //TODO
+        for (PlantData plant : plants) {
+            if (plant.getName().equalsIgnoreCase(name)
+                    || plant.getDisplayName().equalsIgnoreCase(name)) {
+                return plant;
+            }
+        }
         return null;
     }
 
     public PlantData findById(String id) {
-        //TODO
+        for (PlantData plant : plants) {
+            if (plant.getId().equalsIgnoreCase(id)) {
+                return plant;
+            }
+        }
         return null;
     }
 
     public List<PlantData> findByCategory(String category) {
-        //TODO
-        return null;
+        List<PlantData> result = new ArrayList<>();
+        for (PlantData plant : plants) {
+            if (plant.getCategory().equalsIgnoreCase(category)) {
+                result.add(plant);
+            }
+        }
+        return result;
     }
 
     public List<PlantData> findByTag(String tag) {
-        //TODO
-        return null;
+        List<PlantData> result = new ArrayList<>();
+        for (PlantData plant : plants) {
+            if (plant.getTags() != null && plant.getTags().contains(tag)) {
+                result.add(plant);
+            }
+        }
+        return result;
     }
 }

@@ -18,6 +18,10 @@ public class Plant implements Update {
     private int attackCooldownTicks;
     private int currentCooldownTimer;
 
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
     public Plant(PlantData data, int x, int y, int level) {
         this.data = data;
         this.x = x;

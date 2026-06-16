@@ -24,6 +24,10 @@ public class App {
         return currentMenu;
     }
 
+    public static User getCurrentUser() {
+        return currentUser;
+    }
+
     public static void setCurrentUser(User currentUser) {
         App.currentUser = currentUser;
     }
@@ -89,6 +93,19 @@ public class App {
             }
         }
         return false;
+    }
+
+    public static boolean doesUsernameExist(String username) {
+        return doesUsernameExists(username);
+    }
+
+    public static User getUserByUsername(String username) {
+        for (User user : users) {
+            if (user.getUsername().equals(username)) {
+                return user;
+            }
+        }
+        return null;
     }
 
     public static void addUser(User user) {

@@ -22,11 +22,15 @@ public class MenuController {
             return;
         }
         String menuName = matcher.group("menu_name");
-        if (menuName != null) {
-            Menu targetMenu = App.getMenu(menuName);
-            if (canEnter(targetMenu)) { //TODO: check possible errors?
-                App.setCurrentMenu(targetMenu);
-            }
+        Menu targetMenu = App.getMenu(menuName);
+        if (targetMenu == null) {
+            System.out.println("invalid menu");
+            return;
+        }
+        if (canEnter(targetMenu)) {
+            App.setCurrentMenu(targetMenu);
+        } else {
+            System.out.println("cannot enter menu");
         }
     }
 
@@ -38,10 +42,12 @@ public class MenuController {
         } else if (currentMenu == Menu.LOGIN_MENU) {
             App.setCurrentMenu(Menu.SIGNUP_MENU);
         } else if (currentMenu == Menu.MAIN_MENU) {
-            MainMenuController.logout();
+            System.out.println("please logout first");
         } else if (currentMenu == Menu.GAME_MENU || currentMenu == Menu.NEWS_MENU
-                || currentMenu == Menu.SETTINGS_MENU || currentMenu == Menu.PROFILE_MENU) { //TODO: and network menu
+                || currentMenu == Menu.SETTINGS_MENU || currentMenu == Menu.PROFILE_MENU) {
             App.setCurrentMenu(Menu.MAIN_MENU);
+        } else if (currentMenu == Menu.COLLECTION_MENU) {
+            App.setCurrentMenu(Menu.GAME_MENU);
         } else {
             App.setCurrentMenu(Menu.GAME_MENU);
         }
@@ -49,10 +55,22 @@ public class MenuController {
 
     public static boolean canEnter(Menu targetMenu) {
         Menu currentMenu = App.getCurrentMenu();
-        if (currentMenu == Menu.SIGNUP_MENU && targetMenu != Menu.LOGIN_MENU) {
+        if (targetMenu == null) {
             return false;
-        } else if () {
-
         }
+        if (currentMenu == Menu.SIGNUP_MENU) {
+            return targetMenu == Menu.LOGIN_MENU;
+        }
+        if (currentMenu == Menu.LOGIN_MENU) {
+            return App.getCurrentUser() != null && targetMenu == Menu.MAIN_MENU;
+        }
+        if (currentMenu == Menu.MAIN_MENU) {
+            return targetMenu == Menu.GAME_MENU || targetMenu == Menu.SETTINGS_MENU || targetMenu == Menu.NEWS_MENU
+                    || targetMenu == Menu.PROFILE_MENU;
+        }
+        if (currentMenu == Menu.GAME_MENU) {
+            return targetMenu == Menu.COLLECTION_MENU;
+        }
+        return false;
     }
 }

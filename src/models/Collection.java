@@ -4,6 +4,7 @@ import models.MiniGameRelated.MiniGame;
 import models.plants.Plant;
 import models.zombies.Zombie;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Collection {
@@ -11,6 +12,13 @@ public class Collection {
      private List<Plant> availablePlants;
      private List<MiniGame> unlockedMinigames;
      private List<Level> unlockedLevels;
+
+     public Collection() {
+          this.availableZombies = new ArrayList<>();
+          this.availablePlants = new ArrayList<>();
+          this.unlockedMinigames = new ArrayList<>();
+          this.unlockedLevels = new ArrayList<>();
+     }
 
      public List<Zombie> getAvailableZombies() {
           return availableZombies;
