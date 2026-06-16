@@ -20,9 +20,19 @@ public class SettingsMenuController{
 
     }
 
-    public static void increaseZombiesHp() {
+    public static void increaseZombiesHp(int dl) {
         for (Zombie zombie : App.getAllZombies()) {
-            zombie.setCurrentHp(zombie.getCurrentHp());
+            zombie.setCurrentHp(zombie.getCurrentHp() * (3 / dl));
+        }
+    }
+
+    public static void decreaseZombieWave(int dl) {
+        //TODO
+    }
+
+    public static void increaseZombieDamage(int dl) {
+        for (Zombie zombie : App.getAllZombies()) {
+            zombie.(zombie.getCurrentHp() * (3 / dl));
         }
     }
 }
