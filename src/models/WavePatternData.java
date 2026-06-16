@@ -1,5 +1,7 @@
 package models;
 
+import models.zombies.ZombieSpawnData;
+
 import java.util.List;
 
 public class WavePatternData {

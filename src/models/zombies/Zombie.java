@@ -1,6 +1,9 @@
-package models;
+package models.zombies;
 
 import enums.ZombieEffect;
+import models.Update;
+import models.plants.Plant;
+
 import java.util.ArrayList;
 import java.util.List;
 

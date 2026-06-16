@@ -1,4 +1,7 @@
-package models;
+package models.seasons;
+
+import models.LevelData;
+import models.SpecialFeatureData;
 
 import java.util.List;
 

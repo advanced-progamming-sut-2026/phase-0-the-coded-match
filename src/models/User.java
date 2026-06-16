@@ -2,9 +2,10 @@ package models;
 
 import enums.Gender;
 import enums.SecurityQuestions;
+import models.greenhouse.GreenHouse;
+import models.seasons.Season;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.*;
 
 public class User {

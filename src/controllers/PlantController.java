@@ -1,7 +1,7 @@
 package controllers;
 
-import models.Plant;
-import models.PlantRepository;
+import models.plants.Plant;
+import models.plants.PlantRepository;
 
 import java.util.ArrayList;
 import java.util.List;

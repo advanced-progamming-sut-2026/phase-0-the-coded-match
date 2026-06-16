@@ -1,6 +1,6 @@
 package models.MiniGameRelated;
 
-import models.Plant;
+import models.plants.Plant;
 import models.RollingNut;
 
 import java.util.List;

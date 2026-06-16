@@ -1,4 +1,4 @@
-package models;
+package models.seasons;
 
 public class DarkAges extends Season {
     @Override

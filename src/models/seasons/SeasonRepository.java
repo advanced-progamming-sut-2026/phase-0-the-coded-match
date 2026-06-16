@@ -1,4 +1,4 @@
-package models;
+package models.seasons;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
