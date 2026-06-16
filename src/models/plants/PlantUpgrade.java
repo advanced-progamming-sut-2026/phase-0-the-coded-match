@@ -1,4 +1,4 @@
-package models;
+package models.plants;
 
 public class PlantUpgrade {
 

@@ -1,11 +1,6 @@
 package controllers;
 
-import models.Season;
-import models.Sun;
-import models.Zombie;
 import models.*;
-
-import java.util.List;
 
 public class GameManagerController {
     private static Level currentLevel;

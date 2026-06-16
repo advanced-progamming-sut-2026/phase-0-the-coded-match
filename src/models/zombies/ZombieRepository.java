@@ -1,4 +1,4 @@
-package models;
+package models.zombies;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;

@@ -1,4 +1,6 @@
-package models;
+package models.plants;
+
+import models.Update;
 
 import java.util.ArrayList;
 import java.util.List;

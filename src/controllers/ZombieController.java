@@ -1,7 +1,7 @@
 package controllers;
 
-import models.Zombie;
-import models.ZombieRepository;
+import models.zombies.Zombie;
+import models.zombies.ZombieRepository;
 
 import java.util.ArrayList;
 import java.util.List;

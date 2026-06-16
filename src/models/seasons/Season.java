@@ -1,6 +1,7 @@
-package models;
+package models.seasons;
 import java.util.List;
 import enums.SeasonType;
+import models.*;
 
 public abstract class Season {
 
