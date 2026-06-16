@@ -2,6 +2,7 @@ package models;
 
 import controllers.ZombieWaveManager;
 import enums.LevelType;
+import models.plants.Plant;
 import models.seasons.Season;
 import models.zombies.Zombie;
 

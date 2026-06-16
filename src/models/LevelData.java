@@ -1,7 +1,9 @@
 package models;
 
 import enums.LevelType;
+import models.plants.Plant;
 import models.seasons.Season;
+import models.zombies.Zombie;
 
 import java.util.List;
 

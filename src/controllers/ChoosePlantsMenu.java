@@ -2,6 +2,7 @@ package controllers;
 
 import enums.Menu;
 import models.*;
+import models.plants.*;
 
 public class ChoosePlantsMenu{
 
