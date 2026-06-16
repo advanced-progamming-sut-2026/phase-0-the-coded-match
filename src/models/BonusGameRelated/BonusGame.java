@@ -1,4 +1,4 @@
-package models;
+package models.BonusGameRelated;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package models;
+package models.BonusGameRelated;
 
 public interface ScoreStrategy {
 

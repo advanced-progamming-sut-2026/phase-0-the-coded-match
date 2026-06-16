@@ -76,6 +76,8 @@ public class Plant implements Update {
         return boosted;
     }
 
+    public void setBoosted(boolean boosted) {this.boosted = boosted;}
+
     public double getCooldownRemaining() {
         return cooldownRemaining;
     }

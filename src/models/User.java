@@ -136,4 +136,8 @@ public class User {
     public void setDifficultyLevel(int difficultyLevel) {
         this.difficultyLevel = difficultyLevel;
     }
+
+    public Collection getCollection(){
+        return collection;
+    }
 }

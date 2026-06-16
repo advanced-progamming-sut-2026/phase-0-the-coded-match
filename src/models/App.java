@@ -7,18 +7,41 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class App {
-    private static Menu currentMenu = Menu.SIGNUP_MENU;
-    private static ArrayList<User> users = new ArrayList<>();
     private static User currentUser;
-    private static List<Season> allSeasons = new ArrayList<>();
-    private static Phases currentPhase = Phases.NORMAL_GAMEPLAY;
     private static User userUndergoingReset;
+    private static Level currentLevel;
+    private static Menu currentMenu = Menu.SIGNUP_MENU;
+    private static Phases currentPhase = Phases.NORMAL_GAMEPLAY;
+    private static ArrayList<User> users = new ArrayList<>();
+    private static List<Season> allSeasons = new ArrayList<>();
     private static List<Plant> allPlants = new ArrayList<>();
     private static List<Zombie> allZombies = new ArrayList<>();
+
+    public static User getCurrentUser() {
+        return currentUser;
+    }
+
+    public static void setCurrentUser(User currentUser) {
+        App.currentUser = currentUser;
+    }
+
+    public static void setUserUndergoingReset(User user){
+        userUndergoingReset = user;
+    }
+
+    public static User getUserUndergoingReset(){
+        return userUndergoingReset;
+    }
 
     public static Menu getCurrentMenu() {
         return currentMenu;
     }
+
+    public static void setCurrentMenu(Menu currentMenu) {
+        App.currentMenu = currentMenu;
+    }
+
+    public static Level getCurrentLevel(){return  currentLevel;}
 
     public static Phases getCurrentPhase() {
         return currentPhase;
@@ -30,18 +53,6 @@ public class App {
 
     public static ArrayList<User> getUsers(){
         return users;
-    }
-
-    public static void setCurrentMenu(Menu currentMenu) {
-        App.currentMenu = currentMenu;
-    }
-
-    public static User getCurrentUser() {
-        return currentUser;
-    }
-
-    public static void setCurrentUser(User currentUser) {
-        App.currentUser = currentUser;
     }
 
     public static List<Plant> getAllPlants() {
@@ -60,7 +71,7 @@ public class App {
         App.allZombies = allZombies;
     }
 
-    public static boolean doesUsernameExists(String username) {
+    public static boolean doesUsernameExist(String username) {
         for (User user : users) {
             if (user.getUsername().equals(username)) {
                 return true;
@@ -71,14 +82,6 @@ public class App {
 
     public static void addUser(User user) {
         users.add(user);
-    }
-
-    public static void setUserUndergoingReset(User user){
-        userUndergoingReset = user;
-    }
-
-    public static User getUserUndergoingReset(){
-        return userUndergoingReset;
     }
 
     public static LevelData getLevelByNumber(int num, Season season) {
@@ -103,6 +106,15 @@ public class App {
         for (Season season : allSeasons) {
             if (season.getType().getName().equalsIgnoreCase(seasonName)) {
                 return season;
+            }
+        }
+        return null;
+    }
+
+    public static Plant getPlantByName(String plantName){
+        for( Plant p: allPlants){
+            if(p.getData().getDisplayName().equalsIgnoreCase(plantName)){
+                return p;
             }
         }
         return null;
