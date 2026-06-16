@@ -1,24 +1,33 @@
 package enums;
 
 public enum SunType {
-    NORMAL {
+    NORMAL() {
         @Override
         public void explode() {
 
         }
     },
-    SPECIAL {
+    SPECIAL() {
         @Override
         public void explode() {
 
         }
     },
-    RADIOACTIVE {
+    RADIOACTIVE() {
         @Override
         public void explode() {
 
         }
     };
+    private final int dropChancePercentage;
+
+    SunType(int dropChancePercentage) {
+        this.dropChancePercentage = dropChancePercentage;
+    }
+
+    public int getDropChancePercentage() {
+        return dropChancePercentage;
+    }
 
     public abstract void explode();
 }

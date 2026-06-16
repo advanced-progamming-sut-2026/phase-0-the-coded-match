@@ -1,6 +1,7 @@
 package models;
 
 import enums.LevelType;
+import models.GameMapRelated.GameMapData;
 import models.seasons.Season;
 
 import java.util.List;

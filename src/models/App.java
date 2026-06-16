@@ -63,6 +63,18 @@ public class App {
         App.allZombies = allZombies;
     }
 
+    public static void setUsers(ArrayList<User> users) {
+        App.users = users;
+    }
+
+    public static List<Season> getAllSeasons() {
+        return allSeasons;
+    }
+
+    public static void setAllSeasons(List<Season> allSeasons) {
+        App.allSeasons = allSeasons;
+    }
+
     public static boolean doesUsernameExists(String username) {
         for (User user : users) {
             if (user.getUsername().equals(username)) {

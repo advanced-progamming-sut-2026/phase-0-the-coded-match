@@ -10,6 +10,7 @@ import java.util.List;
 public class Zombie implements Update {
     private ZombieData data;
     private int currentHp;
+    private int currentDamage;
     private double x;
     private int y;
     private ZombieArmor armor;
@@ -74,6 +75,14 @@ public class Zombie implements Update {
 
     public void setCurrentHp(int currentHp) {
         this.currentHp = currentHp;
+    }
+
+    public int getCurrentDamage() {
+        return currentDamage;
+    }
+
+    public void setCurrentDamage(int currentDamage) {
+        this.currentDamage = currentDamage;
     }
 
     public double getX() {

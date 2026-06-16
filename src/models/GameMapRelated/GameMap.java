@@ -1,7 +1,8 @@
-package models;
+package models.GameMapRelated;
+
+import models.Tile;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class GameMap {
 

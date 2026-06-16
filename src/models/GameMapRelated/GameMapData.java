@@ -1,4 +1,6 @@
-package models;
+package models.GameMapRelated;
+
+import models.TileData;
 
 import java.util.List;
 

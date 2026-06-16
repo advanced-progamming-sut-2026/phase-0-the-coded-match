@@ -1,7 +1,10 @@
 package controllers;
 
 import enums.Commands;
+import enums.SunType;
 import models.App;
+import models.Level;
+import models.LevelData;
 import models.zombies.Zombie;
 
 import java.util.regex.Matcher;
@@ -17,7 +20,11 @@ public class SettingsMenuController{
         }
         int newDifficulty = Integer.parseInt(matcher.group("difficulty_level"));
         App.getCurrentUser().setDifficultyLevel(newDifficulty);
-
+        increaseZombiesHp(newDifficulty);
+        decreaseZombieWaveCost(newDifficulty);
+        increaseZombieDamage(newDifficulty);
+        decreaseSkySunProduction(newDifficulty);
+        increaseGameTick(newDifficulty);
     }
 
     public static void increaseZombiesHp(int dl) {
@@ -26,13 +33,28 @@ public class SettingsMenuController{
         }
     }
 
-    public static void decreaseZombieWave(int dl) {
-        //TODO
+    public static void decreaseZombieWaveCost(int dl) { //TODO: for all levels?
+        Level level;
+        for (int i = 0; i < 4; i++) {
+            for (LevelData levelData : App.getAllSeasons().get(i).getLevels()) {
+                level = new Level(levelData);
+                level.getZombieWave().getWavePattern().setWaveDifficulty
+                        (level.getZombieWave().getWavePattern().getWaveDifficulty() * (dl / 3)); //TODO: check int or double
+            }
+        }
     }
 
     public static void increaseZombieDamage(int dl) {
         for (Zombie zombie : App.getAllZombies()) {
-            zombie.(zombie.getCurrentHp() * (3 / dl));
+            zombie.setCurrentDamage(zombie.getCurrentDamage() * (3 / dl));
         }
+    }
+
+    public static void decreaseSkySunProduction(int dl) {
+        //TODO: complete when SkySunProducer is completed
+    }
+
+    public static void increaseGameTick(int dl) {
+        //TODO: complete when time mechanism is completed
     }
 }

@@ -2,6 +2,8 @@ package models;
 
 import controllers.ZombieWaveManager;
 import enums.LevelType;
+import models.GameMapRelated.GameMapData;
+import models.GameMapRelated.SkySunProducer;
 import models.seasons.Season;
 import models.zombies.Zombie;
 
@@ -23,6 +25,7 @@ public class Level {
     private ZombieWaveManager zombieWave;
     private List<Projectile> activeProjectiles; //todo: here or in GameMap or not needed
     private int plantFoodCount;
+    private SkySunProducer skySunProducer;
 
     public Level(LevelData data) {
         this.data = data;
@@ -138,5 +141,13 @@ public class Level {
 
     public void setPlantFoodCount(int plantFoodCount) {
         this.plantFoodCount = plantFoodCount;
+    }
+
+    public SkySunProducer getSkySunProducer() {
+        return skySunProducer;
+    }
+
+    public void setSkySunProducer(SkySunProducer skySunProducer) {
+        this.skySunProducer = skySunProducer;
     }
 }
