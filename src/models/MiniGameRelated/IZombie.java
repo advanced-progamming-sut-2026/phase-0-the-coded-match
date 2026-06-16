@@ -1,7 +1,5 @@
 package models.MiniGameRelated;
 
-import models.Brain;
-
 import java.util.List;
 
 public class IZombie extends MiniGame {

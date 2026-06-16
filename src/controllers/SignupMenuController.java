@@ -45,7 +45,7 @@ public class SignupMenuController{
     }
 
     public static boolean validateUsername(String username) {
-        return App.doesUsernameExists(username);
+        return App.doesUsernameExist(username);
     }
 
     public static boolean validatePassword(String password) {
@@ -113,7 +113,7 @@ public class SignupMenuController{
         return null;
     }
 
-    public static String hashPassword(String password) {
+    public static void hashPassword(String password) {
 
     }
 

@@ -4,6 +4,7 @@ import controllers.ZombieWaveManager;
 import enums.LevelType;
 import models.GameMapRelated.GameMapData;
 import models.GameMapRelated.SkySunProducer;
+import models.plants.Plant;
 import models.seasons.Season;
 import models.zombies.Zombie;
 
@@ -18,6 +19,7 @@ public class Level {
     private LevelType levelType;
     private GameMapData gameMap;
     private List<Zombie> activeZombies;
+    private List<Plant> activePlants;
     private List<Sun> activeSuns; //todo: suns that are on the ground
     private int collectedSunsAmount;
     private Season currentSeason;
@@ -34,6 +36,7 @@ public class Level {
         this.levelType = data.getLevelType();
         this.gameMap = data.getMap();
         this.activeZombies = new ArrayList<>();
+        this.activePlants = new ArrayList<>();
         this.activeSuns = new ArrayList<>();
         this.collectedSunsAmount = 0;
         this.currentSeason = data.getType();
@@ -44,6 +47,10 @@ public class Level {
     }
 
     public void addActiveZombie(Zombie zombie) {}
+
+    public void AddActivePlants(Plant plant) {
+        activePlants.add(plant);
+    }
 
     public void addActiveSun() {}
 
@@ -82,6 +89,8 @@ public class Level {
     public List<Zombie> getActiveZombies() {
         return activeZombies;
     }
+
+    public List<Plant> getActivePlants(){return activePlants;}
 
     public void setActiveZombies(List<Zombie> activeZombies) {
         this.activeZombies = activeZombies;

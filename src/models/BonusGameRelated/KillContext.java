@@ -1,4 +1,4 @@
-package models;
+package models.BonusGameRelated;
 
 public class KillContext {
     public int zombiesKilledByOneShot;
