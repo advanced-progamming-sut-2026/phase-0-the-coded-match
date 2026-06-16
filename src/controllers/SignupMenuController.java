@@ -113,7 +113,7 @@ public class SignupMenuController{
         return null;
     }
 
-    public static String hashPassword(String password) {
+    public static void hashPassword(String password) {
 
     }
 

@@ -32,7 +32,7 @@ public class SettingsMenuController{
 
     public static void increaseZombieDamage(int dl) {
         for (Zombie zombie : App.getAllZombies()) {
-            zombie.(zombie.getCurrentHp() * (3 / dl));
+            zombie.setCurrentHp(zombie.getCurrentHp() * (3 / dl));
         }
     }
 }
