@@ -1,14 +1,23 @@
 package enums;
 
 public enum PlantCategory {
-    SUN_PRODUCER,
-    SHOOTER,
-    HOMING,
-    STRIKE_TROUGH,
-    LOBBER,
-    EXPLOSIVE,
-    MELEE,
-    WALL_NUT,
-    MODIFIER,
-    MINT
+    SUN_PRODUCER("Sun Producer"),
+    SHOOTER("Shooter"),
+    HOMING("Homing"),
+    STRIKE_TROUGH("Strike-through"),
+    LOBBER("Lobber"),
+    EXPLOSIVE("Explosive"),
+    MELEE("melee"),
+    WALL_NUT("Wall-nut"),
+    MODIFIER("Modifier"),
+    MINT("Mint");
+    private final String name;
+
+    PlantCategory(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
 }

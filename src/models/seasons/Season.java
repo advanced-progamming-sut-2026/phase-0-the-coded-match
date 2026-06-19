@@ -2,6 +2,7 @@ package models.seasons;
 import java.util.List;
 import enums.SeasonType;
 import models.*;
+import models.GameMapRelated.Tile;
 
 public abstract class Season {
 

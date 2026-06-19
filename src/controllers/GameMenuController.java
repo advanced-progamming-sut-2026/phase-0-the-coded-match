@@ -35,11 +35,12 @@ public class GameMenuController{
             App.getCurrentUser().setLastLevel(level);
             Level currentLevel = new Level(level);
             GameManagerController.setCurrentLevel(currentLevel);
+
         }
     }
 
     public static void enter(String input) {
-        Pattern pattern = Pattern.compile(Commands.ENTER_LEVEL.getPattern());
+        Pattern pattern = Pattern.compile(Commands.GAME_MENU_MENUS.getPattern());
         Matcher matcher = pattern.matcher(input);
         if (!matcher.matches()) {
             return;

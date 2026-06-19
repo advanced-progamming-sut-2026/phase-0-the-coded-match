@@ -1,4 +1,4 @@
-package models;
+package models.GameMapRelated;
 
 import models.plants.Plant;
 import models.zombies.Zombie;

@@ -3,6 +3,7 @@ package controllers;
 import models.plants.Plant;
 import models.plants.PlantRepository;
 
+import java.nio.file.attribute.UserPrincipalLookupService;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,7 +33,28 @@ public class PlantController {
         //TODO
     }
 
-    public List<Plant> getActivePlants() {
-        return activePlants;
+    public static void produceSun(Plant plant) {
+        plant.setProducedSun(true);
     }
+
+    public static void shootProjectile() {
+
+    }
+
+    public static void lobProjectile() {
+
+    }
+
+    public static void explode() {
+
+    }
+
+    public static void attack() {
+
+    }
+
+    public static void detectAZombie() {}
+
+    public static void givePlantFood() {}
+
 }

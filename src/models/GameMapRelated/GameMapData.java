@@ -1,12 +1,12 @@
 package models.GameMapRelated;
 
-import models.TileData;
-
 import java.util.List;
 
 public class GameMapData {
     private int rows;
     private int columns;
+    private int length;
+    private int width;
     private int zombieStartColumn;
     private int homeColumn;
     private String defaultPathDirection;
@@ -34,5 +34,13 @@ public class GameMapData {
 
     public List<TileData> getTiles() {
         return tiles;
+    }
+
+    public int getLength() {
+        return length;
+    }
+
+    public int getWidth() {
+        return width;
     }
 }

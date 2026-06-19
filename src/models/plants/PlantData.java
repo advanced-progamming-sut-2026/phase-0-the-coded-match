@@ -1,14 +1,16 @@
 package models.plants;
 
+import enums.PlantCategory;
+
 import java.util.List;
 
 public class PlantData {
     private String id;
     private String name;
     private String displayName;
-    private String category; //TODO: PlantCategory/ PlantTag enum?
+    private PlantCategory category;
     private List<String> tags;
-    private int sun_Cost;
+    private int sunCost;
     private int baseHp;
     private int damage;
     private double actionInterval;
@@ -32,7 +34,7 @@ public class PlantData {
         return displayName;
     }
 
-    public String getCategory() {
+    public PlantCategory getCategory() {
         return category;
     }
 
@@ -40,8 +42,8 @@ public class PlantData {
         return tags;
     }
 
-    public int getSun_Cost() {
-        return sun_Cost;
+    public int getSunCost() {
+        return sunCost;
     }
 
     public int getBaseHp() {

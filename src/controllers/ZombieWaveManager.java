@@ -19,12 +19,12 @@ public class ZombieWaveManager implements Update {
 
     }
 
-    public static boolean checkNextWave() {
+    public static boolean checkNextWave() { //TODO: check if its time for the new wave
 
     }
 
     @Override
     public void update() {
-
+        checkNextWave();
     }
 }

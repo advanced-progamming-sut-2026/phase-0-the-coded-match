@@ -20,7 +20,7 @@ public class Level {
     private GameMapData gameMap;
     private List<Zombie> activeZombies;
     private List<Plant> activePlants;
-    private List<Sun> activeSuns; //todo: suns that are on the ground
+    private List<Sun> activeSuns; //suns that are on the ground
     private int collectedSunsAmount;
     private Season currentSeason;
     private int currentTick;
@@ -41,9 +41,10 @@ public class Level {
         this.collectedSunsAmount = 0;
         this.currentSeason = data.getType();
         this.currentTick = 0;
-        this.zombieWave = data.; //TODO: what type of wave exactly? ZombieWaveController or WavePatterData?
+        this.zombieWave = data.; //TODO: include ZombieWaveManager in LevelData
         this.activeProjectiles = new ArrayList<>();
         this.plantFoodCount = 0;
+        skySunProducer = new SkySunProducer();
     }
 
     public void addActiveZombie(Zombie zombie) {}

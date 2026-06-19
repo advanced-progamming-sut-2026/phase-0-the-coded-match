@@ -83,7 +83,7 @@ public class CollectionMenuController {
         result.append("id: ").append(plant.getId()).append("\n");
         result.append("category: ").append(plant.getCategory()).append("\n");
         result.append("tags: ").append(plant.getTags()).append("\n");
-        result.append("sun cost: ").append(plant.getSun_Cost()).append("\n");
+        result.append("sun cost: ").append(plant.getSunCost()).append("\n");
         result.append("hp: ").append(plant.getBaseHp()).append("\n");
         result.append("damage: ").append(plant.getDamage()).append("\n");
         result.append("recharge: ").append(plant.getRecharge()).append("\n");

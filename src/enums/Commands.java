@@ -28,7 +28,8 @@ public enum Commands {
     PROFILE_CHANGE_USERNAME("^\\s*menu\\s+profile\\s+change-username\\s+-u\\s+(?<username>\\S+)\\s*$"),
     PROFILE_CHANGE_NICKNAME("^\\s*menu\\s+profile\\s+change-nickname\\s+-u\\s+(?<nickname>.*)\\s*$"),
     PROFILE_CHANGE_EMAIL("^\\s*menu\\s+profile\\s+change-email\\s+-e\\s+(?<email>\\S+)\\s*$"),
-    PROFILE_CHANGE_PASSWORD("^\\s*menu\\s+profile\\s+change-password\\s+-p\\s+(?<new_password>\\S+)\\s+-o\\s+(?<old_password>\\S+)\\s*$"),
+    PROFILE_CHANGE_PASSWORD("^\\s*menu\\s+profile\\s+change-password\\s+-p\\s+(?<new_password>\\S+)\\s+-o\\s+" +
+            "(?<old_password>\\S+)\\s*$"),
     PROFILE_SHOW_INFO("^\\s*menu\\s+profile\\s+show-info\\s*$"),
     COLLECTION_SHOW_PLANTS("^\\s*menu\\s+collection\\s+show-plants\\s*$"),
     COLLECTION_SHOW_ALL_PLANTS("^\\s*menu\\s+collection\\s+show-all-plants\\s*$"),
@@ -39,10 +40,11 @@ public enum Commands {
     COLLECTION_UPGRADE("^\\s*menu\\s+collection\\s+upgrade-plant\\s+-p\\s+(?<plant_name>.*)\\s*$"),
     COLLECTION_PURCHASE("^\\s*menu\\s+collection\\s+purchase-plant\\s+-p\\s+(?<plant_name>.*)\\s*$"),
     PLANTS_COMMANDS,
-    ADVANCE_TIME,
-    COLLECT_SUN,
+    ADVANCE_TIME("^\\s*advance\\s+time\\s+-t\\s+(?<count>\\d+)\\s+ticks\\s*$"),
+    COLLECT_SUN("^\\s*collect\\s+sun\\s+-l\\s+(\\s+(?<x>\\d+)\\s+,\\s+(?<y>\\d+)\\s+)\\s*$"),
+    SUN_AMOUNT("^\\s*show\\s+sun\\s+amount\\s*$"),
+    CHEAT_ADD_SUNS("^\\s*cheat\\s+add\\s+-n\\s+(?<count>\\d+)\\s+suns\\s*$"),
     PLANT_PLANT,
-    SUN_AMOUNT,
     TILE_STATUS;
 
     private final String pattern;
