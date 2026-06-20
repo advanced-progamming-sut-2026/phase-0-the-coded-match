@@ -2,6 +2,8 @@ package models;
 
 import controllers.GameManagerController;
 import enums.SunType;
+import models.plants.Plant;
+import models.zombies.Zombie;
 
 public class Sun implements Update {
 
@@ -27,10 +29,33 @@ public class Sun implements Update {
     public void collect() {
         Level currentLevel = GameManagerController.getCurrentLevel();
         if (isFalling && type == SunType.RADIOACTIVE) {
-
+            explode();
+            currentLevel.getActiveSuns().remove(this);
+            return;
+        } else if (type == SunType.RADIOACTIVE) {
+            this.type = SunType.NORMAL;
         }
         currentLevel.setCollectedSunsAmount(currentLevel.getCollectedSunsAmount() + value);
         currentLevel.getActiveSuns().remove(this);
+    }
+
+    public void explode() {
+        for (Zombie zombie : GameManagerController.getCurrentLevel().getActiveZombies()) {
+            if ((zombie.getX() - this.x <= 2) && (zombie.getY() - this.y <= 2)) {
+                zombie.setCurrentHp(zombie.getCurrentHp() - 150);
+                if (zombie.isDead()) {
+                    //TODO: call the method that should be called after a zombie dies
+                }
+            }
+        }
+        for (Plant plant : GameManagerController.getCurrentLevel().getActivePlants()) {
+            if ((plant.getX() - this.x <= 1) && (plant.getY() - this.y <= 1)) {
+                plant.setCurrentHp(plant.getCurrentHp() - 80);
+                if (plant.isDead()) {
+                    //TODO: call the method that should be called after a plant dies
+                }
+            }
+        }
     }
 
     @Override

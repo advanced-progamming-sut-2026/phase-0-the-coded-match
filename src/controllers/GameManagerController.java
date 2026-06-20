@@ -38,9 +38,11 @@ public class GameManagerController {
     public static String[] updateObjects(String[] message) {
         for (Plant plant : currentLevel.getActivePlants()) { //TODO: or a loop on all tiles and their plants?
             plant.update();
-            if (plant.getData().getCategory().getName().equalsIgnoreCase("sun producer") && plant.isProducedSun()) {
+            if (plant.getData().getCategory().getName().equalsIgnoreCase("sun producer") &&
+                    plant.isProducedSun()) {
                 message[0] = "plant " + plant.getData().getDisplayName() + " produced a sun at (" + plant.getX() + ", "
                         + plant.getY() + ")";
+                plant.setProducedSun(false);
             }
         }
         for (Zombie zombie : currentLevel.getActiveZombies()) {

@@ -10,4 +10,11 @@ public class GameMap {
     private int width;
     private Tile[][] tiles;
     private ArrayList<Lawnmower> lawnmowers;
+
+    public GameMap(int rows, int columns) {
+        this.rows = rows;
+        this.columns = columns;
+    }
+
+
 }

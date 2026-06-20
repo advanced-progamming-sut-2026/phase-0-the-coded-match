@@ -1,5 +1,7 @@
 package controllers;
 
+import enums.SunType;
+import models.Sun;
 import models.plants.Plant;
 import models.plants.PlantRepository;
 
@@ -35,6 +37,8 @@ public class PlantController {
 
     public static void produceSun(Plant plant) {
         plant.setProducedSun(true);
+        Sun sun = new Sun(plant.getX(), plant.getY(), SunType.NORMAL.getValue(), 0, false, SunType.NORMAL);
+        GameManagerController.getCurrentLevel().getActiveSuns().add(sun);
     }
 
     public static void shootProjectile() {

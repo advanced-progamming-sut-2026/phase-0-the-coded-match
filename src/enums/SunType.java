@@ -1,20 +1,12 @@
 package enums;
 
-public enum SunType {
-    NORMAL("Normal" ,80, 25) {
-        @Override
-        public void explode() {}
-    },
-    SPECIAL("Special" ,15, 100) {
-        @Override
-        public void explode() {}
-    },
-    RADIOACTIVE("RadioActive" ,5, 25) {
-        @Override
-        public void explode() {
+import controllers.GameManagerController;
+import models.zombies.Zombie;
 
-        }
-    };
+public enum SunType {
+    NORMAL("Normal" ,80, 25),
+    SPECIAL("Special" ,15, 100),
+    RADIOACTIVE("RadioActive" ,5, 25);
     private final String name;
     private final int dropChancePercentage;
     private final int value;
@@ -36,6 +28,4 @@ public enum SunType {
     public int getValue() {
         return value;
     }
-
-    public abstract void explode();
 }

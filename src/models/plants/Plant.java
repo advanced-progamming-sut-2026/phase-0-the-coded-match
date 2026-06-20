@@ -41,37 +41,44 @@ public class Plant implements Update {
     public void update() {
         // TODO
         if (cooldownRemaining > 0) {
-            cooldownRemaining -= 1;
+            cooldownRemaining--;
         }
-        if (cooldownRemaining == 0) {
+        if (currentCooldownTimer > 0) {
+            currentCooldownTimer--;
+        }
+        if (currentCooldownTimer == 0) {
             switch (data.getCategory().getName().toLowerCase()) {
                 case "sun producer":
                     if (sunCollected == true) {
                         PlantController.produceSun(this);
-                        cooldownRemaining = currentCooldownTimer; //TODO: if not collected, should cooldown reset or not?
+                        currentCooldownTimer = attackCooldownTicks; //TODO: if not collected, should cooldown reset or not?
                     }
                 case "shooter":
                     PlantController.shootProjectile();
-                    cooldownRemaining = currentCooldownTimer;
+                    currentCooldownTimer = attackCooldownTicks;
                 case "lobber":
                     PlantController.lobProjectile();
-                    cooldownRemaining = currentCooldownTimer;
+                    currentCooldownTimer = attackCooldownTicks;
                 case "explosive":
                     PlantController.explode();
-                    cooldownRemaining = currentCooldownTimer;
+                    currentCooldownTimer = attackCooldownTicks;
                 case "melee":
                     PlantController.attack();
-                    cooldownRemaining = currentCooldownTimer;
+                    currentCooldownTimer = attackCooldownTicks;
                 case "strike-through":
                     PlantController.shootProjectile();
-                    cooldownRemaining = currentCooldownTimer;
+                    currentCooldownTimer = attackCooldownTicks;
                 case "homing":
                     PlantController.detectAZombie();
-                    cooldownRemaining = currentCooldownTimer;
+                    currentCooldownTimer = attackCooldownTicks;
                 case "mint":
                     PlantController.givePlantFood();
-                    cooldownRemaining = currentCooldownTimer;
+                    currentCooldownTimer = attackCooldownTicks;
             }
+        }
+        //TODO: check if plant gets destroyed here
+        if (isDead()) {
+
         }
     }
 
@@ -85,6 +92,10 @@ public class Plant implements Update {
 
     public void activatePlantFood() {
         // TODO
+    }
+
+    public void setCurrentHp(int currentHp) {
+        this.currentHp = currentHp;
     }
 
     public String getBehaviorType() {
