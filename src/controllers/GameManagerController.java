@@ -2,6 +2,8 @@ package controllers;
 
 import enums.Commands;
 import models.*;
+import models.GameMapRelated.Tile;
+import models.GameMapRelated.TileData;
 import models.plants.Plant;
 import models.zombies.Zombie;
 
@@ -61,6 +63,9 @@ public class GameManagerController {
             if (sun.hasFallen() && !sun.isFalling()) {
                 message[0] += "Sun reached the ground at position (" + sun.getX() + ", " + sun.getY() + ")";
             }
+        }
+        for (Tile tile : currentLevel.getGameMap().getTiles()) {
+            tile.update();
         }
         return message;
     }

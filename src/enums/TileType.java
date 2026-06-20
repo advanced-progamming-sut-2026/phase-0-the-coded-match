@@ -1,32 +1,28 @@
 package enums;
 
 public enum TileType {
-    NORMAL(true),
-    GRAVE(false) {
-        @Override
-        public void takeDamage(int damage) {
-
-        }
-    },
-    ICE(false) {
-        @Override
-        public void takeDamage(int damage) {
-
-        }
-    },
-    SLIDE_UP(false),
-    SLIDE_DOWN(false),
-    WATER,
-    LOW_TIDE,
-    NECROMANCY;
+    NORMAL(true, 0),
+    GRAVE(false, 700),
+    ICE(false, 600),
+    SLIDE_UP(false, 0),
+    SLIDE_DOWN(false, 0),
+    WATER(true, 0),
+    LOW_TIDE(true, 0),
+    NECROMANCY(true, 0);
 
     private final boolean canPlant;
-    private final int hp;
+    private final int maxHp;
 
-    TileType(boolean canPlant, int hp) {
+    TileType(boolean canPlant, int maxHp) {
         this.canPlant = canPlant;
-        this.hp = hp;
+        this.maxHp = maxHp;
     }
 
-    public abstract void takeDamage(int damage);
+    public boolean isCanPlant() {
+        return canPlant;
+    }
+
+    public int getMaxHp() {
+        return maxHp;
+    }
 }

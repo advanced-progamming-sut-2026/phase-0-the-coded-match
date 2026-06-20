@@ -1,18 +1,18 @@
 package models.seasons;
 
 public class AncientEgypt extends Season {
+    public AncientEgypt(SeasonData data) {
+        super(data);
+    }
 
     @Override
     public void initializeGrid() {
 
     }
-        public AncientEgypt(SeasonData data) {
-            super(data);
-        }
 
-        @Override
-        public void applySpecialRules() {
-            // TODO
-        }
+    @Override
+    public void applySpecialRules() {
+        // TODO
     }
+}
 

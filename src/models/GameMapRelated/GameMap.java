@@ -8,13 +8,12 @@ public class GameMap {
     private int columns;
     private int length;
     private int width;
-    private Tile[][] tiles;
+    private Tile[][] grid;
     private ArrayList<Lawnmower> lawnmowers;
 
     public GameMap(int rows, int columns) {
         this.rows = rows;
         this.columns = columns;
+        grid = new Tile[rows][columns];
     }
-
-
 }

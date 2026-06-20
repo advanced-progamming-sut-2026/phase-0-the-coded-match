@@ -10,7 +10,7 @@ public class GameMapData {
     private int zombieStartColumn;
     private int homeColumn;
     private String defaultPathDirection;
-    private List<TileData> tiles;
+    private List<Tile> tiles;
 
     public int getRows() {
         return rows;
@@ -32,7 +32,7 @@ public class GameMapData {
         return defaultPathDirection;
     }
 
-    public List<TileData> getTiles() {
+    public List<Tile> getTiles() {
         return tiles;
     }
 

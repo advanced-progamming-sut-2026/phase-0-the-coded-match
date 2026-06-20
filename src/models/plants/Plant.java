@@ -1,6 +1,7 @@
 package models.plants;
 
 import controllers.PlantController;
+import enums.PlantTag;
 import models.Update;
 
 import java.util.ArrayList;
@@ -15,8 +16,9 @@ public class Plant implements Update {
     private boolean boosted;
     private int cooldownRemaining;
     private List<String> activeEffects;
+    private List<PlantTag> tags;
     private boolean isLocked;
-    private int attackCooldownTicks;
+    private int cooldownTicks;
     private int currentCooldownTimer;
     private boolean producedSun = false;
     private boolean sunCollected = false;
@@ -51,29 +53,29 @@ public class Plant implements Update {
                 case "sun producer":
                     if (sunCollected == true) {
                         PlantController.produceSun(this);
-                        currentCooldownTimer = attackCooldownTicks; //TODO: if not collected, should cooldown reset or not?
+                        currentCooldownTimer = cooldownTicks; //TODO: if not collected, should cooldown reset or not?
                     }
                 case "shooter":
                     PlantController.shootProjectile();
-                    currentCooldownTimer = attackCooldownTicks;
+                    currentCooldownTimer = cooldownTicks;
                 case "lobber":
                     PlantController.lobProjectile();
-                    currentCooldownTimer = attackCooldownTicks;
+                    currentCooldownTimer = cooldownTicks;
                 case "explosive":
                     PlantController.explode();
-                    currentCooldownTimer = attackCooldownTicks;
+                    currentCooldownTimer = cooldownTicks;
                 case "melee":
                     PlantController.attack();
-                    currentCooldownTimer = attackCooldownTicks;
+                    currentCooldownTimer = cooldownTicks;
                 case "strike-through":
                     PlantController.shootProjectile();
-                    currentCooldownTimer = attackCooldownTicks;
+                    currentCooldownTimer = cooldownTicks;
                 case "homing":
                     PlantController.detectAZombie();
-                    currentCooldownTimer = attackCooldownTicks;
+                    currentCooldownTimer = cooldownTicks;
                 case "mint":
                     PlantController.givePlantFood();
-                    currentCooldownTimer = attackCooldownTicks;
+                    currentCooldownTimer = cooldownTicks;
             }
         }
         //TODO: check if plant gets destroyed here
@@ -92,6 +94,15 @@ public class Plant implements Update {
 
     public void activatePlantFood() {
         // TODO
+    }
+
+    public boolean hasThisTag(PlantTag tag) {
+        for (PlantTag plantTag : tags) {
+            if (plantTag == tag) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void setCurrentHp(int currentHp) {
@@ -150,5 +161,13 @@ public class Plant implements Update {
 
     public void setProducedSun(boolean producedSun) {
         this.producedSun = producedSun;
+    }
+
+    public List<PlantTag> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<PlantTag> tags) {
+        this.tags = tags;
     }
 }
