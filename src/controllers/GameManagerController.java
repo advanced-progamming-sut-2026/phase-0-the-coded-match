@@ -49,6 +49,9 @@ public class GameManagerController {
         }
         for (Zombie zombie : currentLevel.getActiveZombies()) {
             zombie.update();
+            if (zombie.getX() <= 0){
+                App.handleLawnMower(zombie);
+            }
         }
         currentLevel.getZombieWave().update();
         currentLevel.getSkySunProducer().update();

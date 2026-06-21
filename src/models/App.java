@@ -2,6 +2,7 @@ package models;
 
 import enums.Menu;
 import enums.Phases;
+import models.GameMapRelated.Lawnmower;
 import models.plants.Plant;
 import models.seasons.Season;
 import models.zombies.Zombie;
@@ -19,6 +20,7 @@ public class App {
     private static List<Season> allSeasons = new ArrayList<>();
     private static List<Plant> allPlants = new ArrayList<>();
     private static List<Zombie> allZombies = new ArrayList<>();
+    private static List<Lawnmower> allLawnMowers = new ArrayList<>();
 
     public static Menu getCurrentMenu() {
         return currentMenu;
@@ -144,6 +146,61 @@ public class App {
             if(p.getData().getDisplayName().equalsIgnoreCase(plantName)){
                 return p;
             }
+        }
+        return null;
+    }
+
+    public static Plant getFrontMostPlantInRow(double row){
+        Plant front= null;
+        int minCol = Integer.MAX_VALUE;
+        for(Plant p : allPlants){
+            if(p.getX() == row && p.getY() < minCol){
+                minCol = p.getY();
+                front = p;
+            }
+        }
+        return front;
+    }
+
+    public static void removePlant(Plant plant){
+        allPlants.remove(plant);
+    }
+
+    public static void handleLawnMower(Zombie zombie){
+        int row = zombie.getY();
+        Lawnmower mower = lawnMowerUsed(row);
+        if(mower == null){
+            //TODO: needs to print "The zombie ate your brain; LOSER!!!" how do we send this to view?
+            //TODO: GAME OVER (needs an overall method in the game)
+            return;
+        }
+        mower.setHasBeenUsed(true);
+        //TODO: print "The lawn mower in the row <r>is triggered and killed these zombies:"
+        List<Zombie> killed = new ArrayList<>();
+        for(Zombie z : allZombies){
+            if(z.getY() == row){ //Todo: Make an exception for BOSS ZOMBIE!!!!!
+                killed.add(z);
+                z.setCurrentHp(0);
+                //TODO: PRINT "Zombie of type <type> is dead at (<x>, y>)"
+                //TODO: i think we should erase these dead zombies from the game? a new method perhaps?
+            }
+        }
+
+        for(Zombie z : killed){
+            // TODO: Print the zombie.getType() of that row that are now dead;
+        }
+
+    }
+
+    private static Lawnmower lawnMowerUsed(int row){
+        for(Lawnmower mower: allLawnMowers){
+            if (mower.getRow() != row){
+                continue;
+            }
+            if (mower.HasBeenUsed()){
+                return null;
+            }
+            return mower;
         }
         return null;
     }

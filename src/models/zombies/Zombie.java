@@ -1,6 +1,7 @@
 package models.zombies;
 
 import enums.ZombieEffect;
+import models.App;
 import models.Update;
 import models.plants.Plant;
 
@@ -35,7 +36,26 @@ public class Zombie implements Update {
 
     @Override
     public void update() {
-        move();
+        if(isDead()){
+            return;
+        }
+        Plant target = App.getFrontMostPlantInRow(this.y);
+
+        if(target != null && isAdjacentTo(target)){
+            eating = true;
+            attack(target);
+        }else{
+            eating = false;
+            move();
+        }
+
+    }
+
+    private boolean isAdjacentTo(Plant target){
+        if (this.x == target.getX() && this.y == target.getY()){ //TODO: Maybe later on change the condition to be more flexible
+            return true;
+        }
+        return false;
     }
 
     public void move() {
@@ -46,8 +66,10 @@ public class Zombie implements Update {
     }
 
     public void attack(Plant plant) {
-        eating = true;
         plant.takeDamage(data.getDamage());
+        if(plant.isDead()){
+            App.removePlant(plant); // TODO: After plant dies we need to print "Plant <type> at (<x>, <y>) is destroyed."; but how do we send it to view?
+        }
     }
 
     public void takeDamage(int damage) {
