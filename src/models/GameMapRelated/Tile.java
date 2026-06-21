@@ -7,10 +7,10 @@ import models.Update;
 import models.plants.Plant;
 import models.zombies.Zombie;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Tile implements Update {
-
     private int row;
     private int column;
     private TileType type;
@@ -24,6 +24,7 @@ public class Tile implements Update {
         this.column = column;
         this.type = type;
         this.currentHp = type.getMaxHp();
+        this.zombies = new ArrayList<>();
     }
 
     public void takeDamage(int damage) {
@@ -38,7 +39,7 @@ public class Tile implements Update {
 
     public void startTakingDamage() {
         if (type == TileType.ICE && firePlantExists()) {
-            currentHp -= 60;
+            currentHp -= 6;
             this.isGettingDamaged = true;
         }
     }
@@ -47,29 +48,71 @@ public class Tile implements Update {
         if (type == TileType.ICE && currentHp <= 0) {
             currentHp = 0;
             this.isGettingDamaged = false;
+            this.type = TileType.NORMAL;
         }
     }
 
     public boolean firePlantExists() {
         for (Plant p : GameManagerController.getCurrentLevel().getActivePlants()) {
-            if (p.hasThisTag(PlantTag.FIRE) && (p.getX() - column <= 1) && (p.getY() - row <= 1)) {
+            int dx = Math.abs(p.getX() - column);
+            int dy = Math.abs(p.getY() - row);
+            if (p.hasThisTag(PlantTag.FIRE) && dx <= 1 && dy <= 1) {
                 return true;
             }
         }
         return false;
     }
 
+    public boolean isPlantable() {
+        return type == TileType.NORMAL || type == TileType.WATER;
+    }
+
     public boolean isEmpty() {
         return plant == null;
     }
 
-    public static void removePlant() {
+    public void setPlant(Plant plant) {
+        this.plant = plant;
+    }
 
+    public Plant getPlant() {
+        return plant;
+    }
+
+    public void removePlantFromTile() {
+        this.plant = null;
+    }
+
+    public static void removePlant() {
     }
 
     @Override
     public void update() {
         startTakingDamage();
         stopTakingDamage();
+    }
+
+    public int getRow() {
+        return row;
+    }
+
+    public int getColumn() {
+        return column;
+    }
+
+    public TileType getType() {
+        return type;
+    }
+
+    public int getCurrentHp() {
+        return currentHp;
+    }
+
+    public boolean isGettingDamaged() {
+        return isGettingDamaged;
+    }
+
+    public List<Zombie> getZombies() {
+        return zombies;
     }
 }
