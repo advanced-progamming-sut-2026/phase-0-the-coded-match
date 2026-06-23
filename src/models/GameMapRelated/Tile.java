@@ -39,7 +39,7 @@ public class Tile implements Update {
 
     public void startTakingDamage() {
         if (type == TileType.ICE && firePlantExists()) {
-            currentHp -= 6;
+            currentHp -= 60;
             this.isGettingDamaged = true;
         }
     }

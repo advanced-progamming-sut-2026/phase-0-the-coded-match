@@ -14,12 +14,14 @@ public class LoginMenuController{
         if(target == null){
             return "User does not exist";
         }
-        if(!target.getPassword().equals(password)){
+        String hashedPassword = SignupMenuController.hashPassword(password);
+        if(!target.getPassword().equals(hashedPassword)){
             return "Incorrect password";
         }
         App.setCurrentUser(target);
+        App.saveLoggedInUser(username);
         if(!stayLoggedIn.isEmpty()){
-            App.getCurrentUser().setStayLoggedIn(true);
+            App.getCurrentUser().setStayLoggedIn(true); //TODO: is this necessary?
         }
         return "Logged in successfully";
     }
@@ -47,7 +49,7 @@ public class LoginMenuController{
         return "Please enter your new password";
     }
 
-    public static String resetPassword(String newPassword){
+    public static String resetPassword(String newPassword) {
         if (newPassword == null || newPassword.length() < 8) {
             return "Invalid password: It must be at least 8 characters long.";
         }
@@ -65,7 +67,7 @@ public class LoginMenuController{
             return "Invalid password: It must contain at least one special character.";
         }
         User target = App.getUserUndergoingReset();
-        target.setPassword(newPassword);
+        target.setPassword(SignupMenuController.hashPassword(newPassword));
         App.setCurrentPhase(Phases.NORMAL_GAMEPLAY);
         return "Password reset successfully";
     }

@@ -1,9 +1,11 @@
 package views;
 
 import controllers.MenuController;
+import controllers.SignupMenuController;
 import enums.Commands;
 import enums.Menu;
 import models.App;
+import models.User;
 
 import java.util.Scanner;
 
@@ -12,6 +14,8 @@ public class AppView {
     public static boolean isRunning = true;
 
     public static void run() {
+        SignupMenuController.loadFromJson();
+        App.loadLoggedInUser();
         Scanner scanner = new Scanner(System.in);
         while (scanner.hasNextLine() && isRunning) {
             String input = scanner.nextLine();

@@ -7,8 +7,12 @@ import models.plants.Plant;
 import models.seasons.Season;
 import models.zombies.Zombie;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class App {
     private static User currentUser;
@@ -148,6 +152,37 @@ public class App {
             }
         }
         return null;
+    }
+
+    public static void saveLoggedInUser(String username) {
+        try (FileWriter writer = new FileWriter("assets.Data/loggedInUser.txt")) {
+            writer.write(username);
+        } catch (IOException e) {
+            System.err.println("Could not save user: " + e.getMessage());
+        }
+    }
+
+    public static void loadLoggedInUser() {
+        File file = new File("assets.Data/loggedInUser.txt");
+        if (!file.exists()) {
+            setCurrentUser(null);
+            return;
+        }
+        try (Scanner scanner = new Scanner(file)) {
+            if (scanner.hasNext()) {
+                String username =  scanner.next();
+                User user = getUserByUsername(username);
+                if (user != null) {
+                    setCurrentUser(user);
+                    setCurrentMenu(Menu.MAIN_MENU);
+                    return;
+                }
+            }
+        } catch (IOException e) {
+            System.err.println("Could not read file: " + e.getMessage());
+        }
+        setCurrentUser(null);
+        return;
     }
 
     public static Plant getFrontMostPlantInRow(double row){

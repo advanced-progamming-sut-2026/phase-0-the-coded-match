@@ -74,16 +74,18 @@ public class ProfileMenuController {
         User user = App.getCurrentUser();
         String newPassword = matcher.group("new_password");
         String oldPassword = matcher.group("old_password");
+        String hashedNewPassword = SignupMenuController.hashPassword(newPassword);
+        String hashedOldPassword = SignupMenuController.hashPassword(oldPassword);
         if (user == null) {
             System.out.println("no user is logged in");
-        } else if (!user.getPassword().equals(oldPassword)) {
+        } else if (!user.getPassword().equals(hashedOldPassword)) {
             System.out.println("old password is incorrect");
-        } else if (user.getPassword().equals(newPassword)) {
+        } else if (user.getPassword().equals(hashedNewPassword)) {
             System.out.println("new password is the same as current password");
         } else if (!SignupMenuController.validatePassword(newPassword)) {
             System.out.println("password is not strong enough");
         } else {
-            user.setPassword(newPassword);
+            user.setPassword(hashedNewPassword);
             System.out.println("password changed successfully");
         }
     }

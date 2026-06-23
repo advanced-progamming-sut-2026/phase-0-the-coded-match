@@ -1,5 +1,8 @@
 package controllers;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import enums.Commands;
 import enums.Gender;
 import enums.SecurityQuestions;
@@ -7,6 +10,15 @@ import models.App;
 import models.User;
 import views.SignupMenu;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,8 +49,10 @@ public class SignupMenuController{
         } else {
             SignupMenu.registered = true;
             Gender gender = whichGender(genderSt);
-            User user = new User(username, password, nickname, email, gender);
+            String hashedPassword = hashPassword(password);
+            User user = new User(username, hashedPassword, nickname, email, gender);
             App.addUser(user);
+            saveToJson(user);
             message[0] = "";
         }
         return message;
@@ -113,15 +127,47 @@ public class SignupMenuController{
         return null;
     }
 
-    public static void hashPassword(String password) {
-
+    public static String hashPassword(String password) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+            StringBuilder hexString = new StringBuilder(2 * hash.length);
+            for (int i = 0; i < hash.length; i++) {
+                String hex = Integer.toHexString(0xff & hash[i]);
+                if(hex.length() == 1) {
+                    hexString.append('0');
+                }
+                hexString.append(hex);
+            }
+            return hexString.toString();
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("SHA-256 algorithm not found", e);
+        }
     }
 
-    public static void saveToFile() {
-
+    public static void saveToJson(User newUser) {
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        try (FileWriter writer = new FileWriter("assets.Data/Users.json")){
+            gson.toJson(newUser, writer);
+        } catch (IOException e) {
+            System.out.println("Error saving user: " + e.getMessage());
+        }
     }
 
-    public static void loadFromFile() {
-
+    public static void loadFromJson() {
+        Gson gson = new Gson();
+        try (FileReader reader = new FileReader("assets.Data/Users.json")){
+            Type userListType = new TypeToken<ArrayList<User>>(){}.getType();
+            ArrayList<User> loadedUsers = gson.fromJson(reader, userListType);
+            App.setUsers(loadedUsers != null ? loadedUsers : new ArrayList<>());
+            return;
+        } catch (FileNotFoundException e) {
+            App.setUsers(new ArrayList<>());
+            return;
+        } catch (IOException e) {
+            System.out.println("Error loading users: " + e.getMessage());
+            App.setUsers(new ArrayList<>());
+            return;
+        }
     }
 }

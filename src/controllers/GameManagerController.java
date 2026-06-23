@@ -220,7 +220,7 @@ public class GameManagerController {
         if (!cooldownRemoved) {
             plantCooldowns.put(data.getName().toLowerCase(), secondsToTicks(data.getRecharge()));
         }
-        if (isBoostedPlant(type)) {
+        if (isBoostedPlant(plant)) {
             plant.activatePlantFood();
         }
         System.out.println("Plant " + data.getDisplayName() + " planted at (" + x + ", " + y + ")");
@@ -450,8 +450,8 @@ public class GameManagerController {
         return Math.max(1, (int) Math.ceil(seconds * TICKS_PER_SECOND));
     }
 
-    private static boolean isBoostedPlant(String type) {
-        return false;
+    private static boolean isBoostedPlant(Plant plant) {
+        return plant.isBoosted();
     }
 
     private static void handleZombieDrop() {
