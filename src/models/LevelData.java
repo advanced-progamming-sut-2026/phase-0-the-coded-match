@@ -23,7 +23,7 @@ public class LevelData {
     private List<Plant> conveyorPlants;
     private List<Plant> lockedPlants;
     private List<Plant> protectedPlants;
-    private List<WavePatternData> wavePatterns;
+    private WavePatternData wavePatterns; //i changed it from List to WavePatternData cause each level has multiple waves but starts from one pattern!!
     private List<SpecialLevelRuleData> specialRules;
     private GameMapData map;
 
@@ -79,7 +79,7 @@ public class LevelData {
         return specialRules;
     }
 
-    public List<WavePatternData> getWavePatterns() {
+    public WavePatternData getWavePatterns() {
         return wavePatterns;
     }
 

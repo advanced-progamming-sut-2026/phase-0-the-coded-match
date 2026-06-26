@@ -28,6 +28,8 @@ public abstract class Season {
         return data;
     }
 
+    public List<Level> getLevelsInSeason(){return levels;}
+
     public List<LevelData> getLevels() {
         return data.getLevels();
     }

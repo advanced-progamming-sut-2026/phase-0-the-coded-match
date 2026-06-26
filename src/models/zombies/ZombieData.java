@@ -8,7 +8,7 @@ public class ZombieData {
     private String displayName;
     private String category;
     private List<String> seasons;
-    private int health;
+    private int maxHP;
     private int damage;
     private double speed;
     private double attackInterval;
@@ -39,8 +39,8 @@ public class ZombieData {
         return seasons;
     }
 
-    public int getHealth() {
-        return health;
+    public int getMaxHp() {
+        return maxHP;
     }
 
     public int getDamage() {

@@ -5,6 +5,9 @@ import java.util.List;
 
 public class ZombieRepository {
     private final List<ZombieData> zombies;
+    public static List<ZombieData> getZombies(){
+        return zombies;
+    }; // temporary until JSONS are made cause we need random zombies for waves
 
     public ZombieRepository(String jsonPath) {
         this.zombies = loadZombies(jsonPath);
