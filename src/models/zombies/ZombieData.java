@@ -31,7 +31,7 @@ public class ZombieData {
         return seasons;
     }
 
-    public int getMaxHp() {
+    public int getMaxHP() {
         return maxHP;
     }
 

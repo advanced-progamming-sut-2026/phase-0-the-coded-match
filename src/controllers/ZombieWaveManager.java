@@ -43,7 +43,7 @@ public class ZombieWaveManager implements Update {
             App.getCurrentLevel().getActiveZombies().add(z);
             previousWaveZombies.add(z); // if tracking per wave
 
-            System.out.println("Zombie " + z.getData().getCategory() + " spawned at wave " + currentWave
+            System.out.println("Zombie " + z.getData().getDisplayName() + " spawned at wave " + currentWave
                     + " in lane " + lane + " which costed " + z.getWaveCost() + ".");
 
             remainingCost -= z.getWaveCost();
@@ -51,8 +51,8 @@ public class ZombieWaveManager implements Update {
     }
 
     private Zombie createRandomZombie(){
-        int index = Random.nextInt(ZombieRepository.getZombies().size());
-        ZombieData template = ZombieRepository.getZombies().get(index);
+        int index = Random.nextInt(ZombieRepository.getInstance().getAllZombies().size());
+        ZombieData template = ZombieRepository.getInstance().getAllZombies().get(index);
         Zombie zombie = new Zombie(template, 0, 0);
         return zombie;
     }
@@ -67,7 +67,7 @@ public class ZombieWaveManager implements Update {
 
         for (Zombie z : previousWaveZombies) {
             if (!z.isDead()) {
-                totalHealth += z.getData().getMaxHp();
+                totalHealth += z.getData().getMaxHP();
                 currentHealth += z.getCurrentHp();
             }
         }

@@ -23,7 +23,7 @@ public class Zombie implements Update {
 
     public Zombie(ZombieData data, double x, int y) {
         this.data = data;
-        this.currentHp = data.getmaxHP();
+        this.currentHp = data.getMaxHP();
         this.x = x;
         this.y = y;
         this.effects = new ArrayList<>();
