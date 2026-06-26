@@ -39,7 +39,7 @@ public class PlantRepository {
         List<String> possiblePaths = new ArrayList<>();
         possiblePaths.add(normalizePath(jsonPath));
         possiblePaths.add("src/assets/Data/Plants.json");
-        possiblePaths.add("assets/Data/Plants.json");
+        possiblePaths.add("assets/Plants.json");
 
         for (String path : possiblePaths) {
             try {

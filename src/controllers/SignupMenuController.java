@@ -147,7 +147,7 @@ public class SignupMenuController{
 
     public static void saveToJson(User newUser) {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        try (FileWriter writer = new FileWriter("assets.Data/Users.json")){
+        try (FileWriter writer = new FileWriter("assets/Users.json")){
             gson.toJson(newUser, writer);
         } catch (IOException e) {
             System.out.println("Error saving user: " + e.getMessage());
@@ -156,7 +156,7 @@ public class SignupMenuController{
 
     public static void loadFromJson() {
         Gson gson = new Gson();
-        try (FileReader reader = new FileReader("assets.Data/Users.json")){
+        try (FileReader reader = new FileReader("assets/Users.json")){
             Type userListType = new TypeToken<ArrayList<User>>(){}.getType();
             ArrayList<User> loadedUsers = gson.fromJson(reader, userListType);
             App.setUsers(loadedUsers != null ? loadedUsers : new ArrayList<>());

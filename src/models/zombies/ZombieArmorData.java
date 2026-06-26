@@ -1,11 +1,13 @@
 package models.zombies;
 
-public class ZombieArmorData {
-    private String type;
-    private int hp;
-    private boolean metal;
+import enums.ArmorType;
 
-    public String getType() {
+public class ZombieArmorData {
+    private ArmorType type;
+    private int hp;
+    private boolean metallic;
+
+    public ArmorType getType() {
         return type;
     }
 
@@ -13,7 +15,7 @@ public class ZombieArmorData {
         return hp;
     }
 
-    public boolean isMetal() {
-        return metal;
+    public boolean isMetallic() {
+        return metallic;
     }
 }

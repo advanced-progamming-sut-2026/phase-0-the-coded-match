@@ -12,7 +12,7 @@ public class ZombieController {
     private final List<Zombie> activeZombies;
 
     public ZombieController() {
-        this.zombieRepository = new ZombieRepository("assets/Data/zombies.json");
+        this.zombieRepository = ZombieRepository.getInstance();
         this.activeZombies = new ArrayList<>();
     }
 
