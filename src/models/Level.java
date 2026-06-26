@@ -47,6 +47,8 @@ public class Level {
         skySunProducer = new SkySunProducer();
     }
 
+    public LevelData getData() {return data;}
+
     public void addActiveZombie(Zombie zombie) {
         activeZombies.add(zombie);
     }

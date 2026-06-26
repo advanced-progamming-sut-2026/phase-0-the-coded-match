@@ -17,7 +17,6 @@ import java.util.Scanner;
 public class App {
     private static User currentUser;
     private static User userUndergoingReset;
-    private static Level currentLevel;
     private static Menu currentMenu = Menu.SIGNUP_MENU;
     private static Phases currentPhase = Phases.NORMAL_GAMEPLAY;
     private static ArrayList<User> users = new ArrayList<>();
@@ -49,8 +48,6 @@ public class App {
     public static void setCurrentMenu(Menu currentMenu) {
         App.currentMenu = currentMenu;
     }
-
-    public static Level getCurrentLevel(){return  currentLevel;}
 
     public static Phases getCurrentPhase() {
         return currentPhase;
@@ -121,6 +118,18 @@ public class App {
     public static LevelData getLevelByNumber(int num, Season season) {
         for (LevelData level : season.getLevels()) {
             if (level.getLevelNumber() == num) {
+                return level;
+            }
+        }
+        return null;
+    }
+
+    public static Level getCurrentLevel(){
+        Season currentSeason = currentUser.getLastSeason();
+        LevelData currentLevelData = currentUser.getLastLevel();
+        int levelNum = currentLevelData.getLevelNumber();
+        for (Level level : currentSeason.getLevelsInSeason()){
+            if(levelNum == level.getLevelNumber()){
                 return level;
             }
         }

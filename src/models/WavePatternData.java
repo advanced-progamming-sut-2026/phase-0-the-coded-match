@@ -8,7 +8,7 @@ public class WavePatternData {
     private int waveNumber;
     private int startTick;
     private List<ZombieSpawnData> zombies;
-    private int waveDifficulty;
+    private double waveDifficulty;
 
     public int getWaveNumber() {
         return waveNumber;
@@ -22,11 +22,11 @@ public class WavePatternData {
         return zombies;
     }
 
-    public int getWaveDifficulty() {
+    public double getWaveDifficulty() {
         return waveDifficulty;
     }
 
-    public void setWaveDifficulty(int waveDifficulty) {
+    public void setWaveDifficulty(double waveDifficulty) {
         this.waveDifficulty = waveDifficulty;
     }
 }

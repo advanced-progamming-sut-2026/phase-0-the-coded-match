@@ -9,7 +9,7 @@ public class ZombieData {
 //    private String alias;
     private String displayName;
     private List<SeasonType> seasons;
-    private int HP;
+    private int maxHP;
     private int eatDPS;
     private double speed;
     private double attackInterval;
@@ -31,8 +31,8 @@ public class ZombieData {
         return seasons;
     }
 
-    public int getHP() {
-        return HP;
+    public int getMaxHp() {
+        return maxHP;
     }
 
     public int getEatDPS() {
