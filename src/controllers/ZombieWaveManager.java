@@ -2,6 +2,7 @@ package controllers;
 
 
 import models.App;
+import models.GameMapRelated.GameMap;
 import models.Update;
 import models.WavePatternData;
 import models.zombies.Zombie;
@@ -14,7 +15,7 @@ import java.util.Random;
 
 public class ZombieWaveManager implements Update {
     private int currentWave = 0;
-    private List<Zombie> previousWaveZombies = new ArrayList<>();
+    private static List<Zombie> previousWaveZombies = new ArrayList<>();
     private WavePatternData wavePattern = App.getCurrentLevel().getData().getWavePatterns();
 
     public WavePatternData getWavePattern(){return wavePattern;}
@@ -35,11 +36,11 @@ public class ZombieWaveManager implements Update {
             Zombie z = createRandomZombie();   // weighted random based on cost
             if (z.getWaveCost() > remainingCost) continue;
 
-            int lane = Random.nextInt(NUM_ROWS); // todo: fixed number of rows and columns!!!!
+            int lane = Random.nextInt(App.getCurrentLevel().getGameMap().getRows()); // todo: fixed number of rows and columns!!!!
             z.setY(lane);
-            z.setX(START_COL);   // right side
+            z.setX(1);   // right side : starts from the first column (figure out the number)
 
-            //zombies.add(z);
+            App.getCurrentLevel().getActiveZombies().add(z);
             previousWaveZombies.add(z); // if tracking per wave
 
             System.out.println("Zombie " + z.getData().getCategory() + " spawned at wave " + currentWave
@@ -58,7 +59,7 @@ public class ZombieWaveManager implements Update {
 
 
 
-    public boolean shouldNextWaveStart() { //TODO: check if its time for the new wave
+    public boolean shouldNextWaveStart() {
         if (currentWave == 0) return true;
 
         int totalHealth = 0;
@@ -74,10 +75,19 @@ public class ZombieWaveManager implements Update {
         return (double)currentHealth / totalHealth <= 0.25; // 75% dead
     }
 
+    public static void releaseTheNuke(){
+        for(Zombie z: previousWaveZombies){
+            z.setCurrentHp(0);
+        }
+    }
+
     @Override
     public void update() {
         if(shouldNextWaveStart()){
             currentWave++;
+            if(currentWave > wavePattern.getWaveNumber()){
+                GameManagerController.gameWon();
+            }
             if(currentWave == wavePattern.getWaveNumber()){
                 System.out.println("The final wave has come.");
             }else{
