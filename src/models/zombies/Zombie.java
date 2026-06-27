@@ -50,7 +50,7 @@ public class Zombie implements Update {
 
     @Override
     public void update() {
-        Plant target = App.getFrontMostPlantInRow(this.y);
+        Plant target = GameManagerController.getCurrentLevel().getFrontMostPlantInRow(this.y);
 
         if (target != null && isAdjacentTo(target)){
             currentState = ZombieState.EATING;

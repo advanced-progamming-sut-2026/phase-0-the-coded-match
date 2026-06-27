@@ -124,17 +124,6 @@ public class App {
         return null;
     }
 
-    public static Level getCurrentLevel(){
-        Season currentSeason = currentUser.getLastSeason();
-        LevelData currentLevelData = currentUser.getLastLevel();
-        int levelNum = currentLevelData.getLevelNumber();
-        for (Level level : currentSeason.getLevelsInSeason()){
-            if(levelNum == level.getLevelNumber()){
-                return level;
-            }
-        }
-        return null;
-    }
 
     public static Menu getMenu(String menuName) {
         for (Menu menu : Menu.values()) {
