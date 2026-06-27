@@ -166,4 +166,16 @@ public class Level {
     public void setSkySunProducer(SkySunProducer skySunProducer) {
         this.skySunProducer = skySunProducer;
     }
+
+    public Plant getFrontMostPlantInRow(double row){
+        Plant front= null;
+        int minCol = Integer.MAX_VALUE;
+        for(Plant p : activePlants){
+            if(p.getX() == row && p.getY() < minCol){
+                minCol = p.getY();
+                front = p;
+            }
+        }
+        return front;
+    }
 }

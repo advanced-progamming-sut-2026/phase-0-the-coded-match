@@ -194,18 +194,6 @@ public class App {
         return;
     }
 
-    public static Plant getFrontMostPlantInRow(double row){
-        Plant front= null;
-        int minCol = Integer.MAX_VALUE;
-        for(Plant p : allPlants){
-            if(p.getX() == row && p.getY() < minCol){
-                minCol = p.getY();
-                front = p;
-            }
-        }
-        return front;
-    }
-
     public static void removePlant(Plant plant){
         allPlants.remove(plant);
     }

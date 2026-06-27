@@ -39,7 +39,7 @@ public class Zombie implements Update {
         if(isDead()){
             return;
         }
-        Plant target = App.getFrontMostPlantInRow(this.y);
+        Plant target = App.getCurrentLevel().getFrontMostPlantInRow(this.y);
 
         if(target != null && isAdjacentTo(target)){
             eating = true;
