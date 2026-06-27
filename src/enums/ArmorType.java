@@ -4,7 +4,7 @@ public enum ArmorType {
     CONE,
     BUCKET,
     HELMET,
-    SHOULDER_ARMORED,
+    SHOULDER_ARMOR,
     BLOCK,
     NEWSPAPER,
     BARREL,

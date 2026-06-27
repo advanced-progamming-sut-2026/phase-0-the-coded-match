@@ -10,15 +10,14 @@ public class ZombieArmor {
         this.currentHp = data.getHp();
     }
 
-    public int takeDamage(int damage) {
+    public int takeDamage(Zombie zombie, int damage) {
         currentHp -= damage;
-
         if (currentHp < 0) {
-            int remainingDamage = -currentHp;
+            int remainingDamage =- currentHp;
             currentHp = 0;
+            zombie.getArmors().remove(this);
             return remainingDamage;
         }
-
         return 0;
     }
 

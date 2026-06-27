@@ -1,50 +1,41 @@
 package models.zombies;
 
+import enums.SeasonType;
+import enums.ZombieState;
+
 import java.util.List;
 
 public class ZombieData {
     private String id;
-    private String alias;
     private String displayName;
-    private String category;
-    private List<String> seasons;
+    private List<SeasonType> seasons;
     private int maxHP;
-    private int damage;
+    private int eatDPS;
     private double speed;
     private double attackInterval;
     private int waveCost;
-    private ZombieArmorData armor;
+    private List<ZombieArmorData> armors;
     private String behaviorType;
-    private String description;
-    private List<String> abilities;
-
+    private ZombieState state;
 
     public String getId() {
         return id;
-    }
-
-    public String getAlias() {
-        return alias;
     }
 
     public String getDisplayName() {
         return displayName;
     }
 
-    public String getCategory() {
-        return category;
-    }
-
-    public List<String> getSeasons() {
+    public List<SeasonType> getSeasons() {
         return seasons;
     }
 
-    public int getMaxHp() {
+    public int getMaxHP() {
         return maxHP;
     }
 
-    public int getDamage() {
-        return damage;
+    public int getEatDPS() {
+        return eatDPS;
     }
 
     public double getSpeed() {
@@ -59,20 +50,15 @@ public class ZombieData {
         return waveCost;
     }
 
-    public ZombieArmorData getArmor() {
-        return armor;
+    public List<ZombieArmorData> getArmors() {
+        return armors;
     }
 
     public String getBehaviorType() {
         return behaviorType;
     }
 
-    public String getDescription() {
-        return description;
+    public ZombieState getState() {
+        return state;
     }
-
-    public List<String> getAbilities() {
-        return abilities;
-    }
-
 }

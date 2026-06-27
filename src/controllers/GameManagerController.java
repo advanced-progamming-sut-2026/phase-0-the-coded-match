@@ -213,7 +213,7 @@ public class GameManagerController {
             System.out.println(error);
             return;
         }
-        PlantData data = new PlantRepository("assets/Data/Plants.json").findByName(type);
+        PlantData data = new PlantRepository("assets/Plants.json").findByName(type);
         Plant plant = new Plant(data, x, y, 1);
         currentLevel.getActivePlants().add(plant);
         findTile(x, y).setPlant(plant);
@@ -228,7 +228,7 @@ public class GameManagerController {
     }
 
     private static String getPlantingError(String type, int x, int y) {
-        PlantData data = new PlantRepository("assets/Data/Plants.json").findByName(type);
+        PlantData data = new PlantRepository("assets/Plants.json").findByName(type);
         if (data == null) {
             return "plant type does not exist";
         }
@@ -343,7 +343,7 @@ public class GameManagerController {
 
     public static StringBuilder showPlantsStatus() {
         StringBuilder builder = new StringBuilder();
-        PlantRepository repository = new PlantRepository("assets/Data/Plants.json");
+        PlantRepository repository = new PlantRepository("assets/Plants.json");
         for (PlantData data : repository.getAllPlants()) {
             int cooldown = plantCooldowns.getOrDefault(data.getName().toLowerCase(), 0);
             builder.append(data.getDisplayName()).append(" | cost: ").append(data.getSunCost());

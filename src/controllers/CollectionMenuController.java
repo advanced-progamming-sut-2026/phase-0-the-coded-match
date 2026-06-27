@@ -58,7 +58,7 @@ public class CollectionMenuController {
 
     public static StringBuilder showAllZombies() {
         StringBuilder result = new StringBuilder();
-        List<ZombieData> zombies = getZombieRepository().getAllZombies();
+        List<ZombieData> zombies = ZombieRepository.getInstance().getAllZombies();
         if (zombies.isEmpty()) {
             return result.append("no zombies defined\n");
         }
@@ -99,23 +99,18 @@ public class CollectionMenuController {
             return new StringBuilder();
         }
         String zombieName = matcher.group("zombie_name");
-        ZombieData zombie = getZombieRepository().findByAlias(zombieName);
+        ZombieData zombie = ZombieRepository.getInstance().findByDisplayName(zombieName);
         if (zombie == null) {
             return new StringBuilder("zombie not found\n");
         }
         StringBuilder result = new StringBuilder();
         result.append("name: ").append(zombie.getDisplayName()).append("\n");
         result.append("id: ").append(zombie.getId()).append("\n");
-        result.append("alias: ").append(zombie.getAlias()).append("\n");
-        result.append("category: ").append(zombie.getCategory()).append("\n");
         result.append("seasons: ").append(zombie.getSeasons()).append("\n");
-        result.append("health: ").append(zombie.getHealth()).append("\n");
-        result.append("damage: ").append(zombie.getDamage()).append("\n");
+        result.append("health: ").append(zombie.getMaxHP()).append("\n");
+        result.append("damage: ").append(zombie.getEatDPS()).append("\n");
         result.append("speed: ").append(zombie.getSpeed()).append("\n");
         result.append("wave cost: ").append(zombie.getWaveCost()).append("\n");
-        result.append("behavior: ").append(zombie.getBehaviorType()).append("\n");
-        result.append("abilities: ").append(zombie.getAbilities()).append("\n");
-        result.append("description: ").append(zombie.getDescription()).append("\n");
         return result;
     }
 
@@ -219,18 +214,18 @@ public class CollectionMenuController {
     }
 
     private static PlantRepository getPlantRepository() {
-        PlantRepository repository = new PlantRepository("src/assets/Data/Plants.json");
+        PlantRepository repository = new PlantRepository("src/assets/Plants.json");
         if (!repository.getAllPlants().isEmpty()) {
             return repository;
         }
-        return new PlantRepository("assets/Data/Plants.json");
+        return new PlantRepository("assets/Plants.json");
     }
 
-    private static ZombieRepository getZombieRepository() {
-        ZombieRepository repository = new ZombieRepository("src/assets/Data/Zombies.json");
-        if (!repository.getAllZombies().isEmpty()) {
-            return repository;
-        }
-        return new ZombieRepository("assets/Data/Zombies.json");
-    }
+//    private static ZombieRepository getZombieRepository() {
+//        ZombieRepository repository = new ZombieRepository("src/assets/Zombies.json");
+//        if (!repository.getAllZombies().isEmpty()) {
+//            return repository;
+//        }
+//        return new ZombieRepository("assets/Zombies.json");
+//    }
 }
