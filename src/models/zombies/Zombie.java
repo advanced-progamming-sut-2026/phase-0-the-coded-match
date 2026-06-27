@@ -2,9 +2,12 @@ package models.zombies;
 
 import controllers.GameManagerController;
 import enums.ZombieEffect;
+import enums.ZombieState;
 import models.App;
 import models.Update;
+import models.factories.ZombieBehaviorFactory;
 import models.plants.Plant;
+import models.strategies.ZombieBehavior;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,22 +16,27 @@ public class Zombie implements Update {
     private ZombieData data;
     private int currentHp;
     private int currentDamage;
+    private ZombieState currentState;
     private double x;
     private int y;
     private List<ZombieArmor> armors;
+    private ZombieBehavior behavior;
     private List<ZombieEffect> effects;
-    private boolean eating;
-    private boolean moving;
+//    private boolean eating;
+//    private boolean moving;
     private boolean isLocked;
+    private boolean hasThrownImp;
 
     public Zombie(ZombieData data, double x, int y) {
         this.data = data;
         this.currentHp = data.getMaxHP();
+        this.currentState = data.getState();
         this.x = x;
         this.y = y;
         this.effects = new ArrayList<>();
-        this.eating = false;
-        this.moving = true;
+//        this.eating = false;
+//        this.moving = true;
+        this.hasThrownImp = false;
 
         if (!data.getArmors().isEmpty()) {
             this.armors = new ArrayList<>();
@@ -36,22 +44,24 @@ public class Zombie implements Update {
                 this.armors.add(new ZombieArmor(armorData));
             }
         }
+
+        this.behavior = ZombieBehaviorFactory.getBehavior(data.getBehaviorType());
     }
 
     @Override
     public void update() {
-//        if (isDead()){
-//            return;
-//        }
-
         Plant target = App.getFrontMostPlantInRow(this.y);
 
         if (target != null && isAdjacentTo(target)){
-            eating = true;
-            attack(target);
+            currentState = ZombieState.EATING;
         } else {
-            eating = false;
-            move();
+            if (currentState != ZombieState.RUNNING) {//TODO: if not paralyzed
+                currentState = ZombieState.WALKING;
+            }
+        }
+
+        if (behavior != null) {
+            behavior.updateZombie(this, target);
         }
 
     }
@@ -63,8 +73,8 @@ public class Zombie implements Update {
         return false;
     }
 
-    public void move() {
-        if (!moving || eating) {
+    public void walk() {
+        if (currentState == ZombieState.EATING) {
             return;
         }
         x -= data.getSpeed();
@@ -73,11 +83,16 @@ public class Zombie implements Update {
     public void attack(Plant plant) {
         plant.takeDamage(data.getEatDPS());
         if(plant.isDead()){
-            App.removePlant(plant); // TODO: After plant dies we need to print "Plant <type> at (<x>, <y>) is destroyed."; but how do we send it to view?
+            GameManagerController.getCurrentLevel().getActivePlants().remove(plant); // TODO: After plant dies we need to print "Plant <type> at (<x>, <y>) is destroyed."; but how do we send it to view?
         }
     }
 
-    public void takeDamage(int damage) {
+    public void destroyPlant(Plant plant) {
+        plant.setCurrentHp(0);
+        GameManagerController.getCurrentLevel().getActivePlants().remove(plant); // TODO: After plant dies we need to print "Plant <type> at (<x>, <y>) is destroyed."; but how do we send it to view?
+    }
+
+    public void takeDamage(int damage, Plant plant) {
         if (data.getDisplayName().equalsIgnoreCase("knight zombie") && !armors.isEmpty()) {
             int remainingDamage = armors.get(armors.size() - 1).takeDamage(this ,damage);
             if (remainingDamage > 0) {
@@ -98,6 +113,12 @@ public class Zombie implements Update {
         if (isDead()) {
             GameManagerController.getCurrentLevel().getActiveZombies().remove(this);
         }
+    }
+
+    public void throwImp() {
+        ZombieData impData = ZombieRepository.getInstance().findByDisplayName("Imp");
+        Zombie newImp = new Zombie(impData, 3.0, this.y);
+        GameManagerController.getCurrentLevel().getActiveZombies().add(newImp);
     }
 
     public boolean isDead() {
@@ -124,6 +145,14 @@ public class Zombie implements Update {
         this.currentDamage = currentDamage;
     }
 
+    public ZombieState getCurrentState() {
+        return currentState;
+    }
+
+    public void setCurrentState(ZombieState currentState) {
+        this.currentState = currentState;
+    }
+
     public double getX() {
         return x;
     }
@@ -148,6 +177,19 @@ public class Zombie implements Update {
         return data.getWaveCost();
     }
 
-    public void shootProjectile() {}
+//    public boolean isEating() {
+//        return eating;
+//    }
+//
+//    public boolean isMoving() {
+//        return moving;
+//    }
 
+    public boolean isHasThrownImp() {
+        return hasThrownImp;
+    }
+
+    public void setHasThrownImp(boolean hasThrownImp) {
+        this.hasThrownImp = hasThrownImp;
+    }
 }

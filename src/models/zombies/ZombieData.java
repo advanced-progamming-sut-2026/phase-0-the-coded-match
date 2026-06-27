@@ -1,12 +1,12 @@
 package models.zombies;
 
 import enums.SeasonType;
+import enums.ZombieState;
 
 import java.util.List;
 
 public class ZombieData {
     private String id;
-//    private String alias;
     private String displayName;
     private List<SeasonType> seasons;
     private int maxHP;
@@ -15,9 +15,8 @@ public class ZombieData {
     private double attackInterval;
     private int waveCost;
     private List<ZombieArmorData> armors;
-//    private String behaviorType;
-//    private List<String> abilities;
-
+    private String behaviorType;
+    private ZombieState state;
 
     public String getId() {
         return id;
@@ -53,5 +52,13 @@ public class ZombieData {
 
     public List<ZombieArmorData> getArmors() {
         return armors;
+    }
+
+    public String getBehaviorType() {
+        return behaviorType;
+    }
+
+    public ZombieState getState() {
+        return state;
     }
 }
