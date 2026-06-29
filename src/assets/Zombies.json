@@ -136,7 +136,9 @@
     "eatDPS": 100,
     "speed": 0.16,
     "waveCost": 1000,
-    "state": "RUNNING"
+    "behaviorType": "AllStar",
+    "state": "RUNNING",
+    "runningSpeed": 0.5
   },
   {
     "id": "ZombieArcade",
@@ -151,8 +153,8 @@
     "waveCost": 600
   },
   {
-    "id": "ZombieCrystalSkull",
-    "displayName": "Turquoise Zombie",
+    "id": "ZombieLostCityJane",
+    "displayName": "Parasol Zombie",
     "seasons": ["ANCIENT_EGYPT",
       "FROSTBITE_CAVES",
       "BIG_WAVE_BEACH",
@@ -160,7 +162,10 @@
     "HP": 350,
     "eatDPS": 100,
     "speed": 0.25,
-    "waveCost": 200
+    "waveCost": 200,
+    "behaviorType": "Normal",
+    "state": "WALKING",
+    "hasParasol": true
   },
   {
     "id": "ZombieCrystalSkull",
@@ -172,7 +177,9 @@
     "HP": 250,
     "eatDPS": 100,
     "speed": 0.185,
-    "waveCost": 500
+    "waveCost": 500,
+    "behaviorType": "Turquoise",
+    "state": "WALKING"
   },
   {
     "id": "ZombieProspector",
@@ -216,13 +223,13 @@
     }
   },
   {
-    "id": "",//
+    "id": "ZombieBarrelRoller",
     "displayName": "Barrel Roller Zombie",
     "seasons": ["ANCIENT_EGYPT",
       "FROSTBITE_CAVES",
       "BIG_WAVE_BEACH",
       "DARK_AGES"],
-    "HP": 250,
+    "HP": 190, barrel 1100
     "eatDPS": 100,
     "speed": 0.185,
     "waveCost": 500

@@ -17,6 +17,8 @@ public class ZombieData {
     private List<ZombieArmorData> armors;
     private String behaviorType;
     private ZombieState state;
+    private double runningSpeed;
+    private boolean hasParasol;
 
     public String getId() {
         return id;
@@ -60,5 +62,13 @@ public class ZombieData {
 
     public ZombieState getState() {
         return state;
+    }
+
+    public boolean isHasParasol() {
+        return hasParasol;
+    }
+
+    public double getRunningSpeed() {
+        return runningSpeed;
     }
 }

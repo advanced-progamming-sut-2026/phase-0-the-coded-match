@@ -4,6 +4,8 @@ import controllers.GameManagerController;
 import enums.ZombieEffect;
 import enums.ZombieState;
 import models.App;
+import models.GameMapRelated.Tile;
+import models.Level;
 import models.Update;
 import models.factories.ZombieBehaviorFactory;
 import models.plants.Plant;
@@ -26,6 +28,12 @@ public class Zombie implements Update {
 //    private boolean moving;
     private boolean isLocked;
     private boolean hasThrownImp;
+    private double runningSpeed;
+    private boolean wasRunning;
+    private boolean hasParasol;
+    private int stolenSuns;
+    private int abilityTickTimer = 0;
+    private boolean abilityDone;
 
     public Zombie(ZombieData data, double x, int y) {
         this.data = data;
@@ -37,6 +45,10 @@ public class Zombie implements Update {
 //        this.eating = false;
 //        this.moving = true;
         this.hasThrownImp = false;
+        this.runningSpeed = data.getRunningSpeed();
+        this.wasRunning = false;
+        this.hasParasol = data.isHasParasol(); //TODO: Parasol Zombie's talent should be handled in the method in which zombies are attacked and takes damage
+        this.abilityDone = false;
 
         if (!data.getArmors().isEmpty()) {
             this.armors = new ArrayList<>();
@@ -53,6 +65,9 @@ public class Zombie implements Update {
         Plant target = App.getFrontMostPlantInRow(this.y);
 
         if (target != null && isAdjacentTo(target)){
+            if (currentState == ZombieState.RUNNING) {
+                wasRunning = true;
+            }
             currentState = ZombieState.EATING;
         } else {
             if (currentState != ZombieState.RUNNING) {//TODO: if not paralyzed
@@ -80,6 +95,10 @@ public class Zombie implements Update {
         x -= data.getSpeed();
     }
 
+    public void run() {
+        x -= runningSpeed;
+    }
+
     public void attack(Plant plant) {
         plant.takeDamage(data.getEatDPS());
         if(plant.isDead()){
@@ -90,6 +109,29 @@ public class Zombie implements Update {
     public void destroyPlant(Plant plant) {
         plant.setCurrentHp(0);
         GameManagerController.getCurrentLevel().getActivePlants().remove(plant); // TODO: After plant dies we need to print "Plant <type> at (<x>, <y>) is destroyed."; but how do we send it to view?
+    }
+
+    public void destroyZombie(Zombie zombie) {
+        zombie.setCurrentHp(0);
+        GameManagerController.getCurrentLevel().getActiveZombies().remove(zombie);
+    }
+
+    public int stealSuns() {
+        int sunsToSteal = Math.max(25, GameManagerController.getCurrentLevel().getCollectedSunsAmount());
+        if (sunsToSteal > 0) {
+            Level level = GameManagerController.getCurrentLevel();
+            level.setCollectedSunsAmount(level.getCollectedSunsAmount() - sunsToSteal);
+        }
+        return sunsToSteal;
+    }
+
+    public void lazer() {
+        for (Tile tile : GameManagerController.getCurrentLevel().getGameMap().getTiles()) {
+            if (tile.getRow() == y && x - tile.getColumn() <= 4 && !tile.isEmpty()) {
+                tile.getPlant().setCurrentHp(0);
+                GameManagerController.getCurrentLevel().getActivePlants().remove(tile.getPlant());//TODO: if there is a specific method that kills the plant instantly, replace
+            }
+        }
     }
 
     public void takeDamage(int damage, Plant plant) {
@@ -112,6 +154,10 @@ public class Zombie implements Update {
         }
         if (isDead()) {
             GameManagerController.getCurrentLevel().getActiveZombies().remove(this);
+            if (data.getId().matches("ZombieCrystalSkull")) {
+                Level level = GameManagerController.getCurrentLevel();
+                level.setCollectedSunsAmount(level.getCollectedSunsAmount() + (int) (stolenSuns / 2));
+            }
         }
     }
 
@@ -119,6 +165,15 @@ public class Zombie implements Update {
         ZombieData impData = ZombieRepository.getInstance().findByDisplayName("Imp");
         Zombie newImp = new Zombie(impData, 3.0, this.y);
         GameManagerController.getCurrentLevel().getActiveZombies().add(newImp);
+    }
+
+    public void explodeDynamite() {
+        y = 0; //TODO: should be moved to the first tile. but is it y = 0?
+        currentState = ZombieState.WALKING_BACKWARD;
+    }
+
+    public void walkBackWard() {
+        x += data.getSpeed();
     }
 
     public boolean isDead() {
@@ -191,5 +246,45 @@ public class Zombie implements Update {
 
     public void setHasThrownImp(boolean hasThrownImp) {
         this.hasThrownImp = hasThrownImp;
+    }
+
+    public boolean isWasRunning() {
+        return wasRunning;
+    }
+
+    public void setWasRunning(boolean wasRunning) {
+        this.wasRunning = wasRunning;
+    }
+
+    public boolean isHasParasol() {
+        return hasParasol;
+    }
+
+    public void setHasParasol(boolean hasParasol) {
+        this.hasParasol = hasParasol;
+    }
+
+    public int getStolenSuns() {
+        return stolenSuns;
+    }
+
+    public void setStolenSuns(int stolenSuns) {
+        this.stolenSuns = stolenSuns;
+    }
+
+    public int getAbilityTickTimer() {
+        return abilityTickTimer;
+    }
+
+    public void setAbilityTickTimer(int abilityTickTimer) {
+        this.abilityTickTimer = abilityTickTimer;
+    }
+
+    public boolean isAbilityDone() {
+        return abilityDone;
+    }
+
+    public void setAbilityDone(boolean abilityDone) {
+        this.abilityDone = abilityDone;
     }
 }

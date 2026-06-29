@@ -47,7 +47,26 @@ public class Level {
         skySunProducer = new SkySunProducer();
     }
 
-    public static Zombie get
+    public Zombie getAdjacentZombie(Zombie zombie) {
+        for (Zombie adjacentZombie : activeZombies) {
+            if (zombie.getX() == adjacentZombie.getX() && zombie.getY() == adjacentZombie.getY()) {
+                return adjacentZombie;
+            }
+        }
+        return null;
+    }
+
+    public Boolean isPlantWithinDistance(Zombie zombie, int requiredDistance) {
+        for (Plant plant : activePlants) {
+            if (plant.getY() == zombie.getY()) {
+                double distance = zombie.getX() - plant.getX();
+                if (distance <= requiredDistance) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     public LevelData getData() {return data;}
 

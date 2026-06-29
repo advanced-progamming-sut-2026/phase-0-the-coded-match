@@ -1,8 +1,6 @@
 package models.factories;
 
-import models.strategies.GiantBehavior;
-import models.strategies.NormalBehavior;
-import models.strategies.ZombieBehavior;
+import models.strategies.*;
 
 public class ZombieBehaviorFactory {
     public static ZombieBehavior getBehavior(String behaviorName) {
@@ -11,8 +9,10 @@ public class ZombieBehaviorFactory {
                 return new NormalBehavior();
             case "giant" :
                 return new GiantBehavior();
-            case "" :
-
+            case "allstar" :
+                return new AllStarBehavior();
+            case "turquoise" :
+                return new TurquoiseBehavior();
             default:
                 return null;
         }

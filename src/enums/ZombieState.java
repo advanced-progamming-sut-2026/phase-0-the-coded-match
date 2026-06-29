@@ -5,5 +5,7 @@ public enum ZombieState {
     RUNNING,
     IDLE,
     EATING,
-    HYPNOTIZED;
+    HYPNOTIZED,
+    STEALING,
+    WALKING_BACKWARD;
 }

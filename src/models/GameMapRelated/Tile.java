@@ -13,6 +13,7 @@ import java.util.List;
 public class Tile implements Update {
     private int row;
     private int column;
+    private int tileWidth; //TODO: choose an optional width?
     private TileType type;
     private int currentHp;
     private Plant plant;
