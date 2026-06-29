@@ -124,17 +124,6 @@ public class App {
         return null;
     }
 
-    public static Level getCurrentLevel(){
-        Season currentSeason = currentUser.getLastSeason();
-        LevelData currentLevelData = currentUser.getLastLevel();
-        int levelNum = currentLevelData.getLevelNumber();
-        for (Level level : currentSeason.getLevelsInSeason()){
-            if(levelNum == level.getLevelNumber()){
-                return level;
-            }
-        }
-        return null;
-    }
 
     public static Menu getMenu(String menuName) {
         for (Menu menu : Menu.values()) {
@@ -192,18 +181,6 @@ public class App {
         }
         setCurrentUser(null);
         return;
-    }
-
-    public static Plant getFrontMostPlantInRow(double row){
-        Plant front= null;
-        int minCol = Integer.MAX_VALUE;
-        for(Plant p : allPlants){
-            if(p.getX() == row && p.getY() < minCol){
-                minCol = p.getY();
-                front = p;
-            }
-        }
-        return front;
     }
 
     public static void removePlant(Plant plant){

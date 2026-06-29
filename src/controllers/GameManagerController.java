@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 public class GameManagerController {
     private static final int MAX_PLANT_FOOD = 3;
     private static final int TICKS_PER_SECOND = 10;
-    private static Level currentLevel = App.getCurrentLevel();
+    private static Level currentLevel;
     private static boolean cooldownRemoved;
     private static final Map<String, Integer> plantCooldowns = new HashMap<>();
 
@@ -193,7 +193,7 @@ public class GameManagerController {
         return new String[] {"wave system is not ready yet"};
     }// do we need this method?
 
-    public static void cheatReleaseTheNuke() {
+    public void cheatReleaseTheNuke() {
         ZombieWaveManager.releaseTheNuke();
         currentLevel.getActiveZombies().clear();
         System.out.println("all zombies are dead");
