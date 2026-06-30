@@ -105,6 +105,10 @@ public class Tile implements Update {
         return type;
     }
 
+    public void setType(TileType type) {
+        this.type = type;
+    }
+
     public int getCurrentHp() {
         return currentHp;
     }

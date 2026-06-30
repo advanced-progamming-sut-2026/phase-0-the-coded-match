@@ -2,6 +2,7 @@ package models.strategies;
 
 import controllers.GameManagerController;
 import enums.ZombieState;
+import models.Projectile;
 import models.plants.Plant;
 import models.zombies.Zombie;
 
@@ -30,7 +31,15 @@ public class TurquoiseBehavior implements ZombieBehavior {
             }
             if (zombie.getCurrentState() == ZombieState.EATING) {
                 zombie.attack(targetPlant);
+                if(targetPlant.isDead()) {
+                    zombie.setCurrentState(ZombieState.WALKING);
+                }
             }
         }
+    }
+
+    @Override
+    public void onProjectileHit(Zombie zombie, Projectile projectile) {
+        zombie.takeDamage(projectile.getDamage());
     }
 }

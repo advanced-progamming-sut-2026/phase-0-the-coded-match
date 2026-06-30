@@ -5,19 +5,21 @@ import models.Projectile;
 import models.plants.Plant;
 import models.zombies.Zombie;
 
-public class GiantBehavior implements ZombieBehavior {
+public class PianistBehavior implements ZombieBehavior {
+    private int abilityTimer = 5; //TODO: optional?
+
     @Override
     public void updateZombie(Zombie zombie, Plant targetPlant) {
+        zombie.setAbilityTickTimer(zombie.getAbilityTickTimer() + 1);
         if (zombie.getCurrentState() == ZombieState.EATING) {
             zombie.destroyPlant(targetPlant);
-            if(targetPlant.isDead()) {
-                zombie.setCurrentState(ZombieState.WALKING);
-            }
+            zombie.setCurrentState(ZombieState.WALKING);
         } else if (zombie.getCurrentState() == ZombieState.WALKING) {
             zombie.walk();
-        } else if (zombie.getCurrentHp() <= (zombie.getData().getMaxHP() / 2) && !zombie.isHasThrownImp()) {
-            zombie.throwImp();
-            zombie.setHasThrownImp(true);
+        }
+        if (zombie.getAbilityTickTimer() == abilityTimer) {
+            zombie.shuffleZombies(zombie);
+            zombie.setAbilityTickTimer(0);
         }
     }
 

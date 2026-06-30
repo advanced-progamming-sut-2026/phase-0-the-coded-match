@@ -2,6 +2,7 @@ package models.strategies;
 
 import enums.ZombieEffect;
 import enums.ZombieState;
+import models.Projectile;
 import models.plants.Plant;
 import models.zombies.Zombie;
 
@@ -28,6 +29,14 @@ public class ProspectorBehavior implements ZombieBehavior {
             zombie.walkBackWard();
         } else if (zombie.getCurrentState() == ZombieState.EATING) {
             zombie.attack(targetPlant);
+            if(targetPlant.isDead()) {
+                zombie.setCurrentState(ZombieState.WALKING_BACKWARD);
+            }
         }
+    }
+
+    @Override
+    public void onProjectileHit(Zombie zombie, Projectile projectile) {
+        zombie.takeDamage(projectile.getDamage());
     }
 }

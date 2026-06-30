@@ -199,4 +199,14 @@ public class Level {
         }
         return front;
     }
+
+    public Plant getPlantInFrontOfZombie(Zombie zombie) {
+        Plant target = null;
+        for (Plant p : activePlants) {
+            if (p.getX() == zombie.getX() && p.getY() == zombie.getY()) {
+                return target;
+            }
+        }
+        return null;
+    }
 }

@@ -26,7 +26,7 @@
     "speed": 0.185,
     "attackInterval": 1.0,
     "waveCost": 200,
-    "armor": {
+    "armors": {
       "type": "CONE",
       "hp": 370,
       "metallic": false
@@ -45,7 +45,7 @@
     "eatDPS": 100,
     "speed": 0.185,
     "waveCost": 400,
-    "armor": {
+    "armors": {
       "type": "BUCKET",
       "hp": 1100,
       "metallic": true
@@ -64,19 +64,19 @@
     "eatDPS": 100,
     "speed": 0.185,
     "waveCost": 550,
-    "armor": [
+    "armors": [
       {
         "type": "CROWN",
         "hp": 1600,
-        "metallic": true,
-        "state": "WALKING"
+        "metallic": true
       },
       {
         "type": "SHOULDER_ARMOR",
         "hp": 1600,
         "metallic": true
       }],
-    "behaviorType": "Normal"
+    "behaviorType": "Normal",
+    "state": "WALKING"
   },
   {
     "id": "ZombieArmor4",
@@ -89,7 +89,7 @@
     "eatDPS": 100,
     "speed": 0.185,
     "waveCost": 700,
-    "armor": {
+    "armors": {
       "type": "BUCKET",
       "hp": 1100,
       "metallic": true
@@ -191,7 +191,9 @@
     "HP": 190,
     "eatDPS": 100,
     "speed": 0.16,
-    "waveCost": 200
+    "waveCost": 200,
+    "behaviorType": "Prospector",
+    "state": "WALKING"
   },
   {
     "id": "ZombiePiano",
@@ -203,7 +205,9 @@
     "HP": 840,
     "eatDPS": 4000,
     "speed": 0.12,
-    "waveCost": 450
+    "waveCost": 450,
+    "behaviorType": "Pianist",
+    "state": "WALKING"
   },
   {
     "id": "ZombieArmZombieNewspaper",
@@ -216,11 +220,14 @@
     "eatDPS": 200,
     "speed": 0.22,
     "waveCost": 700,
-    "armor": {
+    "armors": {
       "type": "NEWSPAPER",
       "hp": 800,
       "metallic": false
-    }
+    },
+    "behaviorType": "Normal",
+    "state": "WALKING",
+    "runningState": 0.44
   },
   {
     "id": "ZombieBarrelRoller",
@@ -229,10 +236,15 @@
       "FROSTBITE_CAVES",
       "BIG_WAVE_BEACH",
       "DARK_AGES"],
-    "HP": 190, barrel 1100
+    "HP": 190,
     "eatDPS": 100,
     "speed": 0.185,
-    "waveCost": 500
+    "waveCost": 500,
+    "armors": {
+      "type": "BARREL",
+      "hp": 1100,
+      "metallic": false
+    } todo
   },
   {
     "id": "ZombieRa",
@@ -241,7 +253,9 @@
     "HP": 190,
     "eatDPS": 100,
     "speed": 0.2,
-    "waveCost": 100
+    "waveCost": 100,
+    "behaviorType": "Normal",
+    "state": "WALKING"
   },
   {
     "id": "ZombieExplorer",
@@ -250,7 +264,9 @@
     "HP": 250,
     "eatDPS": 100,
     "speed": 0.25,
-    "waveCost": 250
+    "waveCost": 250,
+    "behaviorType": "Explorer",
+    "state": "WALKING"
   },
   {
     "id": "ZombieTombRaiser",
@@ -259,7 +275,9 @@
     "HP": 380,
     "eatDPS": 100,
     "speed": 0.185,
-    "waveCost": 300
+    "waveCost": 300,
+    "behaviorType": "Normal",
+    "state": "WALKING"
   },
   {
     "id": "ZombieIceAgeDodo",
@@ -268,7 +286,9 @@
     "HP": 490,
     "eatDPS": 100,
     "speed": 0.3,
-    "waveCost": 600
+    "waveCost": 600,
+    "behaviorType": "DodoRider",
+    "state": "WALKING"
   },
   {
     "id": "ZombieIceAgeHunter",
@@ -277,7 +297,9 @@
     "HP": 700,
     "eatDPS": 100,
     "speed": 0.13,
-    "waveCost": 500
+    "waveCost": 500,
+    "behaviorType": "Normal",
+    "state": "WALKING"
   },
   {
     "id": "ZombieIceAgeTroglobite",
@@ -304,7 +326,9 @@
     "HP": 350,
     "eatDPS": 100,
     "speed": 0.185,
-    "waveCost": 200
+    "waveCost": 200,
+    "behaviorType": "Snorkel",
+    "state": "WALKING"
   },
   {
     "id": "ZombieBeachOctopus",
@@ -313,7 +337,9 @@
     "HP": 910,
     "eatDPS": 100,
     "speed": 0.12,
-    "waveCost": 900
+    "waveCost": 900,
+    "behaviorType": "Normal",
+    "state": "WALKING"
   },
   {
     "id": "ZombieDarkJuggler",
@@ -349,6 +375,8 @@
     "HP": 190,
     "eatDPS": 100,
     "speed": 0.185,
-    "waveCost": 150
+    "waveCost": 150,
+    "behaviorType": "Normal",
+    "state": "WALKING"
   }
 ]

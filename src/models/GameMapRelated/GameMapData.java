@@ -36,6 +36,15 @@ public class GameMapData {
         return tiles;
     }
 
+    public Tile getTile(int row, int column) {
+        for (Tile tile : tiles) {
+            if (tile.getRow() == row && tile.getColumn() == column) {
+                return tile;
+            }
+        }
+        return null;
+    }
+
     public int getLength() {
         return length;
     }
