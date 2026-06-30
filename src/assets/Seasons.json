@@ -7,7 +7,8 @@
     "allowedZombies": [
       "ZombieTutorialDefault",
       "ZombieTutorialArmor1Default",
-      "ZombieRaDefault"
+      "ZombieRaDefault",
+      "ZombieSandstorm"
     ],
     "unlockedPlants": [
       "Peashooter",
@@ -22,7 +23,7 @@
       },
       {
         "type": "SANDSTORM",
-        "description": "Some zombies may enter the map through sandstorm.",
+        "description": "Zombies enter via sandstorm 1 to 4 columns ahead during the final wave.",
         "enabled": true
       }
     ],
@@ -98,16 +99,17 @@
         }
       },
       {
-        "id": "egypt_conveyor_1",
-        "name": "Egypt Conveyor Belt",
+        "id": "egypt_level_2",
+        "name": "Egypt Level 2 (Conveyor Belt)",
         "levelNumber": 2,
-        "levelType": "CONVEYOR_BELT",
+        "levelType": "SPECIAL",
         "plantSelectionLimit": 0,
         "waveCount": 3,
-        "baseWaveCost": 10,
+        "baseWaveCost": 15,
         "allowedZombies": [
           "ZombieTutorialDefault",
-          "ZombieTutorialArmor1Default"
+          "ZombieTutorialArmor1Default",
+          "ZombieRaDefault"
         ],
         "availablePlants": [],
         "conveyorPlants": [
@@ -121,7 +123,7 @@
           {
             "waveNumber": 1,
             "startTick": 0,
-            "waveCost": 10,
+            "waveCost": 15,
             "zombies": [
               {
                 "zombieAlias": "ZombieTutorialDefault",
@@ -142,8 +144,707 @@
           {
             "type": "CONVEYOR_SPAWN_INTERVAL_SECONDS",
             "target": "CONVEYOR",
+            "value": "12",
+            "description": "A random plant appears on the conveyor every 12 seconds."
+          }
+        ],
+        "map": {
+          "rows": 5,
+          "columns": 9,
+          "zombieStartColumn": 9,
+          "homeColumn": 0,
+          "defaultPathDirection": "RIGHT_TO_LEFT",
+          "tiles": []
+        }
+      },
+      {
+        "id": "egypt_level_3",
+        "name": "Egypt Level 3 (Locked Plants)",
+        "levelNumber": 3,
+        "levelType": "SPECIAL",
+        "plantSelectionLimit": 8,
+        "waveCount": 4,
+        "baseWaveCost": 20,
+        "allowedZombies": [
+          "ZombieTutorialDefault",
+          "ZombieRaDefault"
+        ],
+        "availablePlants": [
+          "Peashooter",
+          "Sunflower",
+          "Wall-nut"
+        ],
+        "conveyorPlants": [],
+        "lockedPlants": [
+          "Sunflower"
+        ],
+        "protectedPlants": [],
+        "wavePatterns": [],
+        "specialRules": [
+          {
+            "type": "LOCKED_PLANTS_RELOAD",
+            "target": "PLANTS",
+            "value": "true",
+            "description": "Specific plant items/families are locked and unavailable."
+          }
+        ],
+        "map": {
+          "rows": 5,
+          "columns": 9,
+          "zombieStartColumn": 9,
+          "homeColumn": 0,
+          "defaultPathDirection": "RIGHT_TO_LEFT",
+          "tiles": []
+        }
+      },
+      {
+        "id": "egypt_level_4",
+        "name": "Egypt Level 4 (Boss Fight)",
+        "levelNumber": 4,
+        "levelType": "BOSS",
+        "plantSelectionLimit": 8,
+        "waveCount": 1,
+        "baseWaveCost": 100,
+        "allowedZombies": [
+          "ZombieBossEgypt"
+        ],
+        "availablePlants": [
+          "Peashooter",
+          "Sunflower",
+          "Wall-nut"
+        ],
+        "conveyorPlants": [],
+        "lockedPlants": [],
+        "protectedPlants": [],
+        "wavePatterns": [],
+        "specialRules": [
+          {
+            "type": "BOSS_PHASE_ACTIVE",
+            "target": "GAME",
+            "value": "true",
+            "description": "Defeat the sector Boss to finish the phase."
+          }
+        ],
+        "map": {
+          "rows": 5,
+          "columns": 9,
+          "zombieStartColumn": 9,
+          "homeColumn": 0,
+          "defaultPathDirection": "RIGHT_TO_LEFT",
+          "tiles": []
+        }
+      }
+    ]
+  },
+  {
+    "id": "frostbite_caves",
+    "name": "FrostbiteCaves",
+    "displayName": "Frostbite Caves",
+    "seasonType": "FROSTBITE_CAVES",
+    "allowedZombies": [
+      "ZombieHunter",
+      "ZombieDodoRider",
+      "ZombieFrozenDefault"
+    ],
+    "unlockedPlants": [
+      "FirePeashooter",
+      "Repeater"
+    ],
+    "specialFeatures": [
+      {
+        "type": "IMMUNE_TO_FREEZING_PEAS",
+        "description": "Zombies are immune to freezing peashooter slow effects.",
+        "enabled": true
+      },
+      {
+        "type": "FREEZING_WIND",
+        "description": "Increases plant freezing points sequentially unless defrosted by Fire tags.",
+        "enabled": true
+      },
+      {
+        "type": "ICE_FLOES",
+        "description": "Directional sliders that push walking zombies up or down.",
+        "enabled": true
+      }
+    ],
+    "levels": [
+      {
+        "id": "caves_level_1",
+        "name": "Caves Level 1",
+        "levelNumber": 1,
+        "levelType": "NORMAL",
+        "plantSelectionLimit": 8,
+        "waveCount": 5,
+        "baseWaveCost": 15,
+        "allowedZombies": [
+          "ZombieFrozenDefault"
+        ],
+        "availablePlants": [
+          "Peashooter",
+          "Sunflower",
+          "FirePeashooter"
+        ],
+        "conveyorPlants": [],
+        "lockedPlants": [],
+        "protectedPlants": [],
+        "wavePatterns": [],
+        "specialRules": [],
+        "map": {
+          "rows": 5,
+          "columns": 9,
+          "zombieStartColumn": 9,
+          "homeColumn": 0,
+          "defaultPathDirection": "RIGHT_TO_LEFT",
+          "tiles": [
+            {
+              "x": 6,
+              "y": 1,
+              "type": "FROZEN_ZOMBIE",
+              "hp": 200,
+              "plantable": false,
+              "walkable": true,
+              "direction": null
+            }
+          ]
+        }
+      },
+      {
+        "id": "caves_level_2",
+        "name": "Caves Level 2 (Save Our Seeds)",
+        "levelNumber": 2,
+        "levelType": "SPECIAL",
+        "plantSelectionLimit": 8,
+        "waveCount": 4,
+        "baseWaveCost": 20,
+        "allowedZombies": [
+          "ZombieFrozenDefault",
+          "ZombieHunter"
+        ],
+        "availablePlants": [
+          "Peashooter",
+          "Sunflower",
+          "FirePeashooter"
+        ],
+        "conveyorPlants": [],
+        "lockedPlants": [],
+        "protectedPlants": [
+          "Sunflower"
+        ],
+        "wavePatterns": [],
+        "specialRules": [
+          {
+            "type": "SAVE_OUR_SEEDS_FAIL_CONDITION",
+            "target": "GAME",
+            "value": "true",
+            "description": "Losing protected plants instantly triggers a Game Over."
+          }
+        ],
+        "map": {
+          "rows": 5,
+          "columns": 9,
+          "zombieStartColumn": 9,
+          "homeColumn": 0,
+          "defaultPathDirection": "RIGHT_TO_LEFT",
+          "tiles": [
+            {
+              "x": 2,
+              "y": 2,
+              "type": "PROTECTED_PLANT",
+              "hp": 300,
+              "plantable": false,
+              "walkable": false,
+              "direction": null
+            }
+          ]
+        }
+      },
+      {
+        "id": "caves_level_3",
+        "name": "Caves Level 3 (Timed War)",
+        "levelNumber": 3,
+        "levelType": "SPECIAL",
+        "plantSelectionLimit": 8,
+        "waveCount": 3,
+        "baseWaveCost": 25,
+        "allowedZombies": [
+          "ZombieFrozenDefault",
+          "ZombieDodoRider"
+        ],
+        "availablePlants": [
+          "Peashooter",
+          "Sunflower",
+          "FirePeashooter"
+        ],
+        "conveyorPlants": [],
+        "lockedPlants": [],
+        "protectedPlants": [],
+        "wavePatterns": [],
+        "specialRules": [
+          {
+            "type": "TIMED_WAR_LIMIT_SECONDS",
+            "target": "TIMER",
+            "value": "45",
+            "description": "Defeat designated threshold targets within timeframe."
+          }
+        ],
+        "map": {
+          "rows": 5,
+          "columns": 9,
+          "zombieStartColumn": 9,
+          "homeColumn": 0,
+          "defaultPathDirection": "RIGHT_TO_LEFT",
+          "tiles": [
+            {
+              "x": 4,
+              "y": 0,
+              "type": "SLIDER_TILE",
+              "hp": 0,
+              "plantable": true,
+              "walkable": true,
+              "direction": "UP"
+            },
+            {
+              "x": 4,
+              "y": 4,
+              "type": "SLIDER_TILE",
+              "hp": 0,
+              "plantable": true,
+              "walkable": true,
+              "direction": "DOWN"
+            }
+          ]
+        }
+      },
+      {
+        "id": "caves_level_4",
+        "name": "Caves Level 4 (Boss Fight)",
+        "levelNumber": 4,
+        "levelType": "BOSS",
+        "plantSelectionLimit": 8,
+        "waveCount": 1,
+        "baseWaveCost": 120,
+        "allowedZombies": [
+          "ZombieBossCaves"
+        ],
+        "availablePlants": [
+          "Peashooter",
+          "Sunflower",
+          "FirePeashooter"
+        ],
+        "conveyorPlants": [],
+        "lockedPlants": [],
+        "protectedPlants": [],
+        "wavePatterns": [],
+        "specialRules": [
+          {
+            "type": "BOSS_PHASE_ACTIVE",
+            "target": "GAME",
+            "value": "true",
+            "description": "Defeat the sector Boss to finish the phase."
+          }
+        ],
+        "map": {
+          "rows": 5,
+          "columns": 9,
+          "zombieStartColumn": 9,
+          "homeColumn": 0,
+          "defaultPathDirection": "RIGHT_TO_LEFT",
+          "tiles": []
+        }
+      }
+    ]
+  },
+  {
+    "id": "big_wave_beach",
+    "name": "BigWaveBeach",
+    "displayName": "Big Wave Beach",
+    "seasonType": "BIG_WAVE_BEACH",
+    "allowedZombies": [
+      "ZombieBeachDefault",
+      "ZombieSurfer",
+      "ZombieLowTide"
+    ],
+    "unlockedPlants": [
+      "LilyPad",
+      "TangleKelp"
+    ],
+    "specialFeatures": [
+      {
+        "type": "WATER_TIDE_LINES",
+        "description": "Right side layout maps water dynamic pools. Requires Lily Pads for basic plants.",
+        "enabled": true
+      },
+      {
+        "type": "LOW_SHORE_SPAWNS",
+        "description": "Zombies spawn directly out of water lines during Low Tide shifts.",
+        "enabled": true
+      }
+    ],
+    "levels": [
+      {
+        "id": "beach_level_1",
+        "name": "Beach Level 1",
+        "levelNumber": 1,
+        "levelType": "NORMAL",
+        "plantSelectionLimit": 8,
+        "waveCount": 5,
+        "baseWaveCost": 20,
+        "allowedZombies": [
+          "ZombieBeachDefault"
+        ],
+        "availablePlants": [
+          "Peashooter",
+          "Sunflower",
+          "LilyPad"
+        ],
+        "conveyorPlants": [],
+        "lockedPlants": [],
+        "protectedPlants": [],
+        "wavePatterns": [],
+        "specialRules": [],
+        "map": {
+          "rows": 5,
+          "columns": 9,
+          "zombieStartColumn": 9,
+          "homeColumn": 0,
+          "defaultPathDirection": "RIGHT_TO_LEFT",
+          "tiles": [
+            {
+              "x": 6,
+              "y": 0,
+              "type": "WATER",
+              "hp": 0,
+              "plantable": false,
+              "walkable": true,
+              "direction": null
+            },
+            {
+              "x": 7,
+              "y": 0,
+              "type": "WATER",
+              "hp": 0,
+              "plantable": false,
+              "walkable": true,
+              "direction": null
+            },
+            {
+              "x": 8,
+              "y": 0,
+              "type": "WATER",
+              "hp": 0,
+              "plantable": false,
+              "walkable": true,
+              "direction": null
+            }
+          ]
+        }
+      },
+      {
+        "id": "beach_level_2",
+        "name": "Beach Level 2 (Night Ops)",
+        "levelNumber": 2,
+        "levelType": "SPECIAL",
+        "plantSelectionLimit": 8,
+        "waveCount": 4,
+        "baseWaveCost": 25,
+        "allowedZombies": [
+          "ZombieBeachDefault",
+          "ZombieSurfer"
+        ],
+        "availablePlants": [
+          "Peashooter",
+          "Sunflower",
+          "LilyPad"
+        ],
+        "conveyorPlants": [],
+        "lockedPlants": [],
+        "protectedPlants": [],
+        "wavePatterns": [],
+        "specialRules": [
+          {
+            "type": "NIGHT_OPS_NO_SKY_SUN",
+            "target": "SKY",
+            "value": "false",
+            "description": "No sky sun falls down; manual plant resources only."
+          }
+        ],
+        "map": {
+          "rows": 5,
+          "columns": 9,
+          "zombieStartColumn": 9,
+          "homeColumn": 0,
+          "defaultPathDirection": "RIGHT_TO_LEFT",
+          "tiles": []
+        }
+      },
+      {
+        "id": "beach_level_3",
+        "name": "Beach Level 3 (Dead Line)",
+        "levelNumber": 3,
+        "levelType": "SPECIAL",
+        "plantSelectionLimit": 8,
+        "waveCount": 4,
+        "baseWaveCost": 30,
+        "allowedZombies": [
+          "ZombieBeachDefault",
+          "ZombieLowTide"
+        ],
+        "availablePlants": [
+          "Peashooter",
+          "Sunflower",
+          "LilyPad"
+        ],
+        "conveyorPlants": [],
+        "lockedPlants": [],
+        "protectedPlants": [],
+        "wavePatterns": [],
+        "specialRules": [
+          {
+            "type": "DEAD_LINE_LIMIT_COLUMN",
+            "target": "MAP",
             "value": "3",
-            "description": "A random plant appears on the conveyor every 3 seconds."
+            "description": "Zombies crossing this vertical grid index cause an immediate defeat condition."
+          }
+        ],
+        "map": {
+          "rows": 5,
+          "columns": 9,
+          "zombieStartColumn": 9,
+          "homeColumn": 0,
+          "defaultPathDirection": "RIGHT_TO_LEFT",
+          "tiles": []
+        }
+      },
+      {
+        "id": "beach_level_4",
+        "name": "Beach Level 4 (Boss Fight)",
+        "levelNumber": 4,
+        "levelType": "BOSS",
+        "plantSelectionLimit": 8,
+        "waveCount": 1,
+        "baseWaveCost": 150,
+        "allowedZombies": [
+          "ZombieBossBeach"
+        ],
+        "availablePlants": [
+          "Peashooter",
+          "Sunflower",
+          "LilyPad"
+        ],
+        "conveyorPlants": [],
+        "lockedPlants": [],
+        "protectedPlants": [],
+        "wavePatterns": [],
+        "specialRules": [
+          {
+            "type": "BOSS_PHASE_ACTIVE",
+            "target": "GAME",
+            "value": "true",
+            "description": "Defeat the sector Boss to finish the phase."
+          }
+        ],
+        "map": {
+          "rows": 5,
+          "columns": 9,
+          "zombieStartColumn": 9,
+          "homeColumn": 0,
+          "defaultPathDirection": "RIGHT_TO_LEFT",
+          "tiles": []
+        }
+      }
+    ]
+  },
+  {
+    "id": "dark_ages",
+    "name": "DarkAges",
+    "displayName": "Dark Ages",
+    "seasonType": "DARK_AGES",
+    "allowedZombies": [
+      "ZombieKnight",
+      "ZombieWizard",
+      "ZombieNecromancer"
+    ],
+    "unlockedPlants": [
+      "Sunshroom",
+      "Puffshroom"
+    ],
+    "specialFeatures": [
+      {
+        "type": "NIGHT_ENVIRONMENT",
+        "description": "Naturally lacks environmental sky sun rain.",
+        "enabled": true
+      },
+      {
+        "type": "RANDOM_GRAVE_SPAWNS",
+        "description": "Graves appear dynamically at wave phases, containing either 50 Sun or Plant Food items.",
+        "enabled": true
+      },
+      {
+        "type": "NECROMANCY",
+        "description": "Under-grave dynamic ambush triggers spawn zombies instantly inside bounds.",
+        "enabled": true
+      }
+    ],
+    "levels": [
+      {
+        "id": "dark_level_1",
+        "name": "Dark Ages Level 1",
+        "levelNumber": 1,
+        "levelType": "NORMAL",
+        "plantSelectionLimit": 8,
+        "waveCount": 5,
+        "baseWaveCost": 25,
+        "allowedZombies": [
+          "ZombieKnight"
+        ],
+        "availablePlants": [
+          "Puffshroom",
+          "Sunshroom",
+          "Peashooter"
+        ],
+        "conveyorPlants": [],
+        "lockedPlants": [],
+        "protectedPlants": [],
+        "wavePatterns": [],
+        "specialRules": [],
+        "map": {
+          "rows": 5,
+          "columns": 9,
+          "zombieStartColumn": 9,
+          "homeColumn": 0,
+          "defaultPathDirection": "RIGHT_TO_LEFT",
+          "tiles": [
+            {
+              "x": 3,
+              "y": 1,
+              "type": "DARK_GRAVE_SUN",
+              "hp": 700,
+              "plantable": false,
+              "walkable": true,
+              "direction": null
+            },
+            {
+              "x": 5,
+              "y": 3,
+              "type": "DARK_GRAVE_FOOD",
+              "hp": 700,
+              "plantable": false,
+              "walkable": true,
+              "direction": null
+            }
+          ]
+        }
+      },
+      {
+        "id": "dark_level_2",
+        "name": "Dark Ages Level 2 (Love Your Plants)",
+        "levelNumber": 2,
+        "levelType": "SPECIAL",
+        "plantSelectionLimit": 8,
+        "waveCount": 4,
+        "baseWaveCost": 30,
+        "allowedZombies": [
+          "ZombieKnight",
+          "ZombieWizard"
+        ],
+        "availablePlants": [
+          "Puffshroom",
+          "Sunshroom",
+          "Peashooter"
+        ],
+        "conveyorPlants": [],
+        "lockedPlants": [],
+        "protectedPlants": [],
+        "wavePatterns": [],
+        "specialRules": [
+          {
+            "type": "MAX_ALLOWED_PLANT_LOSS",
+            "target": "PLAYER",
+            "value": "5",
+            "description": "Losing 5 or more plants via zombie consumption or destruction triggers immediate defeat."
+          }
+        ],
+        "map": {
+          "rows": 5,
+          "columns": 9,
+          "zombieStartColumn": 9,
+          "homeColumn": 0,
+          "defaultPathDirection": "RIGHT_TO_LEFT",
+          "tiles": []
+        }
+      },
+      {
+        "id": "dark_level_3",
+        "name": "Dark Ages Level 3 (Plant What You Get)",
+        "levelNumber": 3,
+        "levelType": "SPECIAL",
+        "plantSelectionLimit": 8,
+        "waveCount": 4,
+        "baseWaveCost": 35,
+        "allowedZombies": [
+          "ZombieKnight",
+          "ZombieNecromancer"
+        ],
+        "availablePlants": [
+          "Peashooter",
+          "Wall-nut"
+        ],
+        "conveyorPlants": [],
+        "lockedPlants": [
+          "Sunflower",
+          "Sunshroom"
+        ],
+        "protectedPlants": [],
+        "wavePatterns": [],
+        "specialRules": [
+          {
+            "type": "FIXED_INITIAL_SUN_BANK",
+            "target": "WALLET",
+            "value": "500",
+            "description": "The match triggers with static setup sun values. Sun producing structures are entirely disabled."
+          },
+          {
+            "type": "MANUAL_WAVE_START_TRIGGER",
+            "target": "WAVES",
+            "value": "start zombie waves",
+            "description": "Pre-planting setup allows unlimited placements without active recharge constraints until manual invocation."
+          }
+        ],
+        "map": {
+          "rows": 5,
+          "columns": 9,
+          "zombieStartColumn": 9,
+          "homeColumn": 0,
+          "defaultPathDirection": "RIGHT_TO_LEFT",
+          "tiles": []
+        }
+      },
+      {
+        "id": "dark_level_4",
+        "name": "Dark Ages Level 4 (Boss Fight)",
+        "levelNumber": 4,
+        "levelType": "BOSS",
+        "plantSelectionLimit": 8,
+        "waveCount": 1,
+        "baseWaveCost": 200,
+        "allowedZombies": [
+          "ZombieBossDarkAges"
+        ],
+        "availablePlants": [
+          "Puffshroom",
+          "Sunshroom",
+          "Peashooter"
+        ],
+        "conveyorPlants": [],
+        "lockedPlants": [],
+        "protectedPlants": [],
+        "wavePatterns": [],
+        "specialRules": [
+          {
+            "type": "BOSS_PHASE_ACTIVE",
+            "target": "GAME",
+            "value": "true",
+            "description": "Defeat the sector Boss to finish the phase."
           }
         ],
         "map": {
