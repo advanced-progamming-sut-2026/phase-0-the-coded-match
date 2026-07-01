@@ -244,7 +244,9 @@
       "type": "BARREL",
       "hp": 1100,
       "metallic": false
-    } todo
+    },
+    "behaviorType": "BarrelRoller",
+    "state": "WALKING"
   },
   {
     "id": "ZombieRa",
@@ -366,7 +368,9 @@
     "HP": 1000,
     "eatDPS": 100,
     "speed": 0.0,
-    "waveCost": 750
+    "waveCost": 750,
+    "behaviorType": "King",
+    "state": "IDLE"
   },
   {
     "id": "ZombieDarkImpDragon",

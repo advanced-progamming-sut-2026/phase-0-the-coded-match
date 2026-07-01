@@ -5,19 +5,21 @@ import models.Projectile;
 import models.plants.Plant;
 import models.zombies.Zombie;
 
-public class GiantBehavior implements ZombieBehavior {
+public class BarrelRollerBehavior implements ZombieBehavior {
+
     @Override
     public void updateZombie(Zombie zombie, Plant targetPlant) {
         if (zombie.getCurrentState() == ZombieState.EATING) {
-            zombie.destroyPlant(targetPlant);
+            zombie.attack(targetPlant);
             if(targetPlant.isDead()) {
                 zombie.setCurrentState(ZombieState.WALKING);
             }
         } else if (zombie.getCurrentState() == ZombieState.WALKING) {
             zombie.walk();
-        } else if (zombie.getCurrentHp() <= (zombie.getData().getMaxHP() / 2) && !zombie.isHasThrownImp()) {
-            zombie.spawnImp(3.0);
-            zombie.setHasThrownImp(true);
+        }
+
+        if (zombie.getArmors().isEmpty()) {
+            zombie.spawnImp(zombie.getX());
         }
     }
 

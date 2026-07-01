@@ -7,6 +7,12 @@ public class ZombieArmorData {
     private int hp;
     private boolean metallic;
 
+    public ZombieArmorData(ArmorType type) {
+        this.type = type;
+        this.hp = type.getHp();
+        this.metallic = type.isMetallic();
+    }
+
     public ArmorType getType() {
         return type;
     }

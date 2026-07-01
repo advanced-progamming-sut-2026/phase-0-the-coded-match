@@ -1,10 +1,7 @@
 package models.zombies;
 
 import controllers.GameManagerController;
-import enums.PlantCategory;
-import enums.TileType;
-import enums.ZombieEffect;
-import enums.ZombieState;
+import enums.*;
 import models.GameMapRelated.GameMapData;
 import models.GameMapRelated.Tile;
 import models.Level;
@@ -29,8 +26,6 @@ public class Zombie implements Update {
     private List<ZombieArmor> armors;
     private ZombieBehavior behavior;
     private List<ZombieEffect> effects;
-//    private boolean eating;
-//    private boolean moving;
     private boolean isLocked;
     private boolean hasThrownImp;
     private double runningSpeed;
@@ -49,8 +44,6 @@ public class Zombie implements Update {
         this.x = x;
         this.y = y;
         this.effects = new ArrayList<>();
-//        this.eating = false;
-//        this.moving = true;
         this.hasThrownImp = false;
         this.runningSpeed = data.getRunningSpeed();
         this.wasRunning = false;
@@ -170,19 +163,24 @@ public class Zombie implements Update {
         }
         if (isDead()) {
             Level level = GameManagerController.getCurrentLevel();
-            GameManagerController.getCurrentLevel().getActiveZombies().remove(this);
             if (data.getId().matches("ZombieCrystalSkull")) {
                 level.setCollectedSunsAmount(level.getCollectedSunsAmount() + (int) (stolenSuns / 2));
             } else if (data.getId().matches("ZombieRa")) {
                 for (Sun sun : stolenActiveSuns)
                 level.getActiveSuns().add(sun);
+            } else if (data.getId().matches("ZombieBarrelRoller")) {
+                if (!armors.isEmpty()) {
+                    Barrel barrel = new Barrel(x, y, armors.get(0).getCurrentHp());
+                    GameManagerController.getInstance().getCurrentLevel().getBarrels().add(barrel);
+                }
             }
+            GameManagerController.getCurrentLevel().getActiveZombies().remove(this);
         }
     }
 
-    public void throwImp() {
+    public void spawnImp(double x) {
         ZombieData impData = ZombieRepository.getInstance().findByDisplayName("Imp");
-        Zombie newImp = new Zombie(impData, 3.0, this.y);
+        Zombie newImp = new Zombie(impData, x, this.y);
         GameManagerController.getCurrentLevel().getActiveZombies().add(newImp);
     }
 
@@ -267,6 +265,31 @@ public class Zombie implements Update {
         GameManagerController.getCurrentLevel().getActiveProjectiles().add(icyProjectile);
     }
 
+    public void makeKnight() {
+        List<Zombie> defaultZombies = getDefaultZombies();
+
+        if (defaultZombies.isEmpty()) {
+            return;
+        }
+        Collections.shuffle(defaultZombies);
+
+        for (int i = 0; i < 1; i++) {
+            Zombie target = defaultZombies.get(i);
+            target.addArmor(ArmorType.SHOULDER_ARMOR);
+            target.addArmor(ArmorType.CROWN);
+        }
+    }
+
+    public List<Zombie> getDefaultZombies() {
+        List<Zombie> zombies = new ArrayList<>();
+        for (Zombie zombie : GameManagerController.getCurrentLevel().getActiveZombies()) {
+            if (zombie.getData().getId().equalsIgnoreCase("ZombieDefault")) {
+                zombies.add(zombie);
+            }
+        }
+        return zombies;
+    }
+
     public boolean isDead() {
         return currentHp <= 0;
     }
@@ -315,6 +338,11 @@ public class Zombie implements Update {
         return armors;
     }
 
+    public void addArmor(ArmorType type) {
+        ZombieArmor armor = new ZombieArmor(new ZombieArmorData(type));
+        armors.add(armor);
+    }
+
     public List<ZombieEffect> getEffects() {
         return effects;
     }
@@ -322,14 +350,6 @@ public class Zombie implements Update {
     public int getWaveCost() {
         return data.getWaveCost();
     }
-
-//    public boolean isEating() {
-//        return eating;
-//    }
-//
-//    public boolean isMoving() {
-//        return moving;
-//    }
 
     public boolean isHasThrownImp() {
         return hasThrownImp;

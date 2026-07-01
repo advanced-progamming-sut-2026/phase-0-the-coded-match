@@ -6,6 +6,7 @@ import models.GameMapRelated.GameMapData;
 import models.GameMapRelated.SkySunProducer;
 import models.plants.Plant;
 import models.seasons.Season;
+import models.zombies.Barrel;
 import models.zombies.Zombie;
 
 import java.util.ArrayList;
@@ -28,6 +29,7 @@ public class Level {
     private List<Projectile> activeProjectiles; 
     private int plantFoodCount;
     private SkySunProducer skySunProducer;
+    private List<Barrel> barrels;
 
     public Level(LevelData data) {
         this.data = data;
@@ -45,6 +47,7 @@ public class Level {
         this.activeProjectiles = new ArrayList<>();
         this.plantFoodCount = 0;
         skySunProducer = new SkySunProducer();
+        this.barrels = new ArrayList<>();
     }
 
     public Zombie getAdjacentZombie(Zombie zombie) {
@@ -186,6 +189,14 @@ public class Level {
 
     public void setSkySunProducer(SkySunProducer skySunProducer) {
         this.skySunProducer = skySunProducer;
+    }
+
+    public List<Barrel> getBarrels() {
+        return barrels;
+    }
+
+    public void setBarrels(List<Barrel> barrels) {
+        this.barrels = barrels;
     }
 
     public Plant getFrontMostPlantInRow(double row){

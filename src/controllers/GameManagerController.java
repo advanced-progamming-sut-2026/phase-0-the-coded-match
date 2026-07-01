@@ -8,10 +8,7 @@ import models.GameMapRelated.Tile;
 import models.plants.Plant;
 import models.plants.PlantData;
 import models.plants.PlantRepository;
-import models.zombies.Zombie;
-import models.zombies.ZombieArmor;
-import models.zombies.ZombieData;
-import models.zombies.ZombieRepository;
+import models.zombies.*;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -20,11 +17,19 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class GameManagerController {
+    private static GameManagerController instance;
     private static final int MAX_PLANT_FOOD = 3;
     private static final int TICKS_PER_SECOND = 10;
     private static Level currentLevel;
     private static boolean cooldownRemoved;
     private static final Map<String, Integer> plantCooldowns = new HashMap<>();
+
+    public static GameManagerController getInstance() {
+        if (instance == null) {
+            instance = new GameManagerController();
+        }
+        return instance;
+    }
 
     public static Level getCurrentLevel() {
         return currentLevel;
@@ -59,6 +64,8 @@ public class GameManagerController {
         updateSkySuns(message);
         updateSuns(message);
         updateTiles();
+        updateBarrels();
+        updateProjectiles();
         return message;
     }
 
@@ -144,6 +151,12 @@ public class GameManagerController {
         }
         for (Tile tile : currentLevel.getGameMap().getTiles()) {
             tile.update();
+        }
+    }
+
+    private static void updateBarrels() {
+        for (Barrel barrel : currentLevel.getBarrels()) {
+            barrel.update();
         }
     }
 
@@ -440,7 +453,7 @@ public class GameManagerController {
     public void loadGame() {
     }
 
-    public void updateProjectiles() {
+    public static void updateProjectiles() {
     }
 
     private void handleProjectileCollisions() {
