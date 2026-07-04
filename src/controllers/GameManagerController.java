@@ -4,6 +4,7 @@ import enums.Commands;
 import models.App;
 import models.Level;
 import models.Sun;
+import models.Projectile;
 import models.GameMapRelated.Tile;
 import models.plants.Plant;
 import models.plants.PlantData;
@@ -454,15 +455,42 @@ public class GameManagerController {
     }
 
     public static void updateProjectiles() {
+        if (currentLevel == null || currentLevel.getActiveProjectiles() == null) {
+            return;
+        }
+        Iterator<Projectile> iterator = currentLevel.getActiveProjectiles().iterator();
+        while (iterator.hasNext()) {
+            Projectile projectile = iterator.next();
+            if (projectile.isDestroyed()) {
+                iterator.remove();
+                continue;
+            }
+            projectile.move();
+            for (Zombie zombie : currentLevel.getActiveZombies().toArray(new Zombie[0])) {
+                if (projectile.checkZombieCollision(zombie)) {
+                    zombie.takeDamage(projectile.getDamage());
+                    iterator.remove();
+                    break;
+                }
+            }
+        }
     }
 
     private void handleProjectileCollisions() {
+        updateProjectiles();
     }
 
     private void cleanUpDestroyedProjectiles() {
+        if (currentLevel == null || currentLevel.getActiveProjectiles() == null) {
+            return;
+        }
+        currentLevel.getActiveProjectiles().removeIf(Projectile::isDestroyed);
     }
 
     public void spawnProjectile(models.Projectile projectile) {
+        if (currentLevel != null && projectile != null) {
+            currentLevel.getActiveProjectiles().add(projectile);
+        }
     }
 
     private static Plant findPlant(int x, int y) {

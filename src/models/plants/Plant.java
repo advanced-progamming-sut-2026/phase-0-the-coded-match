@@ -1,8 +1,9 @@
 package models.plants;
 
-import controllers.PlantController;
 import enums.PlantTag;
 import models.Update;
+import models.plants.abilities.PlantAbilityFactory;
+import models.plants.abilities.PlantAbilityHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,29 +54,28 @@ public class Plant implements Update {
     }
 
     private void doAction() {
-        String categoryName = data.getCategory().getName().toLowerCase();
-        if (categoryName.equals("sun producer")) {
-            if (sunCollected) {
-                PlantController.produceSun(this);
-                sunCollected = false;
-                currentCooldownTimer = cooldownTicks;
-            }
+        if (data.getAbilities() == null || data.getAbilities().isEmpty()) {
+            currentCooldownTimer = cooldownTicks;
             return;
         }
-        if (categoryName.equals("shooter") || categoryName.equals("strike-through")) {
-            PlantController.shootProjectile();
-        } else if (categoryName.equals("lobber")) {
-            PlantController.lobProjectile();
-        } else if (categoryName.equals("explosive")) {
-            PlantController.explode();
-        } else if (categoryName.equals("melee")) {
-            PlantController.attack();
-        } else if (categoryName.equals("homing")) {
-            PlantController.detectAZombie();
-        } else if (categoryName.equals("mint")) {
-            PlantController.givePlantFood();
+        if (data.getAbilities().contains("PRODUCE_SUN") && !sunCollected) {
+            currentCooldownTimer = cooldownTicks;
+            return;
         }
+        executeAbilities(data.getAbilities());
         currentCooldownTimer = cooldownTicks;
+    }
+
+    private void executeAbilities(List<String> abilities) {
+        if (abilities == null) {
+            return;
+        }
+        for (String ability : abilities) {
+            PlantAbilityHandler handler = PlantAbilityFactory.getHandler(ability);
+            if (handler != null) {
+                handler.execute(this);
+            }
+        }
     }
 
     public void takeDamage(int damage) {
@@ -90,10 +90,7 @@ public class Plant implements Update {
         boosted = true;
         currentHp = Math.max(currentHp, data.getBaseHp());
         activeEffects.add("plantFood:" + data.getPlantFoodEffect());
-        if (data.getCategory().getName().equalsIgnoreCase("sun producer")) {
-            PlantController.produceSun(this);
-            sunCollected = false;
-        }
+        executeAbilities(data.getPlantFoodAbilities());
     }
 
     public boolean hasThisTag(PlantTag tag) {

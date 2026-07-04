@@ -17,6 +17,9 @@ public class PlantData {
     private double recharge;
     private String behaviorType;
     private List<String> abilities;
+    private List<String> plantFoodAbilities;
+    private int projectileCount;
+    private double projectileSpeed;
     private String baseAbility;
     private String plantFoodEffect;
     private List<PlantUpgradeData> upgrades;
@@ -68,6 +71,18 @@ public class PlantData {
 
     public List<String> getAbilities() {
         return abilities;
+    }
+
+    public List<String> getPlantFoodAbilities() {
+        return plantFoodAbilities;
+    }
+
+    public int getProjectileCount() {
+        return projectileCount;
+    }
+
+    public double getProjectileSpeed() {
+        return projectileSpeed;
     }
 
     public String getBaseAbility() {

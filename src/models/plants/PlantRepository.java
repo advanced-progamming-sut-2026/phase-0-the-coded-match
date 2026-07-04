@@ -38,6 +38,7 @@ public class PlantRepository {
     private String readJsonFile(String jsonPath) {
         List<String> possiblePaths = new ArrayList<>();
         possiblePaths.add(normalizePath(jsonPath));
+        possiblePaths.add("src/assets/Plants.json");
         possiblePaths.add("src/assets/Data/Plants.json");
         possiblePaths.add("assets/Plants.json");
 
@@ -113,6 +114,9 @@ public class PlantRepository {
         setField(plantData, "recharge", readDouble(object, "recharge", 0));
         setField(plantData, "behaviorType", readString(object, "behaviorType"));
         setField(plantData, "abilities", readStringArray(object, "abilities"));
+        setField(plantData, "plantFoodAbilities", readStringArray(object, "plantFoodAbilities"));
+        setField(plantData, "projectileCount", readInt(object, "projectileCount", 1));
+        setField(plantData, "projectileSpeed", readDouble(object, "projectileSpeed", 0.5));
         setField(plantData, "baseAbility", readString(object, "baseAbility"));
         setField(plantData, "plantFoodEffect", readString(object, "plantFoodEffect"));
         setField(plantData, "upgrades", new ArrayList<>());

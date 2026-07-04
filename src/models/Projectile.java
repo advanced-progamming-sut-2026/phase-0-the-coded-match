@@ -21,9 +21,30 @@ public class Projectile {
         this.isDestroyed = isDestroyed;
     }
 
-    public void move() {}
-    public boolean checkPlantCollision(Plant plant) { return false; }
-    public boolean checkZombieCollision(Zombie zombie) { return false; }
+    public void move() {
+        if (isDestroyed) {
+            return;
+        }
+        if (isMovingLeft) {
+            xCoordinate -= speed;
+        } else {
+            xCoordinate += speed;
+        }
+    }
+
+    public boolean checkPlantCollision(Plant plant) {
+        return !isDestroyed
+                && plant != null
+                && plant.getY() == (int) Math.round(yCoordinate)
+                && Math.abs(plant.getX() - xCoordinate) < 0.5;
+    }
+
+    public boolean checkZombieCollision(Zombie zombie) {
+        return !isDestroyed
+                && zombie != null
+                && zombie.getY() == (int) Math.round(yCoordinate)
+                && Math.abs(zombie.getX() - xCoordinate) < 0.5;
+    }
     public void destroy() {
         isDestroyed = true;
         GameManagerController.getCurrentLevel().getActiveProjectiles().remove(this);
