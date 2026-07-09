@@ -168,6 +168,14 @@ public class User {
         return seedPackets.getOrDefault(plantName.toLowerCase(), 0);
     }
 
+    public int getAllSeedPacketsCount() {
+        int sum = 0;
+        for (int amount : seedPackets.values()) {
+            sum += amount;
+        }
+        return sum;
+    }
+
     public void addSeedPackets(String plantName, int count) {
         String key = plantName.toLowerCase();
         seedPackets.put(key, getSeedPacketCount(key) + count);

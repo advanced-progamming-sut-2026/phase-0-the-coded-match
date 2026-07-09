@@ -445,6 +445,9 @@ public class GameManagerController {
     }
 
     public static String gameWon(){
+        if (showSunsAmount() == 0) {
+            QuestController.notifyNoSunsLeft();
+        }
         return "Dear humanz, zis is not done yet; we will come back to eat your brainz, humanz.";
     }
 

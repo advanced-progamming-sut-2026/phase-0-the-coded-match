@@ -1,4 +1,4 @@
-package enums;
+package enums.QuestRelated;
 
 public enum RewardType {
     COIN,

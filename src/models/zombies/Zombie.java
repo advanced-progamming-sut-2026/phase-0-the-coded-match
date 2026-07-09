@@ -1,6 +1,7 @@
 package models.zombies;
 
 import controllers.GameManagerController;
+import controllers.QuestController;
 import enums.*;
 import models.GameMapRelated.GameMapData;
 import models.GameMapRelated.Tile;
@@ -174,6 +175,7 @@ public class Zombie implements Update {
                     GameManagerController.getInstance().getCurrentLevel().getBarrels().add(barrel);
                 }
             }
+            QuestController.notifyZombieKilled(level.getCurrentSeason());
             GameManagerController.getCurrentLevel().getActiveZombies().remove(this);
         }
     }

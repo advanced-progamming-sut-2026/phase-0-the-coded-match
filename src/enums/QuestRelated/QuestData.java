@@ -1,22 +1,23 @@
 package enums.QuestRelated;
 
-import enums.RewardType;
-
 import static enums.QuestRelated.Priority.*;
 import static enums.QuestRelated.QuestCategory.DAILY;
 import static enums.QuestRelated.QuestCategory.MAIN;
 import static enums.QuestRelated.QuestCategory.CHALLENGE;
 import static enums.QuestRelated.QuestObjective.*;
-import static enums.RewardType.*;
+import static enums.QuestRelated.RewardType.*;
 
 public enum QuestData {
-    DAILY_SUN_COLLECTOR("Daily Sun Collector", DAILY, "Collect sun_amount units of sun in a single day", COIN, BLUE, MEDIUM ),
-    CHAPTER_HUNTER("Chapter Hunter", MAIN, "Defeat 50 zombies from the chapter season", SEED_PACKET, ORANGE, HIGH),
-    PRO_PLANT_PLAYER("Pro Plant Player", DAILY, "Kill 10 zombies only with Plant", UNLOCKABLE, ORANGE, HIGH),
-    ONLY_CACTUS("Only Cactus", DAILY, "Kill 10 zombies only with cactus", GEM, ORANGE, HIGH),
-    ECONOMIC_HERBIVORE("Economic Herbivore", MAIN, "Victory in a stage without losing more than n plants", SEED_PACKET, ORANGE, HIGH),
-    DEFENSE_MASTER("Defense Master", CHALLENGE, "Finish a stage with exactly zero sun", GEM, GREEN, CRITICAL),
-    SPEED_EXECUTION("Speed Execution", MAIN, "Kill 10 zombies in less than 30 seconds from the start of the first wave of the zombie attack", COIN, BLUE, MEDIUM),
+    DAILY_SUN_COLLECTOR("Daily Sun Collector", DAILY, "Collect sun_amount units of sun in a single day", COIN, -1, BLUE, MEDIUM, new int[]{3000, 4000, 5000}),
+    ANCIENT_HUNTER("AncientEgypt Hunter", MAIN, "Defeat 50 zombies from the chapter season", SEED_PACKET, 10, ORANGE, HIGH, new int[]{50}),
+    BIGWAVE_HUNTER("BigWaveBeach Hunter", MAIN, "Defeat 50 zombies from the chapter season", SEED_PACKET, 10, ORANGE, HIGH, new int[]{50}),
+    DARKAGES_HUNTER("DarkAges Hunter", MAIN, "Defeat 50 zombies from the chapter season", SEED_PACKET, 10, ORANGE, HIGH, new int[]{50}),
+    FROSBITE_HUNTER("FrostbiteCaves Hunter", MAIN, "Defeat 50 zombies from the chapter season", SEED_PACKET, 10, ORANGE, HIGH, new int[]{50}),
+    PRO_PLANT_PLAYER("Pro Plant Player", DAILY, "Kill 10 zombies only with Plant", UNLOCKABLE, -1, ORANGE, HIGH, new int[]{10}),
+    ONLY_CACTUS("Only Cactus", DAILY, "Kill 10 zombies only with cactus", GEM, 20, ORANGE, HIGH, new int[]{10}),
+    ECONOMIC_HERBIVORE("Economic Herbivore", MAIN, "Victory in a level without losing more than n plants", SEED_PACKET, -1, ORANGE, HIGH, new int[]{0, 1, 2, 3, 4, 5}),
+    DEFENSE_MASTER("Defense Master", CHALLENGE, "Finish a level with exactly zero sun", GEM, 200, GREEN, CRITICAL, new int[]{0}),
+    SPEED_EXECUTION("Speed Execution", MAIN, "Kill 10 zombies in less than 30 seconds from the start of the first wave of the zombie attack", COIN, 500, BLUE, MEDIUM, new int[]{10}),
     PROFESSIONAL_DEMOLISHER("Professional Demolisher", DAILY, "Use 3 explosive plants in a single stage", COIN, BLACK, LOW),
     SYMMETRY("Symmetry", DAILY, "The game garden layout must ultimately be symmetrical", COIN, ORANGE, HIGH),
     FAMILY_SLAUGHTER("Family Slaughter", DAILY, "Only use plants of family_type to kill zombies", COIN, BLUE, MEDIUM),
@@ -36,16 +37,51 @@ public enum QuestData {
     private final QuestCategory category;
     private final String conditionText;
     private final RewardType reward;
+    private final int rewardAmount;
     private final QuestObjective objective;
     private final Priority priority;
+    private final int[] targetValue;
 
-     QuestData(String questName, QuestCategory category, String conditionText, RewardType reward, QuestObjective objective, Priority priority){
+     QuestData(String questName, QuestCategory category, String conditionText, RewardType reward, int rewardAmount, QuestObjective objective, Priority priority, int[] targetValue){
         this.questName=questName;
         this.category=category;
         this.conditionText=conditionText;
         this.reward=reward;
+        this.rewardAmount = rewardAmount;
         this.objective=objective;
         this.priority=priority;
+        this.targetValue = targetValue;
     }
 
+    public String getQuestName() {
+        return questName;
+    }
+
+    public QuestCategory getCategory() {
+        return category;
+    }
+
+    public String getConditionText() {
+        return conditionText;
+    }
+
+    public RewardType getReward() {
+        return reward;
+    }
+
+    public QuestObjective getObjective() {
+        return objective;
+    }
+
+    public Priority getPriority() {
+        return priority;
+    }
+
+    public int getRewardAmount() {
+        return rewardAmount;
+    }
+
+    public int[] getTargetValue() {
+        return targetValue;
+    }
 }

@@ -1,6 +1,7 @@
 package models;
 
 import controllers.GameManagerController;
+import controllers.QuestController;
 import enums.SunType;
 import models.plants.Plant;
 import models.zombies.Zombie;
@@ -36,6 +37,7 @@ public class Sun implements Update {
             this.type = SunType.NORMAL;
         }
         currentLevel.setCollectedSunsAmount(currentLevel.getCollectedSunsAmount() + value);
+        QuestController.notifySunCollected(value);
         currentLevel.getActiveSuns().remove(this);
     }
 

@@ -43,5 +43,9 @@ public abstract class Season {
     public SeasonType getType() {
         return type;
     }
+
+    public String getName() {
+        return name;
+    }
 }
 
