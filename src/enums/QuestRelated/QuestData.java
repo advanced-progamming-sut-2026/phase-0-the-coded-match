@@ -15,11 +15,11 @@ public enum QuestData {
     FROSBITE_HUNTER("FrostbiteCaves Hunter", MAIN, "Defeat 50 zombies from the chapter season", SEED_PACKET, 10, ORANGE, HIGH, new int[]{50}),
     PRO_PLANT_PLAYER("Pro Plant Player", DAILY, "Kill 10 zombies only with Plant", UNLOCKABLE, -1, ORANGE, HIGH, new int[]{10}),
     ONLY_CACTUS("Only Cactus", DAILY, "Kill 10 zombies only with cactus", GEM, 20, ORANGE, HIGH, new int[]{10}),
-    ECONOMIC_HERBIVORE("Economic Herbivore", MAIN, "Victory in a level without losing more than n plants", SEED_PACKET, -1, ORANGE, HIGH, new int[]{0, 1, 2, 3, 4, 5}),
+    ECONOMIC_HERBIVORE("Economic Herbivore", MAIN, "Victory in a level without losing more than n plants", SEED_PACKET, -1, ORANGE, HIGH, new int[]{0, 1, 2, 3, 4, 5}),// TODO: ADD IN ONE LEVEL
     DEFENSE_MASTER("Defense Master", CHALLENGE, "Finish a level with exactly zero sun", GEM, 200, GREEN, CRITICAL, new int[]{0}),
     SPEED_EXECUTION("Speed Execution", MAIN, "Kill 10 zombies in less than 30 seconds from the start of the first wave of the zombie attack", COIN, 500, BLUE, MEDIUM, new int[]{10}),
-    PROFESSIONAL_DEMOLISHER("Professional Demolisher", DAILY, "Use 3 explosive plants in a single stage", COIN, BLACK, LOW),
-    SYMMETRY("Symmetry", DAILY, "The game garden layout must ultimately be symmetrical", COIN, ORANGE, HIGH),
+    PROFESSIONAL_DEMOLISHER("Professional Demolisher", DAILY, "Use 3 explosive plants in a single stage", COIN, 100, BLACK, LOW, new int[]{3}), //TODO:ADD IN ONE LEVEL
+    SYMMETRY("Symmetry", DAILY, "The game garden layout must ultimately be symmetrical", COIN,500, ORANGE, HIGH, new int[]{0}),
     FAMILY_SLAUGHTER("Family Slaughter", DAILY, "Only use plants of family_type to kill zombies", COIN, BLUE, MEDIUM),
     BLOOMING_IN_LIMITS("Blooming in Limits", DAILY, "To win the stage, no plants from the family_type family should be used", GEM, ORANGE, HIGH),
     NIGHT_OR_MORNING("Night or Morning", CHALLENGE, "Completing a Day game using only Night plants (mushrooms)", GEM, ORANGE, HIGH),

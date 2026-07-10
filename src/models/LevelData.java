@@ -1,6 +1,7 @@
 package models;
 
 import enums.LevelType;
+import models.GameMapRelated.GameMap;
 import models.plants.Plant;
 import models.GameMapRelated.GameMapData;
 import models.seasons.Season;
@@ -25,7 +26,7 @@ public class LevelData {
     private List<Plant> protectedPlants;
     private WavePatternData wavePatterns; //i changed it from List to WavePatternData cause each level has multiple waves but starts from one pattern!!
     private List<SpecialLevelRuleData> specialRules;
-    private GameMapData map;
+    private GameMap map; //DOUBLE CHECK WITH JSON
 
     public String getId() {
         return id;
@@ -63,7 +64,7 @@ public class LevelData {
         return availablePlants;
     }
 
-    public GameMapData getMap() {
+    public GameMap getMap() {
         return map;
     }
 

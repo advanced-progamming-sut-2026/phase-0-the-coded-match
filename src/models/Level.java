@@ -2,6 +2,7 @@ package models;
 
 import controllers.ZombieWaveManager;
 import enums.LevelType;
+import models.GameMapRelated.GameMap;
 import models.GameMapRelated.GameMapData;
 import models.GameMapRelated.SkySunProducer;
 import models.plants.Plant;
@@ -18,7 +19,7 @@ public class Level {
     private int levelNumber;
     private boolean isUnlocked;
     private LevelType levelType;
-    private GameMapData gameMap;
+    private GameMap gameMap; // changed to GameMap from GameMapData double-check with he JSON
     private List<Zombie> activeZombies;
     private List<Plant> activePlants;
     private List<Sun> activeSuns; //suns that are on the ground
@@ -111,11 +112,11 @@ public class Level {
         this.levelType = levelType;
     }
 
-    public GameMapData getGameMap() {
+    public GameMap getGameMap() {
         return gameMap;
     }
 
-    public void setGameMap(GameMapData gameMap) {
+    public void setGameMap(GameMap gameMap) {
         this.gameMap = gameMap;
     }
 

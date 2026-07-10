@@ -7,6 +7,7 @@ import models.zombies.Zombie;
 
 public class ExplodeAbility implements PlantAbilityHandler {
     private final int damageMultiplier;
+    private final boolean isExplosive = true;
 
     public ExplodeAbility(int damageMultiplier) {
         this.damageMultiplier = Math.max(1, damageMultiplier);

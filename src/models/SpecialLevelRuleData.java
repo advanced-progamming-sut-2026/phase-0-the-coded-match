@@ -6,6 +6,7 @@ public class SpecialLevelRuleData {
     private SpecialLevelType type;
     private String value;
     private String description;
+    private boolean enabled;
 
     public SpecialLevelType getType() {
         return type;

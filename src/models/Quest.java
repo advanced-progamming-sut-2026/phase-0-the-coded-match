@@ -20,6 +20,7 @@ public class Quest {
     private int currentValue;
     private int[] targetValue;
     private Season season;
+    private Level currentLevel;
 
     public Quest(QuestData questData){
         this.questData = questData;

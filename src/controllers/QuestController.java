@@ -1,13 +1,17 @@
 package controllers;
 
+import enums.PlantCategory;
+import enums.PlantTag;
 import enums.QuestRelated.QuestData;
 import models.App;
 import models.Quest;
 import models.QuestsModel;
 import models.User;
+import models.plants.Plant;
 import models.seasons.Season;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class QuestController {
     public static QuestsModel questsModel = new QuestsModel();
@@ -108,4 +112,25 @@ public class QuestController {
         }
         economicHerbivore.setCurrentValue(0);
     }
+
+    public static void onPlantPlaced(Plant plant){
+        Quest professionalDemolisher = questsModel.getQuestByName("Professional Demolisher");
+       if(plant.hasThisTag(PlantTag.EXPLOSIVE)){
+           professionalDemolisher.setCurrentValue(professionalDemolisher.getCurrentValue()+1);
+       }
+
+       if(professionalDemolisher.getCurrentValue() == professionalDemolisher.getTargetValue()[0]){
+           claimReward(professionalDemolisher, professionalDemolisher.getRewardAmount());
+       }
+    }
+
+    //Has to somehow check the level is done
+    public static void onLevelCompleted(boolean levelWon){
+        Quest symmetry = questsModel.getQuestByName("Symmetry");
+        if(GameManagerController.getInstance().getCurrentLevel().getGameMap().checkGardenSymmetry()) {
+            claimReward(symmetry, symmetry.getRewardAmount());
+        }
+    }
+
+
 }
