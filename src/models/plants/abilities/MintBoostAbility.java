@@ -7,7 +7,7 @@ import models.plants.Plant;
 public class MintBoostAbility implements PlantAbilityHandler {
     @Override
     public void execute(Plant plant) {
-        Level level = GameManagerController.getCurrentLevel();
+        Level level = GameManagerController.getInstance().getCurrentLevel();
         if (level == null) {
             return;
         }

@@ -96,4 +96,16 @@ public class QuestController {
         Quest defenseMaster = questsModel.getQuestByName("Defense Master");
         claimReward(defenseMaster, defenseMaster.getRewardAmount());
     }
+
+    public static void notifyPlantsDestroyed(int count) {
+        Quest economicHerbivore = questsModel.getQuestByName("Economic Herbivore");
+        economicHerbivore.setCurrentValue(count);
+        for (int i = 0; i < economicHerbivore.getTargetValue().length; i++) {
+            if (economicHerbivore.getCurrentValue() == economicHerbivore.getTargetValue()[i]) {
+                claimReward(economicHerbivore, 20 - economicHerbivore.getCurrentValue());
+                return;
+            }
+        }
+        economicHerbivore.setCurrentValue(0);
+    }
 }

@@ -32,17 +32,17 @@ public class GameManagerController {
         return instance;
     }
 
-    public static Level getCurrentLevel() {
+    public Level getCurrentLevel() {
         return currentLevel;
     }
 
-    public static void setCurrentLevel(Level level) {
+    public void setCurrentLevel(Level level) {
         currentLevel = level;
         cooldownRemoved = false;
         plantCooldowns.clear();
     }
 
-    public static String[] advanceTime(String input, String[] message) {
+    public String[] advanceTime(String input, String[] message) {
         message[0] = "";
         Matcher matcher = Pattern.compile(Commands.ADVANCE_TIME.getPattern()).matcher(input);
         if (!matcher.matches()) {
@@ -57,7 +57,7 @@ public class GameManagerController {
         return message;
     }
 
-    public static String[] updateObjects(String[] message) {
+    public String[] updateObjects(String[] message) {
         decreasePlantCooldowns();
         updatePlants(message);
         updateZombies();
@@ -70,7 +70,7 @@ public class GameManagerController {
         return message;
     }
 
-    private static void decreasePlantCooldowns() {
+    private void decreasePlantCooldowns() {
         if (cooldownRemoved) {
             return;
         }
@@ -80,7 +80,7 @@ public class GameManagerController {
         }
     }
 
-    private static void updatePlants(String[] message) {
+    private void updatePlants(String[] message) {
         Iterator<Plant> iterator = currentLevel.getActivePlants().iterator();
         while (iterator.hasNext()) {
             Plant plant = iterator.next();
@@ -98,11 +98,12 @@ public class GameManagerController {
                     tile.removePlantFromTile();
                 }
                 iterator.remove();
+                currentLevel.setRemovedPlantsCount(currentLevel.getRemovedPlantsCount() + 1);
             }
         }
     }
 
-    private static void updateZombies() {
+    private void updateZombies() {
         Iterator<Zombie> iterator = currentLevel.getActiveZombies().iterator();
         while (iterator.hasNext()) {
             Zombie zombie = iterator.next();
@@ -117,13 +118,13 @@ public class GameManagerController {
         }
     }
 
-    private static void updateWaves() {
+    private void updateWaves() {
         if (currentLevel.getZombieWave() != null) {
             currentLevel.getZombieWave().update();
         }
     }
 
-    private static void updateSkySuns(String[] message) {
+    private void updateSkySuns(String[] message) {
         if (currentLevel.getSkySunProducer() == null) {
             return;
         }
@@ -136,7 +137,7 @@ public class GameManagerController {
         }
     }
 
-    private static void updateSuns(String[] message) {
+    private void updateSuns(String[] message) {
         for (Sun sun : currentLevel.getActiveSuns()) {
             boolean wasFalling = sun.isFalling();
             sun.update();
@@ -146,7 +147,7 @@ public class GameManagerController {
         }
     }
 
-    private static void updateTiles() {
+    private void updateTiles() {
         if (currentLevel.getGameMap() == null || currentLevel.getGameMap().getTiles() == null) {
             return;
         }
@@ -155,13 +156,13 @@ public class GameManagerController {
         }
     }
 
-    private static void updateBarrels() {
+    private void updateBarrels() {
         for (Barrel barrel : currentLevel.getBarrels()) {
             barrel.update();
         }
     }
 
-    public static void collectSun(String input) {
+    public void collectSun(String input) {
         Matcher matcher = Pattern.compile(Commands.COLLECT_SUN.getPattern()).matcher(input);
         if (!matcher.matches()) {
             System.out.println("invalid command");
@@ -182,7 +183,7 @@ public class GameManagerController {
         System.out.println("sun collected; you have " + currentLevel.getCollectedSunsAmount() + " suns now");
     }
 
-    public static Sun findSun(int x, int y) {
+    public Sun findSun(int x, int y) {
         for (Sun sun : currentLevel.getActiveSuns()) {
             if (sun.getX() == x && sun.getY() == y) {
                 return sun;
@@ -191,11 +192,11 @@ public class GameManagerController {
         return null;
     }
 
-    public static int showSunsAmount() {
+    public int showSunsAmount() {
         return currentLevel.getCollectedSunsAmount();
     }
 
-    public static void cheatAddSuns(String input) {
+    public void cheatAddSuns(String input) {
         Matcher matcher = Pattern.compile(Commands.CHEAT_ADD_SUNS.getPattern()).matcher(input);
         if (!matcher.matches()) {
             System.out.println("invalid command");
@@ -206,7 +207,7 @@ public class GameManagerController {
         System.out.println("you have " + currentLevel.getCollectedSunsAmount() + " suns now");
     }
 
-    public static String[] startWave() {
+    public String[] startWave() {
         return new String[] {"wave system is not ready yet"};
     }// do we need this method?
 
@@ -216,7 +217,7 @@ public class GameManagerController {
         System.out.println("all zombies are dead");
     }
 
-    public static void plantPlant(String input) {
+    public void plantPlant(String input) {
         Matcher matcher = Pattern.compile(Commands.PLANT_PLANT.getPattern()).matcher(input);
         if (!matcher.matches()) {
             System.out.println("invalid command");
@@ -244,7 +245,7 @@ public class GameManagerController {
         System.out.println("Plant " + data.getDisplayName() + " planted at (" + x + ", " + y + ")");
     }
 
-    private static String getPlantingError(String type, int x, int y) {
+    private String getPlantingError(String type, int x, int y) {
         PlantData data = new PlantRepository("assets/Plants.json").findByName(type);
         if (data == null) {
             return "plant type does not exist";
@@ -266,13 +267,13 @@ public class GameManagerController {
         return null;
     }
 
-    public static void cheatRemoveCooldown() {
+    public void cheatRemoveCooldown() {
         cooldownRemoved = true;
         plantCooldowns.clear();
         System.out.println("all plant cooldowns removed");
     }
 
-    public static void pluckPlant(String input) {
+    public void pluckPlant(String input) {
         Matcher matcher = Pattern.compile(Commands.PLUCK_PLANT.getPattern()).matcher(input);
         if (!matcher.matches()) {
             System.out.println("invalid command");
@@ -293,7 +294,7 @@ public class GameManagerController {
         System.out.println("Plant " + plant.getData().getDisplayName() + " at (" + x + ", " + y + ") removed");
     }
 
-    public static void feedPlant(String input) {
+    public void feedPlant(String input) {
         Matcher matcher = Pattern.compile(Commands.FEED_PLANT.getPattern()).matcher(input);
         if (!matcher.matches()) {
             System.out.println("invalid command");
@@ -316,7 +317,7 @@ public class GameManagerController {
                 + currentLevel.getPlantFoodCount() + " plant foods now");
     }
 
-    public static void cheatAddPlantFood() {
+    public void cheatAddPlantFood() {
         if (currentLevel.getPlantFoodCount() >= MAX_PLANT_FOOD) {
             System.out.println("plant food storage is full");
             return;
@@ -325,7 +326,7 @@ public class GameManagerController {
         System.out.println("you have " + currentLevel.getPlantFoodCount() + " plant foods now");
     }
 
-    public static StringBuilder showMap() {
+    public StringBuilder showMap() {
         StringBuilder builder = new StringBuilder();
         builder.append("tick: ").append(currentLevel.getCurrentTick()).append('\n');
         builder.append("suns: ").append(currentLevel.getCollectedSunsAmount()).append('\n');
@@ -341,7 +342,7 @@ public class GameManagerController {
         return builder;
     }
 
-    private static String tileSymbol(int x, int y) {
+    private String tileSymbol(int x, int y) {
         Tile tile = findTile(x, y);
         if (tile == null) {
             return "[?]";
@@ -358,7 +359,7 @@ public class GameManagerController {
         return "[" + tile.getType().name().charAt(0) + "]";
     }
 
-    public static StringBuilder showPlantsStatus() {
+    public StringBuilder showPlantsStatus() {
         StringBuilder builder = new StringBuilder();
         PlantRepository repository = new PlantRepository("assets/Plants.json");
         for (PlantData data : repository.getAllPlants()) {
@@ -374,7 +375,7 @@ public class GameManagerController {
         return builder;
     }
 
-    public static StringBuilder showTileStatus(String input) {
+    public StringBuilder showTileStatus(String input) {
         Matcher matcher = Pattern.compile(Commands.TILE_STATUS.getPattern()).matcher(input);
         StringBuilder builder = new StringBuilder();
         if (!matcher.matches()) {
@@ -403,11 +404,11 @@ public class GameManagerController {
         return builder;
     }
 
-    public static void ifAZombieWasKilled() {
+    public void ifAZombieWasKilled() {
         handleZombieDrop();
     }
 
-    public static StringBuilder showZombiesInfo() {
+    public StringBuilder showZombiesInfo() {
         StringBuilder builder = new StringBuilder();
         for (Zombie zombie : currentLevel.getActiveZombies()) {
             builder.append(zombie.getData().getDisplayName()).append(":\n");
@@ -425,7 +426,7 @@ public class GameManagerController {
         return builder;
     }
 
-    public static void cheatSpawnZombies(String input) {
+    public void cheatSpawnZombies(String input) {
         Matcher matcher = Pattern.compile(Commands.CHEAT_SPAWN_ZOMBIE.getPattern()).matcher(input);
         if (!matcher.matches()) {
             System.out.println("invalid command");
@@ -444,10 +445,11 @@ public class GameManagerController {
     public static void endGame() {
     }
 
-    public static String gameWon(){
+    public String gameWon(){
         if (showSunsAmount() == 0) {
             QuestController.notifyNoSunsLeft();
         }
+        QuestController.notifyPlantsDestroyed(currentLevel.getRemovedPlantsCount());
         return "Dear humanz, zis is not done yet; we will come back to eat your brainz, humanz.";
     }
 
@@ -457,7 +459,7 @@ public class GameManagerController {
     public void loadGame() {
     }
 
-    public static void updateProjectiles() {
+    public void updateProjectiles() {
         if (currentLevel == null || currentLevel.getActiveProjectiles() == null) {
             return;
         }
@@ -496,7 +498,7 @@ public class GameManagerController {
         }
     }
 
-    private static Plant findPlant(int x, int y) {
+    private Plant findPlant(int x, int y) {
         for (Plant plant : currentLevel.getActivePlants()) {
             if (plant.getX() == x && plant.getY() == y) {
                 return plant;
@@ -505,7 +507,7 @@ public class GameManagerController {
         return null;
     }
 
-    private static Tile findTile(int x, int y) {
+    private Tile findTile(int x, int y) {
         if (currentLevel == null || currentLevel.getGameMap() == null || currentLevel.getGameMap().getTiles() == null) {
             return null;
         }
@@ -517,15 +519,15 @@ public class GameManagerController {
         return null;
     }
 
-    private static int secondsToTicks(double seconds) {
+    private int secondsToTicks(double seconds) {
         return Math.max(1, (int) Math.ceil(seconds * TICKS_PER_SECOND));
     }
 
-    private static boolean isBoostedPlant(Plant plant) {
+    private boolean isBoostedPlant(Plant plant) {
         return plant.isBoosted();
     }
 
-    private static void handleZombieDrop() {
+    private void handleZombieDrop() {
         if (Math.random() < 0.05 && currentLevel.getPlantFoodCount() < MAX_PLANT_FOOD) {
             currentLevel.setPlantFoodCount(currentLevel.getPlantFoodCount() + 1);
             System.out.println("The glowing zombie dropeed a plant food; you have "
@@ -533,7 +535,7 @@ public class GameManagerController {
         }
     }
 
-    private static void append(String[] message, String line) {
+    private void append(String[] message, String line) {
         if (message[0] == null || message[0].isEmpty()) {
             message[0] = line;
         } else {

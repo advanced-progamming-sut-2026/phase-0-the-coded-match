@@ -30,6 +30,7 @@ public class Level {
     private int plantFoodCount;
     private SkySunProducer skySunProducer;
     private List<Barrel> barrels;
+    private int removedPlantsCount;
 
     public Level(LevelData data) {
         this.data = data;
@@ -48,6 +49,7 @@ public class Level {
         this.plantFoodCount = 0;
         skySunProducer = new SkySunProducer();
         this.barrels = new ArrayList<>();
+        this.removedPlantsCount = 0;
     }
 
     public Zombie getAdjacentZombie(Zombie zombie) {
@@ -219,5 +221,13 @@ public class Level {
             }
         }
         return null;
+    }
+
+    public int getRemovedPlantsCount() {
+        return removedPlantsCount;
+    }
+
+    public void setRemovedPlantsCount(int removedPlantsCount) {
+        this.removedPlantsCount = removedPlantsCount;
     }
 }

@@ -39,7 +39,8 @@ public enum Commands {
     COLLECTION_SHOW_ZOMBIE("^\\s*menu\\s+collection\\s+show-zombie\\s+-z\\s+(?<zombie_name>.*)\\s*$"),
     COLLECTION_UPGRADE("^\\s*menu\\s+collection\\s+upgrade-plant\\s+-p\\s+(?<plant_name>.*)\\s*$"),
     COLLECTION_PURCHASE("^\\s*menu\\s+collection\\s+purchase-plant\\s+-p\\s+(?<plant_name>.*)\\s*$"),
-    PLANTS_COMMANDS("^\\s*(show\\s+all\\s+plants|show\\s+available\\s+plants|add\\s+plant.*|remove\\s+plant.*|boost\\s+plant.*|start\\s+game)\\s*$"),
+    PLANTS_COMMANDS("^\\s*(show\\s+all\\s+plants|show\\s+available\\s+plants|add\\s+plant.*|remove\\s+" +
+            "plant.*|boost\\s+plant.*|start\\s+game)\\s*$"),
     ADVANCE_TIME("^\\s*advance\\s+time\\s+-t\\s+(?<count>\\d+)\\s+ticks\\s*$"),
     COLLECT_SUN("^\\s*collect\\s+sun\\s+-l\\s*\\(\\s*(?<x>\\d+)\\s*,\\s*(?<y>\\d+)\\s*\\)\\s*$"),
     SUN_AMOUNT("^\\s*show\\s+sun\\s+amount\\s*$"),
@@ -53,7 +54,8 @@ public enum Commands {
     SHOW_PLANTS_STATUS("^\\s*show\\s+plants\\s+status\\s*$"),
     TILE_STATUS("^\\s*show\\s+tile\\s+status\\s+-l\\s*\\(\\s*(?<x>\\d+)\\s*,\\s*(?<y>\\d+)\\s*\\)\\s*$"),
     SHOW_ZOMBIES_INFO("^\\s*zombies\\s+info\\s*$"),
-    CHEAT_SPAWN_ZOMBIE("^\\s*cheat\\s+spawn-zombie\\s+-t\\s+(?<zombie_type>.+?)\\s+-l\\s*<?\\s*(?<x>\\d+)\\s*,\\s*(?<y>\\d+)\\s*>?\\s*$");
+    CHEAT_SPAWN_ZOMBIE("^\\s*cheat\\s+spawn-zombie\\s+-t\\s+(?<zombie_type>.+?)\\s+-l\\s*<?\\s*(?<x>\\d+)\\s*," +
+            "\\s*(?<y>\\d+)\\s*>?\\s*$");
 
     private final String pattern;
 

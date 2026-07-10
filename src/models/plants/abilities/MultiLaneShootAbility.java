@@ -11,7 +11,7 @@ public class MultiLaneShootAbility extends ShootAbility {
 
     @Override
     public void execute(Plant plant) {
-        Level level = GameManagerController.getCurrentLevel();
+        Level level = GameManagerController.getInstance().getCurrentLevel();
         if (level == null) {
             return;
         }

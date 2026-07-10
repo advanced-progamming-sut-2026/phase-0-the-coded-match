@@ -11,7 +11,7 @@ import models.Sun;
 import models.Update;
 import models.factories.ZombieBehaviorFactory;
 import models.plants.Plant;
-import models.strategies.ZombieBehavior;
+import models.zombies.strategies.ZombieBehavior;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -65,9 +65,9 @@ public class Zombie implements Update {
 
     @Override
     public void update() {
-        Plant target = GameManagerController.getCurrentLevel().getFrontMostPlantInRow(this.y);
+        Plant target = GameManagerController.getInstance().getCurrentLevel().getFrontMostPlantInRow(this.y);
         if (data.getId().equalsIgnoreCase("ZombieIceAgeDodo")) {
-            target = GameManagerController.getCurrentLevel().getPlantInFrontOfZombie(this);
+            target = GameManagerController.getInstance().getCurrentLevel().getPlantInFrontOfZombie(this);
         }
 
         if (target != null && isAdjacentTo(target)){
@@ -112,34 +112,34 @@ public class Zombie implements Update {
             plant.takeDamage(data.getEatDPS());
         }
         if(plant.isDead()){
-            GameManagerController.getCurrentLevel().getActivePlants().remove(plant); // TODO: After plant dies we need to print "Plant <type> at (<x>, <y>) is destroyed."; but how do we send it to view?
+            GameManagerController.getInstance().getCurrentLevel().getActivePlants().remove(plant); // TODO: After plant dies we need to print "Plant <type> at (<x>, <y>) is destroyed."; but how do we send it to view?
         }
     }
 
     public void destroyPlant(Plant plant) {
         plant.setCurrentHp(0);
-        GameManagerController.getCurrentLevel().getActivePlants().remove(plant); // TODO: After plant dies we need to print "Plant <type> at (<x>, <y>) is destroyed."; but how do we send it to view?
+        GameManagerController.getInstance().getCurrentLevel().getActivePlants().remove(plant); // TODO: After plant dies we need to print "Plant <type> at (<x>, <y>) is destroyed."; but how do we send it to view?
     }
 
     public void destroyZombie(Zombie zombie) {
         zombie.setCurrentHp(0);
-        GameManagerController.getCurrentLevel().getActiveZombies().remove(zombie);
+        GameManagerController.getInstance().getCurrentLevel().getActiveZombies().remove(zombie);
     }
 
     public int stealSuns() {
-        int sunsToSteal = Math.max(25, GameManagerController.getCurrentLevel().getCollectedSunsAmount());
+        int sunsToSteal = Math.max(25, GameManagerController.getInstance().getCurrentLevel().getCollectedSunsAmount());
         if (sunsToSteal > 0) {
-            Level level = GameManagerController.getCurrentLevel();
+            Level level = GameManagerController.getInstance().getCurrentLevel();
             level.setCollectedSunsAmount(level.getCollectedSunsAmount() - sunsToSteal);
         }
         return sunsToSteal;
     }
 
     public void lazer() {
-        for (Tile tile : GameManagerController.getCurrentLevel().getGameMap().getTiles()) {
+        for (Tile tile : GameManagerController.getInstance().getCurrentLevel().getGameMap().getTiles()) {
             if (tile.getRow() == y && x - tile.getColumn() <= 4 && !tile.isEmpty()) {
                 tile.getPlant().setCurrentHp(0);
-                GameManagerController.getCurrentLevel().getActivePlants().remove(tile.getPlant());//TODO: if there is a specific method that kills the plant instantly, replace
+                GameManagerController.getInstance().getCurrentLevel().getActivePlants().remove(tile.getPlant());//TODO: if there is a specific method that kills the plant instantly, replace
             }
         }
     }
@@ -163,7 +163,7 @@ public class Zombie implements Update {
             currentHp = Math.max(0, currentHp - damage);
         }
         if (isDead()) {
-            Level level = GameManagerController.getCurrentLevel();
+            Level level = GameManagerController.getInstance().getCurrentLevel();
             if (data.getId().matches("ZombieCrystalSkull")) {
                 level.setCollectedSunsAmount(level.getCollectedSunsAmount() + (int) (stolenSuns / 2));
             } else if (data.getId().matches("ZombieRa")) {
@@ -176,14 +176,14 @@ public class Zombie implements Update {
                 }
             }
             QuestController.notifyZombieKilled(level.getCurrentSeason());
-            GameManagerController.getCurrentLevel().getActiveZombies().remove(this);
+            GameManagerController.getInstance().getCurrentLevel().getActiveZombies().remove(this);
         }
     }
 
     public void spawnImp(double x) {
         ZombieData impData = ZombieRepository.getInstance().findByDisplayName("Imp");
         Zombie newImp = new Zombie(impData, x, this.y);
-        GameManagerController.getCurrentLevel().getActiveZombies().add(newImp);
+        GameManagerController.getInstance().getCurrentLevel().getActiveZombies().add(newImp);
     }
 
     public void explodeDynamite() {
@@ -196,7 +196,7 @@ public class Zombie implements Update {
     }
 
     public void shuffleZombies(Zombie pianist) {
-        for (Zombie zombie : GameManagerController.getCurrentLevel().getActiveZombies()) {
+        for (Zombie zombie : GameManagerController.getInstance().getCurrentLevel().getActiveZombies()) {
             if (zombie != pianist) {
                 //TODO: complete this
             }
@@ -204,7 +204,7 @@ public class Zombie implements Update {
     }
 
     public void stealDroppedSuns() {
-        Level level = GameManagerController.getCurrentLevel();
+        Level level = GameManagerController.getInstance().getCurrentLevel();
         for (Sun sun : level.getActiveSuns()) {
             //TODO: the sun must have a speed?
             level.getActiveSuns().remove(sun);
@@ -240,7 +240,7 @@ public class Zombie implements Update {
 
     private List<Tile> getValidTilesForGrave() {
         List<Tile> validTiles = new ArrayList<>();
-        GameMapData map = GameManagerController.getCurrentLevel().getGameMap();
+        GameMapData map = GameManagerController.getInstance().getCurrentLevel().getGameMap();
         for (int row = 0; row < map.getRows(); row++) {
             for (int col = 0; col < map.getColumns(); col++) {
                 Tile tile = map.getTile(row, col);
@@ -264,7 +264,7 @@ public class Zombie implements Update {
     public void shootProjectile() { //TODO: include projectile TYPE
         Projectile icyProjectile = new Projectile(x, y, data.getSpeed(), data.getEatDPS(), false, false);
         //TODO: what should the speed and damage amount be??
-        GameManagerController.getCurrentLevel().getActiveProjectiles().add(icyProjectile);
+        GameManagerController.getInstance().getCurrentLevel().getActiveProjectiles().add(icyProjectile);
     }
 
     public void makeKnight() {
@@ -284,7 +284,7 @@ public class Zombie implements Update {
 
     public List<Zombie> getDefaultZombies() {
         List<Zombie> zombies = new ArrayList<>();
-        for (Zombie zombie : GameManagerController.getCurrentLevel().getActiveZombies()) {
+        for (Zombie zombie : GameManagerController.getInstance().getCurrentLevel().getActiveZombies()) {
             if (zombie.getData().getId().equalsIgnoreCase("ZombieDefault")) {
                 zombies.add(zombie);
             }

@@ -45,14 +45,14 @@ public class SkySunProducer implements Update {
     }
 
     public void calculateDropTime() {
-        int time = Math.max(6 + (int) (0.05 * GameManagerController.getCurrentLevel().getCurrentTick()), 12);
+        int time = Math.max(6 + (int) (0.05 * GameManagerController.getInstance().getCurrentLevel().getCurrentTick()), 12);
         if (timeSinceLastDrop == time) {
             spawnRandomSun();
         }
     }
 
     public void spawnRandomSun() {
-        Level currentLevel = GameManagerController.getCurrentLevel();
+        Level currentLevel = GameManagerController.getInstance().getCurrentLevel();
         int chance = random.nextInt();
         int randomX = random.nextInt(currentLevel.getGameMap().getLength()); //x and y >= 0
         int randomY = random.nextInt(currentLevel.getGameMap().getWidth());

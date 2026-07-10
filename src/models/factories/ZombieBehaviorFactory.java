@@ -1,6 +1,6 @@
 package models.factories;
 
-import models.strategies.*;
+import models.zombies.strategies.*;
 
 public class ZombieBehaviorFactory {
     public static ZombieBehavior getBehavior(String behaviorName) {

@@ -16,7 +16,7 @@ import java.util.Random;
 public class ZombieWaveManager implements Update {
     private int currentWave = 0;
     private static List<Zombie> previousWaveZombies = new ArrayList<>();
-    private WavePatternData wavePattern = GameManagerController.getCurrentLevel().getData().getWavePatterns();
+    private WavePatternData wavePattern = GameManagerController.getInstance().getCurrentLevel().getData().getWavePatterns();
 
     public WavePatternData getWavePattern(){return wavePattern;}
 
@@ -36,11 +36,11 @@ public class ZombieWaveManager implements Update {
             Zombie z = createRandomZombie();   // weighted random based on cost
             if (z.getWaveCost() > remainingCost) continue;
 
-            int lane = Random.nextInt(GameManagerController.getCurrentLevel().getGameMap().getRows()); // todo: fixed number of rows and columns!!!!
+            int lane = Random.nextInt(GameManagerController.getInstance().getCurrentLevel().getGameMap().getRows()); // todo: fixed number of rows and columns!!!!
             z.setY(lane);
             z.setX(1);   // right side : starts from the first column (figure out the number)
 
-            GameManagerController.getCurrentLevel().getActiveZombies().add(z);
+            GameManagerController.getInstance().getCurrentLevel().getActiveZombies().add(z);
             previousWaveZombies.add(z); // if tracking per wave
 
             System.out.println("Zombie " + z.getData().getDisplayName() + " spawned at wave " + currentWave
@@ -86,7 +86,7 @@ public class ZombieWaveManager implements Update {
         if(shouldNextWaveStart()){
             currentWave++;
             if(currentWave > wavePattern.getWaveNumber()){
-                GameManagerController.gameWon();
+                GameManagerController.getInstance().gameWon();
             }
             if(currentWave == wavePattern.getWaveNumber()){
                 System.out.println("The final wave has come.");

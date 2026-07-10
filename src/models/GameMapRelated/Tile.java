@@ -54,7 +54,7 @@ public class Tile implements Update {
     }
 
     public boolean firePlantExists() {
-        for (Plant p : GameManagerController.getCurrentLevel().getActivePlants()) {
+        for (Plant p : GameManagerController.getInstance().getCurrentLevel().getActivePlants()) {
             int dx = Math.abs(p.getX() - column);
             int dy = Math.abs(p.getY() - row);
             if (p.hasThisTag(PlantTag.FIRE) && dx <= 1 && dy <= 1) {

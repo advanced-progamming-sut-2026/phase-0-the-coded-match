@@ -1,11 +1,11 @@
 package views;
 
-import controllers.MenuController;
-import controllers.SignupMenuController;
+import controllers.menus.MenuController;
+import controllers.menus.SignupMenuController;
 import enums.Commands;
 import enums.Menu;
 import models.App;
-import models.User;
+import views.menus.*;
 
 import java.util.Scanner;
 

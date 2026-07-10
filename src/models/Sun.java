@@ -28,7 +28,7 @@ public class Sun implements Update {
     }
 
     public void collect() {
-        Level currentLevel = GameManagerController.getCurrentLevel();
+        Level currentLevel = GameManagerController.getInstance().getCurrentLevel();
         if (isFalling && type == SunType.RADIOACTIVE) {
             explode();
             currentLevel.getActiveSuns().remove(this);
@@ -42,7 +42,7 @@ public class Sun implements Update {
     }
 
     public void explode() {
-        for (Zombie zombie : GameManagerController.getCurrentLevel().getActiveZombies()) {
+        for (Zombie zombie : GameManagerController.getInstance().getCurrentLevel().getActiveZombies()) {
             if ((zombie.getX() - this.x <= 2) && (zombie.getY() - this.y <= 2)) {
                 zombie.setCurrentHp(zombie.getCurrentHp() - 150);
                 if (zombie.isDead()) {
@@ -50,7 +50,7 @@ public class Sun implements Update {
                 }
             }
         }
-        for (Plant plant : GameManagerController.getCurrentLevel().getActivePlants()) {
+        for (Plant plant : GameManagerController.getInstance().getCurrentLevel().getActivePlants()) {
             if ((plant.getX() - this.x <= 1) && (plant.getY() - this.y <= 1)) {
                 plant.setCurrentHp(plant.getCurrentHp() - 80);
                 if (plant.isDead()) {

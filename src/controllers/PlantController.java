@@ -58,7 +58,7 @@ public class PlantController {
     public static void produceSun(Plant plant) {
         plant.setProducedSun(true);
         Sun sun = new Sun(plant.getX(), plant.getY(), SunType.NORMAL.getValue(), 0, false, SunType.NORMAL);
-        Level level = GameManagerController.getCurrentLevel();
+        Level level = GameManagerController.getInstance().getCurrentLevel();
         if (level != null) {
             level.getActiveSuns().add(sun);
         }
