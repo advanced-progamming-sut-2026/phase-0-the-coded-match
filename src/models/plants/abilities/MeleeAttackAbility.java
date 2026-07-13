@@ -20,7 +20,7 @@ public class MeleeAttackAbility implements PlantAbilityHandler {
         }
         for (Zombie zombie : level.getActiveZombies()) {
             if (zombie.getY() == plant.getY() && Math.abs(zombie.getX() - plant.getX()) <= range) {
-                zombie.takeDamage(plant.getData().getDamage());
+                zombie.takeDamage(plant.getData().getDamage(), plant.getData().getCategory().toString());
             }
         }
     }
