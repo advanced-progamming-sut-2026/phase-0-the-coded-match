@@ -5,6 +5,7 @@ import enums.QuestRelated.QuestCategory;
 import enums.QuestRelated.QuestData;
 import enums.QuestRelated.QuestObjective;
 import enums.QuestRelated.RewardType;
+import models.plants.Plant;
 import models.seasons.Season;
 
 public class Quest {
@@ -21,6 +22,7 @@ public class Quest {
     private int[] targetValue;
     private Season season;
     private Level currentLevel;
+    private Plant targetPlant;
 
     public Quest(QuestData questData){
         this.questData = questData;
@@ -39,6 +41,10 @@ public class Quest {
     public void updateProgress(int amount) {}
     public boolean checkCompletionStatus() { return false; }
     public void distributeReward(User player) {}
+
+    public QuestData getQuestData() {
+        return questData;
+    }
 
     public String getQuestName() {
         return questName;
@@ -90,5 +96,13 @@ public class Quest {
 
     public void setSeason(Season season) {
         this.season = season;
+    }
+
+    public Plant getTargetPlant() {
+        return targetPlant;
+    }
+
+    public void setTargetPlant(Plant targetPlant) {
+        this.targetPlant = targetPlant;
     }
 }

@@ -9,22 +9,66 @@ import models.QuestsModel;
 import models.User;
 import models.plants.Plant;
 import models.seasons.Season;
+import models.zombies.Barrel;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 public class QuestController {
     public static QuestsModel questsModel = new QuestsModel();
 
-    private Set<String> plantsThatKilledZombies = new HashSet<>();
+    private static Set<String> plantsThatKilledZombies = new HashSet<>();
 
     public void generateAllQuests() {
         for (QuestData questData : QuestData.values()) {
             Quest quest = new Quest(questData);
+            if (quest.getQuestData().isNeedsPlant()) {
+                Plant targetPlant = null;
+                switch (quest.getQuestName()) {
+
+                    case "Pro Plant Player":
+                        targetPlant = getRandomPlant("killer");
+                        break;
+                    case "Only Cactus":
+                        targetPlant = getRandomPlant("cactus");
+                        break;
+                }
+
+                if (targetPlant != null) {
+                    quest.setTargetPlant(targetPlant);
+                }
+            }
             questsModel.addQuest(quest);
         }
+    }
+
+    public Plant getRandomPlant(String type) {
+        List<Plant> unlockedPlants = App.getCurrentUser().getCollection().getAvailablePlants();
+        PlantCategory plantCategory;
+
+        if (type.equalsIgnoreCase("killer")) {
+            List<Plant> killerPlants = new ArrayList<>();
+
+            for (Plant plant : unlockedPlants) {
+                plantCategory = plant.getData().getCategory();
+                if (plantCategory == PlantCategory.SHOOTER || plantCategory == PlantCategory.LOBBER ||
+                        plantCategory == PlantCategory.EXPLOSIVE || plantCategory == PlantCategory.MELEE ||
+                        plantCategory == PlantCategory.STRIKE_TROUGH) {
+                    killerPlants.add(plant);
+                }
+            }
+
+            if (!killerPlants.isEmpty()) {
+                Random random = new Random();
+                int randomIndex = random.nextInt(killerPlants.size());
+
+                return killerPlants.get(randomIndex);
+            } else if (type.equalsIgnoreCase("cactus")) {
+                Plant plant = App.getPlantByName("Cactus");
+                return plant;
+            }
+        }
+
+        return null;
     }
 
     public void checkQuestObjectives() {}
@@ -138,5 +182,27 @@ public class QuestController {
 
     public static void onZombieDefeated(String killerPlantFamily){
         plantsThatKilledZombies.add(killerPlantFamily);
+
+        Quest proPlantPlayer = questsModel.getQuestByName("Pro Plant Player");
+        if (killerPlantFamily.equalsIgnoreCase(proPlantPlayer.getTargetPlant().getData().getName())) {
+            proPlantPlayer.setCurrentValue(proPlantPlayer.getCurrentValue() + 1);
+        }
+
+         isItDone(proPlantPlayer);
+
+        Quest onlyCactus = questsModel.getQuestByName("Only Cactus");
+        if (killerPlantFamily.equalsIgnoreCase("cactus")) {
+            onlyCactus.setCurrentValue(onlyCactus.getCurrentValue() + 1);
+        }
+
+        isItDone(onlyCactus);
+    }
+
+    public static void isItDone(Quest quest) {
+        for (int i = 0; i < quest.getTargetValue().length; i++) {
+            if (quest.getCurrentValue() == quest.getTargetValue()[i]) {
+                claimReward(quest, quest.getRewardAmount());
+            }
+        }
     }
 }

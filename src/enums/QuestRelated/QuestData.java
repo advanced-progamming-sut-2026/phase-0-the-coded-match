@@ -8,29 +8,75 @@ import static enums.QuestRelated.QuestObjective.*;
 import static enums.QuestRelated.RewardType.*;
 
 public enum QuestData {
-    DAILY_SUN_COLLECTOR("Daily Sun Collector", DAILY, "Collect sun_amount units of sun in a single day", COIN, -1, BLUE, MEDIUM, new int[]{3000, 4000, 5000}),
-    ANCIENT_HUNTER("AncientEgypt Hunter", MAIN, "Defeat 50 zombies from the chapter season", SEED_PACKET, 10, ORANGE, HIGH, new int[]{50}),
-    BIGWAVE_HUNTER("BigWaveBeach Hunter", MAIN, "Defeat 50 zombies from the chapter season", SEED_PACKET, 10, ORANGE, HIGH, new int[]{50}),
-    DARKAGES_HUNTER("DarkAges Hunter", MAIN, "Defeat 50 zombies from the chapter season", SEED_PACKET, 10, ORANGE, HIGH, new int[]{50}),
-    FROSBITE_HUNTER("FrostbiteCaves Hunter", MAIN, "Defeat 50 zombies from the chapter season", SEED_PACKET, 10, ORANGE, HIGH, new int[]{50}),
-    PRO_PLANT_PLAYER("Pro Plant Player", DAILY, "Kill 10 zombies only with Plant", UNLOCKABLE, -1, ORANGE, HIGH, new int[]{10}),
-    ONLY_CACTUS("Only Cactus", DAILY, "Kill 10 zombies only with cactus", GEM, 20, ORANGE, HIGH, new int[]{10}),
-    ECONOMIC_HERBIVORE("Economic Herbivore", MAIN, "Victory in a level without losing more than n plants", SEED_PACKET, -1, ORANGE, HIGH, new int[]{0, 1, 2, 3, 4, 5}),// TODO: ADD IN ONE LEVEL
-    DEFENSE_MASTER("Defense Master", CHALLENGE, "Finish a level with exactly zero sun", GEM, 200, GREEN, CRITICAL, new int[]{0}),
-    SPEED_EXECUTION("Speed Execution", MAIN, "Kill 10 zombies in less than 30 seconds from the start of the first wave of the zombie attack", COIN, 500, BLUE, MEDIUM, new int[]{10}),
-    PROFESSIONAL_DEMOLISHER("Professional Demolisher", DAILY, "Use 3 explosive plants in a single stage", COIN, 100, BLACK, LOW, new int[]{3}), //TODO:ADD IN ONE LEVEL
-    SYMMETRY("Symmetry", DAILY, "The game garden layout must ultimately be symmetrical", COIN,500, ORANGE, HIGH, new int[]{0}),
-    FAMILY_SLAUGHTER("Family Slaughter", DAILY, "Only use plants of family_type to kill zombies", COIN, BLUE, MEDIUM),
-    BLOOMING_IN_LIMITS("Blooming in Limits", DAILY, "To win the stage, no plants from the family_type family should be used", GEM, ORANGE, HIGH),
-    NIGHT_OR_MORNING("Night or Morning", CHALLENGE, "Completing a Day game using only Night plants (mushrooms)", GEM, ORANGE, HIGH),
-    WIN_STREAK("Win Streak", DAILY, "Win 5 stages in a row on the highest difficulty", COIN, ORANGE, MEDIUM),
-    ALMOST_VICTORIOUS("Almost Victorious", DAILY, "Kill 10 zombies in the first column of a row that does not have a lawnmower", COIN, BLUE, MEDIUM),
-    NO_OCD("No OCD", DAILY, "Win the stage in a state where there is absolutely no symmetry in the garden (except for the middle row)", COIN, BLUE, MEDIUM),
-    CLOUDY_DAY("Cloudy Day", DAILY, "Beat a stage using only 3 sun-producing plants", GEM, BLUE, HIGH),
-    ONE_COLUMN_LESS("One Column Less", DAILY, "Win a stage provided that no plants are planted in the n-th column", GEM, ORANGE, HIGH),
-    DEFENSELESS_ROW("Defenseless Row", DAILY, "Win a stage provided that no plants are planted in the $n$-th row", GEM, ORANGE, HIGH),
-    DEFENSELESS_CROSS("Defenseless Cross", DAILY, "Win a stage provided that both the $n$-th column and $n$-th row are completely empty", GEM, ORANGE, HIGH),
-    MOWING_TIME("Mowing Time", CHALLENGE, "Kill at least n zombies using the lawnmowers", GEM, ORANGE, MEDIUM);
+    DAILY_SUN_COLLECTOR("Daily Sun Collector", DAILY,
+            "Collect sun_amount units of sun in a single day", COIN, -1,
+            BLUE, MEDIUM, new int[]{3000, 4000, 5000}, false),
+    ANCIENT_HUNTER("AncientEgypt Hunter", MAIN,
+            "Defeat 50 zombies from the chapter season", SEED_PACKET, 10,
+            ORANGE, HIGH, new int[]{50}, false),
+    BIGWAVE_HUNTER("BigWaveBeach Hunter", MAIN,
+            "Defeat 50 zombies from the chapter season", SEED_PACKET, 10,
+            ORANGE, HIGH, new int[]{50}, false),
+    DARKAGES_HUNTER("DarkAges Hunter", MAIN,
+            "Defeat 50 zombies from the chapter season", SEED_PACKET, 10,
+            ORANGE, HIGH, new int[]{50}, false),
+    FROSBITE_HUNTER("FrostbiteCaves Hunter", MAIN,
+            "Defeat 50 zombies from the chapter season", SEED_PACKET, 10,
+            ORANGE, HIGH, new int[]{50}, false),
+    PRO_PLANT_PLAYER("Pro Plant Player", DAILY,
+            "Kill 10 zombies only with Plant", UNLOCKABLE, -1,
+            ORANGE, HIGH, new int[]{10}, true),
+    ONLY_CACTUS("Only Cactus", DAILY,
+            "Kill 10 zombies only with cactus", GEM, 20,
+            ORANGE, HIGH, new int[]{10}, true),
+    ECONOMIC_HERBIVORE("Economic Herbivore", MAIN,
+            "Victory in a level without losing more than n plants", SEED_PACKET, -1,
+            ORANGE, HIGH, new int[]{0, 1, 2, 3, 4, 5}, false),// TODO: ADD IN ONE LEVEL
+    DEFENSE_MASTER("Defense Master", CHALLENGE,
+            "Finish a level with exactly zero sun", GEM, 200,
+            GREEN, CRITICAL, new int[]{0}, false),
+    SPEED_EXECUTION("Speed Execution", MAIN,
+            "Kill 10 zombies in less than 30 seconds from the start of the first wave of the zombie attack",
+            COIN, 500, BLUE, MEDIUM, new int[]{10}, false),
+    PROFESSIONAL_DEMOLISHER("Professional Demolisher", DAILY,
+            "Use 3 explosive plants in a single stage", COIN, 100,
+            BLACK, LOW, new int[]{3}), //TODO:ADD IN ONE LEVEL
+    SYMMETRY("Symmetry", DAILY,
+            "The game garden layout must ultimately be symmetrical", COIN,500,
+            ORANGE, HIGH, new int[]{0}),
+    FAMILY_SLAUGHTER("Family Slaughter", DAILY,
+            "Only use plants of family_type to kill zombies", COIN,
+            BLUE, MEDIUM),
+    BLOOMING_IN_LIMITS("Blooming in Limits", DAILY,
+            "To win the stage, no plants from the family_type family should be used", GEM,
+            ORANGE, HIGH),
+    NIGHT_OR_MORNING("Night or Morning", CHALLENGE,
+            "Completing a Day game using only Night plants (mushrooms)", GEM,
+            ORANGE, HIGH),
+    WIN_STREAK("Win Streak", DAILY,
+            "Win 5 stages in a row on the highest difficulty", COIN,
+            ORANGE, MEDIUM),
+    ALMOST_VICTORIOUS("Almost Victorious", DAILY,
+            "Kill 10 zombies in the first column of a row that does not have a lawnmower", COIN,
+            BLUE, MEDIUM),
+    NO_OCD("No OCD", DAILY,
+            "Win the stage in a state where there is absolutely no symmetry in the garden (except for the middle row)",
+            COIN, BLUE, MEDIUM),
+    CLOUDY_DAY("Cloudy Day", DAILY,
+            "Beat a stage using only 3 sun-producing plants", GEM,
+            BLUE, HIGH),
+    ONE_COLUMN_LESS("One Column Less", DAILY,
+            "Win a stage provided that no plants are planted in the n-th column", GEM,
+            ORANGE, HIGH),
+    DEFENSELESS_ROW("Defenseless Row", DAILY,
+            "Win a stage provided that no plants are planted in the $n$-th row", GEM,
+            ORANGE, HIGH),
+    DEFENSELESS_CROSS("Defenseless Cross", DAILY,
+            "Win a stage provided that both the $n$-th column and $n$-th row are completely empty", GEM,
+            ORANGE, HIGH),
+    MOWING_TIME("Mowing Time", CHALLENGE,
+            "Kill at least n zombies using the lawnmowers", GEM,
+            ORANGE, MEDIUM);
 
 
     private final String questName;
@@ -41,8 +87,10 @@ public enum QuestData {
     private final QuestObjective objective;
     private final Priority priority;
     private final int[] targetValue;
+    private final boolean needsPlant;
 
-     QuestData(String questName, QuestCategory category, String conditionText, RewardType reward, int rewardAmount, QuestObjective objective, Priority priority, int[] targetValue){
+     QuestData(String questName, QuestCategory category, String conditionText, RewardType reward, int rewardAmount,
+               QuestObjective objective, Priority priority, int[] targetValue, boolean needsPlant){
         this.questName=questName;
         this.category=category;
         this.conditionText=conditionText;
@@ -51,6 +99,7 @@ public enum QuestData {
         this.objective=objective;
         this.priority=priority;
         this.targetValue = targetValue;
+        this.needsPlant = needsPlant;
     }
 
     public String getQuestName() {
@@ -83,5 +132,9 @@ public enum QuestData {
 
     public int[] getTargetValue() {
         return targetValue;
+    }
+
+    public boolean isNeedsPlant() {
+        return needsPlant;
     }
 }
