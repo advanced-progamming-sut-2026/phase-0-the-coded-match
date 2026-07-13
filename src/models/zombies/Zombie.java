@@ -144,7 +144,7 @@ public class Zombie implements Update {
         }
     }
 
-    public void takeDamage(int damage) {
+    public void takeDamage(int damage, String killerPlant) {
         if (data.getDisplayName().equalsIgnoreCase("knight zombie") && !armors.isEmpty()) {
             int remainingDamage = armors.get(armors.size() - 1).takeDamage(this ,damage);
             if (remainingDamage > 0) {
@@ -176,6 +176,7 @@ public class Zombie implements Update {
                 }
             }
             QuestController.notifyZombieKilled(level.getCurrentSeason());
+            QuestController.onZombieDefeated(killerPlant);
             GameManagerController.getInstance().getCurrentLevel().getActiveZombies().remove(this);
         }
     }

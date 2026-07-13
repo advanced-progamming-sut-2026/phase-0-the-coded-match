@@ -473,7 +473,7 @@ public class GameManagerController {
             projectile.move();
             for (Zombie zombie : currentLevel.getActiveZombies().toArray(new Zombie[0])) {
                 if (projectile.checkZombieCollision(zombie)) {
-                    zombie.takeDamage(projectile.getDamage());
+                    zombie.takeDamage(projectile.getDamage(), projectile.getCreatorPlantCategory());
                     iterator.remove();
                     break;
                 }

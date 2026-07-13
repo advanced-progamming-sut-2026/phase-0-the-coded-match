@@ -11,10 +11,14 @@ import models.plants.Plant;
 import models.seasons.Season;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 public class QuestController {
     public static QuestsModel questsModel = new QuestsModel();
+
+    private Set<String> plantsThatKilledZombies = new HashSet<>();
 
     public void generateAllQuests() {
         for (QuestData questData : QuestData.values()) {
@@ -122,7 +126,7 @@ public class QuestController {
        if(professionalDemolisher.getCurrentValue() == professionalDemolisher.getTargetValue()[0]){
            claimReward(professionalDemolisher, professionalDemolisher.getRewardAmount());
        }
-    }
+    } // Explanation: a daily quest that is used to see if the player has used 3 explosive type of plants in the current game/level
 
     //Has to somehow check the level is done
     public static void onLevelCompleted(boolean levelWon){
@@ -130,7 +134,9 @@ public class QuestController {
         if(GameManagerController.getInstance().getCurrentLevel().getGameMap().checkGardenSymmetry()) {
             claimReward(symmetry, symmetry.getRewardAmount());
         }
+    }// Explanation: a daily quest that is used to see at the end of the game the garden is symmetrical meaning if the same amount and type of plants are on parallel rows
+
+    public static void onZombieDefeated(String killerPlantFamily){
+        plantsThatKilledZombies.add(killerPlantFamily);
     }
-
-
 }
