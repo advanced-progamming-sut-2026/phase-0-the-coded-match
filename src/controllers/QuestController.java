@@ -18,7 +18,10 @@ public class QuestController {
 
     private static Set<String> plantsThatKilledZombies = new HashSet<>();
 
-    public void generateAllQuests() {
+    public static void generateAllQuests() {
+        if (!questsModel.getAvailableQuests().isEmpty()) { // if the user is loaded from json
+            return;
+        }
         for (QuestData questData : QuestData.values()) {
             Quest quest = new Quest(questData);
             if (quest.getQuestData().isNeedsPlant()) {
@@ -38,10 +41,15 @@ public class QuestController {
                 }
             }
             questsModel.addQuest(quest);
+            App.getCurrentUser().setQuestsModel(questsModel);
         }
     }
 
-    public Plant getRandomPlant(String type) {
+    public static void refreshDailyQuests() {
+        //todo: check current time with the time daily quests were generated
+    }
+
+    public static Plant getRandomPlant(String type) {
         List<Plant> unlockedPlants = App.getCurrentUser().getCollection().getAvailablePlants();
         PlantCategory plantCategory;
 
@@ -96,8 +104,6 @@ public class QuestController {
     }
 
     public void loadTemplatesFromCSV(String filePath) {}
-
-    public void generateDailyQuests() {}
 
     public static void notifySunCollected(int value) {
         Quest dailySunCollector = questsModel.getQuestByName("Daily Sun Collector");

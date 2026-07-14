@@ -2,7 +2,8 @@ package enums;
 
 public enum SecurityQuestions {
     QUESTION1(1 ,"What is your favorite color?"),
-    QUESTION2(2 ,"What is your favorite animal?");
+    QUESTION2(2 ,"What is your favorite animal?"),
+    QUESTION3(3, "What year were you born?");
     private final int num;
     private final String text;
 

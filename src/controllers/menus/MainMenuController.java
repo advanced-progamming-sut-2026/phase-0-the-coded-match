@@ -11,9 +11,10 @@ public class MainMenuController {
         if (App.getCurrentUser() != null) {
             App.getCurrentUser().setStayLoggedIn(false);
         }
+        SignupMenuController.saveToJson();
         App.setCurrentUser(null);
         App.setCurrentMenu(Menu.SIGNUP_MENU);
-        File file = new File("assets.Data/loggedInUser.txt");
+        File file = new File("assets/loggedInUser.txt");
         if (file.exists()) {
             file.delete();
         }

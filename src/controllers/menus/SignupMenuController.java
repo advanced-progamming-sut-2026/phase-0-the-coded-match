@@ -10,15 +10,13 @@ import models.App;
 import models.User;
 import views.menus.SignupMenu;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -43,17 +41,21 @@ public class SignupMenuController{
         } else if (!validatePassword(password)) {
             message[0] = "Error: password is not strong enough.";
         } else if (!passwordIsConfirmed(password, passwordConfirm)) {
-            message[0] = "Error: password not confirmed."; //TODO: enter password again or go back to signup menu
+            message[0] = "Error: password not confirmed.";
         } else if (!validateNickname(nickname)) {
             message[0] = "Error: nickname is too short";
+        } else if (!validateEmail(email)) {
+            message[0] = "Error: email pattern in not valid";
+        } else if (!(genderSt.equalsIgnoreCase("male") && genderSt.equalsIgnoreCase("female"))) {
+            message[0] = "Error: gender is not valid";
         } else {
             SignupMenu.registered = true;
             Gender gender = whichGender(genderSt);
             String hashedPassword = hashPassword(password);
             User user = new User(username, hashedPassword, nickname, email, gender);
             App.addUser(user);
-            saveToJson(user);
-            message[0] = "";
+            saveToJson();
+            message[0] = "Registered successfully";
         }
         return message;
     }
@@ -74,9 +76,9 @@ public class SignupMenuController{
         return nickname.matches(Commands.NICKNAME.getPattern());
     }
 
-//    public static boolean validateEmail(String email) {
-//
-//    }
+    public static boolean validateEmail(String email) {
+        return email.matches(Commands.EMAIL.getPattern());
+    }
 
     public static Gender whichGender(String gender) {
         if (gender.equalsIgnoreCase("female")) {
@@ -86,28 +88,19 @@ public class SignupMenuController{
         }
     }
 
-    public static String[] showQuestion(String input, String[] message) {
-        Pattern pattern = Pattern.compile(Commands.PICK_QUESTION.getPattern());
-        Matcher matcher = pattern.matcher(input);
-        if (!matcher.matches()) {
-            message[0] = "invalid command";
-            return message;
-        }
-        int questionNum = Integer.parseInt(matcher.group("question_number"));
-        SecurityQuestions question = getQuestionByNumber(questionNum);
-        if (question == null) {
-            return message;
-        } else {
-            message[0] = question.getText();
+    public static String[] showQuestions(String input, String[] message) {
+        for (SecurityQuestions securityQuestion : SecurityQuestions.values()) {
+            message[0] += securityQuestion.getNum() + ": " + securityQuestion.getText() + "\n";
         }
         return message;
     }
 
-    public static void pickQuestion(String input) {
+    public static String[] pickQuestion(String input, String[] message) {
         Pattern pattern = Pattern.compile(Commands.PICK_QUESTION.getPattern());
         Matcher matcher = pattern.matcher(input);
         if (!matcher.matches()) {
-            return;
+            message[0] = "pick a question!";
+            return message;
         }
         int questionNum = Integer.parseInt(matcher.group("question_number"));
         String answer = matcher.group("answer");
@@ -115,7 +108,12 @@ public class SignupMenuController{
         SecurityQuestions question = getQuestionByNumber(questionNum);
         if (answer.equals(confirmAnswer)) {
             App.getUsers().get(App.getUsers().size() - 1).addQuestion(question, answer);
+            SignupMenu.questionPicked = true;
+            message[0] = "question picked successfully";
+        } else {
+            message[0] = "not confirmed";
         }
+        return message;
     }
 
     public static SecurityQuestions getQuestionByNumber(int num) {
@@ -145,12 +143,25 @@ public class SignupMenuController{
         }
     }
 
-    public static void saveToJson(User newUser) {
+    public static void saveToJson() {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        File file = new File("assets/Users.json");
+        ArrayList<User> users = App.getUsers();
+
+        if (file.exists() && file.length() > 0) {
+            try (FileReader reader = new FileReader(file)) {
+                Type userListType = new TypeToken<ArrayList<User>>(){}.getType();
+                ArrayList<User> existingUsers = gson.fromJson(reader, userListType);
+
+            } catch (IOException e) {
+                System.out.println("Error reading users: " + e.getMessage());
+            }
+        }
+
         try (FileWriter writer = new FileWriter("assets/Users.json")){
-            gson.toJson(newUser, writer);
+            gson.toJson(users, writer);
         } catch (IOException e) {
-            System.out.println("Error saving user: " + e.getMessage());
+            System.out.println("Error saving users: " + e.getMessage());
         }
     }
 
@@ -160,14 +171,11 @@ public class SignupMenuController{
             Type userListType = new TypeToken<ArrayList<User>>(){}.getType();
             ArrayList<User> loadedUsers = gson.fromJson(reader, userListType);
             App.setUsers(loadedUsers != null ? loadedUsers : new ArrayList<>());
-            return;
         } catch (FileNotFoundException e) {
             App.setUsers(new ArrayList<>());
-            return;
         } catch (IOException e) {
             System.out.println("Error loading users: " + e.getMessage());
             App.setUsers(new ArrayList<>());
-            return;
         }
     }
 }

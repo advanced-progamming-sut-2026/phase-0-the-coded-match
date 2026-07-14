@@ -1,14 +1,29 @@
 package controllers.menus;
 
+import controllers.QuestController;
+import enums.Commands;
 import enums.Menu;
 import enums.Phases;
 import models.App;
 import models.User;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class LoginMenuController{
 
-    public String login(String username, String password, String stayLoggedIn) {
-        User target=findUserByUsername(username);
+    public static String login(String input) {
+        Pattern pattern = Pattern.compile(Commands.LOGIN.getPattern());
+        Matcher matcher = pattern.matcher(input);
+        if (!matcher.matches()) {
+            return "invalid command";
+        }
+
+        String username = matcher.group("username");
+        String password = matcher.group("password");
+        String stayLoggedIn = matcher.group(3); //right??
+
+        User target = App.getUserByUsername(username);
         if(target == null){
             return "User does not exist";
         }
@@ -21,11 +36,13 @@ public class LoginMenuController{
         if(!stayLoggedIn.isEmpty()){
             App.getCurrentUser().setStayLoggedIn(true); //TODO: is this necessary?
         }
+        QuestController.generateAllQuests();
+        QuestController.refreshDailyQuests();
         return "Logged in successfully";
     }
 
     public String forgotPassword(String username, String email) {
-        User target = findUserByUsername(username);
+        User target = App.getUserByUsername(username);
         if(target == null){
             return "User does not exist";
         }
@@ -70,16 +87,7 @@ public class LoginMenuController{
         return "Password reset successfully";
     }
 
-    private User findUserByUsername(String username){
-        for(User u : App.getUsers()){
-            if(u.getUsername().equals(username)){
-                return u;
-            }
-        }
-        return null;
-    }
-
-    public static void savePlayer() {
+    public static void saveLoggedInUserData() {
 
     }
 

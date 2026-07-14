@@ -8,6 +8,7 @@ public abstract class Season {
 
     protected SeasonData data;
     protected String name;
+    private boolean isUnlocked;
     protected SeasonType type;
     protected List<Level> levels;
     protected Tile[][] field;
@@ -46,6 +47,14 @@ public abstract class Season {
 
     public String getName() {
         return name;
+    }
+
+    public boolean isUnlocked() {
+        return isUnlocked;
+    }
+
+    public void setUnlocked(boolean unlocked) {
+        isUnlocked = unlocked;
     }
 }
 

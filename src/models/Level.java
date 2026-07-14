@@ -19,7 +19,7 @@ public class Level {
     private int levelNumber;
     private boolean isUnlocked;
     private LevelType levelType;
-    private GameMap gameMap; // changed to GameMap from GameMapData double-check with he JSON
+    private GameMap gameMap; // changed to GameMap from GameMapData double-check with the JSON
     private List<Zombie> activeZombies;
     private List<Plant> activePlants;
     private List<Sun> activeSuns; //suns that are on the ground

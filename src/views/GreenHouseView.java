@@ -1,13 +1,17 @@
 package views;
 
 public class GreenHouseView {
-    public void showGreenHouse() {
+    public static void check(String input) {
 
     }
-    public void showPotInfo() {
 
-    }
-    public void showCollectedRewards() {
-
-    }
+//    public void showGreenHouse() {
+//
+//    }
+//    public void showPotInfo() {
+//
+//    }
+//    public void showCollectedRewards() {
+//
+//    }
 }

@@ -63,4 +63,63 @@ public class GameMap {
         if (plantA == null || plantB == null) return false; // One is empty, one has a plant (Asymmetrical)
         return plantA.equals(plantB);                       // Check if they are the exact same plant type
     }
+
+    public Tile getTile(int row, int column) {
+        for (int i = 0; i < columns; i++) {
+            for (int j = 0; j < rows; j++) {
+                if (grid[i][j].getRow() == row && grid[i][j].getColumn() == column) {
+                    return grid[i][j];
+                }
+            }
+        }
+        return null;
+    }
+
+    public int getRows() {
+        return rows;
+    }
+
+    public void setRows(int rows) {
+        this.rows = rows;
+    }
+
+    public int getColumns() {
+        return columns;
+    }
+
+    public void setColumns(int columns) {
+        this.columns = columns;
+    }
+
+    public int getLength() {
+        return length;
+    }
+
+    public void setLength(int length) {
+        this.length = length;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public Tile[][] getGrid() {
+        return grid;
+    }
+
+    public void setGrid(Tile[][] grid) {
+        this.grid = grid;
+    }
+
+    public ArrayList<Lawnmower> getLawnmowers() {
+        return lawnmowers;
+    }
+
+    public void setLawnmowers(ArrayList<Lawnmower> lawnmowers) {
+        this.lawnmowers = lawnmowers;
+    }
 }

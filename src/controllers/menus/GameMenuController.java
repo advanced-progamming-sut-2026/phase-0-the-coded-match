@@ -13,56 +13,83 @@ import java.util.regex.Pattern;
 
 public class GameMenuController{
 
-    public static void enterSeason(String input) {
+    public static String[] enterSeason(String input, String[] message) {
         Pattern pattern = Pattern.compile(Commands.ENTER_SEASON.getPattern());
         Matcher matcher = pattern.matcher(input);
+
         if (!matcher.matches()) {
-            return;
+            message[0] = "Invalid command";
+            return message;
         }
+
         String seasonName = matcher.group("season");
         Season season = App.getSeason(seasonName);
-        App.getCurrentUser().setLastSeason(season);
+
+        if (season.isUnlocked()) {
+            App.getCurrentUser().setLastSeason(season);
+            message[0] = "entered " + seasonName + " successfully";
+        } else {
+            message[0] = seasonName + " in locked";
+        }
+        return message;
     }
 
-    public static void enterLevel(String input) {
+    public static String[] enterLevel(String input, String[] message) {
         Pattern pattern = Pattern.compile(Commands.ENTER_LEVEL.getPattern());
         Matcher matcher = pattern.matcher(input);
+
         if (!matcher.matches()) {
-            return;
+            message[0] = "Invalid command";
+            return message;
         }
+
         int levelNum = Integer.parseInt(matcher.group("level"));
         LevelData level = App.getLevelByNumber(levelNum, App.getCurrentUser().getLastSeason());
+
         if (level.isUnlocked()) {
             App.getCurrentUser().setLastLevel(level);
             Level currentLevel = new Level(level);
             GameManagerController.getInstance().setCurrentLevel(currentLevel);
-
+            message[0] = "entered level " + levelNum + " successfully";
+        } else {
+            message[0] = "level" + levelNum + " is locked";
         }
+        return message;
     }
 
-    public static void enter(String input) {
+    public static String[] enter(String input, String[] message) {
         Pattern pattern = Pattern.compile(Commands.GAME_MENU_MENUS.getPattern());
         Matcher matcher = pattern.matcher(input);
+
         if (!matcher.matches()) {
-            return;
+            message[0] = "Invalid command";
+            return message;
         }
+
         String menuSt = matcher.group("menu");
         Menu menu = App.getMenu(menuSt);
         App.setCurrentMenu(menu);
+        message[0] = "entered " + menuSt + "successfully";
+        return message;
     }
 
-    public static void cheatAddCoinOrGem(String input) {
+    public static String[] cheatAddCoinOrGem(String input, String[] message) {
         Pattern pattern = Pattern.compile(Commands.CHEAT_ADD_CURRENCY.getPattern());
         Matcher matcher = pattern.matcher(input);
+
         if (!matcher.matches()) {
-            return;
+            message[0] = "Invalid command";
+            return message;
         }
+
         int amount = Integer.parseInt(matcher.group("amount"));
         String currency = matcher.group("currency");
         if (currency.equals("coin")) {
-            App.getCurrentUser().setCoinsCount(App.getCurrentUser().getCoinsCount() + amount);
+            App.getCurrentUser().addCoins(amount);
         } else {
-            App.getCurrentUser().setGemsCount(App.getCurrentUser().getGemsCount() + amount);
+            App.getCurrentUser().addGems(amount);
         }
+        message[0] = amount + currency + " added successfully";
+        return message;
     }
 }

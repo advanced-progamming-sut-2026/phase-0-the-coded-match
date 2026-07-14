@@ -153,7 +153,7 @@ public class App {
     }
 
     public static void saveLoggedInUser(String username) {
-        try (FileWriter writer = new FileWriter("assets.Data/loggedInUser.txt")) {
+        try (FileWriter writer = new FileWriter("assets/loggedInUser.txt")) {
             writer.write(username);
         } catch (IOException e) {
             System.err.println("Could not save user: " + e.getMessage());
@@ -161,7 +161,7 @@ public class App {
     }
 
     public static void loadLoggedInUser() {
-        File file = new File("assets.Data/loggedInUser.txt");
+        File file = new File("assets/loggedInUser.txt");
         if (!file.exists()) {
             setCurrentUser(null);
             return;
@@ -179,8 +179,6 @@ public class App {
         } catch (IOException e) {
             System.err.println("Could not read file: " + e.getMessage());
         }
-        setCurrentUser(null);
-        return;
     }
 
     public static void removePlant(Plant plant){

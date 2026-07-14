@@ -3,6 +3,7 @@ package models.zombies;
 import controllers.GameManagerController;
 import controllers.QuestController;
 import enums.*;
+import models.GameMapRelated.GameMap;
 import models.GameMapRelated.GameMapData;
 import models.GameMapRelated.Tile;
 import models.Level;
@@ -241,7 +242,7 @@ public class Zombie implements Update {
 
     private List<Tile> getValidTilesForGrave() {
         List<Tile> validTiles = new ArrayList<>();
-        GameMapData map = GameManagerController.getInstance().getCurrentLevel().getGameMap();
+        GameMap map = GameManagerController.getInstance().getCurrentLevel().getGameMap();
         for (int row = 0; row < map.getRows(); row++) {
             for (int col = 0; col < map.getColumns(); col++) {
                 Tile tile = map.getTile(row, col);

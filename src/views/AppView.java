@@ -5,6 +5,7 @@ import controllers.menus.SignupMenuController;
 import enums.Commands;
 import enums.Menu;
 import models.App;
+import models.greenhouse.GreenHouse;
 import views.menus.*;
 
 import java.util.Scanner;
@@ -19,6 +20,8 @@ public class AppView {
         Scanner scanner = new Scanner(System.in);
         while (scanner.hasNextLine() && isRunning) {
             String input = scanner.nextLine();
+            Menu currentMenu = App.getCurrentMenu();
+
             if (input.matches(Commands.SHOW_MENU.getPattern())) {
                 MenuController.showCurrentMenu(message);
                 System.out.println(message[0]);
@@ -26,22 +29,28 @@ public class AppView {
                 MenuController.enterMenu(input);
             } else if (input.matches(Commands.EXIT_MENU.getPattern())) {
                 MenuController.exitMenu();
-            } else if (App.getCurrentMenu() == Menu.SIGNUP_MENU) {
+            } else if (currentMenu == Menu.SIGNUP_MENU) {
                 SignupMenu.check(input, scanner);
-            } else if (App.getCurrentMenu() == Menu.LOGIN_MENU) {
+            } else if (currentMenu == Menu.LOGIN_MENU) {
                 LoginMenu.check(input);
-            } else if (App.getCurrentMenu() == Menu.MAIN_MENU) {
+            } else if (currentMenu == Menu.MAIN_MENU) {
                 MainMenu.check(input);
-            } else if (App.getCurrentMenu() == Menu.GAME_MENU) {
+            } else if (currentMenu == Menu.GAME_MENU) {
                 GameMenu.check(input);
-            } else if (App.getCurrentMenu() == Menu.SETTINGS_MENU) {
+            } else if (currentMenu == Menu.SETTINGS_MENU) {
                 SettingsMenu.check(input);
-            } else if (App.getCurrentMenu() == Menu.NEWS_MENU) {
+            } else if (currentMenu == Menu.NEWS_MENU) {
                 NewsMenu.check(input);
-            } else if (App.getCurrentMenu() == Menu.PROFILE_MENU) {
+            } else if (currentMenu == Menu.PROFILE_MENU) {
                 ProfileMenu.check(input);
-            } else if (App.getCurrentMenu() == Menu.COLLECTION_MENU) {
+            } else if (currentMenu == Menu.COLLECTION_MENU) {
                 CollectionMenu.check(input);
+            } else if (currentMenu == Menu.GREEN_HOUSE) {
+                GreenHouseView.check(input);
+            } else if (currentMenu == Menu.TRAVEL_LOG) {
+                TravelLogView.check(input);
+            } else if (currentMenu == Menu.LEADERBOARD) {
+
             } else {
                 System.out.println("invalid command");
             }

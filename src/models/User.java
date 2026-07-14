@@ -34,6 +34,7 @@ public class User {
     private ArrayList<Level> unlockedLevels = new ArrayList<>();
     private NewsManager personalNews;
     private Map<String, Integer> seedPackets = new HashMap<>();
+    private QuestsModel questsModel;
 
     public User(String username, String password, String nickname, String email, Gender gender) {
         this.username = username;
@@ -48,9 +49,13 @@ public class User {
 
     public void addGamesPlayed() {}
 
-    public void addCoins() {}
+    public void addCoins(int amount) {
+        this.coinsCount = coinsCount + amount;
+    }
 
-    public void addGems() {}
+    public void addGems(int amount) {
+        this.gemsCount = gemsCount + amount;
+    }
 
     public void addChapters() {}
 
@@ -193,5 +198,13 @@ public class User {
 
     public Collection getCollection(){
         return collection;
+    }
+
+    public QuestsModel getQuestsModel() {
+        return questsModel;
+    }
+
+    public void setQuestsModel(QuestsModel questsModel) {
+        this.questsModel = questsModel;
     }
 }

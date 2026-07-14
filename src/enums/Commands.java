@@ -12,6 +12,7 @@ public enum Commands {
     PASSWORD("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!#$%^&*()=+{}\\[\\]|\\/\\\\:;\\\"',<>?])" +
             "[A-Za-z0-9!#$%^&*()=+{}\\[\\]|\\/:;\\\"',<>?\\\\]{8,}$"),
     NICKNAME("^.{3,30}$"),
+    EMAIL("^[a-zA-Z0-9]+([._-][a-zA-Z0-9]+)*@([a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,}$"),
     LOGIN("^\\s*login\\s+-u\\s+(?<username>\\S+)\\s+-p\\s+(?<password>\\S+)(?:\\s+-stay-logged-in)?\\s*$"),
     PICK_QUESTION("^\\s*pick\\s+question\\s+-q\\s+(?<question_number>.*)\\s+-a\\s+(?<answer>.*)\\s+-c" +
             "\\s+(?<answer_confirm>.*)\\s*$"),
