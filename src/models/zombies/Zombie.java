@@ -137,10 +137,17 @@ public class Zombie implements Update {
     }
 
     public void lazer() {
-        for (Tile tile : GameManagerController.getInstance().getCurrentLevel().getGameMap().getTiles()) {
-            if (tile.getRow() == y && x - tile.getColumn() <= 4 && !tile.isEmpty()) {
-                tile.getPlant().setCurrentHp(0);
-                GameManagerController.getInstance().getCurrentLevel().getActivePlants().remove(tile.getPlant());//TODO: if there is a specific method that kills the plant instantly, replace
+        GameMap map = GameManagerController.getInstance().getCurrentLevel().getGameMap();
+
+        for (int i = 0; i < map.getColumns(); i++) {
+            for (int j = 0; j < map.getRows(); j++) {
+                if (j == y && x - i <= 4) {
+                    Tile tile = map.getTile(j, i);
+                    if (!tile.isEmpty()) {
+                        GameManagerController.getInstance().getCurrentLevel().getActivePlants().remove(tile.getPlant());
+                        //TODO: if there is a specific method that kills the plant instantly, replace
+                    }
+                }
             }
         }
     }
