@@ -17,6 +17,9 @@ public class QuestController {
     public static QuestsModel questsModel = new QuestsModel();
 
     private static Set<String> plantsThatKilledZombies = new HashSet<>();
+    private static int explosivePlantsPlacedThisLevel = 0;
+    private static boolean brokeFamilyRule = false;
+    private static boolean usedForbiddenFamily = false;
 
     public static void generateAllQuests() {
         if (!questsModel.getAvailableQuests().isEmpty()) { // if the user is loaded from json
@@ -34,6 +37,12 @@ public class QuestController {
                     case "Only Cactus":
                         targetPlant = getRandomPlant("cactus");
                         break;
+                    case "Family Slaughter":
+                        targetPlant = getRandomPlant();
+                        break;
+                    case "Blooming in Limits":
+                        targetPlant = getRandomPlant();
+                        break;
                 }
 
                 if (targetPlant != null) {
@@ -48,6 +57,11 @@ public class QuestController {
     public static void refreshDailyQuests() {
         //todo: check current time with the time daily quests were generated
     }
+    public void onLevelStarted() {
+        this.explosivePlantsPlacedThisLevel = 0;
+    } //todo: if we have quests that need to update their target value whenever a new level starts we update them here
+    //todo: add this method whenever a new level starts
+
 
     public static Plant getRandomPlant(String type) {
         List<Plant> unlockedPlants = App.getCurrentUser().getCollection().getAvailablePlants();
@@ -78,6 +92,14 @@ public class QuestController {
 
         return null;
     }
+
+    public static Plant getRandomPlant(){
+        List<Plant> unlockedPlants = App.getCurrentUser().getCollection().getAvailablePlants();
+        PlantCategory plantCategory;
+        int randomIndex = new Random().nextInt(unlockedPlants.size());
+        return unlockedPlants.get(randomIndex);
+    }
+
 
     public void checkQuestObjectives() {}
 
@@ -170,38 +192,57 @@ public class QuestController {
     public static void onPlantPlaced(Plant plant){
         Quest professionalDemolisher = questsModel.getQuestByName("Professional Demolisher");
        if(plant.hasThisTag(PlantTag.EXPLOSIVE)){
-           professionalDemolisher.setCurrentValue(professionalDemolisher.getCurrentValue()+1);
+           explosivePlantsPlacedThisLevel += 1;
+           professionalDemolisher.setCurrentValue(explosivePlantsPlacedThisLevel);
        }
-
        if(professionalDemolisher.getCurrentValue() == professionalDemolisher.getTargetValue()[0]){
            claimReward(professionalDemolisher, professionalDemolisher.getRewardAmount());
        }
+
+       Quest bloomingInLimits = questsModel.getQuestByName("Blooming in Limits");
+       if(plant.getData().getCategory() == bloomingInLimits.getTargetPlant().getData().getCategory()){
+           usedForbiddenFamily = true;
+       }
     } // Explanation: a daily quest that is used to see if the player has used 3 explosive type of plants in the current game/level
 
-    //Has to somehow check the level is done
+    // TODO: make a method whenever levels are done they call this method to check quests that have to check when levels are completed
     public static void onLevelCompleted(boolean levelWon){
         Quest symmetry = questsModel.getQuestByName("Symmetry");
         if(GameManagerController.getInstance().getCurrentLevel().getGameMap().checkGardenSymmetry()) {
             claimReward(symmetry, symmetry.getRewardAmount());
         }
-    }// Explanation: a daily quest that is used to see at the end of the game the garden is symmetrical meaning if the same amount and type of plants are on parallel rows
 
-    public static void onZombieDefeated(String killerPlantFamily){
-        plantsThatKilledZombies.add(killerPlantFamily);
+        Quest familySlaughter = questsModel.getQuestByName("Family Slaughter");
+        if(!brokeFamilyRule){
+            claimReward(familySlaughter, familySlaughter.getRewardAmount());
+        }
+
+        Quest bloomingInLimits = questsModel.getQuestByName("Blooming in Limits");
+        if(!usedForbiddenFamily){
+            claimReward(bloomingInLimits, bloomingInLimits.getRewardAmount());
+        }
+    }
+
+    public static void onZombieDefeated(Plant killerPlant){
 
         Quest proPlantPlayer = questsModel.getQuestByName("Pro Plant Player");
-        if (killerPlantFamily.equalsIgnoreCase(proPlantPlayer.getTargetPlant().getData().getName())) {
+        if (killerPlant.getData().getName().equalsIgnoreCase(proPlantPlayer.getTargetPlant().getData().getName())) {
             proPlantPlayer.setCurrentValue(proPlantPlayer.getCurrentValue() + 1);
         }
 
          isItDone(proPlantPlayer);
 
         Quest onlyCactus = questsModel.getQuestByName("Only Cactus");
-        if (killerPlantFamily.equalsIgnoreCase("cactus")) {
+        if (killerPlant.getData().getName().equalsIgnoreCase("cactus")) {
             onlyCactus.setCurrentValue(onlyCactus.getCurrentValue() + 1);
         }
 
         isItDone(onlyCactus);
+
+        Quest familySlaughter = questsModel.getQuestByName("Family Slaughter");
+        if (killerPlant.getData().getCategory() != familySlaughter.getTargetPlant().getData().getCategory()){
+            brokeFamilyRule = true;
+        }
     }
 
     public static void isItDone(Quest quest) {

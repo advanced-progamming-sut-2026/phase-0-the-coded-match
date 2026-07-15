@@ -242,6 +242,7 @@ public class GameManagerController {
         if (isBoostedPlant(plant)) {
             plant.activatePlantFood();
         }
+        QuestController.onPlantPlaced(plant);
         System.out.println("Plant " + data.getDisplayName() + " planted at (" + x + ", " + y + ")");
     }
 

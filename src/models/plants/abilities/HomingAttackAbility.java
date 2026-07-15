@@ -23,7 +23,7 @@ public class HomingAttackAbility implements PlantAbilityHandler {
             if (target == null) {
                 return;
             }
-            target.takeDamage(plant.getData().getDamage(), plant.getData().getCategory().toString());
+            target.takeDamage(plant.getData().getDamage(), plant);
         }
     }
 

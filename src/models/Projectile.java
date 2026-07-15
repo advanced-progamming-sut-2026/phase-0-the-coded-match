@@ -1,6 +1,7 @@
 package models;
 
 import controllers.GameManagerController;
+import enums.PlantCategory;
 import models.plants.Plant;
 import models.zombies.Zombie;
 
@@ -11,9 +12,9 @@ public class Projectile {
     private int damage;
     private boolean isMovingLeft;
     private boolean isDestroyed;
-    private String creatorPlantCategory;
+    private Plant creatorPlantCategory;
 
-    public Projectile(double xCoordinate, double yCoordinate, double speed, int damage, boolean isMovingLeft, boolean isDestroyed, String creatorPlantCategory) {
+    public Projectile(double xCoordinate, double yCoordinate, double speed, int damage, boolean isMovingLeft, boolean isDestroyed, Plant creatorPlantCategory) {
         this.xCoordinate = xCoordinate;
         this.yCoordinate = yCoordinate;
         this.speed = speed;
@@ -76,7 +77,7 @@ public class Projectile {
         return isDestroyed;
     }
 
-    public String getCreatorPlantCategory() {
+    public Plant getCreatorPlantCategory() {
         return creatorPlantCategory;
     }
 }

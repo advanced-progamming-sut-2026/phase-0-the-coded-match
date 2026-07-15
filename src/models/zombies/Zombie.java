@@ -145,7 +145,7 @@ public class Zombie implements Update {
         }
     }
 
-    public void takeDamage(int damage, String killerPlant) {
+    public void takeDamage(int damage, Plant killerPlant) {
         if (data.getDisplayName().equalsIgnoreCase("knight zombie") && !armors.isEmpty()) {
             int remainingDamage = armors.get(armors.size() - 1).takeDamage(this ,damage);
             if (remainingDamage > 0) {
