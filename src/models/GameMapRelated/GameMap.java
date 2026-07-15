@@ -65,12 +65,8 @@ public class GameMap {
     }
 
     public Tile getTile(int row, int column) {
-        for (int i = 0; i < columns; i++) {
-            for (int j = 0; j < rows; j++) {
-                if (grid[i][j].getRow() == row && grid[i][j].getColumn() == column) {
-                    return grid[i][j];
-                }
-            }
+        if (row >= 0 && row <= rows && column >= 0 && column <= columns) {
+            return grid[row][column];
         }
         return null;
     }

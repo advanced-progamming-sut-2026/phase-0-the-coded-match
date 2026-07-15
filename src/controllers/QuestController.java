@@ -70,12 +70,14 @@ public class QuestController {
                 int randomIndex = random.nextInt(killerPlants.size());
 
                 return killerPlants.get(randomIndex);
-            } else if (type.equalsIgnoreCase("cactus")) {
-                Plant plant = App.getPlantByName("Cactus");
-                return plant;
-            }
-        }
 
+            }
+
+        } else if (type.equalsIgnoreCase("cactus")) {
+            Plant plant = App.getPlantByName("Cactus");
+            return plant;
+        }
+        
         return null;
     }
 
