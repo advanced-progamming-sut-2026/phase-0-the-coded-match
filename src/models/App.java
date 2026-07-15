@@ -223,4 +223,14 @@ public class App {
         }
         return null;
     }
+
+    public static List<Plant> getLockedPlants() {
+        List<Plant> lockedPlants = new ArrayList<>();
+        for (Plant plant : allPlants) {
+            if (plant.isLocked()) {
+                lockedPlants.add(plant);
+            }
+        }
+        return lockedPlants;
+    }
 }

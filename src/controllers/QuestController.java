@@ -80,8 +80,7 @@ public class QuestController {
             }
 
             if (!killerPlants.isEmpty()) {
-                Random random = new Random();
-                int randomIndex = random.nextInt(killerPlants.size());
+                int randomIndex = new Random().nextInt(killerPlants.size());
 
                 return killerPlants.get(randomIndex);
 
@@ -117,12 +116,22 @@ public class QuestController {
                 break;
             }
             case UNLOCKABLE -> {
+                currentUser.getCollection().getAvailablePlants().add(getRewardPlant());
                 break;
             }
             case SEED_PACKET -> {
                 //TODO: add to all seed packets count
                 break;
             }
+        }
+        return null;
+    }
+
+    public static Plant getRewardPlant() {
+        List<Plant> lockedPlants = App.getLockedPlants();
+        if (lockedPlants != null) {
+            int randomIndex = new Random().nextInt(lockedPlants.size());
+            return lockedPlants.get(randomIndex);
         }
         return null;
     }

@@ -21,7 +21,7 @@ import java.util.List;
 public class Zombie implements Update {
     private ZombieData data;
     private int currentHp;
-    private int currentDamage;
+    private int eatDPS;
     private ZombieState currentState;
     private double x;
     private int y;
@@ -42,6 +42,7 @@ public class Zombie implements Update {
     public Zombie(ZombieData data, double x, int y) {
         this.data = data;
         this.currentHp = data.getMaxHP();
+        this.eatDPS = data.getEatDPS();
         this.currentState = data.getState();
         this.x = x;
         this.y = y;
@@ -317,12 +318,12 @@ public class Zombie implements Update {
         this.currentHp = currentHp;
     }
 
-    public int getCurrentDamage() {
-        return currentDamage;
+    public int getEatDPS() {
+        return eatDPS;
     }
 
-    public void setCurrentDamage(int currentDamage) {
-        this.currentDamage = currentDamage;
+    public void setEatDPS(int eatDPS) {
+        this.eatDPS = eatDPS;
     }
 
     public ZombieState getCurrentState() {

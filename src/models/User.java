@@ -1,6 +1,7 @@
 package models;
 
 import enums.Gender;
+import enums.QuestRelated.QuestCategory;
 import enums.SecurityQuestions;
 import models.greenhouse.GreenHouse;
 import models.seasons.Season;
@@ -23,10 +24,9 @@ public class User {
     private int meowPoints;
     private LevelData lastLevel;
     private Season lastSeason;
+    private int lastSeasonId;
     private int difficultyLevel;
     private int minigamesWonCount;
-    private int dailyQuestsCount;
-    private int questsCount;
     private int highestPointAchieved;
     private boolean stayLoggedIn;
     private Collection collection;
@@ -65,7 +65,25 @@ public class User {
 
     public void addDailyQuests() {}
 
-    public void addQuestsCount() {}
+    public int getCompletedQuestsCount() {
+        int count = 0;
+        for (Quest quest : questsModel.getAvailableQuests()) {
+            if (quest.isCompleted) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public int getCompletedDailyQuestsCount() {
+        int count = 0;
+        for (Quest quest : questsModel.getAvailableQuests()) {
+            if (quest.isCompleted && quest.getQuestData().getCategory() == QuestCategory.DAILY) {
+                count++;
+            }
+        }
+        return count;
+    }
 
     public void addCollection() {}
 
@@ -91,6 +109,23 @@ public class User {
 
     public void setLastSeason(Season lastSeason) {
         this.lastSeason = lastSeason;
+        this.lastSeasonId = lastSeason.getData().getId();
+    }
+
+    public int getMinigamesWonCount() {
+        return minigamesWonCount;
+    }
+
+    public void setMinigamesWonCount(int minigamesWonCount) {
+        this.minigamesWonCount = minigamesWonCount;
+    }
+
+    public int getHighestPointAchieved() {
+        return highestPointAchieved;
+    }
+
+    public void setHighestPointAchieved(int highestPointAchieved) {
+        this.highestPointAchieved = highestPointAchieved;
     }
 
     public void addQuestion(SecurityQuestions question, String answer){

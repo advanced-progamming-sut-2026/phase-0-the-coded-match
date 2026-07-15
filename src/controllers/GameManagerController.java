@@ -2,6 +2,7 @@ package controllers;
 
 import enums.Commands;
 import models.App;
+import models.GameMapRelated.GameMap;
 import models.Level;
 import models.Sun;
 import models.Projectile;
@@ -21,7 +22,7 @@ public class GameManagerController {
     private static GameManagerController instance;
     private static final int MAX_PLANT_FOOD = 3;
     private static final int TICKS_PER_SECOND = 10;
-    private static Level currentLevel;
+    private Level currentLevel;
     private static boolean cooldownRemoved;
     private static final Map<String, Integer> plantCooldowns = new HashMap<>();
 
@@ -50,8 +51,10 @@ public class GameManagerController {
             return message;
         }
         int count = Integer.parseInt(matcher.group("count"));
+        int dl = App.getCurrentUser().getDifficultyLevel();
+        int step = (int) (1 * (dl / 3.0));
         for (int i = 0; i < count; i++) {
-            currentLevel.setCurrentTick(currentLevel.getCurrentTick() + 1);
+            currentLevel.setCurrentTick(currentLevel.getCurrentTick() + step);
             updateObjects(message);
         }
         return message;
@@ -93,7 +96,7 @@ public class GameManagerController {
             if (plant.isDead()) {
                 append(message, "Plant " + plant.getData().getDisplayName() + " at (" + plant.getX() + ", "
                         + plant.getY() + ") is destroyed.");
-                Tile tile = findTile(plant.getX(), plant.getY());
+                Tile tile = currentLevel.getGameMap().getTile(plant.getX(), plant.getY());
                 if (tile != null && tile.getPlant() == plant) {
                     tile.removePlantFromTile();
                 }
@@ -148,11 +151,15 @@ public class GameManagerController {
     }
 
     private void updateTiles() {
-        if (currentLevel.getGameMap() == null || currentLevel.getGameMap().getTiles() == null) {
+        GameMap map = currentLevel.getGameMap();
+        if (map == null || map.getGrid() == null) {
             return;
         }
-        for (Tile tile : currentLevel.getGameMap().getTiles()) {
-            tile.update();
+        for (int i = 0; i < map.getRows(); i++) {
+            for (int j = 0; j < map.getColumns(); j++) {
+                Tile tile = map.getGrid()[i][j];
+                tile.update();
+            }
         }
     }
 
@@ -234,7 +241,7 @@ public class GameManagerController {
         PlantData data = new PlantRepository("assets/Plants.json").findByName(type);
         Plant plant = new Plant(data, x, y, 1);
         currentLevel.getActivePlants().add(plant);
-        findTile(x, y).setPlant(plant);
+        currentLevel.getGameMap().getTile(plant.getX(), plant.getY()).setPlant(plant);
         currentLevel.setCollectedSunsAmount(currentLevel.getCollectedSunsAmount() - data.getSunCost());
         if (!cooldownRemoved) {
             plantCooldowns.put(data.getName().toLowerCase(), secondsToTicks(data.getRecharge()));
@@ -251,7 +258,7 @@ public class GameManagerController {
         if (data == null) {
             return "plant type does not exist";
         }
-        Tile tile = findTile(x, y);
+        Tile tile = currentLevel.getGameMap().getTile(x, y);
         if (tile == null) {
             return "location is out of map";
         }
@@ -288,7 +295,7 @@ public class GameManagerController {
             return;
         }
         currentLevel.getActivePlants().remove(plant);
-        Tile tile = findTile(x, y);
+        Tile tile = currentLevel.getGameMap().getTile(x, y);
         if (tile != null) {
             tile.removePlantFromTile();
         }
@@ -344,7 +351,7 @@ public class GameManagerController {
     }
 
     private String tileSymbol(int x, int y) {
-        Tile tile = findTile(x, y);
+        Tile tile = currentLevel.getGameMap().getTile(x, y);
         if (tile == null) {
             return "[?]";
         }
@@ -384,7 +391,7 @@ public class GameManagerController {
         }
         int x = Integer.parseInt(matcher.group("x"));
         int y = Integer.parseInt(matcher.group("y"));
-        Tile tile = findTile(x, y);
+        Tile tile = currentLevel.getGameMap().getTile(x, y);
         if (tile == null) {
             return builder.append("location is out of map");
         }
@@ -503,18 +510,6 @@ public class GameManagerController {
         for (Plant plant : currentLevel.getActivePlants()) {
             if (plant.getX() == x && plant.getY() == y) {
                 return plant;
-            }
-        }
-        return null;
-    }
-
-    private Tile findTile(int x, int y) {
-        if (currentLevel == null || currentLevel.getGameMap() == null || currentLevel.getGameMap().getTiles() == null) {
-            return null;
-        }
-        for (Tile tile : currentLevel.getGameMap().getTiles()) {
-            if (tile.getColumn() == x && tile.getRow() == y) {
-                return tile;
             }
         }
         return null;

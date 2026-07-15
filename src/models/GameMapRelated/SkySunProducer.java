@@ -2,6 +2,7 @@ package models.GameMapRelated;
 
 import controllers.GameManagerController;
 import enums.SunType;
+import models.App;
 import models.Level;
 import models.Sun;
 import models.Update;
@@ -46,6 +47,8 @@ public class SkySunProducer implements Update {
 
     public void calculateDropTime() {
         int time = Math.max(6 + (int) (0.05 * GameManagerController.getInstance().getCurrentLevel().getCurrentTick()), 12);
+        int dl = App.getCurrentUser().getDifficultyLevel();
+        time = (int) (time * (dl / 3.0));
         if (timeSinceLastDrop == time) {
             spawnRandomSun();
         }

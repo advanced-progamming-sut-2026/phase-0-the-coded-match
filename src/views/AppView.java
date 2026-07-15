@@ -1,5 +1,6 @@
 package views;
 
+import controllers.LeaderBoardController;
 import controllers.menus.MenuController;
 import controllers.menus.SignupMenuController;
 import enums.Commands;
@@ -50,7 +51,7 @@ public class AppView {
             } else if (currentMenu == Menu.TRAVEL_LOG) {
                 TravelLogView.check(input);
             } else if (currentMenu == Menu.LEADERBOARD) {
-
+                LeaderBoardView.check(input);
             } else {
                 System.out.println("invalid command");
             }

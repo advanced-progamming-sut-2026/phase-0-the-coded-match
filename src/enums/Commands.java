@@ -56,7 +56,8 @@ public enum Commands {
     TILE_STATUS("^\\s*show\\s+tile\\s+status\\s+-l\\s*\\(\\s*(?<x>\\d+)\\s*,\\s*(?<y>\\d+)\\s*\\)\\s*$"),
     SHOW_ZOMBIES_INFO("^\\s*zombies\\s+info\\s*$"),
     CHEAT_SPAWN_ZOMBIE("^\\s*cheat\\s+spawn-zombie\\s+-t\\s+(?<zombie_type>.+?)\\s+-l\\s*<?\\s*(?<x>\\d+)\\s*," +
-            "\\s*(?<y>\\d+)\\s*>?\\s*$");
+            "\\s*(?<y>\\d+)\\s*>?\\s*$"),
+    SORT_LEADERBOARD("^\\s*sort\\s+by\\s+(.+)\\s+ascending:\\s+(.+)\\s*$");
 
     private final String pattern;
 
