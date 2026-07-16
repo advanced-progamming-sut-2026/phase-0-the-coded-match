@@ -220,12 +220,4 @@ public class CollectionMenuController {
         }
         return new PlantRepository("assets/Plants.json");
     }
-
-//    private static ZombieRepository getZombieRepository() {
-//        ZombieRepository repository = new ZombieRepository("src/assets/Zombies.json");
-//        if (!repository.getAllZombies().isEmpty()) {
-//            return repository;
-//        }
-//        return new ZombieRepository("assets/Zombies.json");
-//    }
 }

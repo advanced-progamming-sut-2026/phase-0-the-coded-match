@@ -20,7 +20,7 @@ public class User {
     private int gamesPlayedCount;
     private int coinsCount;
     private int gemsCount;
-    private int chaptersCount;
+    private int levelsCount;
     private int meowPoints;
     private LevelData lastLevel;
     private Season lastSeason;
@@ -35,6 +35,7 @@ public class User {
     private NewsManager personalNews;
     private Map<String, Integer> seedPackets = new HashMap<>();
     private QuestsModel questsModel;
+    private int plantFoodBoughtCount = 0;
 
     public User(String username, String password, String nickname, String email, Gender gender) {
         this.username = username;
@@ -196,8 +197,8 @@ public class User {
         return gamesPlayedCount;
     }
 
-    public int getChaptersCount() {
-        return chaptersCount;
+    public int getLevelsCount() {
+        return levelsCount;
     }
 
     public int getMeowPoints() {
@@ -241,5 +242,13 @@ public class User {
 
     public void setQuestsModel(QuestsModel questsModel) {
         this.questsModel = questsModel;
+    }
+
+    public int getPlantFoodBoughtCount() {
+        return plantFoodBoughtCount;
+    }
+
+    public void setPlantFoodBoughtCount(int plantFoodBoughtCount) {
+        this.plantFoodBoughtCount = plantFoodBoughtCount;
     }
 }

@@ -52,6 +52,8 @@ public class AppView {
                 TravelLogView.check(input);
             } else if (currentMenu == Menu.LEADERBOARD) {
                 LeaderBoardView.check(input);
+            } else if (currentMenu == Menu.SHOP) {
+                ShopView.check(input);
             } else {
                 System.out.println("invalid command");
             }

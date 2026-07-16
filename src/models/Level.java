@@ -47,7 +47,12 @@ public class Level {
         this.currentTick = 0;
         this.zombieWave = null;
         this.activeProjectiles = new ArrayList<>();
-        this.plantFoodCount = 0;
+        if (App.getCurrentUser().getPlantFoodBoughtCount() != 0) {
+            this.plantFoodCount = App.getCurrentUser().getPlantFoodBoughtCount();
+            App.getCurrentUser().setPlantFoodBoughtCount(0);
+        } else {
+            this.plantFoodCount = 0;
+        }
         skySunProducer = new SkySunProducer();
         this.barrels = new ArrayList<>();
         this.removedPlantsCount = 0;

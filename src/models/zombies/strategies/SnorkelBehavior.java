@@ -11,7 +11,8 @@ import models.zombies.Zombie;
 public class SnorkelBehavior implements ZombieBehavior {
     @Override
     public void updateZombie(Zombie zombie, Plant targetPlant) {
-        Tile currentTile = GameManagerController.getInstance().getCurrentLevel().getGameMap().getTile((int)zombie.getX(), zombie.getY());
+        Tile currentTile = GameManagerController.getInstance().getCurrentLevel().getGameMap().getTile((int)zombie.getX()
+                , zombie.getY());
 
         if (currentTile.getType() == TileType.WATER && zombie.getCurrentState() != ZombieState.EATING) {
             zombie.setSubmerged(true);

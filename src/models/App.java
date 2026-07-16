@@ -226,8 +226,9 @@ public class App {
 
     public static List<Plant> getLockedPlants() {
         List<Plant> lockedPlants = new ArrayList<>();
+        List<Plant> unlockedPlants = currentUser.getCollection().getAvailablePlants();
         for (Plant plant : allPlants) {
-            if (plant.isLocked()) {
+            if (!unlockedPlants.contains(plant)) {
                 lockedPlants.add(plant);
             }
         }

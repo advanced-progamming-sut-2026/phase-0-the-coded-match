@@ -14,6 +14,10 @@ public class ZombieRepository {
     private static ZombieRepository instance;
     private List<ZombieData> zombies;
 
+    public ZombieRepository() {
+        loadZombies("assets/Zomvies.json");
+    }
+
     public static ZombieRepository getInstance() {
         if (instance == null) {
             instance = new ZombieRepository();
@@ -26,11 +30,9 @@ public class ZombieRepository {
             Gson gson = new Gson();
             Type listType = new TypeToken<ArrayList<ZombieData>>(){}.getType();
             this.zombies = gson.fromJson(reader, listType);
-            return;
         } catch (IOException e) {
             e.printStackTrace();
             this.zombies = new ArrayList<>();
-            return;
         }
     }
 
@@ -43,9 +45,6 @@ public class ZombieRepository {
             if (zombie.getDisplayName() != null && zombie.getDisplayName().equalsIgnoreCase(name)) {
                 return zombie;
             }
-//            if (zombie.getId() != null && zombie.getId().equalsIgnoreCase(name)) {
-//                return zombie;
-//            }
         }
         return null;
     }

@@ -14,7 +14,8 @@ public enum Menu {
     TRAVEL_LOG("travel-log"),
     LEADERBOARD("leaderboard"),
     COIN_WALLET("coin-wallet"),
-    GEM_WALLET("gem-wallet");
+    GEM_WALLET("gem-wallet"),
+    SHOP("shop");
 
     private final String menuName;
 

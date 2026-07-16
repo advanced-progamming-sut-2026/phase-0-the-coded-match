@@ -15,12 +15,11 @@ import java.util.Random;
 
 public class ZombieWaveManager implements Update {
     private int currentWave = 0;
+    private int timeWaveStarted = 0;
     private static List<Zombie> previousWaveZombies = new ArrayList<>();
     private WavePatternData wavePattern = GameManagerController.getInstance().getCurrentLevel().getData().getWavePatterns();
 
     public WavePatternData getWavePattern(){return wavePattern;}
-
-
 
     public void calculateWaveDifficulty() {
         if(currentWave == 1){
@@ -31,6 +30,7 @@ public class ZombieWaveManager implements Update {
 
     public void spawnZombies() {
         int remainingCost = (int) wavePattern.getWaveDifficulty();
+        timeWaveStarted = GameManagerController.getInstance().getCurrentLevel().getCurrentTick();
 
         while (remainingCost > 0) {
             Zombie z = createRandomZombie();   // weighted random based on cost
@@ -56,8 +56,6 @@ public class ZombieWaveManager implements Update {
         Zombie zombie = new Zombie(template, 0, 0);
         return zombie;
     }
-
-
 
     public boolean shouldNextWaveStart() {
         if (currentWave == 0) return true;
@@ -90,11 +88,19 @@ public class ZombieWaveManager implements Update {
             }
             if(currentWave == wavePattern.getWaveNumber()){
                 System.out.println("The final wave has come.");
-            }else{
+            } else{
                 System.out.println("Wave " + currentWave + " started.");
             }
             calculateWaveDifficulty();
             spawnZombies();
         }
+    }
+
+    public int getCurrentWave() {
+        return currentWave;
+    }
+
+    public int getTimeWaveStarted() {
+        return timeWaveStarted;
     }
 }

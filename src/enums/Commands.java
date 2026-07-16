@@ -57,7 +57,10 @@ public enum Commands {
     SHOW_ZOMBIES_INFO("^\\s*zombies\\s+info\\s*$"),
     CHEAT_SPAWN_ZOMBIE("^\\s*cheat\\s+spawn-zombie\\s+-t\\s+(?<zombie_type>.+?)\\s+-l\\s*<?\\s*(?<x>\\d+)\\s*," +
             "\\s*(?<y>\\d+)\\s*>?\\s*$"),
-    SORT_LEADERBOARD("^\\s*sort\\s+by\\s+(.+)\\s+ascending:\\s+(.+)\\s*$");
+    SORT_LEADERBOARD("^\\s*sort\\s+by\\s+(.+)\\s+ascending:\\s+(.+)\\s*$"),
+    SHOP_LIST("^\\s*shop\\s+list\\s*$"),
+    SHOP_DAILY("^\\s*shop\\s+daily\\s*$"),
+    SHOP_BUY("^\\s*shop\\s+buy\\s+-i\\s+(?<item_id>\\d+)\\s+-n\\s+(?<count>\\d+)(?:\\s+-t\\s+(\\S+))?$");
 
     private final String pattern;
 
