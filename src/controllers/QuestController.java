@@ -81,7 +81,6 @@ public class QuestController {
 
             if (!killerPlants.isEmpty()) {
                 int randomIndex = new Random().nextInt(killerPlants.size());
-
                 return killerPlants.get(randomIndex);
 
             }
@@ -181,6 +180,19 @@ public class QuestController {
                 claimReward(quest, quest.getRewardAmount());
             }
         }
+        if (GameManagerController.getInstance().getCurrentLevel().getZombieWave().getCurrentWave() == 1) {
+            Quest speedExecution = questsModel.getQuestByName("Speed Execution");
+
+            int currentTick = GameManagerController.getInstance().getCurrentLevel().getCurrentTick();
+            int timeWaveStarted = GameManagerController.getInstance().getCurrentLevel().getZombieWave().getTimeWaveStarted();
+
+            if (currentTick - timeWaveStarted <= 30) {
+                speedExecution.setCurrentValue(speedExecution.getCurrentValue() + 1);
+            }
+
+            isItDone(speedExecution);
+        }
+
     }
 
     public static void notifyNoSunsLeft() {

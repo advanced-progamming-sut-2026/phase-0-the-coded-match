@@ -4,17 +4,19 @@ import controllers.menus.ProfileMenuController;
 import enums.Commands;
 
 public class ProfileMenu {
+    public static String[] message = new String[1];
+
     public static void check(String input) {
         if (input.matches(Commands.PROFILE_CHANGE_USERNAME.getPattern())) {
-            ProfileMenuController.changeUsername(input);
+            System.out.println(ProfileMenuController.changeUsername(input));
         } else if (input.matches(Commands.PROFILE_CHANGE_NICKNAME.getPattern())) {
-            ProfileMenuController.changeNickname(input);
+            System.out.println(ProfileMenuController.changeNickname(input));
         } else if (input.matches(Commands.PROFILE_CHANGE_EMAIL.getPattern())) {
-            ProfileMenuController.changeEmail(input);
+            System.out.println(ProfileMenuController.changeEmail(input));
         } else if (input.matches(Commands.PROFILE_CHANGE_PASSWORD.getPattern())) {
-            ProfileMenuController.changePassword(input);
+            System.out.println(ProfileMenuController.changePassword(input));
         } else if (input.matches(Commands.PROFILE_SHOW_INFO.getPattern())) {
-            System.out.print(ProfileMenuController.showProfileInfo(input));
+            System.out.println(ProfileMenuController.showProfileInfo(input));
         } else {
             System.out.println("invalid command");
         }

@@ -1,13 +1,8 @@
 package models.MiniGameRelated;
 
 public abstract class MiniGame {
-    private int playerSunAmount;
-    private boolean isGameOver;
-
-    public MiniGame(int playerSunAmount, boolean isGameOver){
-        this.playerSunAmount = playerSunAmount;
-        this.isGameOver=isGameOver;
-    }
+    public int playerSunAmount;
+    public boolean isGameOver;
 
     public abstract void initializeStage();
     public abstract void processInteraction();

@@ -19,6 +19,15 @@ public class SettingsMenuController{
             return message;
         }
         int newDifficulty = Integer.parseInt(matcher.group("difficulty_level"));
+
+        if (newDifficulty == App.getCurrentUser().getDifficultyLevel()) {
+            message[0] = "difficulty already set";
+            return message;
+        } else if (newDifficulty > 5 || newDifficulty < 1) {
+            message[0] = "invalid difficulty";
+            return message;
+        }
+
         App.getCurrentUser().setDifficultyLevel(newDifficulty);
 
         increaseZombiesHp(newDifficulty);

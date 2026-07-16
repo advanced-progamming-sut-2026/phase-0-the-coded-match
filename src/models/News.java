@@ -8,6 +8,7 @@ public class News {
 
     public News(String newsText) {
         this.newsText = newsText;
+        this.isUnread = true;
     }
 
     public boolean isUnread() {
