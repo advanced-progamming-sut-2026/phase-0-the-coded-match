@@ -31,13 +31,21 @@ public class SeasonRepository {
         return seasons;
     }
 
-    public SeasonData findById(String id) {
-        //TODO
+    public SeasonData findById(int id) {
+        for( SeasonData season : seasons ){
+            if(season.getId() == id){
+                return season;
+            }
+        }
         return null;
     }
 
     public SeasonData findByType(String seasonType) {
-       //TODO
+       for(SeasonData season : seasons){
+           if(season.getSeasonType().equalsIgnoreCase(seasonType)){
+               return season;
+           }
+       }
         return null;
     }
 }

@@ -3,6 +3,7 @@ import java.util.List;
 import enums.SeasonType;
 import models.*;
 import models.GameMapRelated.Tile;
+import models.plants.Plant;
 
 public abstract class Season {
 
@@ -13,16 +14,21 @@ public abstract class Season {
     protected List<Level> levels;
     protected Tile[][] field;
 
+    public Season(SeasonData data) {
+        this.data = data;
+    }
+
     public void initializeGrid() {
 
     };
 
+    public abstract void LevelStarted(Level level);
+    public abstract void Update(Level level, double deltaTime);
+    public abstract void WaveStarted(Level level, int waveNumber);
+    public abstract void PlantPlaced(Level level, Plant plant, int x, int y);
+
     public Tile getTile(int x, int y) {
         return null;
-    }
-
-    public Season(SeasonData data) {
-        this.data = data;
     }
 
     public SeasonData getData() {

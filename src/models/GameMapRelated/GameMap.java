@@ -4,6 +4,7 @@ import enums.PlantTag;
 import models.plants.Plant;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class GameMap {
 
@@ -11,6 +12,10 @@ public class GameMap {
     private int columns;
     private int length;
     private int width;
+    private int zombieStartColumn;
+    private int homeColumn;
+    private String defaultPathDirection;
+    private List<Tile> tiles;
     private Tile[][] grid;
     private ArrayList<Lawnmower> lawnmowers;
 

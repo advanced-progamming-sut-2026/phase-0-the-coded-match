@@ -19,12 +19,12 @@ public class LevelData {
     private int waveCount;
     private int baseWaveCost;
     private Season type;
-    private List<Zombie> allowedZombies;
-    private List<Plant> availablePlants;
-    private List<Plant> conveyorPlants;
-    private List<Plant> lockedPlants;
-    private List<Plant> protectedPlants;
-    private WavePatternData wavePatterns; //i changed it from List to WavePatternData cause each level has multiple waves but starts from one pattern!!
+    private List<String> allowedZombies;
+    private List<String> availablePlants;
+    private List<String> conveyorPlants;
+    private List<String> lockedPlants;
+    private List<String> protectedPlants;
+    private List<WavePatternData> wavePatterns; //i changed it from List to WavePatternData cause each level has multiple waves but starts from one pattern!!
     private List<SpecialLevelRuleData> specialRules;
     private GameMap map; //DOUBLE CHECK WITH JSON
 
@@ -56,11 +56,11 @@ public class LevelData {
         return baseWaveCost;
     }
 
-    public List<Zombie> getAllowedZombies() {
+    public List<String> getAllowedZombies() {
         return allowedZombies;
     }
 
-    public List<Plant> getAvailablePlants() {
+    public List<String> getAvailablePlants() {
         return availablePlants;
     }
 
@@ -68,11 +68,11 @@ public class LevelData {
         return map;
     }
 
-    public List<Plant> getConveyorPlants() {
+    public List<String> getConveyorPlants() {
         return conveyorPlants;
     }
 
-    public List<Plant> getLockedPlants() {
+    public List<String> getLockedPlants() {
         return lockedPlants;
     }
 
@@ -80,11 +80,11 @@ public class LevelData {
         return specialRules;
     }
 
-    public WavePatternData getWavePatterns() {
+    public List<WavePatternData> getWavePatterns() {
         return wavePatterns;
     }
 
-    public List<Plant> getProtectedPlants() {
+    public List<String> getProtectedPlants() {
         return protectedPlants;
     }
 

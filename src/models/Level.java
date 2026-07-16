@@ -206,8 +206,8 @@ public class Level {
         Plant front= null;
         int minCol = Integer.MAX_VALUE;
         for(Plant p : activePlants){
-            if(p.getX() == row && p.getY() < minCol){
-                minCol = p.getY();
+            if(p.getY() == row && p.getX() < minCol){
+                minCol = p.getX();
                 front = p;
             }
         }

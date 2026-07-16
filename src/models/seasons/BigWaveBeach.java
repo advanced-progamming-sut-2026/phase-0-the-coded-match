@@ -1,16 +1,43 @@
 package models.seasons;
 
+import models.Level;
+import models.plants.Plant;
+
 public class BigWaveBeach extends Season {
+
+    public BigWaveBeach(SeasonData data) {
+        super(data);
+    }
+
+    @Override
+    public void applySpecialRules() {
+        // TODO
+    }
+
     @Override
     public void initializeGrid() {
 
     }
-        public BigWaveBeach(SeasonData data) {
-            super(data);
-        }
 
-        @Override
-        public void applySpecialRules() {
-            // TODO
-        }
+    @Override
+    public void LevelStarted(Level level) {
+
+    }
+
+    @Override
+    public void Update(Level level, double deltaTime) {
+
+    }
+
+    @Override
+    public void WaveStarted(Level level, int waveNumber) {
+
+    }
+
+    @Override
+    public void PlantPlaced(Level level, Plant plant, int x, int y) {
+
+    }
+
+
 }

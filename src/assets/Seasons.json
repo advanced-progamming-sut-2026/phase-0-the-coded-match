@@ -1,6 +1,6 @@
 [
   {
-    "id": "ancient_egypt",
+    "id": 1,
     "name": "AncientEgypt",
     "displayName": "Ancient Egypt",
     "seasonType": "ANCIENT_EGYPT",
@@ -237,7 +237,7 @@
     ]
   },
   {
-    "id": "frostbite_caves",
+    "id": 2,
     "name": "FrostbiteCaves",
     "displayName": "Frostbite Caves",
     "seasonType": "FROSTBITE_CAVES",
@@ -455,7 +455,7 @@
     ]
   },
   {
-    "id": "big_wave_beach",
+    "id": 3,
     "name": "BigWaveBeach",
     "displayName": "Big Wave Beach",
     "seasonType": "BIG_WAVE_BEACH",
@@ -655,7 +655,7 @@
     ]
   },
   {
-    "id": "dark_ages",
+    "id": 4,
     "name": "DarkAges",
     "displayName": "Dark Ages",
     "seasonType": "DARK_AGES",

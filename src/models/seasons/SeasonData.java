@@ -6,7 +6,7 @@ import models.SpecialFeatureData;
 import java.util.List;
 
 public class SeasonData {
-    private String id;
+    private int id;
     private String name;
     private String displayName;
     private String seasonType;
@@ -15,7 +15,7 @@ public class SeasonData {
     private List<SpecialFeatureData> specialFeatures;
     private List<LevelData> levels;
 
-    public String getId() {
+    public int getId() {
         return id;
     }
 

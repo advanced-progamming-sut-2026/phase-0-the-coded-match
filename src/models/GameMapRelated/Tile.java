@@ -19,6 +19,7 @@ public class Tile implements Update {
     private Plant plant;
     private List<Zombie> zombies;
     private boolean isGettingDamaged = false;
+    private boolean isGrave = false;
 
     public Tile(int row, int column, TileType type) {
         this.row = row;
@@ -34,6 +35,7 @@ public class Tile implements Update {
             if (currentHp <= 0) {
                 currentHp = 0;
                 this.type = TileType.NORMAL;
+                this.isGrave = false;
             }
         }
     }
@@ -120,4 +122,10 @@ public class Tile implements Update {
     public List<Zombie> getZombies() {
         return zombies;
     }
+
+    public void setGrave(boolean isGrave){
+        this.isGrave = isGrave;
+    }
+
+    public boolean isGrave(){return isGrave;}
 }

@@ -272,7 +272,7 @@ public class Zombie implements Update {
     }
 
     public void shootProjectile() { //TODO: include projectile TYPE
-        Projectile icyProjectile = new Projectile(x, y, data.getSpeed(), data.getEatDPS(), false, false);
+        Projectile icyProjectile = new Projectile(x, y, data.getSpeed(), data.getEatDPS(), false, false, null);
         //TODO: what should the speed and damage amount be??
         GameManagerController.getInstance().getCurrentLevel().getActiveProjectiles().add(icyProjectile);
     }
