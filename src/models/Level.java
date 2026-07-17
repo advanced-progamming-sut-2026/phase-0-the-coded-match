@@ -5,6 +5,7 @@ import enums.LevelType;
 import models.GameMapRelated.GameMap;
 import models.GameMapRelated.GameMapData;
 import models.GameMapRelated.SkySunProducer;
+import models.GameMapRelated.Tile;
 import models.plants.Plant;
 import models.seasons.Season;
 import models.zombies.Barrel;
@@ -225,6 +226,15 @@ public class Level {
             if (p.getX() == zombie.getX() && p.getY() == zombie.getY()) {
                 return target;
             }
+        }
+        return null;
+    }
+
+    public Plant getPlantAt(int x, int y){
+        Tile tile = this.getGameMap().getTile(x, y);
+        Plant plant = tile.getPlant();
+        if(plant != null){
+            return plant;
         }
         return null;
     }

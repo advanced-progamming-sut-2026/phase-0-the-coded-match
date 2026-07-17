@@ -38,6 +38,8 @@ public class Zombie implements Update {
     private boolean abilityDone;
     private List<Sun> stolenActiveSuns;
     private boolean isSubmerged;
+    private boolean isFrozen;
+    private int frozenTimer;
 
     public Zombie(ZombieData data, double x, int y) {
         this.data = data;
@@ -54,6 +56,7 @@ public class Zombie implements Update {
         this.abilityDone = false;
         this.stolenActiveSuns = new ArrayList<>();
         this.isSubmerged = false;
+        this.isFrozen = false;
 
         if (!data.getArmors().isEmpty()) {
             this.armors = new ArrayList<>();
@@ -67,6 +70,10 @@ public class Zombie implements Update {
 
     @Override
     public void update() {
+       if(isFrozen){
+           return;
+       }
+
         Plant target = GameManagerController.getInstance().getCurrentLevel().getFrontMostPlantInRow(this.y);
         if (data.getId().equalsIgnoreCase("ZombieIceAgeDodo")) {
             target = GameManagerController.getInstance().getCurrentLevel().getPlantInFrontOfZombie(this);
@@ -417,5 +424,13 @@ public class Zombie implements Update {
 
     public void setSubmerged(boolean submerged) {
         isSubmerged = submerged;
+    }
+
+    public boolean isFrozen() {
+        return isFrozen;
+    }
+
+    public void setFrozen(boolean frozen) {
+        isFrozen = frozen;
     }
 }
