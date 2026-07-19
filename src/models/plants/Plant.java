@@ -25,6 +25,8 @@ public class Plant implements Update {
     private int currentCooldownTimer;
     private boolean producedSun = false;
     private boolean sunCollected = true;
+    private int freezeLevel = 0;
+    private int iceHP = 0;
 
     public Plant(PlantData data, int x, int y, int level) {
         this.data = data;
@@ -75,6 +77,28 @@ public class Plant implements Update {
             if (handler != null) {
                 handler.execute(this);
             }
+        }
+    }
+
+    public void addFreezeLevel(int amount){
+        if(this.hasThisTag(PlantTag.FIRE)){
+            return;
+        }
+        this.freezeLevel = Math.min(3, this.freezeLevel + amount);
+        if(this.freezeLevel == 3 && this.iceHP <= 0){
+            this.iceHP = 600;
+        }
+    }
+
+    public boolean isFullyFrozen(){return this.freezeLevel == 3;}
+
+    public int getIceHP(){return iceHP;}
+
+    public void decreaseIceHP(int amount){
+        this.iceHP -= amount;
+        if(iceHP <= 0){
+            this.iceHP = 0;
+            this.freezeLevel = 0;
         }
     }
 

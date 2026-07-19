@@ -87,6 +87,7 @@ public class AncientEgypt extends Season {
         if(tile != null && tile.isGrave()){
             System.out.println("Cannot place a plant on top of a grave");
         }
+        // double check if we should add a plant here or the main manager does it itself?
 
     }
 
