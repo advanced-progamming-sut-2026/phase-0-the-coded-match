@@ -30,17 +30,9 @@ public class SettingsMenuController{
 
         App.getCurrentUser().setDifficultyLevel(newDifficulty);
 
-        increaseZombiesHp(newDifficulty);
         decreaseZombieWaveCost(newDifficulty);
-        increaseZombieDamage(newDifficulty);
         message[0] = "Difficulty changed to " + newDifficulty;
         return message;
-    }
-
-    public static void increaseZombiesHp(int dl) {
-        for (Zombie zombie : App.getAllZombies()) {
-            zombie.setCurrentHp((int) (zombie.getCurrentHp() * (3.0 / dl)));
-        }
     }
 
     public static void decreaseZombieWaveCost(int dl) { //TODO: for all levels?
@@ -52,11 +44,5 @@ public class SettingsMenuController{
                         (level.getZombieWave().getWavePattern().getWaveDifficulty() * (dl / 3.0));
             }
         }
-    }
-
-    public static void increaseZombieDamage(int dl) {
-        for (Zombie zombie : App.getAllZombies()) {
-            zombie.setEatDPS((int) (zombie.getEatDPS() * (3.0 / dl)));
-        }
-    }
+    } //todo: should be handled when the wave is being made
 }

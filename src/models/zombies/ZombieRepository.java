@@ -25,7 +25,7 @@ public class ZombieRepository {
         return instance;
     }
 
-    private void loadZombies(String jsonPath) { //TODO: call this in the method which starts the level
+    private void loadZombies(String jsonPath) {
         try (FileReader reader = new FileReader(jsonPath)) {
             Gson gson = new Gson();
             Type listType = new TypeToken<ArrayList<ZombieData>>(){}.getType();

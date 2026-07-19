@@ -34,7 +34,7 @@ public class CollectionMenuController {
 
     public static StringBuilder showAllPlants() {
         StringBuilder result = new StringBuilder();
-        List<PlantData> plants = getPlantRepository().getAllPlants();
+        List<PlantData> plants = PlantRepository.getInstance().getAllPlants();
         if (plants.isEmpty()) {
             return result.append("no plants defined\n");
         }
@@ -74,7 +74,7 @@ public class CollectionMenuController {
             return new StringBuilder();
         }
         String plantName = matcher.group("plant_name");
-        PlantData plant = getPlantRepository().findByName(plantName);
+        PlantData plant = PlantRepository.getInstance().findByName(plantName);
         if (plant == null) {
             return new StringBuilder("plant not found\n");
         }
@@ -159,7 +159,7 @@ public class CollectionMenuController {
             return;
         }
         String plantName = matcher.group("plant_name");
-        PlantData plantData = getPlantRepository().findByName(plantName);
+        PlantData plantData = PlantRepository.getInstance().findByName(plantName);
         if (plantData == null) {
             System.out.println("plant not found");
             return;
@@ -211,13 +211,5 @@ public class CollectionMenuController {
 
     private static Matcher getMatcher(Commands command, String input) {
         return Pattern.compile(command.getPattern()).matcher(input);
-    }
-
-    private static PlantRepository getPlantRepository() {
-        PlantRepository repository = new PlantRepository("src/assets/Plants.json");
-        if (!repository.getAllPlants().isEmpty()) {
-            return repository;
-        }
-        return new PlantRepository("assets/Plants.json");
     }
 }

@@ -3,7 +3,6 @@ package models;
 import controllers.ZombieWaveManager;
 import enums.LevelType;
 import models.GameMapRelated.GameMap;
-import models.GameMapRelated.GameMapData;
 import models.GameMapRelated.SkySunProducer;
 import models.plants.Plant;
 import models.seasons.Season;
@@ -85,7 +84,7 @@ public class Level {
         activeZombies.add(zombie);
     }
 
-    public void AddActivePlants(Plant plant) {
+    public void addActivePlants(Plant plant) {
         activePlants.add(plant);
     }
 

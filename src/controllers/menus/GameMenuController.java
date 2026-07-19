@@ -29,7 +29,7 @@ public class GameMenuController{
             App.getCurrentUser().setLastSeason(season);
             message[0] = "entered " + seasonName + " successfully";
         } else {
-            message[0] = seasonName + " in locked";
+            message[0] = seasonName + " is locked";
         }
         return message;
     }

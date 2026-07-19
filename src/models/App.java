@@ -4,8 +4,10 @@ import enums.Menu;
 import enums.Phases;
 import models.GameMapRelated.Lawnmower;
 import models.plants.Plant;
+import models.plants.PlantData;
 import models.seasons.Season;
 import models.zombies.Zombie;
+import models.zombies.ZombieData;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -21,9 +23,18 @@ public class App {
     private static Phases currentPhase = Phases.NORMAL_GAMEPLAY;
     private static ArrayList<User> users = new ArrayList<>();
     private static List<Season> allSeasons = new ArrayList<>();
-    private static List<Plant> allPlants = new ArrayList<>();
-    private static List<Zombie> allZombies = new ArrayList<>();
+    private static List<PlantData> allPlants = new ArrayList<>();
+    private static List<ZombieData> allZombies = new ArrayList<>();
     private static List<Lawnmower> allLawnMowers = new ArrayList<>();
+
+
+    public static void addPlant(PlantData plantData) {
+        allPlants.add(plantData);
+    }
+
+    public static void addZombie(ZombieData zombieData) {
+        allZombies.add(zombieData);
+    }
 
     public static Menu getCurrentMenu() {
         return currentMenu;
@@ -63,18 +74,6 @@ public class App {
 
     public static List<Plant> getAllPlants() {
         return allPlants;
-    }
-
-    public static void setAllPlants(List<Plant> allPlants) {
-        App.allPlants = allPlants;
-    }
-
-    public static List<Zombie> getAllZombies() {
-        return allZombies;
-    }
-
-    public static void setAllZombies(List<Zombie> allZombies) {
-        App.allZombies = allZombies;
     }
 
     public static void setUsers(ArrayList<User> users) {

@@ -1,6 +1,7 @@
 package models.plants;
 
 import enums.PlantCategory;
+import models.zombies.ZombieRepository;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -12,10 +13,18 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class PlantRepository {
+    private static PlantRepository instance;
     private final List<PlantData> plants;
 
     public PlantRepository(String jsonPath) {
         this.plants = loadPlants(jsonPath);
+    }
+
+    public static PlantRepository getInstance() {
+        if (instance == null) {
+            instance = new PlantRepository("assets/Plants.json");
+        }
+        return instance;
     }
 
     private List<PlantData> loadPlants(String jsonPath) {

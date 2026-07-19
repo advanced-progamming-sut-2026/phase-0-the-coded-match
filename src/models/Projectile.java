@@ -14,7 +14,8 @@ public class Projectile {
     private boolean isDestroyed;
     private Plant creatorPlantCategory;
 
-    public Projectile(double xCoordinate, double yCoordinate, double speed, int damage, boolean isMovingLeft, boolean isDestroyed, Plant creatorPlantCategory) {
+    public Projectile(double xCoordinate, double yCoordinate, double speed, int damage, boolean isMovingLeft,
+                      boolean isDestroyed, Plant creatorPlantCategory) {
         this.xCoordinate = xCoordinate;
         this.yCoordinate = yCoordinate;
         this.speed = speed;

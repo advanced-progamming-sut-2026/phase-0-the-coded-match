@@ -3,13 +3,10 @@ package models.zombies;
 import controllers.GameManagerController;
 import controllers.QuestController;
 import enums.*;
+import models.*;
 import models.GameMapRelated.GameMap;
 import models.GameMapRelated.GameMapData;
 import models.GameMapRelated.Tile;
-import models.Level;
-import models.Projectile;
-import models.Sun;
-import models.Update;
 import models.factories.ZombieBehaviorFactory;
 import models.plants.Plant;
 import models.zombies.strategies.ZombieBehavior;
@@ -20,6 +17,7 @@ import java.util.List;
 
 public class Zombie implements Update {
     private ZombieData data;
+    private int difficultyLevel;
     private int currentHp;
     private int eatDPS;
     private ZombieState currentState;
@@ -41,8 +39,9 @@ public class Zombie implements Update {
 
     public Zombie(ZombieData data, double x, int y) {
         this.data = data;
-        this.currentHp = data.getMaxHP();
-        this.eatDPS = data.getEatDPS();
+        this.difficultyLevel = App.getCurrentUser().getDifficultyLevel();
+        this.currentHp = (int) (data.getMaxHP() * (difficultyLevel / 3.0));
+        this.eatDPS = (int) (data.getEatDPS() * (difficultyLevel / 3.0));
         this.currentState = data.getState();
         this.x = x;
         this.y = y;

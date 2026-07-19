@@ -9,7 +9,7 @@ public class ChoosePlantsMenuController {
 
     public static String showAllPlants() {
         StringBuilder message = new StringBuilder();
-        for(Plant p : App.getAllPlants()){
+        for(PlantData p : App.getAllPlants()){
             message.append(p.getData().getDisplayName()).append("\n");
         }
         return message.toString();
@@ -37,7 +37,7 @@ public class ChoosePlantsMenuController {
         if(!hasPlantBeenChosen(p)){
             return "Plant is already selected";
         }
-        level.AddActivePlants(p);
+        level.addActivePlants(p);
         return "Plant added successfully";
 
     }

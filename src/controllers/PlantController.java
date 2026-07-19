@@ -19,7 +19,7 @@ public class PlantController {
     private final List<Plant> activePlants;
 
     public PlantController() {
-        this.plantRepository = new PlantRepository("assets/Plants.json");
+        this.plantRepository = PlantRepository.getInstance();
         this.activePlants = new ArrayList<>();
     }
 
