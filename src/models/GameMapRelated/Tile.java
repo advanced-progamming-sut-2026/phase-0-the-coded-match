@@ -23,6 +23,13 @@ public class Tile implements Update {
     private List<Zombie> zombies;
     private boolean isGettingDamaged = false;
     private boolean isGrave = false;
+    public enum GraveReward {
+        NONE,
+        SUN_50,
+        PLANT_FOOD
+    }
+    private GraveReward graveReward = GraveReward.NONE;
+    private boolean holdsNecromancyPotential = false;
 
     public Tile(int row, int column, TileType type) {
         this.row = row;
@@ -37,10 +44,31 @@ public class Tile implements Update {
             currentHp -= damage;
             if (currentHp <= 0) {
                 currentHp = 0;
+                if(this.type == TileType.GRAVE){
+                    destroyGrave();
+                }
                 this.type = TileType.NORMAL;
                 this.isGrave = false;
             }
         }
+    }
+
+    private void destroyGrave(){
+        switch (this.getGraveReward()) {
+            case SUN_50:
+                GameManagerController.getInstance().getCurrentLevel().setCollectedSunsAmount(GameManagerController.getInstance().getCurrentLevel().getCollectedSunsAmount()+50);
+                break;
+
+            case PLANT_FOOD:
+                GameManagerController.getInstance().getCurrentLevel().setPlantFoodCount(GameManagerController.getInstance().getCurrentLevel().getPlantFoodCount()+1);
+                System.out.println("Grave dropped 1 Plant Food!");
+                break;
+
+            case NONE:
+            default:
+                break;
+        }
+        this.setGrave(false, GraveReward.NONE);
     }
 
     public void startTakingDamage() {
@@ -70,19 +98,12 @@ public class Tile implements Update {
     }
     public boolean isPlantable(Plant plant) {
         if (this.getType() == TileType.WATER) {
-            // If it's water, the plant must either be a LilyPad/Aquatic OR there must already be a LilyPad present
             if (plant.getData().getName().equalsIgnoreCase("LilyPad") || plant.hasThisTag(PlantTag.WATER)) {
                 return this.getPlant() == null; // Can plant if empty
             }
-            // Standard non-water plants require a Lily Pad underneath
             return this.lilyPadPlant != null && this.getPlant() == null;
         }
-        // Sand tiles behave like normal ground
         return this.getPlant() == null && !isGrave();
-    }
-
-    public boolean isPlantable() {
-        return type == TileType.NORMAL || type == TileType.WATER;
     }
 
     public boolean isEmpty() {
@@ -97,11 +118,8 @@ public class Tile implements Update {
         return plant;
     }
 
-    public void removePlantFromTile() {
+    public void removePlant() {
         this.plant = null;
-    }
-
-    public static void removePlant() {
     }
 
     @Override
@@ -138,27 +156,26 @@ public class Tile implements Update {
         return zombies;
     }
 
-    public void setGrave(boolean isGrave){
-        this.isGrave = isGrave;
-    }
+    public void setGrave(boolean isGrave){this.isGrave = isGrave;}
 
     public boolean isGrave(){return isGrave;}
+    public GraveReward getGraveReward() { return graveReward; }
+    public boolean holdsNecromancyPotential() { return holdsNecromancyPotential; }
 
-    public VaseBreaker.Vase getVase() {
-        return vase;
+    public void setGrave(boolean active, GraveReward reward) {
+        this.isGrave = active;
+        this.graveReward = reward;
+        this.setType(TileType.GRAVE);
     }
 
-    public void setVase(VaseBreaker.Vase vase) {
-        this.vase = vase;
-    }
 
-    public boolean hasVase() {
-        return vase != null && !vase.isBroken();
-    }
+    public VaseBreaker.Vase getVase() {return vase;}
 
-    public void removeVase() {
-        this.vase = null;
-    }
+    public void setVase(VaseBreaker.Vase vase) {this.vase = vase;}
+
+    public boolean hasVase() {return vase != null && !vase.isBroken();}
+
+    public void removeVase() {this.vase = null;}
 
     public Plant getLilyPadPlant() { return lilyPadPlant; }
 

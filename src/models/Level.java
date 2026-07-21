@@ -7,11 +7,13 @@ import models.GameMapRelated.SkySunProducer;
 import models.GameMapRelated.Tile;
 import models.plants.Plant;
 import models.seasons.Season;
+import models.specialLevels.*;
 import models.zombies.Barrel;
 import models.zombies.Zombie;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Level {
 
@@ -32,6 +34,7 @@ public class Level {
     private SkySunProducer skySunProducer;
     private List<Barrel> barrels;
     private int removedPlantsCount;
+    private SpecialLevelStrategy specialLevel;
 
     public Level(LevelData data) {
         this.data = data;
@@ -53,9 +56,41 @@ public class Level {
         } else {
             this.plantFoodCount = 0;
         }
-        skySunProducer = new SkySunProducer();
+        this.skySunProducer = new SkySunProducer();
         this.barrels = new ArrayList<>();
         this.removedPlantsCount = 0;
+        setUpSpecialLevel();
+    }
+
+    public void setUpSpecialLevel(){
+        Random random = new Random();
+        if(this.data.getLevelType() == LevelType.SPECIAL) {
+            switch (data.getName()) {
+                case "NIGHT_OPS":
+                    this.specialLevel = new NightOpsStrategy();
+                    break;
+                case "DEAD_LINE":
+                    int deadLine = random.nextInt(6);
+                    this.specialLevel = new DeadLineStrategy(deadLine); // e.g., column 4 is the deadline
+                    break;
+                case "LOVE_YOUR_PLANTS":
+                    int maxLoss = random.nextInt(6);
+                    this.specialLevel = new LoveYourPlantsStrategy(maxLoss); // e.g., max 5 plants lost
+                    break;
+                case "SAVE_OUR_SEEDS":
+                    this.specialLevel = new SaveOurSeedsStrategy();
+                    break;
+                default:
+                    this.specialLevel = null;
+                    break;
+
+            }
+
+            if (this.specialLevel!= null) {
+                this.specialLevel.levelStart(this);
+            }
+        }
+
     }
 
     public Zombie getAdjacentZombie(Zombie zombie) {
@@ -245,4 +280,10 @@ public class Level {
     public void setRemovedPlantsCount(int removedPlantsCount) {
         this.removedPlantsCount = removedPlantsCount;
     }
+
+    public SpecialLevelStrategy getSpecialLevel(){
+        return specialLevel;
+    }
+
+
 }

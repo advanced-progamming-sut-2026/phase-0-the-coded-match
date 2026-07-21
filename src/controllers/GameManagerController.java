@@ -73,6 +73,9 @@ public class GameManagerController {
         updateBarrels();
         updateProjectiles();
         updateSeason();
+        if (currentLevel.getSpecialLevel() != null) {
+            currentLevel.getSpecialLevel().update(currentLevel);
+        }
         if (currentLevel instanceof VaseBreaker) {
             ((VaseBreaker) currentLevel).updateGroundSeeds(message);
         }
@@ -104,10 +107,13 @@ public class GameManagerController {
                         + plant.getY() + ") is destroyed.");
                 Tile tile = currentLevel.getGameMap().getTile(plant.getX(), plant.getY());
                 if (tile != null && tile.getPlant() == plant) {
-                    tile.removePlantFromTile();
+                    tile.removePlant();
                 }
                 iterator.remove();
                 currentLevel.setRemovedPlantsCount(currentLevel.getRemovedPlantsCount() + 1);
+                if (currentLevel.getSpecialLevel() != null) {
+                    currentLevel.getSpecialLevel().plantLost(currentLevel, plant);
+                }
             }
         }
     }
@@ -321,7 +327,7 @@ public class GameManagerController {
         currentLevel.getActivePlants().remove(plant);
         Tile tile = currentLevel.getGameMap().getTile(x, y);
         if (tile != null) {
-            tile.removePlantFromTile();
+            tile.removePlant();
         }
         System.out.println("Plant " + plant.getData().getDisplayName() + " at (" + x + ", " + y + ") removed");
     }
@@ -474,7 +480,8 @@ public class GameManagerController {
         getCurrentLevel().getActiveZombies().add(zombie);
     }
 
-    public static void endGame() {
+    public void gameOver() {
+        //
     }
 
     public String gameWon(){
@@ -509,6 +516,14 @@ public class GameManagerController {
                     iterator.remove();
                     break;
                 }
+            }
+            int col = (int) projectile.getxCoordinate();
+            int row = (int) projectile.getyCoordinate();
+
+            Tile tile = currentLevel.getGameMap().getTile(col, row);
+            if (tile != null && tile.isGrave()) {
+                tile.takeDamage(projectile.getDamage());
+                projectile.destroy();
             }
         }
     }
