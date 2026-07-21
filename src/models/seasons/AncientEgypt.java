@@ -41,7 +41,7 @@ public class AncientEgypt extends Season {
     }
 
     @Override
-    public void Update(Level level, double deltaTime) {
+    public void Update(Level level) {
         for(Projectile projectile : level.getActiveProjectiles()){
             int row = (int) projectile.getyCoordinate();
             int col = (int) projectile.getxCoordinate();

@@ -11,6 +11,7 @@ import models.GameMapRelated.Tile;
 import models.plants.Plant;
 import models.plants.PlantData;
 import models.plants.PlantRepository;
+import models.seasons.Season;
 import models.zombies.*;
 
 import java.util.HashMap;
@@ -71,6 +72,7 @@ public class GameManagerController {
         updateTiles();
         updateBarrels();
         updateProjectiles();
+        updateSeason();
         if (currentLevel instanceof VaseBreaker) {
             ((VaseBreaker) currentLevel).updateGroundSeeds(message);
         }
@@ -176,6 +178,13 @@ public class GameManagerController {
     private void updateBarrels() {
         for (Barrel barrel : currentLevel.getBarrels()) {
             barrel.update();
+        }
+    }
+
+    public void updateSeason(){
+        Season season = currentLevel.getCurrentSeason();
+        if (season != null) {
+            season.Update(currentLevel);
         }
     }
 

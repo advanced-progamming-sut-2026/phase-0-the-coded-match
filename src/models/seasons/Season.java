@@ -23,7 +23,7 @@ public abstract class Season {
     };
 
     public abstract void LevelStarted(Level level);
-    public abstract void Update(Level level, double deltaTime);
+    public abstract void Update(Level level);
     public abstract void WaveStarted(Level level, int waveNumber);
     public abstract void PlantPlaced(Level level, Plant plant, int x, int y);
 

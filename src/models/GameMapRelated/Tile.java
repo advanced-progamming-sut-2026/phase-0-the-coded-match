@@ -68,6 +68,18 @@ public class Tile implements Update {
         }
         return false;
     }
+    public boolean isPlantable(Plant plant) {
+        if (this.getType() == TileType.WATER) {
+            // If it's water, the plant must either be a LilyPad/Aquatic OR there must already be a LilyPad present
+            if (plant.getData().getName().equalsIgnoreCase("LilyPad") || plant.hasThisTag(PlantTag.WATER)) {
+                return this.getPlant() == null; // Can plant if empty
+            }
+            // Standard non-water plants require a Lily Pad underneath
+            return this.lilyPadPlant != null && this.getPlant() == null;
+        }
+        // Sand tiles behave like normal ground
+        return this.getPlant() == null && !isGrave();
+    }
 
     public boolean isPlantable() {
         return type == TileType.NORMAL || type == TileType.WATER;
@@ -147,4 +159,8 @@ public class Tile implements Update {
     public void removeVase() {
         this.vase = null;
     }
+
+    public Plant getLilyPadPlant() { return lilyPadPlant; }
+
+    public void setLilyPadPlant(Plant lilyPad) { this.lilyPadPlant = lilyPad; }
 }

@@ -4,6 +4,7 @@ import enums.Commands;
 import models.App;
 import models.Level;
 import models.LevelData;
+import models.WavePatternData;
 import models.zombies.Zombie;
 
 import java.util.regex.Matcher;
@@ -40,9 +41,10 @@ public class SettingsMenuController{
         for (int i = 0; i < 4; i++) {
             for (LevelData levelData : App.getAllSeasons().get(i).getLevels()) {
                 level = new Level(levelData);
-                level.getZombieWave().getWavePattern().setWaveDifficulty
-                        (level.getZombieWave().getWavePattern().getWaveDifficulty() * (dl / 3.0));
+                for(WavePatternData wave: level.getZombieWave().getWavePattern()){
+                    wave.setWaveDifficulty(wave.getWaveDifficulty() * (dl / 3.0));
+                }
             }
-        }
-    } //todo: should be handled when the wave is being made
+        } //todo: should be handled when the wave is being made
+    }
 }

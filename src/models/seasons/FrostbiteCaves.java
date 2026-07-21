@@ -38,7 +38,7 @@ public class FrostbiteCaves extends Season {
     }
 
     @Override
-    public void Update(Level level, double deltaTime) {
+    public void Update(Level level) {
 
         for(Projectile projectile : level.getActiveProjectiles()){
             int x = (int) projectile.getxCoordinate();
@@ -59,7 +59,7 @@ public class FrostbiteCaves extends Season {
         for(Plant plant : level.getActivePlants()){
             if(plant.isFullyFrozen()){
                 if(hasNeighboringFirePlant(level, plant)){
-                    plant.decreaseIceHP((int) (60 * deltaTime));
+                    plant.decreaseIceHP((int) (60)); // later on work with delta time;
                 }
             }
         }
