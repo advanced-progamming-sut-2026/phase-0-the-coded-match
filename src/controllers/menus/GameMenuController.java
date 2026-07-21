@@ -6,6 +6,7 @@ import enums.Menu;
 import models.App;
 import models.Level;
 import models.LevelData;
+import models.MiniGameRelated.VaseBreaker;
 import models.seasons.Season;
 
 import java.util.regex.Matcher;
@@ -57,6 +58,17 @@ public class GameMenuController{
         return message;
     }
 
+    public static void enterMiniGame(String gameName, int stageNumber){ // I am not sure if this is how we should enter the minigames
+        switch (gameName.toLowerCase()){
+            case "vasebreaker":
+                VaseBreaker minigameLevel = new VaseBreaker(stageNumber);
+                GameManagerController.getInstance().setCurrentLevel(minigameLevel);
+            case "":
+        }
+
+
+    }
+
     public static String[] enter(String input, String[] message) {
         Pattern pattern = Pattern.compile(Commands.GAME_MENU_MENUS.getPattern());
         Matcher matcher = pattern.matcher(input);
@@ -92,4 +104,6 @@ public class GameMenuController{
         message[0] = amount + currency + " added successfully";
         return message;
     }
+
+
 }

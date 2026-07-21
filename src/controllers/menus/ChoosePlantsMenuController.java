@@ -19,8 +19,8 @@ public class ChoosePlantsMenuController {
         User current = App.getCurrentUser();
         LevelData level = current.getLastLevel();
         StringBuilder message = new StringBuilder();
-        for (Plant p: level.getAvailablePlants()){
-            message.append(p.getData().getDisplayName()).append("\n");
+        for (String plantName: level.getAvailablePlants()){
+            message.append(plantName+"\n");
         }
         return message.toString();
     }
@@ -45,8 +45,8 @@ public class ChoosePlantsMenuController {
     private static boolean isPlantAvailable(Plant p){
         User current = App.getCurrentUser();
         LevelData level = current.getLastLevel();
-        for(Plant plant: level.getAvailablePlants()){
-            if(plant.getData().getName().equalsIgnoreCase(p.getData().getName())){
+        for(String plantName: level.getAvailablePlants()){
+            if(plantName.equalsIgnoreCase(p.getData().getName())){
                 return true;
             }
         }

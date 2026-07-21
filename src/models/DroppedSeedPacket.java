@@ -2,21 +2,27 @@ package models;
 
 import models.plants.Plant;
 
-public class DroppedSeedPacket {
-    private int row;
-    private int column;
-    private int expirationTicksRemaining;
-    private boolean isExpired;
-    private Plant plant;
-
-    public DroppedSeedPacket( int row, int col, int durationTicks) {}
-
-    public DroppedSeedPacket(boolean isExpired, Plant plant) {
-        this.isExpired = isExpired;
-        this.plant = plant;
+public class DroppedSeedPacket extends SeedPacket{
+    private final int x;
+    private final int y;
+    private int remainingTicks;
+    public DroppedSeedPacket(String plantType, int x, int y, int durationTicks) {
+        super(false, plantType);
+        this.x = x;
+        this.y = y;
+        this.remainingTicks = durationTicks;
     }
 
-    public void updateExpirationTick() {}
-    public boolean hasExpired() { return false; }
-    public DroppedSeedPacket claim() { return null; }
+    public void updateTick() {
+        if (remainingTicks > 0) {
+            remainingTicks--;
+        }
+    }
+
+    public boolean isExpired() {
+        return remainingTicks <= 0;
+    }
+
+    public int getX() { return x; }
+    public int getY() { return y; }
 }

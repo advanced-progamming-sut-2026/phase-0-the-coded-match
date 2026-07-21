@@ -4,12 +4,14 @@ import enums.Commands;
 import models.App;
 import models.GameMapRelated.GameMap;
 import models.Level;
+import models.MiniGameRelated.VaseBreaker;
 import models.Sun;
 import models.Projectile;
 import models.GameMapRelated.Tile;
 import models.plants.Plant;
 import models.plants.PlantData;
 import models.plants.PlantRepository;
+import models.seasons.Season;
 import models.zombies.*;
 
 import java.util.HashMap;
@@ -68,7 +70,15 @@ public class GameManagerController {
         updateSkySuns(message);
         updateSuns(message);
         updateTiles();
+        updateBarrels();
         updateProjectiles();
+        updateSeason();
+        if (currentLevel.getSpecialLevel() != null) {
+            currentLevel.getSpecialLevel().update(currentLevel);
+        }
+        if (currentLevel instanceof VaseBreaker) {
+            ((VaseBreaker) currentLevel).updateGroundSeeds(message);
+        }
         return message;
     }
 
@@ -97,10 +107,13 @@ public class GameManagerController {
                         + plant.getY() + ") is destroyed.");
                 Tile tile = currentLevel.getGameMap().getTile(plant.getX(), plant.getY());
                 if (tile != null && tile.getPlant() == plant) {
-                    tile.removePlantFromTile();
+                    tile.removePlant();
                 }
                 iterator.remove();
                 currentLevel.setRemovedPlantsCount(currentLevel.getRemovedPlantsCount() + 1);
+                if (currentLevel.getSpecialLevel() != null) {
+                    currentLevel.getSpecialLevel().plantLost(currentLevel, plant);
+                }
             }
         }
     }
@@ -121,12 +134,18 @@ public class GameManagerController {
     }
 
     private void updateWaves() {
+        if (currentLevel instanceof VaseBreaker) {
+            return;
+        }
         if (currentLevel.getZombieWave() != null) {
             currentLevel.getZombieWave().update();
         }
     }
 
     private void updateSkySuns(String[] message) {
+        if (currentLevel instanceof VaseBreaker) {
+            return;
+        }
         if (currentLevel.getSkySunProducer() == null) {
             return;
         }
@@ -165,6 +184,13 @@ public class GameManagerController {
     private void updateBarrels() {
         for (Barrel barrel : currentLevel.getBarrels()) {
             barrel.update();
+        }
+    }
+
+    public void updateSeason(){
+        Season season = currentLevel.getCurrentSeason();
+        if (season != null) {
+            season.Update(currentLevel);
         }
     }
 
@@ -233,6 +259,11 @@ public class GameManagerController {
         int x = Integer.parseInt(matcher.group("x"));
         int y = Integer.parseInt(matcher.group("y"));
         String error = getPlantingError(type, x, y);
+
+        if (currentLevel instanceof VaseBreaker) {
+            plantVasebreakerSeed((VaseBreaker) currentLevel, type, x, y);
+            return;
+        }
         if (error != null) {
             System.out.println(error);
             return;
@@ -296,7 +327,7 @@ public class GameManagerController {
         currentLevel.getActivePlants().remove(plant);
         Tile tile = currentLevel.getGameMap().getTile(x, y);
         if (tile != null) {
-            tile.removePlantFromTile();
+            tile.removePlant();
         }
         System.out.println("Plant " + plant.getData().getDisplayName() + " at (" + x + ", " + y + ") removed");
     }
@@ -418,6 +449,10 @@ public class GameManagerController {
     public static void endGame() {
     }
 
+    public void gameOver() {
+
+    }
+
     public String gameWon(){
         if (showSunsAmount() == 0) {
             QuestController.notifyNoSunsLeft();
@@ -450,6 +485,14 @@ public class GameManagerController {
                     iterator.remove();
                     break;
                 }
+            }
+            int col = (int) projectile.getxCoordinate();
+            int row = (int) projectile.getyCoordinate();
+
+            Tile tile = currentLevel.getGameMap().getTile(col, row);
+            if (tile != null && tile.isGrave()) {
+                tile.takeDamage(projectile.getDamage());
+                projectile.destroy();
             }
             for (Barrel barrel : currentLevel.getBarrels()) {
                 if (projectile.checkBarrelCollision(barrel)) {
@@ -507,5 +550,31 @@ public class GameManagerController {
         } else {
             message[0] += System.lineSeparator() + line;
         }
+    }
+
+    public void breakVaseCommand(int x, int y) {
+        if (!(currentLevel instanceof VaseBreaker)) {
+            System.out.println("You are not in a Vasebreaker minigame!");
+            return;
+        }
+
+        VaseBreaker level = (VaseBreaker) currentLevel;
+        String result = level.breakVaseAt(x, y);
+        System.out.println(result);
+    }
+
+    public void plantVasebreakerSeed(VaseBreaker level, String plantName, int x, int y) {
+
+        if (!level.consumeSeedPacket(plantName)) {
+            System.out.println("You do not have a " + plantName + " seed packet!");
+            return;
+        }
+
+        level.consumeSeedPacket(plantName);
+        PlantData data = PlantRepository.getInstance().findByName(plantName);
+        Plant plant = new Plant(data, x, y, 1);
+        level.getActivePlants().add(plant);
+        level.getGameMap().getTile(x, y).setPlant(plant);
+        System.out.println("Planted " + plantName + " at (" + x + ", " + y + ")");
     }
 }

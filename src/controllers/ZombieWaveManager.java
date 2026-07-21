@@ -3,6 +3,7 @@ package controllers;
 
 import models.App;
 import models.GameMapRelated.GameMap;
+import models.Level;
 import models.Update;
 import models.WavePatternData;
 import models.zombies.Barrel;
@@ -16,22 +17,23 @@ import java.util.Random;
 
 public class ZombieWaveManager implements Update {
     Random random = new Random();
+    private Level currentLevel = GameManagerController.getInstance().getCurrentLevel();
     private int currentWave = 0;
     private int timeWaveStarted = 0;
     private static List<Zombie> previousWaveZombies = new ArrayList<>();
-    private WavePatternData wavePattern = GameManagerController.getInstance().getCurrentLevel().getData().getWavePatterns();
+    private List<WavePatternData> wavePattern = GameManagerController.getInstance().getCurrentLevel().getData().getWavePatterns();
 
-    public WavePatternData getWavePattern(){return wavePattern;}
+    public List<WavePatternData> getWavePattern(){return wavePattern;}
 
     public void calculateWaveDifficulty() {
         if(currentWave == 1){
             return;
         }
-        wavePattern.setWaveDifficulty(wavePattern.getWaveDifficulty()*1.25);
+        wavePattern.get(currentWave).setWaveDifficulty(wavePattern.get(currentWave).getWaveDifficulty()*1.25);
     }
 
     public void spawnZombies() {
-        int remainingCost = (int) wavePattern.getWaveDifficulty();
+        int remainingCost = (int) wavePattern.get(currentWave).getWaveDifficulty();
         timeWaveStarted = GameManagerController.getInstance().getCurrentLevel().getCurrentTick();
 
         while (remainingCost > 0) {
@@ -41,7 +43,7 @@ public class ZombieWaveManager implements Update {
             App.getCurrentUser().getCollection().unlockZombie(z.getData().getId());
             int lane = random.nextInt(GameManagerController.getInstance().getCurrentLevel().getGameMap().getRows()); // todo: fixed number of rows and columns!!!!
             z.setY(lane);
-            z.setX(1);   // right side : starts from the first column (figure out the number)
+            z.setX(9);   // right side : starts from the first column (figure out the number)
 
             if (z.getData().getId().equalsIgnoreCase("ZombieBarrelRoller")) {
                 Barrel barrel = new Barrel(z.getX() - 0.5 , lane, z);
@@ -91,16 +93,19 @@ public class ZombieWaveManager implements Update {
     public void update() {
         if(shouldNextWaveStart()){
             currentWave++;
-            if(currentWave > wavePattern.getWaveNumber()){
+            if(currentWave > wavePattern.size()){
                 GameManagerController.getInstance().gameWon();
             }
-            if(currentWave == wavePattern.getWaveNumber()){
+            if(currentWave == wavePattern.size()){
                 System.out.println("The final wave has come.");
             } else{
                 System.out.println("Wave " + currentWave + " started.");
             }
             calculateWaveDifficulty();
             spawnZombies();
+
+            currentLevel.getCurrentSeason().WaveStarted(currentLevel, currentWave);
+            //currentLevel.getSpecialRuleManager().onWaveStarted(currentLevel, currentWave);
         }
     }
 

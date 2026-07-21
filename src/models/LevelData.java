@@ -2,10 +2,8 @@ package models;
 
 import enums.LevelType;
 import models.GameMapRelated.GameMap;
-import models.plants.Plant;
-import models.GameMapRelated.GameMapData;
 import models.seasons.Season;
-import models.zombies.Zombie;
+import models.specialLevels.SpecialLevelStrategy;
 
 import java.util.List;
 
@@ -19,13 +17,13 @@ public class LevelData {
     private int waveCount;
     private int baseWaveCost;
     private Season type;
-    private List<Zombie> allowedZombies;
-    private List<Plant> availablePlants;
-    private List<Plant> conveyorPlants;
-    private List<Plant> lockedPlants;
-    private List<Plant> protectedPlants;
+    private List<String> allowedZombies;
+    private List<String> availablePlants;
+    private List<String> conveyorPlants;
+    private List<String> lockedPlants;
+    private List<String> protectedPlants;
     private List<WavePatternData> wavePatterns; //i changed it from List to WavePatternData cause each level has multiple waves but starts from one pattern!!
-    private List<SpecialLevelRuleData> specialRules;
+    private List<SpecialLevelStrategy> specialRules;
     private GameMap map; //DOUBLE CHECK WITH JSON
 
     public String getId() {
@@ -56,11 +54,11 @@ public class LevelData {
         return baseWaveCost;
     }
 
-    public List<Zombie> getAllowedZombies() {
+    public List<String> getAllowedZombies() {
         return allowedZombies;
     }
 
-    public List<Plant> getAvailablePlants() {
+    public List<String> getAvailablePlants() {
         return availablePlants;
     }
 
@@ -68,15 +66,15 @@ public class LevelData {
         return map;
     }
 
-    public List<Plant> getConveyorPlants() {
+    public List<String> getConveyorPlants() {
         return conveyorPlants;
     }
 
-    public List<Plant> getLockedPlants() {
+    public List<String> getLockedPlants() {
         return lockedPlants;
     }
 
-    public List<SpecialLevelRuleData> getSpecialRules() {
+    public List<SpecialLevelStrategy> getSpecialRules() {
         return specialRules;
     }
 
@@ -84,7 +82,7 @@ public class LevelData {
         return wavePatterns;
     }
 
-    public List<Plant> getProtectedPlants() {
+    public List<String> getProtectedPlants() {
         return protectedPlants;
     }
 
@@ -94,5 +92,16 @@ public class LevelData {
 
     public Season getType() {
         return type;
+    }
+
+    public void setLevelNumber(int stageNumber) { this.levelNumber = stageNumber;}
+
+    public void setLevelType(LevelType levelType) { this.levelType = levelType;
+    }
+
+    public void setUnlocked(boolean unlocked) { this.isUnlocked = unlocked;
+    }
+
+    public void setMap(GameMap gameMap) { this.map = gameMap;
     }
 }
