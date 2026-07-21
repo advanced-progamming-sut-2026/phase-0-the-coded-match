@@ -1,10 +1,14 @@
 package models.MiniGameRelated;
 
-public abstract class MiniGame {
+import models.Level;
+import models.LevelData;
+
+public abstract class MiniGame extends Level {
     public int playerSunAmount;
     public boolean isGameOver;
 
-    public abstract void initializeStage();
-    public abstract void processInteraction();
-    public abstract void checkRules();
+    public MiniGame(LevelData data) {
+        super(data);
+    }
+
 }

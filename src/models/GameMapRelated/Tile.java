@@ -3,6 +3,7 @@ package models.GameMapRelated;
 import controllers.GameManagerController;
 import enums.PlantTag;
 import enums.TileType;
+import models.MiniGameRelated.VaseBreaker;
 import models.Update;
 import models.plants.Plant;
 import models.zombies.Zombie;
@@ -17,6 +18,8 @@ public class Tile implements Update {
     private TileType type;
     private int currentHp;
     private Plant plant;
+    private VaseBreaker.Vase vase;
+    private Plant lilyPadPlant;
     private List<Zombie> zombies;
     private boolean isGettingDamaged = false;
     private boolean isGrave = false;
@@ -128,4 +131,20 @@ public class Tile implements Update {
     }
 
     public boolean isGrave(){return isGrave;}
+
+    public VaseBreaker.Vase getVase() {
+        return vase;
+    }
+
+    public void setVase(VaseBreaker.Vase vase) {
+        this.vase = vase;
+    }
+
+    public boolean hasVase() {
+        return vase != null && !vase.isBroken();
+    }
+
+    public void removeVase() {
+        this.vase = null;
+    }
 }

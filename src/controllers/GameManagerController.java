@@ -4,6 +4,7 @@ import enums.Commands;
 import models.App;
 import models.GameMapRelated.GameMap;
 import models.Level;
+import models.MiniGameRelated.VaseBreaker;
 import models.Sun;
 import models.Projectile;
 import models.GameMapRelated.Tile;
@@ -70,6 +71,9 @@ public class GameManagerController {
         updateTiles();
         updateBarrels();
         updateProjectiles();
+        if (currentLevel instanceof VaseBreaker) {
+            ((VaseBreaker) currentLevel).updateGroundSeeds(message);
+        }
         return message;
     }
 
@@ -122,12 +126,18 @@ public class GameManagerController {
     }
 
     private void updateWaves() {
+        if (currentLevel instanceof VaseBreaker) {
+            return;
+        }
         if (currentLevel.getZombieWave() != null) {
             currentLevel.getZombieWave().update();
         }
     }
 
     private void updateSkySuns(String[] message) {
+        if (currentLevel instanceof VaseBreaker) {
+            return;
+        }
         if (currentLevel.getSkySunProducer() == null) {
             return;
         }
@@ -234,6 +244,11 @@ public class GameManagerController {
         int x = Integer.parseInt(matcher.group("x"));
         int y = Integer.parseInt(matcher.group("y"));
         String error = getPlantingError(type, x, y);
+
+        if (currentLevel instanceof VaseBreaker) {
+            plantVasebreakerSeed((VaseBreaker) currentLevel, type, x, y);
+            return;
+        }
         if (error != null) {
             System.out.println(error);
             return;
@@ -537,5 +552,31 @@ public class GameManagerController {
         } else {
             message[0] += System.lineSeparator() + line;
         }
+    }
+
+    public void breakVaseCommand(int x, int y) {
+        if (!(currentLevel instanceof VaseBreaker)) {
+            System.out.println("You are not in a Vasebreaker minigame!");
+            return;
+        }
+
+        VaseBreaker level = (VaseBreaker) currentLevel;
+        String result = level.breakVaseAt(x, y);
+        System.out.println(result);
+    }
+
+    public void plantVasebreakerSeed(VaseBreaker level, String plantName, int x, int y) {
+
+        if (!level.consumeSeedPacket(plantName)) {
+            System.out.println("You do not have a " + plantName + " seed packet!");
+            return;
+        }
+
+        level.consumeSeedPacket(plantName);
+        PlantData data = PlantRepository.getInstance().findByName(plantName);
+        Plant plant = new Plant(data, x, y, 1);
+        level.getActivePlants().add(plant);
+        level.getGameMap().getTile(x, y).setPlant(plant);
+        System.out.println("Planted " + plantName + " at (" + x + ", " + y + ")");
     }
 }

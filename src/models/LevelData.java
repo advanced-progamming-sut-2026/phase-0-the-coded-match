@@ -95,4 +95,15 @@ public class LevelData {
     public Season getType() {
         return type;
     }
+
+    public void setLevelNumber(int stageNumber) { this.levelNumber = stageNumber;}
+
+    public void setLevelType(LevelType levelType) { this.levelType = levelType;
+    }
+
+    public void setUnlocked(boolean unlocked) { this.isUnlocked = unlocked;
+    }
+
+    public void setMap(GameMap gameMap) { this.map = gameMap;
+    }
 }

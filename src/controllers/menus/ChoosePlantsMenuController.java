@@ -9,7 +9,7 @@ public class ChoosePlantsMenuController {
 
     public static String showAllPlants() {
         StringBuilder message = new StringBuilder();
-        for(PlantData p : App.getAllPlants()){
+        for(Plant p : App.getAllPlants()){
             message.append(p.getData().getDisplayName()).append("\n");
         }
         return message.toString();

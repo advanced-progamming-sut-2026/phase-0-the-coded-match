@@ -5,7 +5,7 @@ import enums.PlantCategory;
 import enums.ShopRelated.PaymentType;
 import enums.ShopRelated.ShopItemData;
 import models.App;
-import models.DroppedSeedPacket;
+import models.SeedPacket;
 import models.Shop;
 import models.greenhouse.GreenHouse;
 import models.greenhouse.GreenHousePot;
@@ -127,11 +127,11 @@ public class ShopController {
                 return count + " plant food(s) bought successfully";
             }
             case SEED_PACKET_BY_CHANCE -> {
-                DroppedSeedPacket seedPacket = new DroppedSeedPacket(false, shop.getRandomSeedPack());
+                SeedPacket seedPacket = new SeedPacket(false, shop.getRandomSeedPack());
                 //todo: add the seed packet
             }
             case SEED_PACKET_BY_CHOICE -> {
-                DroppedSeedPacket seedPacket = new DroppedSeedPacket(false, plant);
+                SeedPacket seedPacket = new SeedPacket(false, plant);
             }
             case EXCHANGE_CURRENCY -> {
                 int amount = count * item.getUnitBought();
@@ -139,7 +139,7 @@ public class ShopController {
                 return amount + " coins were exchanged with 5 gems";
             }
             case SEED_PACKET_DAILY -> {
-                DroppedSeedPacket seedPacket = new DroppedSeedPacket(false, shop.getRandomSpecialSeedPack());
+                SeedPacket seedPacket = new SeedPacket(false, shop.getRandomSpecialSeedPack());
                 shop.setDailyItemSoldOut(true);
             }
         }
