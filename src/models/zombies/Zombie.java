@@ -26,7 +26,6 @@ public class Zombie implements Update {
     private List<ZombieArmor> armors;
     private ZombieBehavior behavior;
     private List<ZombieEffect> effects;
-    private boolean isLocked;
     private boolean hasThrownImp;
     private double runningSpeed;
     private boolean wasRunning;
@@ -119,14 +118,10 @@ public class Zombie implements Update {
         } else {
             plant.takeDamage(data.getEatDPS());
         }
-        if(plant.isDead()){
-            GameManagerController.getInstance().getCurrentLevel().getActivePlants().remove(plant); // TODO: After plant dies we need to print "Plant <type> at (<x>, <y>) is destroyed."; but how do we send it to view?
-        }
     }
 
     public void destroyPlant(Plant plant) {
         plant.setCurrentHp(0);
-        GameManagerController.getInstance().getCurrentLevel().getActivePlants().remove(plant); // TODO: After plant dies we need to print "Plant <type> at (<x>, <y>) is destroyed."; but how do we send it to view?
     }
 
     public void destroyZombie(Zombie zombie) {
@@ -151,8 +146,7 @@ public class Zombie implements Update {
                 if (j == y && x - i <= 4) {
                     Tile tile = map.getTile(j, i);
                     if (!tile.isEmpty()) {
-                        GameManagerController.getInstance().getCurrentLevel().getActivePlants().remove(tile.getPlant());
-                        //TODO: if there is a specific method that kills the plant instantly, replace
+                        tile.getPlant().setCurrentHp(0);
                     }
                 }
             }
@@ -184,11 +178,6 @@ public class Zombie implements Update {
             } else if (data.getId().matches("ZombieRa")) {
                 for (Sun sun : stolenActiveSuns)
                 level.getActiveSuns().add(sun);
-            } else if (data.getId().matches("ZombieBarrelRoller")) {
-                if (!armors.isEmpty()) {
-                    Barrel barrel = new Barrel(x, y, armors.get(0).getCurrentHp());
-                    GameManagerController.getInstance().getCurrentLevel().getBarrels().add(barrel);
-                }
             }
             QuestController.notifyZombieKilled(level.getCurrentSeason());
             QuestController.onZombieDefeated(killerPlant);
@@ -203,7 +192,7 @@ public class Zombie implements Update {
     }
 
     public void explodeDynamite() {
-        y = 0; //TODO: should be moved to the first tile. but is it y = 0?
+        y = 1;
         currentState = ZombieState.WALKING_BACKWARD;
     }
 
@@ -431,5 +420,13 @@ public class Zombie implements Update {
 
     public void setFrozen(boolean frozen) {
         isFrozen = frozen;
+    }
+
+    public ZombieBehavior getBehavior() {
+        return behavior;
+    }
+
+    public void setBehavior(ZombieBehavior behavior) {
+        this.behavior = behavior;
     }
 }

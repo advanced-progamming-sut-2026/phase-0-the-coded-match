@@ -240,11 +240,6 @@
     "eatDPS": 100,
     "speed": 0.185,
     "waveCost": 500,
-    "armors": {
-      "type": "BARREL",
-      "hp": 1100,
-      "metallic": false
-    },
     "behaviorType": "BarrelRoller",
     "state": "WALKING"
   },

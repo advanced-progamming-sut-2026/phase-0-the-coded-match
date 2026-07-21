@@ -7,8 +7,7 @@ public enum ArmorType {
     SHOULDER_ARMOR("shoulderArmor", 1600, true),
     CROWN("crown", 1600, true),
     NEWSPAPER("newspaper", 800, false),
-    BARREL("barrel", 1100, false),
-    ARCADE_MACHINE("arcadeMachine", , false);
+    ARCADE_MACHINE("arcadeMachine", 1100, false);
     private final String name;
     private final int hp;
     private final boolean metallic;

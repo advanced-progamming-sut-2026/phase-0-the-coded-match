@@ -25,6 +25,6 @@ public class ExplorerBehavior implements ZombieBehavior {
 
     @Override
     public void onProjectileHit(Zombie zombie, Projectile projectile) {
-        zombie.takeDamage(projectile.getDamage());
+        zombie.takeDamage(projectile.getDamage(), projectile.getCreatorPlantCategory());
     }
 }

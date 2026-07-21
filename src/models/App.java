@@ -5,6 +5,7 @@ import enums.Phases;
 import models.GameMapRelated.Lawnmower;
 import models.plants.Plant;
 import models.plants.PlantData;
+import models.plants.PlantRepository;
 import models.seasons.Season;
 import models.zombies.Zombie;
 import models.zombies.ZombieData;
@@ -23,14 +24,8 @@ public class App {
     private static Phases currentPhase = Phases.NORMAL_GAMEPLAY;
     private static ArrayList<User> users = new ArrayList<>();
     private static List<Season> allSeasons = new ArrayList<>();
-    private static List<PlantData> allPlants = new ArrayList<>();
     private static List<ZombieData> allZombies = new ArrayList<>();
     private static List<Lawnmower> allLawnMowers = new ArrayList<>();
-
-
-    public static void addPlant(PlantData plantData) {
-        allPlants.add(plantData);
-    }
 
     public static void addZombie(ZombieData zombieData) {
         allZombies.add(zombieData);
@@ -70,10 +65,6 @@ public class App {
 
     public static ArrayList<User> getUsers(){
         return users;
-    }
-
-    public static List<Plant> getAllPlants() {
-        return allPlants;
     }
 
     public static void setUsers(ArrayList<User> users) {
@@ -180,10 +171,6 @@ public class App {
         }
     }
 
-    public static void removePlant(Plant plant){
-        allPlants.remove(plant);
-    }
-
     public static void handleLawnMower(Zombie zombie){
         int row = zombie.getY();
         Lawnmower mower = lawnMowerUsed(row);
@@ -223,11 +210,11 @@ public class App {
         return null;
     }
 
-    public static List<Plant> getLockedPlants() {
-        List<Plant> lockedPlants = new ArrayList<>();
-        List<Plant> unlockedPlants = currentUser.getCollection().getAvailablePlants();
-        for (Plant plant : allPlants) {
-            if (!unlockedPlants.contains(plant)) {
+    public static List<PlantData> getLockedPlants() {
+        List<PlantData> lockedPlants = new ArrayList<>();
+        List<String> unlockedPlants = currentUser.getCollection().getAvailablePlantsIds();
+        for (PlantData plant : PlantRepository.getInstance().getAllPlants()) {
+            if (!unlockedPlants.contains(plant.getId())) {
                 lockedPlants.add(plant);
             }
         }

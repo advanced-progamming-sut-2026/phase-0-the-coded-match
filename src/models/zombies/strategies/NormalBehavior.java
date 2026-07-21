@@ -1,5 +1,7 @@
 package models.zombies.strategies;
 
+import enums.PlantCategory;
+import enums.PlantTag;
 import enums.ZombieState;
 import models.Projectile;
 import models.plants.Plant;
@@ -41,11 +43,16 @@ public class NormalBehavior implements ZombieBehavior {
 
     @Override
     public void onProjectileHit(Zombie zombie, Projectile projectile) {
-        if (zombie.getData().getId().equalsIgnoreCase("ZombieDarkImpDragon")) {
-            if (projectile.) {//TODO: if the type was fiery
+        if (zombie.getData().getId().equalsIgnoreCase("ZombieLostCityJane")) {
+            if (projectile.getCreatorPlantCategory().getData().getCategory() == PlantCategory.LOBBER) {
                 return;
             }
         }
-        zombie.takeDamage(projectile.getDamage());
+        if (zombie.getData().getId().equalsIgnoreCase("ZombieDarkImpDragon")) {
+            if (projectile.getCreatorPlantCategory().hasThisTag(PlantTag.FIRE)) {
+                return;
+            }
+        }
+        zombie.takeDamage(projectile.getDamage(), projectile.getCreatorPlantCategory());
     }
 }

@@ -5,6 +5,7 @@ import models.App;
 import models.GameMapRelated.GameMap;
 import models.Update;
 import models.WavePatternData;
+import models.zombies.Barrel;
 import models.zombies.Zombie;
 import models.zombies.ZombieData;
 import models.zombies.ZombieRepository;
@@ -37,9 +38,15 @@ public class ZombieWaveManager implements Update {
             Zombie z = createRandomZombie();   // weighted random based on cost
             if (z.getWaveCost() > remainingCost) continue;
 
+            App.getCurrentUser().getCollection().unlockZombie(z.getData().getId());
             int lane = random.nextInt(GameManagerController.getInstance().getCurrentLevel().getGameMap().getRows()); // todo: fixed number of rows and columns!!!!
             z.setY(lane);
             z.setX(1);   // right side : starts from the first column (figure out the number)
+
+            if (z.getData().getId().equalsIgnoreCase("ZombieBarrelRoller")) {
+                Barrel barrel = new Barrel(z.getX() - 0.5 , lane, z);
+                GameManagerController.getInstance().getCurrentLevel().addBarrel(barrel);
+            }
 
             GameManagerController.getInstance().getCurrentLevel().getActiveZombies().add(z);
             previousWaveZombies.add(z); // if tracking per wave

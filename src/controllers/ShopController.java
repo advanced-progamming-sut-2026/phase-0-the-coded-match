@@ -1,17 +1,15 @@
 package controllers;
 
 import enums.Commands;
-import enums.PlantCategory;
 import enums.ShopRelated.PaymentType;
 import enums.ShopRelated.ShopItemData;
 import models.App;
-import models.DroppedSeedPacket;
 import models.Shop;
 import models.greenhouse.GreenHouse;
 import models.greenhouse.GreenHousePot;
-import models.plants.Plant;
+import models.plants.PlantData;
+import models.plants.PlantRepository;
 
-import javax.swing.*;
 import java.util.List;
 import java.util.Random;
 import java.util.regex.Matcher;
@@ -31,7 +29,7 @@ public class ShopController {
             }
             sb.append("id: ").append(shopItem.getId()).append(" - item name: ").append(shopItem.getName()).append("\n");
             if (shopItem == ShopItemData.SEED_PACKET_BY_CHANCE) {
-                sb.append("plant: ").append(shop.getRandomSeedPack().getData().getName()).append("\n");
+                sb.append("plant: ").append(shop.getRandomSeedPack().getName()).append("\n");
             }
             sb.append("price: ").append(shopItem.getPrice()).append(shopItem.getPaymentType().getName())
                     .append(" - buying unit: ").append(shopItem.getUnitBought()).append("\n");
@@ -42,7 +40,7 @@ public class ShopController {
     public static StringBuilder showDailyShop(StringBuilder sb) {
         ShopItemData dailyItem = ShopItemData.SEED_PACKET_DAILY;
         sb.append("id: ").append(dailyItem.getId()).append(" - item name: ").append(dailyItem.getName()).append("\n");
-        sb.append("plant: ").append(shop.getRandomSpecialSeedPack().getData().getName()).append("\n");
+        sb.append("plant: ").append(shop.getRandomSpecialSeedPack().getName()).append("\n");
         sb.append("price: ").append(dailyItem.getPrice()).append(dailyItem.getPaymentType().getName())
                 .append(" - buying unit: ").append(dailyItem.getUnitBought()).append("\n");
         return sb;
@@ -62,11 +60,11 @@ public class ShopController {
             return "invalid item id";
         }
 
-        Plant plantChosen = null;
+        PlantData plantChosen = null;
 
         if (item == ShopItemData.SEED_PACKET_BY_CHOICE) {
             String plantChosenSt = matcher.group(3);
-            plantChosen = App.getPlantByName(plantChosenSt);
+            plantChosen = PlantRepository.getInstance().findByName(plantChosenSt);
             if (plantChosen == null) {
                 return "invalid plant name";
             }
@@ -92,10 +90,10 @@ public class ShopController {
         return "";
     }
 
-    public Plant getRandomPlant(){
-        List<Plant> unlockedPlants = App.getCurrentUser().getCollection().getAvailablePlants();
+    public PlantData getRandomPlant(){
+        List<String> unlockedPlants = App.getCurrentUser().getCollection().getAvailablePlantsIds();
         int randomIndex = new Random().nextInt(unlockedPlants.size());
-        return unlockedPlants.get(randomIndex);
+        return PlantRepository.getInstance().findById(unlockedPlants.get(randomIndex));
     }
 
     public static ShopItemData getItemById(int id) {
@@ -107,7 +105,7 @@ public class ShopController {
         return null;
     }
 
-    public static String addItemToProfile(ShopItemData item, Plant plant, int count) {
+    public static String addItemToProfile(ShopItemData item, PlantData plant, int count) {
         switch (item) {
             case POT -> {
                 if (GreenHouse.getPotsCount() + count > 20) {
@@ -126,12 +124,10 @@ public class ShopController {
                         (count * item.getUnitBought()));
                 return count + " plant food(s) bought successfully";
             }
-            case SEED_PACKET_BY_CHANCE -> {
-                DroppedSeedPacket seedPacket = new DroppedSeedPacket(false, shop.getRandomSeedPack());
-                //todo: add the seed packet
-            }
-            case SEED_PACKET_BY_CHOICE -> {
-                DroppedSeedPacket seedPacket = new DroppedSeedPacket(false, plant);
+            case SEED_PACKET_BY_CHANCE, SEED_PACKET_BY_CHOICE -> {
+                int amount = count * item.getUnitBought();
+                App.getCurrentUser().addSeedPackets(plant.getName(), amount);
+                return amount + " seed packets bought successfully";
             }
             case EXCHANGE_CURRENCY -> {
                 int amount = count * item.getUnitBought();
@@ -139,8 +135,10 @@ public class ShopController {
                 return amount + " coins were exchanged with 5 gems";
             }
             case SEED_PACKET_DAILY -> {
-                DroppedSeedPacket seedPacket = new DroppedSeedPacket(false, shop.getRandomSpecialSeedPack());
+                int amount = count * item.getUnitBought();
+                App.getCurrentUser().addSeedPackets(plant.getName(), amount);
                 shop.setDailyItemSoldOut(true);
+                return amount + " daily seed packets bought successfully";
             }
         }
         return "";

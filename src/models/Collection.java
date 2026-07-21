@@ -1,39 +1,41 @@
 package models;
 
 import models.MiniGameRelated.MiniGame;
-import models.plants.Plant;
-import models.zombies.Zombie;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Collection {
-     private List<Zombie> availableZombies;
-     private List<Plant> availablePlants;
+     private List<String> availableZombiesIds;
+     private List<String> availablePlantsIds;
      private List<MiniGame> unlockedMinigames;
      private List<Level> unlockedLevels;
 
      public Collection() {
-          this.availableZombies = new ArrayList<>();
-          this.availablePlants = new ArrayList<>();
+          this.availableZombiesIds = new ArrayList<>();
+          this.availablePlantsIds = new ArrayList<>();
           this.unlockedMinigames = new ArrayList<>();
           this.unlockedLevels = new ArrayList<>();
      }
 
-     public List<Zombie> getAvailableZombies() {
-          return availableZombies;
+     public List<String> getAvailableZombiesIds() {
+          return availableZombiesIds;
      }
 
-     public void setAvailableZombies(List<Zombie> availableZombies) {
-          this.availableZombies = availableZombies;
+     public void unlockZombie(String zombieId) {
+          if (!availableZombiesIds.contains(zombieId)) {
+               availableZombiesIds.add(zombieId);
+          }
      }
 
-     public List<Plant> getAvailablePlants() {
-          return availablePlants;
+     public List<String> getAvailablePlantsIds() {
+          return availablePlantsIds;
      }
 
-     public void setAvailablePlants(List<Plant> availablePlants) {
-          this.availablePlants = availablePlants;
+     public void unlockPlant(String plantId) {
+          if (!availablePlantsIds.contains(plantId)) {
+               availablePlantsIds.add(plantId);
+          }
      }
 
      public List<MiniGame> getUnlockedMinigames() {

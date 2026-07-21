@@ -9,8 +9,8 @@ public class ChoosePlantsMenuController {
 
     public static String showAllPlants() {
         StringBuilder message = new StringBuilder();
-        for(PlantData p : App.getAllPlants()){
-            message.append(p.getData().getDisplayName()).append("\n");
+        for(PlantData p : PlantRepository.getInstance().getAllPlants()){
+            message.append(p.getDisplayName()).append("\n");
         }
         return message.toString();
     }
@@ -55,8 +55,8 @@ public class ChoosePlantsMenuController {
 
     private static boolean isPlantUnlocked(Plant p){
         User current = App.getCurrentUser();
-        for(Plant plant : current.getCollection().getAvailablePlants()){
-            if(plant.getData().getName().equalsIgnoreCase(p.getData().getName())){
+        for(String plantId : current.getCollection().getAvailablePlantsIds()){
+            if(plantId.equalsIgnoreCase(p.getData().getId())){
                 return true;
             }
         }

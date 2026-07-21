@@ -14,12 +14,14 @@ public class AllStarBehavior implements ZombieBehavior {
             if (targetZombie.getCurrentState() == ZombieState.HYPNOTIZED) {
                 zombie.destroyZombie(targetZombie);
             }
-        } else if (targetPlant != null && zombie.isWasRunning()) {
-            zombie.setWasRunning(false);
-            if (targetPlant.hasThisTag()) {//TODO: plant is hypnotized
-                zombie.destroyPlant(targetPlant);
-            }
-        } else if (zombie.getCurrentState() == ZombieState.EATING) {
+        }
+//        else if (targetPlant != null && zombie.isWasRunning()) {
+//            zombie.setWasRunning(false);
+//            if (targetPlant.hasThisTag()) {//TODO: plant is hypnotized
+//                zombie.destroyPlant(targetPlant);
+//            }
+//        }
+        else if (zombie.getCurrentState() == ZombieState.EATING) {
             zombie.attack(targetPlant);
             if(targetPlant.isDead()) {
                 zombie.setCurrentState(ZombieState.WALKING);

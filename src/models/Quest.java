@@ -6,6 +6,7 @@ import enums.QuestRelated.QuestData;
 import enums.QuestRelated.QuestObjective;
 import enums.QuestRelated.RewardType;
 import models.plants.Plant;
+import models.plants.PlantData;
 import models.seasons.Season;
 
 public class Quest {
@@ -22,7 +23,7 @@ public class Quest {
     private int[] targetValue;
     private Season season;
     private Level currentLevel;
-    private Plant targetPlant;
+    private PlantData targetPlant;
 
     public Quest(QuestData questData){
         this.questData = questData;
@@ -98,11 +99,11 @@ public class Quest {
         this.season = season;
     }
 
-    public Plant getTargetPlant() {
+    public PlantData getTargetPlant() {
         return targetPlant;
     }
 
-    public void setTargetPlant(Plant targetPlant) {
+    public void setTargetPlant(PlantData targetPlant) {
         this.targetPlant = targetPlant;
     }
 }

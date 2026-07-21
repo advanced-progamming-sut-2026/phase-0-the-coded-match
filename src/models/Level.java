@@ -207,6 +207,10 @@ public class Level {
         this.barrels = barrels;
     }
 
+    public void addBarrel(Barrel barrel) {
+        barrels.add(barrel);
+    }
+
     public Plant getFrontMostPlantInRow(double row){
         Plant front= null;
         int minCol = Integer.MAX_VALUE;

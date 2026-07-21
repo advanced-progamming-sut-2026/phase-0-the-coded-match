@@ -1,43 +1,55 @@
 package controllers;
 
+import enums.Commands;
 import models.zombies.Zombie;
+import models.zombies.ZombieArmor;
+import models.zombies.ZombieData;
 import models.zombies.ZombieRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ZombieController {
 
-    private final ZombieRepository zombieRepository;
-    private final List<Zombie> activeZombies;
 
-    public ZombieController() {
-        this.zombieRepository = ZombieRepository.getInstance();
-        this.activeZombies = new ArrayList<>();
+    public static StringBuilder showZombiesInfo() {
+        StringBuilder builder = new StringBuilder();
+        for (Zombie zombie : GameManagerController.getInstance().getCurrentLevel().getActiveZombies()) {
+            builder.append(zombie.getData().getDisplayName()).append(":\n");
+            builder.append("position: ").append(zombie.getX()).append(", ").append(zombie.getY()).append('\n');
+            builder.append("health: ").append(zombie.getCurrentHp()).append('\n');
+            if (!zombie.getArmors().isEmpty()) {
+                builder.append("armor:").append("\n");
+                for (ZombieArmor armor : zombie.getArmors()) {
+                    builder.append(armor.getData().getType().getName()).append(": ")
+                            .append(armor.getCurrentHp()).append("\n");
+                }
+            }
+            builder.append("effects: ").append(zombie.getEffects()).append('\n');
+        }
+        return builder;
     }
 
-    public Zombie spawnZombie(String alias, double x, int y) { //in zombieWaveManager
-        //TODO
-        return null;
-    }
+    public static void cheatSpawnZombies(String input) {
+        Matcher matcher = Pattern.compile(Commands.CHEAT_SPAWN_ZOMBIE.getPattern()).matcher(input);
+        if (!matcher.matches()) {
+            System.out.println("invalid command");
+            return;
+        }
 
-    public void moveZombies() { //in Zombie
-        //TODO
-    }
+        String type = matcher.group("zombie_type");
+        float x = Integer.parseInt(matcher.group("x"));
+        int y = Integer.parseInt(matcher.group("y"));
 
-    public void attackPlants() { //in Zombie
-        // TODO
+        ZombieData newZombie = ZombieRepository.getInstance().findByDisplayName(type);
+        Zombie zombie = new Zombie(newZombie, x, y);
+        GameManagerController.getInstance().getCurrentLevel().getActiveZombies().add(zombie);
     }
 
     public void removeDeadZombies() { //in GameManagerController
        //TODO
     }
 
-    public void showZombieInfo() { //in GameManagerController
-       //TODO
-    }
-
-    public List<Zombie> getActiveZombies() {
-        return activeZombies;
-    }
 }
