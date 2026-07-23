@@ -9,10 +9,10 @@
     "HP": 190,
     "eatDPS": 100,
     "speed": 0.185,
-    "attackInterval": 1.0,
     "waveCost": 100,
     "behaviorType": "Normal",
-    "state": "WALKING"
+    "state": "WALKING",
+    "cost": 50
   },
   {
     "id": "ZombieArmor1",
@@ -24,7 +24,6 @@
     "HP": 190,
     "eatDPS": 100,
     "speed": 0.185,
-    "attackInterval": 1.0,
     "waveCost": 200,
     "armors": {
       "type": "CONE",
@@ -32,7 +31,8 @@
       "metallic": false
     },
     "behaviorType": "Normal",
-    "state": "WALKING"
+    "state": "WALKING",
+    "cost": 100
   },
   {
     "id": "ZombieArmor2",
@@ -51,7 +51,8 @@
       "metallic": true
     },
     "behaviorType": "Normal",
-    "state": "WALKING"
+    "state": "WALKING",
+    "cost": 100
   },
   {
     "id": "ZombieDarkArmor3",
@@ -76,7 +77,8 @@
         "metallic": true
       }],
     "behaviorType": "Normal",
-    "state": "WALKING"
+    "state": "WALKING",
+    "cost": 120
   },
   {
     "id": "ZombieArmor4",
@@ -95,7 +97,8 @@
       "metallic": true
     },
     "behaviorType": "Normal",
-    "state": "WALKING"
+    "state": "WALKING",
+    "cost": 100
   },
   {
     "id": "ZombieGargantuar",
@@ -109,7 +112,8 @@
     "speed": 0.24,
     "waveCost": 1500,
     "behaviorType": "Giant",
-    "state": "WALKING"
+    "state": "WALKING",
+    "cost": 150
   },
   {
     "id": "ZombieImp",
@@ -123,7 +127,8 @@
     "speed": 0.22,
     "waveCost": 100,
     "behaviorType": "Normal",
-    "state": "WALKING"
+    "state": "WALKING",
+    "cost": 50
   },
   {
     "id": "ZombieModernAllStar",
@@ -138,7 +143,8 @@
     "waveCost": 1000,
     "behaviorType": "AllStar",
     "state": "RUNNING",
-    "runningSpeed": 0.5
+    "runningSpeed": 0.5,
+    "cost": 150
   },
   {
     "id": "ZombieArcade",
@@ -150,7 +156,8 @@
     "HP": 490,
     "eatDPS": 100,
     "speed": 0.19,
-    "waveCost": 600
+    "waveCost": 600,
+    "cost": 150
   },
   {
     "id": "ZombieLostCityJane",
@@ -165,7 +172,8 @@
     "waveCost": 200,
     "behaviorType": "Normal",
     "state": "WALKING",
-    "hasParasol": true
+    "hasParasol": true,
+    "cost": 100
   },
   {
     "id": "ZombieCrystalSkull",
@@ -377,5 +385,16 @@
     "waveCost": 150,
     "behaviorType": "Normal",
     "state": "WALKING"
+  },
+  {
+    "id": "SunProducerZombie",
+    "displayName": "Sun Zombie",
+    "seasons": [],
+    "HP": 190,
+    "eatDPS": 100,
+    "speed": 0.185,
+    "behaviorType": "SunProducer",
+    "state": "WALKING",
+    "cost": 50
   }
 ]

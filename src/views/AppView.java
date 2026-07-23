@@ -46,6 +46,10 @@ public class AppView {
                 ProfileMenu.check(input);
             } else if (currentMenu == Menu.COLLECTION_MENU) {
                 CollectionMenu.check(input);
+            } else if (currentMenu == Menu.CHOOSEPLANTS_MENU) {
+                ChoosePlantsMenu.check(input);
+            } else if (currentMenu == Menu.GAME_MANAGER) {
+                GameManager.check(input);
             } else if (currentMenu == Menu.GREEN_HOUSE) {
                 GreenHouseView.check(input);
             } else if (currentMenu == Menu.TRAVEL_LOG) {
@@ -54,6 +58,10 @@ public class AppView {
                 LeaderBoardView.check(input);
             } else if (currentMenu == Menu.SHOP) {
                 ShopView.check(input);
+            } else if (currentMenu == Menu.QUESTS) {
+                QuestView.check(input);
+            } else if (currentMenu == Menu.MINIGAMES) {
+                MiniGameView.check(input);
             } else {
                 System.out.println("invalid command");
             }

@@ -23,12 +23,16 @@ public class DodoRiderBehavior implements ZombieBehavior {
                     zombie.attack(targetPlant);
                     return;
                 }
-                zombie.fly(targetPlant);
+                fly(targetPlant, zombie);
                 zombie.setCurrentState(ZombieState.WALKING);
             } else {
                 zombie.attack(targetPlant);
             }
         }
+    }
+
+    public void fly(Plant target, Zombie zombie) {
+        zombie.setX(target.getX() + 1); // shifts the zombie by one tile
     }
 
     @Override

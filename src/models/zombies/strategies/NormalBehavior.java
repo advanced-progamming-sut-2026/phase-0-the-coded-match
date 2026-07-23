@@ -1,11 +1,21 @@
 package models.zombies.strategies;
 
+import controllers.GameManagerController;
 import enums.PlantCategory;
 import enums.PlantTag;
+import enums.TileType;
 import enums.ZombieState;
+import models.GameMapRelated.GameMap;
+import models.GameMapRelated.Tile;
+import models.Level;
 import models.Projectile;
+import models.Sun;
 import models.plants.Plant;
 import models.zombies.Zombie;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class NormalBehavior implements ZombieBehavior {
     private int abilityTimer = 6;
@@ -17,16 +27,16 @@ public class NormalBehavior implements ZombieBehavior {
                 zombie.setCurrentState(ZombieState.RUNNING);
             }
         } else if (zombie.getData().getId().equalsIgnoreCase("ZombieRa")) {
-            zombie.stealDroppedSuns();
+            stealDroppedSuns(zombie);
         } else if (zombie.getData().getId().equalsIgnoreCase("ZombieTombRaiser")) {
             zombie.setAbilityTickTimer(zombie.getAbilityTickTimer() + 1);
             if (zombie.getAbilityTickTimer() == abilityTimer) {
-                zombie.raiseTomb();
+                raiseTomb();
                 zombie.setAbilityTickTimer(0);
             }
         } else if ((zombie.getData().getId().equalsIgnoreCase("ZombieIceAgeHunter") ||
                 (zombie.getData().getId().equalsIgnoreCase("ZombieBeachOctopus"))) && targetPlant != null) {
-            zombie.shootProjectile();
+            shootProjectile(zombie);
         }
 
         if (zombie.getCurrentState() == ZombieState.EATING) {
@@ -39,6 +49,61 @@ public class NormalBehavior implements ZombieBehavior {
         } else if (zombie.getCurrentState() == ZombieState.RUNNING) {
             zombie.run();
         }
+    }
+
+    public void raiseTomb() {
+        List<Tile> emptyTiles = getValidTilesForGrave();
+        int gravesToSpawn = Math.min(2, emptyTiles.size());
+
+        if (gravesToSpawn == 0) {
+            return;
+        }
+
+        if (emptyTiles.isEmpty()) {
+            return;
+        }
+
+        Collections.shuffle(emptyTiles);
+
+        for (int i = 0; i < gravesToSpawn; i++) {
+            Tile selectedTile = emptyTiles.get(i);
+            selectedTile.setType(TileType.GRAVE);
+        }
+    }
+
+    public List<Tile> getValidTilesForGrave() {
+        List<Tile> validTiles = new ArrayList<>();
+        GameMap map = GameManagerController.getInstance().getCurrentLevel().getGameMap();
+        for (int row = 0; row < map.getRows(); row++) {
+            for (int col = 0; col < map.getColumns(); col++) {
+                Tile tile = map.getTile(row, col);
+
+                if (tile == null) {
+                    continue;
+                }
+
+                if (tile.getType() == TileType.NORMAL && tile.isEmpty()) {
+                    validTiles.add(tile);
+                }
+            }
+        }
+        return validTiles;
+    }
+
+    public void stealDroppedSuns(Zombie zombie) {
+        Level level = GameManagerController.getInstance().getCurrentLevel();
+        for (Sun sun : level.getActiveSuns()) {
+            //TODO: the sun must have a speed?
+            level.getActiveSuns().remove(sun);
+            zombie.getStolenActiveSuns().add(sun);
+        }
+    }
+
+    public void shootProjectile(Zombie zombie) { //TODO: include projectile TYPE
+        Projectile icyProjectile = new Projectile(zombie.getX(), zombie.getY(), zombie.getData().getSpeed(),
+                zombie.getData().getEatDPS(), false, false, null);
+        //TODO: what should the speed and damage amount be??
+        GameManagerController.getInstance().getCurrentLevel().getActiveProjectiles().add(icyProjectile);
     }
 
     @Override

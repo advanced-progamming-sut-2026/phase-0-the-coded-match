@@ -1,6 +1,7 @@
 package controllers;
 
 import enums.Commands;
+import enums.LevelType;
 import models.App;
 import models.GameMapRelated.GameMap;
 import models.Level;
@@ -53,7 +54,7 @@ public class GameManagerController {
         }
         int count = Integer.parseInt(matcher.group("count"));
         int dl = App.getCurrentUser().getDifficultyLevel();
-        int step = (int) (1 * (dl / 3.0));
+        int step = Math.max(1, (int) Math.round(dl / 3.0));
         for (int i = 0; i < count; i++) {
             currentLevel.setCurrentTick(currentLevel.getCurrentTick() + step);
             updateObjects(message);
@@ -62,17 +63,23 @@ public class GameManagerController {
     }
 
     public String[] updateObjects(String[] message) {
-        decreasePlantCooldowns();
-        updatePlants(message);
-        updateBarrels();
-        updateZombies();
-        updateWaves();
-        updateSkySuns(message);
-        updateSuns(message);
-        updateTiles();
-        updateBarrels();
-        updateProjectiles();
-        updateSeason();
+        if (currentLevel.getLevelType() == LevelType.I_ZOMBIE) {
+            decreasePlantCooldowns();
+            updatePlants(message);
+            updateZombies();
+            updateProjectiles();
+        } else {
+            decreasePlantCooldowns();
+            updatePlants(message);
+            updateBarrels();
+            updateZombies();
+            updateWaves();
+            updateSkySuns(message);
+            updateSuns(message);
+            updateTiles();
+            updateProjectiles();
+            updateSeason();
+        }
         if (currentLevel.getSpecialLevel() != null) {
             currentLevel.getSpecialLevel().update(currentLevel);
         }
@@ -123,7 +130,7 @@ public class GameManagerController {
         while (iterator.hasNext()) {
             Zombie zombie = iterator.next();
             zombie.update();
-            if (zombie.getX() <= 0) {
+            if (zombie.getX() <= 0 && currentLevel.getLevelType() != LevelType.I_ZOMBIE) {
                 App.handleLawnMower(zombie);
             }
             if (zombie.isDead()) {

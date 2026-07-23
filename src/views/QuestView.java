@@ -1,7 +1,7 @@
 package views;
 
 public class QuestView {
-    public void check() {
+    public static void check(String input) {
 
     }
 }

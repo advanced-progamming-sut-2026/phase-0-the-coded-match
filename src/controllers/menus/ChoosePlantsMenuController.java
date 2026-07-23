@@ -109,7 +109,7 @@ public class ChoosePlantsMenuController {
     }
 
     public static void startGame() {
-        App.setCurrentMenu(Menu.GAME_MENU);
+        App.setCurrentMenu(Menu.GAME_MANAGER);
         return;
     }
 }

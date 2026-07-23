@@ -12,7 +12,7 @@ public class AllStarBehavior implements ZombieBehavior {
         Zombie targetZombie = GameManagerController.getInstance().getCurrentLevel().getAdjacentZombie(zombie);
         if (targetZombie != null && zombie.getCurrentState() == ZombieState.RUNNING) {
             if (targetZombie.getCurrentState() == ZombieState.HYPNOTIZED) {
-                zombie.destroyZombie(targetZombie);
+                destroyZombie(targetZombie);
             }
         }
 //        else if (targetPlant != null && zombie.isWasRunning()) {
@@ -31,6 +31,11 @@ public class AllStarBehavior implements ZombieBehavior {
         } else if (zombie.getCurrentState() == ZombieState.WALKING) {
             zombie.walk();
         }
+    }
+
+    public void destroyZombie(Zombie zombie) {
+        zombie.setCurrentHp(0);
+        GameManagerController.getInstance().getCurrentLevel().getActiveZombies().remove(zombie);
     }
 
     @Override
