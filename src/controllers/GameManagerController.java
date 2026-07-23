@@ -54,7 +54,7 @@ public class GameManagerController {
         }
         int count = Integer.parseInt(matcher.group("count"));
         int dl = App.getCurrentUser().getDifficultyLevel();
-        int step = Math.max(1, (int) Math.round(dl / 3.0));
+        double step = 1 * (dl / 3.0);
         for (int i = 0; i < count; i++) {
             currentLevel.setCurrentTick(currentLevel.getCurrentTick() + step);
             updateObjects(message);

@@ -26,48 +26,48 @@ public class ChoosePlantsMenuController {
     }
 
     public static String addPlant(String plantName) {
-        Plant p = App.getPlantByName(plantName);
         Level level = GameManagerController.getInstance().getCurrentLevel();
-        if(p == null || !isPlantAvailable(p)){
+        if(plantName == null || !isPlantAvailable(plantName)){
             return "Plant is not available";
         }
-        if(!isPlantUnlocked(p)){
+        if(!isPlantUnlocked(plantName)){
             return "Plant is locked";
         }
-        if(!hasPlantBeenChosen(p)){
+        if(!hasPlantBeenChosen(plantName)){
             return "Plant is already selected";
         }
-        level.addActivePlants(p);
+        level.addChosenPlant(plantName);
         return "Plant added successfully";
 
     }
 
-    private static boolean isPlantAvailable(Plant p){
+    private static boolean isPlantAvailable(String p){
         User current = App.getCurrentUser();
         LevelData level = current.getLastLevel();
-        for(String plantName: level.getAvailablePlants()){
-            if(plantName.equalsIgnoreCase(p.getData().getName())){
+        for (String plantName: level.getAvailablePlants()){
+            if (plantName.equalsIgnoreCase(p)) {
                 return true;
             }
         }
         return false;
     }
 
-    private static boolean isPlantUnlocked(Plant p){
+    private static boolean isPlantUnlocked(String p){
+        PlantData plant = PlantRepository.getInstance().findByName(p);
         User current = App.getCurrentUser();
         for(String plantId : current.getCollection().getAvailablePlantsIds()){
-            if(plantId.equalsIgnoreCase(p.getData().getId())){
+            if(plantId.equalsIgnoreCase(plant.getId())){
                 return true;
             }
         }
         return false;
     }
 
-    public static boolean hasPlantBeenChosen(Plant p) {
+    public static boolean hasPlantBeenChosen(String p) {
         User current = App.getCurrentUser();
         Level level = GameManagerController.getInstance().getCurrentLevel();
-        for(Plant plant : level.getActivePlants()){
-            if(plant.getData().getName().equalsIgnoreCase(p.getData().getName())){
+        for(String plant : level.getChosenPlants()){
+            if(plant.equalsIgnoreCase(p)){
                 return true;
             }
         }
@@ -76,17 +76,16 @@ public class ChoosePlantsMenuController {
     }
 
     public static String removePlant(String plantName) {
-        Plant p = App.getPlantByName(plantName);
         Level level = GameManagerController.getInstance().getCurrentLevel();
-        if(p == null || !isPlantAvailable(p)){
+        if(plantName == null || !isPlantAvailable(plantName)){
             return "Plant is not available";
         }
-        if(!hasPlantBeenChosen(p)){
+        if(!hasPlantBeenChosen(plantName)){
             return "Plant has not been chosen";
         }
         for(Plant plant : level.getActivePlants()){
-            if(plant.getData().getName().equalsIgnoreCase(p.getData().getName())){
-                level.getActivePlants().remove(plant);
+            if(plant.getData().getName().equalsIgnoreCase(plantName)){
+                level.getChosenPlants().remove(plant);
                 return "Plant removed successfully";
             }
         }

@@ -22,12 +22,13 @@ public class Level {
     private boolean isUnlocked;
     private LevelType levelType;
     private GameMap gameMap; // changed to GameMap from GameMapData double-check with the JSON
+    private List<String> chosenPlants;
     private List<Zombie> activeZombies;
     private List<Plant> activePlants;
     private List<Sun> activeSuns; //suns that are on the ground
     private int collectedSunsAmount;
     private Season currentSeason;
-    private int currentTick;
+    private double currentTick;
     private ZombieWaveManager zombieWave;
     private List<Projectile> activeProjectiles; 
     private int plantFoodCount;
@@ -42,6 +43,7 @@ public class Level {
         this.isUnlocked = data.isUnlocked();
         this.levelType = data.getLevelType();
         this.gameMap = data.getMap();
+        this.chosenPlants = new ArrayList<>();
         this.activeZombies = new ArrayList<>();
         this.activePlants = new ArrayList<>();
         this.activeSuns = new ArrayList<>();
@@ -116,6 +118,10 @@ public class Level {
 
     public LevelData getData() {return data;}
 
+    public void addChosenPlant(String name) {
+        chosenPlants.add(name);
+    }
+
     public void addActiveZombie(Zombie zombie) {
         activeZombies.add(zombie);
     }
@@ -160,6 +166,10 @@ public class Level {
         this.gameMap = gameMap;
     }
 
+    public List<String> getChosenPlants() {
+        return chosenPlants;
+    }
+
     public List<Zombie> getActiveZombies() {
         return activeZombies;
     }
@@ -194,11 +204,11 @@ public class Level {
         this.currentSeason = currentSeason;
     }
 
-    public int getCurrentTick() {
+    public double getCurrentTick() {
         return currentTick;
     }
 
-    public void setCurrentTick(int currentTick) {
+    public void setCurrentTick(double currentTick) {
         this.currentTick = currentTick;
     }
 

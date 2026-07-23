@@ -2,7 +2,6 @@ package controllers;
 
 
 import models.App;
-import models.GameMapRelated.GameMap;
 import models.Level;
 import models.Update;
 import models.WavePatternData;
@@ -19,9 +18,10 @@ public class ZombieWaveManager implements Update {
     Random random = new Random();
     private Level currentLevel = GameManagerController.getInstance().getCurrentLevel();
     private int currentWave = 0;
-    private int timeWaveStarted = 0;
+    private double timeWaveStarted = 0;
     private static List<Zombie> previousWaveZombies = new ArrayList<>();
-    private List<WavePatternData> wavePattern = GameManagerController.getInstance().getCurrentLevel().getData().getWavePatterns();
+    private List<WavePatternData> wavePattern = GameManagerController.getInstance().getCurrentLevel().getData()
+            .getWavePatterns();
 
     public List<WavePatternData> getWavePattern(){return wavePattern;}
 
@@ -29,7 +29,9 @@ public class ZombieWaveManager implements Update {
         if(currentWave == 1){
             return;
         }
-        wavePattern.get(currentWave).setWaveDifficulty(wavePattern.get(currentWave).getWaveDifficulty()*1.25);
+        int difficultyLevel = App.getCurrentUser().getDifficultyLevel();
+        double multiplier = 1.0 + (0.25 * (difficultyLevel / 3.0));
+        wavePattern.get(currentWave).setWaveDifficulty(wavePattern.get(currentWave).getWaveDifficulty() * multiplier);
     }
 
     public void spawnZombies() {
@@ -113,7 +115,7 @@ public class ZombieWaveManager implements Update {
         return currentWave;
     }
 
-    public int getTimeWaveStarted() {
+    public double getTimeWaveStarted() {
         return timeWaveStarted;
     }
 }
