@@ -184,7 +184,7 @@ public class App {
         }
         mower.setHasBeenUsed(true);
         //TODO: print "The lawn mower in the row <r>is triggered and killed these zombies:"
-        System.out.println("The lawn mower in the row <r>is triggered and killed these zombies:");
+        System.out.println("The lawn mower in the row "+ row +"is triggered and killed these zombies:");
         List<Zombie> killed = new ArrayList<>();
         for(Zombie z : allZombies){
             if(z.getY() == row){ //Todo: Make an exception for BOSS ZOMBIE!!!!!

@@ -3,6 +3,7 @@ package models;
 import controllers.QuestController;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class QuestsModel {
@@ -10,6 +11,15 @@ public class QuestsModel {
 
     public QuestsModel() {
         this.availableQuests = new ArrayList<>();
+    }
+
+    public void sortByPriority() {
+        Collections.sort(this.availableQuests);
+    }
+
+    public List<Quest> getAvailableQuests() {
+        sortByPriority();
+        return availableQuests;
     }
 
     public Quest getQuestByName(String name) {
@@ -23,10 +33,6 @@ public class QuestsModel {
 
     public void addQuest(Quest quest) {
         availableQuests.add(quest);
-    }
-
-    public List<Quest> getAvailableQuests() {
-        return availableQuests;
     }
 
     public void setAvailableQuests(List<Quest> availableQuests) {

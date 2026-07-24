@@ -7,7 +7,7 @@ public class SeedPacket {
     private int column;
     private int remainingTicks;
     private boolean isExpired;
-    private String plantType;
+    String plantType;
 
     public SeedPacket(boolean isExpired, String plant) {
         this.isExpired = isExpired;

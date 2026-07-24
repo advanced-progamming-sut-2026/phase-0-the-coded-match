@@ -38,6 +38,8 @@ public class GameManager {
             System.out.println(ZombieController.showZombiesInfo().toString());
         } else if (input.matches(Commands.CHEAT_SPAWN_ZOMBIE.getPattern())) {
             ZombieController.cheatSpawnZombies(input);
+        } else if(input.matches(Commands.RELEASE_THE_NUKE.getPattern())){
+            instance.cheatReleaseTheNuke();
         } else {
             System.out.println("invalid command");
         }

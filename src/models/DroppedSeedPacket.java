@@ -23,6 +23,10 @@ public class DroppedSeedPacket extends SeedPacket{
         return remainingTicks <= 0;
     }
 
+    public String getPlantType(){
+        return this.plantType;
+    }
+
     public int getX() { return x; }
     public int getY() { return y; }
 }

@@ -455,12 +455,11 @@ public class GameManagerController {
         handleZombieDrop();
     }
 
-    public static void endGame() {
-    }
-
     public void gameOver() {
-
-
+        currentLevel.getActiveZombies().clear();
+        currentLevel.getActivePlants().clear();
+        currentLevel.getActiveProjectiles().clear();
+        currentLevel.getActiveSuns().clear();
         App.getCurrentUser().setVictroy(false);
     }
 
@@ -472,12 +471,6 @@ public class GameManagerController {
         App.getCurrentUser().setVictroy(true);
         QuestController.onLevelCompleted(true);
         return "Dear humanz, zis is not done yet; we will come back to eat your brainz, humanz.";
-    }
-
-    public void saveGame() {
-    }
-
-    public void loadGame() {
     }
 
     public void updateProjectiles() {
@@ -574,6 +567,17 @@ public class GameManagerController {
         VaseBreaker level = (VaseBreaker) currentLevel;
         String result = level.breakVaseAt(x, y);
         System.out.println(result);
+    }
+
+    public void pickUPPacket(int x, int y){
+        if (!(currentLevel instanceof VaseBreaker)) {
+            System.out.println("You are not in a Vasebreaker minigame!");
+            return;
+        }
+        VaseBreaker level = (VaseBreaker) currentLevel;
+        String result = level.pickUpSeedAt(x, y);
+        System.out.println(result);
+
     }
 
     public void plantVasebreakerSeed(VaseBreaker level, String plantName, int x, int y) {
