@@ -10,18 +10,18 @@ import models.Update;
 import java.util.Random;
 
 public class SkySunProducer implements Update {
-    private int timeSinceLastDrop;
+    private double timeSinceLastDrop;
     private Random random;
     private boolean producedASun;
     private Sun sun;
 
     public SkySunProducer() {
-        this.timeSinceLastDrop = 0;
+        this.timeSinceLastDrop = 0.0;
         this.random = new Random();
         producedASun = false;
     }
 
-    public int getTimeSinceLastDrop() {
+    public double getTimeSinceLastDrop() {
         return timeSinceLastDrop;
     }
 
@@ -46,11 +46,12 @@ public class SkySunProducer implements Update {
     }
 
     public void calculateDropTime() {
-        int time = Math.max(6 + (int) (0.05 * GameManagerController.getInstance().getCurrentLevel().getCurrentTick()), 12);
+        double time = Math.max(6 + 0.05 * GameManagerController.getInstance().getCurrentLevel().getCurrentTick(), 12);
         int dl = App.getCurrentUser().getDifficultyLevel();
-        time = (int) (time * (dl / 3.0));
-        if (timeSinceLastDrop == time) {
+        time = time * (dl / 3.0);
+        if (timeSinceLastDrop >= time) {
             spawnRandomSun();
+            timeSinceLastDrop = 0.0;
         }
     }
 

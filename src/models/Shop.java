@@ -2,12 +2,13 @@ package models;
 
 import controllers.ShopController;
 import models.plants.Plant;
+import models.plants.PlantData;
 
 public class Shop {
     private boolean dailyItemSoldOut = false;
-    private Plant randomSeedPack;
-    private Plant randomSpecialSeedPack;
-    private Plant seedPackByChoice;
+    private PlantData randomSeedPack;
+    private PlantData randomSpecialSeedPack;
+    private PlantData seedPackByChoice;
     private ShopController controller;
 
     public Shop(){
@@ -15,10 +16,8 @@ public class Shop {
         initializeRandomPlants();
     }
 
-
-
     private void checkAndRefreshDailyOffer(){
-
+        //todo
     }
 
     private void initializeRandomPlants(){
@@ -34,27 +33,27 @@ public class Shop {
         this.dailyItemSoldOut = dailyItemSoldOut;
     }
 
-    public Plant getRandomSeedPack() {
+    public PlantData getRandomSeedPack() {
         return randomSeedPack;
     }
 
-    public void setRandomSeedPack(Plant randomSeedPack) {
+    public void setRandomSeedPack(PlantData randomSeedPack) {
         this.randomSeedPack = randomSeedPack;
     }
 
-    public Plant getRandomSpecialSeedPack() {
+    public PlantData getRandomSpecialSeedPack() {
         return randomSpecialSeedPack;
     }
 
-    public void setRandomSpecialSeedPack(Plant randomSpecialSeedPack) {
+    public void setRandomSpecialSeedPack(PlantData randomSpecialSeedPack) {
         this.randomSpecialSeedPack = randomSpecialSeedPack;
     }
 
-    public Plant getSeedPackByChoice() {
+    public PlantData getSeedPackByChoice() {
         return seedPackByChoice;
     }
 
-    public void setSeedPackByChoice(Plant seedPackByChoice) {
+    public void setSeedPackByChoice(PlantData seedPackByChoice) {
         this.seedPackByChoice = seedPackByChoice;
     }
 }

@@ -5,4 +5,5 @@ public enum LevelType {
     SPECIAL,
     BOSS,
     VASEBREAKER,
+    I_ZOMBIE,
 }

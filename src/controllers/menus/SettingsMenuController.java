@@ -31,20 +31,7 @@ public class SettingsMenuController{
 
         App.getCurrentUser().setDifficultyLevel(newDifficulty);
 
-        decreaseZombieWaveCost(newDifficulty);
         message[0] = "Difficulty changed to " + newDifficulty;
         return message;
-    }
-
-    public static void decreaseZombieWaveCost(int dl) { //TODO: for all levels?
-        Level level;
-        for (int i = 0; i < 4; i++) {
-            for (LevelData levelData : App.getAllSeasons().get(i).getLevels()) {
-                level = new Level(levelData);
-                for(WavePatternData wave: level.getZombieWave().getWavePattern()){
-                    wave.setWaveDifficulty(wave.getWaveDifficulty() * (dl / 3.0));
-                }
-            }
-        } //todo: should be handled when the wave is being made
     }
 }

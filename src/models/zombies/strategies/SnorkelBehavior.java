@@ -1,6 +1,7 @@
 package models.zombies.strategies;
 
 import controllers.GameManagerController;
+import enums.PlantCategory;
 import enums.TileType;
 import enums.ZombieState;
 import models.GameMapRelated.Tile;
@@ -27,12 +28,12 @@ public class SnorkelBehavior implements ZombieBehavior {
     @Override
     public void onProjectileHit(Zombie zombie, Projectile projectile) {
         if (zombie.isSubmerged()) {
-            if (projectile.) {//TODO: projectile is from a lobber
-                zombie.takeDamage(projectile.getDamage());
+            if (projectile.getCreatorPlantCategory().getData().getCategory() == PlantCategory.LOBBER) {
+                zombie.takeDamage(projectile.getDamage(), projectile.getCreatorPlantCategory());
                 projectile.destroy();
             }
         } else {
-            zombie.takeDamage(projectile.getDamage());
+            zombie.takeDamage(projectile.getDamage(), projectile.getCreatorPlantCategory());
         }
     }
 }

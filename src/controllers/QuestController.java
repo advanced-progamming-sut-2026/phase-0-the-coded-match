@@ -8,6 +8,8 @@ import models.Quest;
 import models.QuestsModel;
 import models.User;
 import models.plants.Plant;
+import models.plants.PlantData;
+import models.plants.PlantRepository;
 import models.seasons.Season;
 import models.zombies.Barrel;
 import models.zombies.Zombie;
@@ -23,7 +25,7 @@ public class QuestController {
     private static boolean usedForbiddenFamily = false;
     private static boolean notMushrooms = false;
     private static int winCount;
-    private int numberOfZombiesKilled;
+    private static int numberOfZombiesKilled;
 
     public static void generateAllQuests() {
         if (!questsModel.getAvailableQuests().isEmpty()) { // if the user is loaded from json
@@ -32,7 +34,7 @@ public class QuestController {
         for (QuestData questData : QuestData.values()) {
             Quest quest = new Quest(questData);
             if (quest.getQuestData().isNeedsPlant()) {
-                Plant targetPlant = null;
+                PlantData targetPlant = null;
                 switch (quest.getQuestName()) {
 
                     case "Pro Plant Player":
@@ -71,15 +73,16 @@ public class QuestController {
 
 
 
-    public static Plant getRandomPlant(String type) {
-        List<Plant> unlockedPlants = App.getCurrentUser().getCollection().getAvailablePlants();
+    public static PlantData getRandomPlant(String type) {
+        List<String> unlockedPlants = App.getCurrentUser().getCollection().getAvailablePlantsIds();
         PlantCategory plantCategory;
 
         if (type.equalsIgnoreCase("killer")) {
-            List<Plant> killerPlants = new ArrayList<>();
+            List<PlantData> killerPlants = new ArrayList<>();
 
-            for (Plant plant : unlockedPlants) {
-                plantCategory = plant.getData().getCategory();
+            for (String plantId : unlockedPlants) {
+                PlantData plant = PlantRepository.getInstance().findById(plantId);
+                plantCategory = plant.getCategory();
                 if (plantCategory == PlantCategory.SHOOTER || plantCategory == PlantCategory.LOBBER ||
                         plantCategory == PlantCategory.EXPLOSIVE || plantCategory == PlantCategory.MELEE ||
                         plantCategory == PlantCategory.STRIKE_TROUGH) {
@@ -94,18 +97,18 @@ public class QuestController {
             }
 
         } else if (type.equalsIgnoreCase("cactus")) {
-            Plant plant = App.getPlantByName("Cactus");
+            PlantData plant = PlantRepository.getInstance().findByName("Cactus");
             return plant;
         }
         
         return null;
     }
 
-    public static Plant getRandomPlant(){
-        List<Plant> unlockedPlants = App.getCurrentUser().getCollection().getAvailablePlants();
-        PlantCategory plantCategory;
+    public static PlantData getRandomPlant(){
+        List<String> unlockedPlants = App.getCurrentUser().getCollection().getAvailablePlantsIds();
+
         int randomIndex = new Random().nextInt(unlockedPlants.size());
-        return unlockedPlants.get(randomIndex);
+        return PlantRepository.getInstance().findById(unlockedPlants.get(randomIndex));
     }
 
 
@@ -123,19 +126,19 @@ public class QuestController {
                 break;
             }
             case UNLOCKABLE -> {
-                currentUser.getCollection().getAvailablePlants().add(getRewardPlant());
+                currentUser.getCollection().getAvailablePlantsIds().add(getRewardPlant().getId());
                 break;
             }
             case SEED_PACKET -> {
-                //TODO: add to all seed packets count
+                currentUser.addSeedPackets(quest.getTargetPlant().getName(), amount);
                 break;
             }
         }
         return null;
     }
 
-    public static Plant getRewardPlant() {
-        List<Plant> lockedPlants = App.getLockedPlants();
+    public static PlantData getRewardPlant() {
+        List<PlantData> lockedPlants = App.getLockedPlants();
         if (lockedPlants != null) {
             int randomIndex = new Random().nextInt(lockedPlants.size());
             return lockedPlants.get(randomIndex);
@@ -191,8 +194,8 @@ public class QuestController {
         if (GameManagerController.getInstance().getCurrentLevel().getZombieWave().getCurrentWave() == 1) {
             Quest speedExecution = questsModel.getQuestByName("Speed Execution");
 
-            int currentTick = GameManagerController.getInstance().getCurrentLevel().getCurrentTick();
-            int timeWaveStarted = GameManagerController.getInstance().getCurrentLevel().getZombieWave().getTimeWaveStarted();
+            double currentTick = GameManagerController.getInstance().getCurrentLevel().getCurrentTick();
+            double timeWaveStarted = GameManagerController.getInstance().getCurrentLevel().getZombieWave().getTimeWaveStarted();
 
             if (currentTick - timeWaveStarted <= 30) {
                 speedExecution.setCurrentValue(speedExecution.getCurrentValue() + 1);
@@ -244,7 +247,7 @@ public class QuestController {
            claimReward(professionalDemolisher, professionalDemolisher.getRewardAmount());}
 
        Quest bloomingInLimits = questsModel.getQuestByName("Blooming in Limits");
-       if(plant.getData().getCategory() == bloomingInLimits.getTargetPlant().getData().getCategory()){
+       if(plant.getData().getCategory() == bloomingInLimits.getTargetPlant().getCategory()){
            usedForbiddenFamily = true;
        }
 
@@ -297,7 +300,7 @@ public class QuestController {
     public static void onZombieDefeated(Plant killerPlant){
 
         Quest proPlantPlayer = questsModel.getQuestByName("Pro Plant Player");
-        if (killerPlant.getData().getName().equalsIgnoreCase(proPlantPlayer.getTargetPlant().getData().getName())) {
+        if (killerPlant.getData().getName().equalsIgnoreCase(proPlantPlayer.getTargetPlant().getName())) {
             proPlantPlayer.setCurrentValue(proPlantPlayer.getCurrentValue() + 1);
         }
 
@@ -311,7 +314,7 @@ public class QuestController {
         isItDone(onlyCactus);
 
         Quest familySlaughter = questsModel.getQuestByName("Family Slaughter");
-        if (killerPlant.getData().getCategory() != familySlaughter.getTargetPlant().getData().getCategory()){
+        if (killerPlant.getData().getCategory() != familySlaughter.getTargetPlant().getCategory()){
             brokeFamilyRule = true;
         }
     }

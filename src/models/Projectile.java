@@ -3,6 +3,7 @@ package models;
 import controllers.GameManagerController;
 import enums.PlantCategory;
 import models.plants.Plant;
+import models.zombies.Barrel;
 import models.zombies.Zombie;
 
 public class Projectile {
@@ -48,6 +49,13 @@ public class Projectile {
                 && zombie != null
                 && zombie.getY() == (int) Math.round(yCoordinate)
                 && Math.abs(zombie.getX() - xCoordinate) < 0.5;
+    }
+
+    public boolean checkBarrelCollision(Barrel barrel) {
+        return !isDestroyed
+                && barrel != null
+                && barrel.getY() == (int) Math.round(yCoordinate)
+                && Math.abs(barrel.getX() - xCoordinate) < 0.5;
     }
     public void destroy() {
         isDestroyed = true;

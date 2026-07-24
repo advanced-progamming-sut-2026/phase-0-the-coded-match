@@ -10,12 +10,15 @@ public enum Menu {
     PROFILE_MENU("profile menu"),
     COLLECTION_MENU("collection menu"),
     CHOOSEPLANTS_MENU("choose plants menu"),
+    GAME_MANAGER("game manager"),
     GREEN_HOUSE("greenhouse"),
     TRAVEL_LOG("travel-log"),
     LEADERBOARD("leaderboard"),
     COIN_WALLET("coin-wallet"),
     GEM_WALLET("gem-wallet"),
-    SHOP("shop");
+    SHOP("shop"),
+    QUESTS("quests"),
+    MINIGAMES("minigames");
 
     private final String menuName;
 

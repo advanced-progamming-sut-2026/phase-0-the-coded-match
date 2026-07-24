@@ -1,5 +1,6 @@
 package models.zombies.strategies;
 
+import controllers.GameManagerController;
 import enums.ZombieState;
 import models.Projectile;
 import models.plants.Plant;
@@ -18,13 +19,21 @@ public class PianistBehavior implements ZombieBehavior {
             zombie.walk();
         }
         if (zombie.getAbilityTickTimer() == abilityTimer) {
-            zombie.shuffleZombies(zombie);
+            shuffleZombies(zombie);
             zombie.setAbilityTickTimer(0);
+        }
+    }
+
+    public void shuffleZombies(Zombie pianist) {
+        for (Zombie zombie : GameManagerController.getInstance().getCurrentLevel().getActiveZombies()) {
+            if (zombie != pianist) {
+                //TODO: complete this
+            }
         }
     }
 
     @Override
     public void onProjectileHit(Zombie zombie, Projectile projectile) {
-        zombie.takeDamage(projectile.getDamage());
+        zombie.takeDamage(projectile.getDamage(), projectile.getCreatorPlantCategory());
     }
 }

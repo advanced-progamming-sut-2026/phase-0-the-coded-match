@@ -8,7 +8,6 @@ import models.plants.Plant;
 import models.plants.PlantData;
 import models.plants.PlantRepository;
 import models.plants.PlantUpgradeData;
-import models.zombies.Zombie;
 import models.zombies.ZombieData;
 import models.zombies.ZombieRepository;
 
@@ -23,11 +22,13 @@ public class CollectionMenuController {
     public static StringBuilder showAchievedPlants() {
         StringBuilder result = new StringBuilder();
         Collection collection = getCollection();
-        if (collection == null || collection.getAvailablePlants().isEmpty()) {
+        if (collection == null || collection.getAvailablePlantsIds().isEmpty()) {
             return result.append("no plants achieved\n");
         }
-        for (Plant plant : collection.getAvailablePlants()) {
-            result.append(plant.getData().getDisplayName()).append("\n");
+        for (PlantData plant : PlantRepository.getInstance().getAllPlants()) {
+            if (collection.getAvailablePlantsIds().contains(plant.getId())) {
+                result.append(plant.getDisplayName()).append("\n");
+            }
         }
         return result;
     }
@@ -47,11 +48,13 @@ public class CollectionMenuController {
     public static StringBuilder showSeenZombies() {
         StringBuilder result = new StringBuilder();
         Collection collection = getCollection();
-        if (collection == null || collection.getAvailableZombies().isEmpty()) {
+        if (collection == null || collection.getAvailableZombiesIds().isEmpty()) {
             return result.append("no zombies seen\n");
         }
-        for (Zombie zombie : collection.getAvailableZombies()) {
-            result.append(zombie.getData().getDisplayName()).append("\n");
+        for (ZombieData zombie : ZombieRepository.getInstance().getAllZombies()) {
+            if (collection.getAvailableZombiesIds().contains(zombie.getId())) {
+                result.append(zombie.getDisplayName()).append("\n");
+            }
         }
         return result;
     }
@@ -173,7 +176,7 @@ public class CollectionMenuController {
             return;
         }
         user.setCoinsCount(user.getCoinsCount() - PLANT_PRICE);
-        user.getCollection().getAvailablePlants().add(new Plant(plantData, 0, 0, 1));
+        user.getCollection().unlockPlant(plantData.getId());
         System.out.println("plant purchased successfully");
     }
 
@@ -187,11 +190,13 @@ public class CollectionMenuController {
         if (collection == null) {
             return null;
         }
-        for (Plant plant : collection.getAvailablePlants()) {
-            PlantData data = plant.getData();
-            if (data.getDisplayName().equalsIgnoreCase(name) || data.getName().equalsIgnoreCase(name)
-                    || data.getId().equalsIgnoreCase(name)) {
-                return plant;
+        PlantData plant = PlantRepository.getInstance().findByName(name);
+        if (plant == null) {
+            return null;
+        }
+        for (String plantId : collection.getAvailablePlantsIds()) {
+            if (plant.getId().equalsIgnoreCase(plantId)) {
+                return plant; //todo: what to return? should it be PlantData type?
             }
         }
         return null;

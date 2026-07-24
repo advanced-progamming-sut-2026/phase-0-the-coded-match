@@ -19,12 +19,18 @@ public class ExplorerBehavior implements ZombieBehavior {
         if (zombie.getCurrentState() == ZombieState.WALKING) {
             zombie.walk();
         } else {
-            zombie.burn(targetPlant);
+            burn(targetPlant, zombie);
+        }
+    }
+
+    public void burn(Plant targetPlant, Zombie zombie) {
+        if (zombie.getX() - targetPlant.getX() <= 1) {
+            zombie.destroyPlant(targetPlant);
         }
     }
 
     @Override
     public void onProjectileHit(Zombie zombie, Projectile projectile) {
-        zombie.takeDamage(projectile.getDamage());
+        zombie.takeDamage(projectile.getDamage(), projectile.getCreatorPlantCategory());
     }
 }

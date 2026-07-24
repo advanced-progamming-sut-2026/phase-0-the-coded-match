@@ -60,7 +60,10 @@ public enum Commands {
     SORT_LEADERBOARD("^\\s*sort\\s+by\\s+(.+)\\s+ascending:\\s+(.+)\\s*$"),
     SHOP_LIST("^\\s*shop\\s+list\\s*$"),
     SHOP_DAILY("^\\s*shop\\s+daily\\s*$"),
-    SHOP_BUY("^\\s*shop\\s+buy\\s+-i\\s+(?<item_id>\\d+)\\s+-n\\s+(?<count>\\d+)(?:\\s+-t\\s+(\\S+))?$");
+    SHOP_BUY("^\\s*shop\\s+buy\\s+-i\\s+(?<item_id>\\d+)\\s+-n\\s+(?<count>\\d+)(?:\\s+-t\\s+(\\S+))?$"),
+    TRAVEL_LOG_PAGE("^\\s*travel\\s+log\\s+page\\s+(?<page>\\S+)\\s*$"),
+    ENTER_MINIGAME("^\\s*enter\\s+minigame\\s+(?<name>\\S+)\\s+level\\s+(?<level>\\d+)\\s*$"),
+    PLACE_ZOMBIE("^\\s*place\\s+zombie\\s+(?<name>\\S+)\\s+at\\s+\\(\\s*(?<x>\\d+)\\s*,\\s*(?<y>\\d+)\\s*\\)\\s*$");
 
     private final String pattern;
 

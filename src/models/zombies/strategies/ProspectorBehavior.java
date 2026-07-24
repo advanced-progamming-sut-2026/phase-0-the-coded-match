@@ -20,13 +20,13 @@ public class ProspectorBehavior implements ZombieBehavior {
             zombie.setAbilityTickTimer(0);
         }
         if (zombie.getAbilityTickTimer() == abilityTimer) {
-            zombie.explodeDynamite();
+            explodeDynamite(zombie);
             isCastingAbility = false;
             zombie.setAbilityTickTimer(0);
         } else if (zombie.getCurrentState() == ZombieState.WALKING) {
             zombie.walk();
         } else if (zombie.getCurrentState() == ZombieState.WALKING_BACKWARD) {
-            zombie.walkBackWard();
+            walkBackWard(zombie);
         } else if (zombie.getCurrentState() == ZombieState.EATING) {
             zombie.attack(targetPlant);
             if(targetPlant.isDead()) {
@@ -35,8 +35,17 @@ public class ProspectorBehavior implements ZombieBehavior {
         }
     }
 
+    public void explodeDynamite(Zombie zombie) {
+        zombie.setY(1);
+        zombie.setCurrentState(ZombieState.WALKING_BACKWARD);
+    }
+
+    public void walkBackWard(Zombie zombie) {
+        zombie.setX(zombie.getX() + zombie.getData().getSpeed());
+    }
+
     @Override
     public void onProjectileHit(Zombie zombie, Projectile projectile) {
-        zombie.takeDamage(projectile.getDamage());
+        zombie.takeDamage(projectile.getDamage(), projectile.getCreatorPlantCategory());
     }
 }

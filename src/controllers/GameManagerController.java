@@ -1,6 +1,7 @@
 package controllers;
 
 import enums.Commands;
+import enums.LevelType;
 import models.App;
 import models.GameMapRelated.GameMap;
 import models.Level;
@@ -54,7 +55,7 @@ public class GameManagerController {
         }
         int count = Integer.parseInt(matcher.group("count"));
         int dl = App.getCurrentUser().getDifficultyLevel();
-        int step = (int) (1 * (dl / 3.0));
+        double step = 1 * (dl / 3.0);
         for (int i = 0; i < count; i++) {
             currentLevel.setCurrentTick(currentLevel.getCurrentTick() + step);
             updateObjects(message);
@@ -63,16 +64,23 @@ public class GameManagerController {
     }
 
     public String[] updateObjects(String[] message) {
-        decreasePlantCooldowns();
-        updatePlants(message);
-        updateZombies();
-        updateWaves();
-        updateSkySuns(message);
-        updateSuns(message);
-        updateTiles();
-        updateBarrels();
-        updateProjectiles();
-        updateSeason();
+        if (currentLevel.getLevelType() == LevelType.I_ZOMBIE) {
+            decreasePlantCooldowns();
+            updatePlants(message);
+            updateZombies();
+            updateProjectiles();
+        } else {
+            decreasePlantCooldowns();
+            updatePlants(message);
+            updateBarrels();
+            updateZombies();
+            updateWaves();
+            updateSkySuns(message);
+            updateSuns(message);
+            updateTiles();
+            updateProjectiles();
+            updateSeason();
+        }
         if (currentLevel.getSpecialLevel() != null) {
             currentLevel.getSpecialLevel().update(currentLevel);
         }
@@ -447,41 +455,11 @@ public class GameManagerController {
         handleZombieDrop();
     }
 
-    public StringBuilder showZombiesInfo() {
-        StringBuilder builder = new StringBuilder();
-        for (Zombie zombie : currentLevel.getActiveZombies()) {
-            builder.append(zombie.getData().getDisplayName()).append(":\n");
-            builder.append("position: ").append(zombie.getX()).append(", ").append(zombie.getY()).append('\n');
-            builder.append("health: ").append(zombie.getCurrentHp()).append('\n');
-            if (!zombie.getArmors().isEmpty()) {
-                builder.append("armor:").append("\n");
-                for (ZombieArmor armor : zombie.getArmors()) {
-                    builder.append(armor.getData().getType().getName()).append(": ")
-                            .append(armor.getCurrentHp()).append("\n");
-                }
-            }
-            builder.append("effects: ").append(zombie.getEffects()).append('\n');
-        }
-        return builder;
-    }
-
-    public void cheatSpawnZombies(String input) {
-        Matcher matcher = Pattern.compile(Commands.CHEAT_SPAWN_ZOMBIE.getPattern()).matcher(input);
-        if (!matcher.matches()) {
-            System.out.println("invalid command");
-            return;
-        }
-
-        String type = matcher.group("zombie_type");
-        float x = Integer.parseInt(matcher.group("x"));
-        int y = Integer.parseInt(matcher.group("y"));
-
-        ZombieData newZombie = ZombieRepository.getInstance().findByDisplayName(type);
-        Zombie zombie = new Zombie(newZombie, x, y);
-        getCurrentLevel().getActiveZombies().add(zombie);
+    public static void endGame() {
     }
 
     public void gameOver() {
+
 
         App.getCurrentUser().setVictroy(false);
     }
@@ -516,7 +494,7 @@ public class GameManagerController {
             projectile.move();
             for (Zombie zombie : currentLevel.getActiveZombies().toArray(new Zombie[0])) {
                 if (projectile.checkZombieCollision(zombie)) {
-                    zombie.takeDamage(projectile.getDamage(), projectile.getCreatorPlantCategory());
+                    zombie.getBehavior().onProjectileHit(zombie, projectile);
                     iterator.remove();
                     break;
                 }
@@ -528,6 +506,11 @@ public class GameManagerController {
             if (tile != null && tile.isGrave()) {
                 tile.takeDamage(projectile.getDamage());
                 projectile.destroy();
+            }
+            for (Barrel barrel : currentLevel.getBarrels()) {
+                if (projectile.checkBarrelCollision(barrel)) {
+                    barrel.onProjectileHit(projectile);
+                }
             }
         }
     }

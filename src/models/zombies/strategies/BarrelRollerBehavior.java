@@ -17,14 +17,10 @@ public class BarrelRollerBehavior implements ZombieBehavior {
         } else if (zombie.getCurrentState() == ZombieState.WALKING) {
             zombie.walk();
         }
-
-        if (zombie.getArmors().isEmpty()) {
-            zombie.spawnImp(zombie.getX());
-        }
     }
 
     @Override
     public void onProjectileHit(Zombie zombie, Projectile projectile) {
-        zombie.takeDamage(projectile.getDamage());
+        zombie.takeDamage(projectile.getDamage(), projectile.getCreatorPlantCategory());
     }
 }

@@ -1,31 +1,197 @@
 package models.MiniGameRelated;
 
+import controllers.MiniGameController;
+import enums.Commands;
+import enums.LevelType;
+import models.GameMapRelated.GameMap;
+import models.LevelData;
+import models.plants.Plant;
+import models.plants.PlantRepository;
+import models.zombies.Zombie;
+import models.zombies.ZombieData;
+import models.zombies.ZombieRepository;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class IZombie extends MiniGame {
-    private List<Brain> laneBrains;
-    private double redLineCoordinateX;
-    public IZombie() {
-        playerSunAmount = 150;
+
+    private final int stageNumber;
+    private int sunAmount;
+    private Boolean[] brainsEatenInLane;
+    private double redLineCoordinateX = 6;
+    private List<String> availableZombies;
+
+    public IZombie(int stageNumber) {
+        super(createIZombieLevelData(stageNumber));
+        this.stageNumber = stageNumber;
+        this.sunAmount = 150;
+        this.brainsEatenInLane = new Boolean[5];
+        this.availableZombies = new ArrayList<>();
         isGameOver = false;
+
+        setupStage(stageNumber);
     }
 
-    @Override
-    public void initializeStage() {
-
+    private static LevelData createIZombieLevelData(int stageNumber) {
+        LevelData data = new LevelData();
+        data.setLevelNumber(stageNumber);
+        data.setLevelType(LevelType.I_ZOMBIE);
+        data.setUnlocked(true);
+        data.setMap(new GameMap(5, 9));
+        return data;
     }
 
-    @Override
-    public void processInteraction() {
+    private void setupStage(int stage) {
+        PlantRepository plants = PlantRepository.getInstance();
+        ZombieRepository zombies = ZombieRepository.getInstance();
 
+
+        ZombieData sunZombieData = zombies.findByDisplayName("Sun Zombie");
+        for (int row = 1; row <= 5; row++) {
+            addActiveZombie(new Zombie(sunZombieData, 9, row));
+        }
+
+        switch (stage) {
+            case 1:
+                setUpStage1(plants);
+
+            case 2:
+                setUpStage2(plants);
+
+            case 3:
+                setUpStage3(plants);
+
+        }
     }
 
-    @Override
-    public void checkRules() {
+    public void setUpStage1(PlantRepository plants) {
+        availableZombies.add("Default");
+        availableZombies.add("Gargantuar");
+        availableZombies.add("Buckethead Zombie");
+        availableZombies.add("Knight Zombie");
+        availableZombies.add("Brickhead Zombie");
 
+        for (int row = 1; row <= 5; row++) {
+            getGameMap().getTile(row, 1).setPlant(new Plant(plants.findByName("Peashooter"),
+                    1, row, 1));
+            getGameMap().getTile(row, 5).setPlant(new Plant(plants.findByName("Wall-nut"),
+                    5, row, 1));
+        }
+
+        getGameMap().getTile(1, 3).setPlant(new Plant(plants.findByName("Cabbage-pult"),
+                3, 1, 1));
+        getGameMap().getTile(2, 2).setPlant(new Plant(plants.findByName("Cabbage-pult"),
+                2, 2, 1));
+        getGameMap().getTile(3, 3).setPlant(new Plant(plants.findByName("Cabbage-pult"),
+                3, 3, 1));
+        getGameMap().getTile(4, 2).setPlant(new Plant(plants.findByName("Cabbage-pult"),
+                2, 4, 1));
+        getGameMap().getTile(5, 3).setPlant(new Plant(plants.findByName("Cabbage-pult"),
+                3, 5, 1));
     }
 
-    void SunCount(){
+    public void setUpStage2(PlantRepository plants) {
+        availableZombies.add("Default");
+        availableZombies.add("Imp");
+        availableZombies.add("AllStar");
+        availableZombies.add("Arcade");
+        availableZombies.add("Parasol Zombie");
 
+        for (int row = 1; row <= 5; row++) {
+            getGameMap().getTile(row, 1).setPlant(new Plant(plants.findByName("Peashooter"),
+                    1, row, 1));
+            getGameMap().getTile(row, 2).setPlant(new Plant(plants.findByName("Cabbage-pult"),
+                    2, row, 1));
+            getGameMap().getTile(row, 5).setPlant(new Plant(plants.findByName("Wall-nut"),
+                    5, row, 1));
+        }
+
+        getGameMap().getTile(1, 3).setPlant(new Plant(plants.findByName("Bonk Choy"),
+                3, 1, 1));
+        getGameMap().getTile(3, 3).setPlant(new Plant(plants.findByName("Bonk Choy"),
+                3, 3, 1));
+        getGameMap().getTile(5, 3).setPlant(new Plant(plants.findByName("Bonk Choy"),
+                3, 5, 1));
     }
+
+    public void setUpStage3(PlantRepository plants) {
+        availableZombies.add("Default");
+        availableZombies.add("Conehead Zombie");
+        availableZombies.add("AllStar");
+        availableZombies.add("Parasol Zombie");
+        availableZombies.add("Buckethead Zombie");
+
+        for (int row = 1; row <= 5; row++) {
+            getGameMap().getTile(row, 1).setPlant(new Plant(plants.findByName("Peashooter"),
+                    1, row, 1));
+            getGameMap().getTile(row, 2).setPlant(new Plant(plants.findByName("Cabbage-pult"),
+                    2, row, 1));
+            getGameMap().getTile(row, 4).setPlant(new Plant(plants.findByName("Cabbage-pult"),
+                    4, row, 1));
+            getGameMap().getTile(row, 5).setPlant(new Plant(plants.findByName("Wall-nut"),
+                    5, row, 1));
+        }
+    }
+
+    public void Update() {
+        for (Zombie zombie : getActiveZombies()) {
+            if (zombie.getX() <= 1) {
+                eatBrainAtRow(zombie.getY());
+            }
+            if (zombie.isSunProduced()) {
+                addSun();
+                zombie.setSunProduced(false);
+            }
+        }
+        MiniGameController.verifyWinLossConditions();
+    }
+
+    public String placeZombie(String input) {
+        Pattern pattern = Pattern.compile(Commands.PLACE_ZOMBIE.getPattern());
+        Matcher matcher = pattern.matcher(input);
+        if (!matcher.matches()) {
+            return "invalid command";
+        }
+
+        String zombieName = matcher.group("name");
+        int col = Integer.parseInt(matcher.group("x"));
+        int row = Integer.parseInt(matcher.group("y"));
+        if (col < redLineCoordinateX) {
+            return "place zombies on the right side of the red line";
+        }
+
+        ZombieData zombieData = getZombieDataFromAvailable(zombieName);
+        if (zombieData == null) {
+            return "this zombie is not available";
+        }
+
+        if (sunAmount < zombieData.getCost()) {
+            return "not enough sun";
+        }
+
+        sunAmount -= zombieData.getCost();
+        Zombie newZombie = new Zombie(zombieData, col, row);
+        getActiveZombies().add(newZombie);
+
+        return "Placed " + zombieName + " at (" + col + ", " + row + ")";
+    }
+
+    public void eatBrainAtRow(int row) {
+        brainsEatenInLane[row - 1] = true;
+    }
+
+    private ZombieData getZombieDataFromAvailable(String name) {
+        for (String z : availableZombies) {
+            if (z.equalsIgnoreCase(name)) {
+                return ZombieRepository.getInstance().findByDisplayName(z);
+            }
+        }
+        return null;
+    }
+
+    public int getSunAmount() { return sunAmount; }
+    public void addSun() { this.sunAmount += 50; }
 }

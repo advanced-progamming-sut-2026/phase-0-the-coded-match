@@ -1,6 +1,7 @@
 package views;
 
 import controllers.GameManagerController;
+import controllers.ZombieController;
 import enums.Commands;
 
 public class GameManager {
@@ -34,9 +35,9 @@ public class GameManager {
         } else if (input.matches(Commands.TILE_STATUS.getPattern())) {
             System.out.println(instance.showTileStatus(input));
         } else if (input.matches(Commands.SHOW_ZOMBIES_INFO.getPattern())) {
-            System.out.println(instance.showZombiesInfo());
+            System.out.println(ZombieController.showZombiesInfo().toString());
         } else if (input.matches(Commands.CHEAT_SPAWN_ZOMBIE.getPattern())) {
-            instance.cheatSpawnZombies(input);
+            ZombieController.cheatSpawnZombies(input);
         } else {
             System.out.println("invalid command");
         }

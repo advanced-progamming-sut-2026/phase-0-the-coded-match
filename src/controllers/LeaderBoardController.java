@@ -48,8 +48,8 @@ public class LeaderBoardController {
 
         switch (sortBy) {
             case "last level":
-                comparator = Comparator.comparingInt(User::getLastSeason())
-                        .thenComparingInt(User::getLastLevel);
+                comparator = Comparator.comparingInt((User user) -> user.getLastSeason().getData().getId())
+                        .thenComparingInt((User user) -> user.getLastLevel().getLevelNumber());
                 break;
 
             case "minigames":

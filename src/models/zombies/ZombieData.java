@@ -19,6 +19,7 @@ public class ZombieData {
     private ZombieState state;
     private double runningSpeed;
     private boolean hasParasol;
+    private int cost; //for IZombie minigame
 
     public String getId() {
         return id;
@@ -70,5 +71,9 @@ public class ZombieData {
 
     public double getRunningSpeed() {
         return runningSpeed;
+    }
+
+    public int getCost() {
+        return cost;
     }
 }
