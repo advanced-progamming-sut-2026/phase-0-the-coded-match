@@ -456,6 +456,7 @@ public class GameManagerController {
     }
 
     public void gameOver() {
+//        this.currentLevel = null;
         currentLevel.getActiveZombies().clear();
         currentLevel.getActivePlants().clear();
         currentLevel.getActiveProjectiles().clear();

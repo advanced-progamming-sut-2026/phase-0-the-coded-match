@@ -134,15 +134,6 @@ public class App {
         return null;
     }
 
-    public static Plant getPlantByName(String plantName){
-        for( PlantData p: allPlants){
-            if(p.getDisplayName().equalsIgnoreCase(plantName)){
-                return p;
-            }
-        }
-        return null;
-    }
-
     public static void saveLoggedInUser(String username) {
         try (FileWriter writer = new FileWriter("assets/loggedInUser.txt")) {
             writer.write(username);
