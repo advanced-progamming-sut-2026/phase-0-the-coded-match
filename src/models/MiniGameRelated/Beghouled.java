@@ -4,10 +4,6 @@ import models.LevelData;
 import models.plants.Plant;
 import java.util.Random;
 
-/**
- * Beghouled mini game implementation.
- * A match-3 style mini game where plants are swapped to create groups.
- */
 public class Beghouled extends MiniGame {
     private Plant[][] grid;
     private int matchCount;
@@ -23,20 +19,18 @@ public class Beghouled extends MiniGame {
         this.matchCount = 0;
     }
 
-    @Override
     public void initializeStage() {
         resetGrid();
         matchCount = 0;
         isGameOver = false;
     }
 
-    @Override
+
     public void processInteraction() {
         // Interaction is handled through swapPlants(row,col,row,col).
         // This method keeps compatibility with the MiniGame architecture.
     }
 
-    /** Swap two adjacent plants. A swap is accepted only if it creates a match. */
     public boolean swapPlants(int r1, int c1, int r2, int c2) {
         if (!valid(r1,c1) || !valid(r2,c2)) return false;
         if (Math.abs(r1-r2)+Math.abs(c1-c2) != 1) return false;
@@ -53,7 +47,6 @@ public class Beghouled extends MiniGame {
         return false;
     }
 
-    @Override
     public void checkRules() {
         if (matchCount >= targetMatches) {
             WinGame();
