@@ -259,4 +259,8 @@ public class User {
     public void setVictroy(boolean isVictroy){
         this.isVictroy = isVictroy;
     }
+
+    public GreenHouse getGreenHouse(){
+        return greenHouse;
+    }
 }

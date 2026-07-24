@@ -40,8 +40,12 @@ public enum Commands {
     COLLECTION_SHOW_ZOMBIE("^\\s*menu\\s+collection\\s+show-zombie\\s+-z\\s+(?<zombie_name>.*)\\s*$"),
     COLLECTION_UPGRADE("^\\s*menu\\s+collection\\s+upgrade-plant\\s+-p\\s+(?<plant_name>.*)\\s*$"),
     COLLECTION_PURCHASE("^\\s*menu\\s+collection\\s+purchase-plant\\s+-p\\s+(?<plant_name>.*)\\s*$"),
-    PLANTS_COMMANDS("^\\s*(show\\s+all\\s+plants|show\\s+available\\s+plants|add\\s+plant.*|remove\\s+" +
-            "plant.*|boost\\s+plant.*|start\\s+game)\\s*$"),
+    CHOOSE_SHOW_ALL("^\\s*show\\s+all\\s+plants\\s*$"),
+    CHOOSE_SHOW_AVAILABLE("^\\s*show\\s+available\\s+plants\\s*$"),
+    CHOOSE_ADD_PLANT("^\\s*add\\s+plant\\s+(?<plantName>.+)\\s*$"),
+    CHOOSE_REMOVE_PLANT("^\\s*remove\\s+plant\\s+(?<plantName>.+)\\s*$"),
+    CHOOSE_BOOST_PLANT("^\\s*boost\\s+plant\\s+(?<plantName>.+)\\s*$"),
+    CHOOSE_START_GAME("^\\s*start\\s+game\\s*$"),
     ADVANCE_TIME("^\\s*advance\\s+time\\s+-t\\s+(?<count>\\d+)\\s+ticks\\s*$"),
     COLLECT_SUN("^\\s*collect\\s+sun\\s+-l\\s*\\(\\s*(?<x>\\d+)\\s*,\\s*(?<y>\\d+)\\s*\\)\\s*$"),
     SUN_AMOUNT("^\\s*show\\s+sun\\s+amount\\s*$"),
@@ -57,13 +61,20 @@ public enum Commands {
     SHOW_ZOMBIES_INFO("^\\s*zombies\\s+info\\s*$"),
     CHEAT_SPAWN_ZOMBIE("^\\s*cheat\\s+spawn-zombie\\s+-t\\s+(?<zombie_type>.+?)\\s+-l\\s*<?\\s*(?<x>\\d+)\\s*," +
             "\\s*(?<y>\\d+)\\s*>?\\s*$"),
+    RELEASE_THE_NUKE("^\\s*release\\s+the\\s+nuke\\s*$"),
     SORT_LEADERBOARD("^\\s*sort\\s+by\\s+(.+)\\s+ascending:\\s+(.+)\\s*$"),
     SHOP_LIST("^\\s*shop\\s+list\\s*$"),
     SHOP_DAILY("^\\s*shop\\s+daily\\s*$"),
     SHOP_BUY("^\\s*shop\\s+buy\\s+-i\\s+(?<item_id>\\d+)\\s+-n\\s+(?<count>\\d+)(?:\\s+-t\\s+(\\S+))?$"),
     TRAVEL_LOG_PAGE("^\\s*travel\\s+log\\s+page\\s+(?<page>\\S+)\\s*$"),
     ENTER_MINIGAME("^\\s*enter\\s+minigame\\s+(?<name>\\S+)\\s+level\\s+(?<level>\\d+)\\s*$"),
-    PLACE_ZOMBIE("^\\s*place\\s+zombie\\s+(?<name>\\S+)\\s+at\\s+\\(\\s*(?<x>\\d+)\\s*,\\s*(?<y>\\d+)\\s*\\)\\s*$");
+    PLACE_ZOMBIE("^\\s*place\\s+zombie\\s+(?<name>\\S+)\\s+at\\s+\\(\\s*(?<x>\\d+)\\s*,\\s*(?<y>\\d+)\\s*\\)\\s*$"),
+    SHOW_GREENHOUSE("^\\s*show\\s+greenhouse\\s*$"),
+    GREENHOUSE_PLANT_POT("^\\s*plant\\s+pot\\s+at\\s+\\(\\s*(?<x>\\d+)\\s*,\\s*(?<y>\\d+)\\s*\\)\\s*$"),
+    GREENHOUSE_COLLECT("^\\s*collect\\s+\\(\\s*(?<x>\\d+)\\s*,\\s*(?<y>\\d+)\\s*\\)\\s*$"),
+    GREENHOUSE_GROW("^\\s*grow\\s+\\(\\s*(?<x>\\d+)\\s*,\\s*(?<y>\\d+)\\s*\\)\\s*$"),
+    VASEBREAKER_BREAK_VASE("^\\s*break\\s+vase\\s+at\\s+\\(\\s*(?<x>\\d+)\\s*,\\s*(?<y>\\d+)\\s*\\)\\s*$"),
+    VASEBREAKER_PICKUP_SEED("^\\s*break\\s+vase\\s+at\\s+\\(\\s*(?<x>\\d+)\\s*,\\s*(?<y>\\d+)\\s*\\)\\s*$");
 
     private final String pattern;
 

@@ -22,6 +22,7 @@ public class VaseBreaker extends MiniGame {
     private final int stageNumber;
     private final List<Vase> activeVases;
     private final List<DroppedSeedPacket> groundSeeds;
+    private final List<String> collected = new ArrayList<>();
 
     public VaseBreaker(int stageNumber) {
         super(createVasebreakerLevelData(stageNumber));
@@ -195,8 +196,23 @@ public class VaseBreaker extends MiniGame {
         return v != null && !v.isBroken();
     }
 
+    public String pickUpSeedAt(int x, int y) {
+        Iterator<DroppedSeedPacket> iterator = groundSeeds.iterator();
+        while (iterator.hasNext()) {
+            DroppedSeedPacket packet = iterator.next();
+
+            if (packet.getX() == x && packet.getY() == y) {
+                String seedName = packet.getPlantType().toLowerCase();
+                collected.add(seedName);
+                iterator.remove();
+                return "Picked up " + packet.getPlantType() + " seed packet from (" + x + ", " + y + ")!";
+            }
+        }
+        return "No seed packet on ground at (" + x + ", " + y + ")!";
+    }
+
     public boolean consumeSeedPacket(String plantName) {
-        return groundSeeds.remove(plantName.toLowerCase());
+        return collected.remove(plantName.toLowerCase());
     }
 
     public List<DroppedSeedPacket> getAvailableSeedPackets() {

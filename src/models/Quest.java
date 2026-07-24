@@ -9,7 +9,7 @@ import models.plants.Plant;
 import models.plants.PlantData;
 import models.seasons.Season;
 
-public class Quest {
+public class Quest implements Comparable<Quest> {
     private QuestData questData;
     private String questName;
     private Priority priority;
@@ -38,10 +38,13 @@ public class Quest {
         this.targetValue = questData.getTargetValue();
     }
 
-
-    public void updateProgress(int amount) {}
-    public boolean checkCompletionStatus() { return false; }
-    public void distributeReward(User player) {}
+    @Override
+    public int compareTo(Quest other) {
+        if (this.priority == null || other.priority == null) {
+            return 0;
+        }
+        return Integer.compare(this.priority.ordinal(), other.priority.ordinal());
+    }
 
     public QuestData getQuestData() {
         return questData;
@@ -106,4 +109,5 @@ public class Quest {
     public void setTargetPlant(PlantData targetPlant) {
         this.targetPlant = targetPlant;
     }
+
 }

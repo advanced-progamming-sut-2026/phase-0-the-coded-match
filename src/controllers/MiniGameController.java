@@ -59,6 +59,13 @@ public class MiniGameController {
                 EndGame(false);
             }
         }
+        if(miniGame instanceof VaseBreaker){
+            if(((VaseBreaker) miniGame).winConditionsChecked()){
+                EndGame(true);
+            }else{
+                EndGame(false);
+            }
+        }
     }
 
     public static void EndGame(Boolean won){
