@@ -4,6 +4,7 @@ import enums.Commands;
 import models.Level;
 import models.MiniGameRelated.IZombie;
 import models.MiniGameRelated.MiniGame;
+import models.MiniGameRelated.VaseBreaker;
 import views.MiniGameView;
 
 import java.util.regex.Matcher;
@@ -31,7 +32,12 @@ public class MiniGameController {
         switch (name) {
             case "izombie" :
                 miniGame = new IZombie(stage);
-
+                GameManagerController.getInstance().setCurrentLevel(miniGame);
+                break;
+            case "vasebreaker":
+                miniGame = new VaseBreaker(stage);
+                GameManagerController.getInstance().setCurrentLevel(miniGame);
+                break;
         }
 
         return "entered minigame" + name;

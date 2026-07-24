@@ -4,9 +4,9 @@ import controllers.ShopController;
 import enums.Commands;
 
 public class ShopView {
-    public StringBuilder stringBuilder = new StringBuilder();
+    public static StringBuilder stringBuilder = new StringBuilder();
 
-    public void check(String input) {
+    public static void check(String input) {
         if (input.matches(Commands.SHOP_LIST.getPattern())) {
             ShopController.showShopList(stringBuilder);
             System.out.println(stringBuilder.toString());

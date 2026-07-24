@@ -58,17 +58,6 @@ public class GameMenuController{
         return message;
     }
 
-    public static void enterMiniGame(String gameName, int stageNumber){ // I am not sure if this is how we should enter the minigames
-        switch (gameName.toLowerCase()){
-            case "vasebreaker":
-                VaseBreaker minigameLevel = new VaseBreaker(stageNumber);
-                GameManagerController.getInstance().setCurrentLevel(minigameLevel);
-            case "":
-        }
-
-
-    }
-
     public static String[] enter(String input, String[] message) {
         Pattern pattern = Pattern.compile(Commands.GAME_MENU_MENUS.getPattern());
         Matcher matcher = pattern.matcher(input);
@@ -80,8 +69,14 @@ public class GameMenuController{
 
         String menuSt = matcher.group("menu");
         Menu menu = App.getMenu(menuSt);
-        App.setCurrentMenu(menu);
-        message[0] = "entered " + menuSt + "successfully";
+        if (menu == Menu.COIN_WALLET) {
+            message[0] = "you have " + App.getCurrentUser().getCoinsCount() + " coins";
+        } else if (menu == Menu.GEM_WALLET) {
+            message[0] = "you have " + App.getCurrentUser().getGemsCount() + " gems";
+        } else {
+            App.setCurrentMenu(menu);
+            message[0] = "entered " + menuSt + "successfully";
+        }
         return message;
     }
 
