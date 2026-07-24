@@ -13,6 +13,7 @@ public class LevelData {
     private int levelNumber;
     private LevelType levelType;
     private boolean isUnlocked;
+    private boolean isDay;
     private int plantSelectionLimit;
     private int waveCount;
     private int baseWaveCost;
@@ -99,9 +100,11 @@ public class LevelData {
     public void setLevelType(LevelType levelType) { this.levelType = levelType;
     }
 
-    public void setUnlocked(boolean unlocked) { this.isUnlocked = unlocked;
-    }
+    public void setUnlocked(boolean unlocked) { this.isUnlocked = unlocked;}
 
-    public void setMap(GameMap gameMap) { this.map = gameMap;
+    public void setMap(GameMap gameMap) { this.map = gameMap;}
+
+    public boolean isDay() {
+        return isDay;
     }
 }

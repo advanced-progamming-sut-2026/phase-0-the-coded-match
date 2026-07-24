@@ -129,6 +129,7 @@ public class GameManagerController {
             if (zombie.isDead()) {
                 iterator.remove();
                 handleZombieDrop();
+                QuestController.notifyZombieKilled(zombie);
             }
         }
     }
@@ -481,7 +482,8 @@ public class GameManagerController {
     }
 
     public void gameOver() {
-        //
+
+        App.getCurrentUser().setVictroy(false);
     }
 
     public String gameWon(){
@@ -489,6 +491,8 @@ public class GameManagerController {
             QuestController.notifyNoSunsLeft();
         }
         QuestController.notifyPlantsDestroyed(currentLevel.getRemovedPlantsCount());
+        App.getCurrentUser().setVictroy(true);
+        QuestController.onLevelCompleted(true);
         return "Dear humanz, zis is not done yet; we will come back to eat your brainz, humanz.";
     }
 

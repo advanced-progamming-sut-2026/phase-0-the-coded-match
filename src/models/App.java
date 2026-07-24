@@ -1,5 +1,6 @@
 package models;
 
+import controllers.GameManagerController;
 import enums.Menu;
 import enums.Phases;
 import models.GameMapRelated.Lawnmower;
@@ -143,8 +144,8 @@ public class App {
     }
 
     public static Plant getPlantByName(String plantName){
-        for( Plant p: allPlants){
-            if(p.getData().getDisplayName().equalsIgnoreCase(plantName)){
+        for( PlantData p: allPlants){
+            if(p.getDisplayName().equalsIgnoreCase(plantName)){
                 return p;
             }
         }
@@ -190,10 +191,13 @@ public class App {
         if(mower == null){
             //TODO: needs to print "The zombie ate your brain; LOSER!!!" how do we send this to view?
             //TODO: GAME OVER (needs an overall method in the game)
+            System.out.println( "The zombie ate your brain; LOSER!!!");
+            GameManagerController.getInstance().gameOver();
             return;
         }
         mower.setHasBeenUsed(true);
         //TODO: print "The lawn mower in the row <r>is triggered and killed these zombies:"
+        System.out.println("The lawn mower in the row <r>is triggered and killed these zombies:");
         List<Zombie> killed = new ArrayList<>();
         for(Zombie z : allZombies){
             if(z.getY() == row){ //Todo: Make an exception for BOSS ZOMBIE!!!!!
@@ -210,7 +214,7 @@ public class App {
 
     }
 
-    private static Lawnmower lawnMowerUsed(int row){
+    public static Lawnmower lawnMowerUsed(int row){
         for(Lawnmower mower: allLawnMowers){
             if (mower.getRow() != row){
                 continue;

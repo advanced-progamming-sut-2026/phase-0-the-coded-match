@@ -23,6 +23,7 @@ public class User {
     private int levelsCount;
     private int meowPoints;
     private LevelData lastLevel;
+    private boolean isVictroy;
     private Season lastSeason;
     private int lastSeasonId;
     private int difficultyLevel;
@@ -250,5 +251,12 @@ public class User {
 
     public void setPlantFoodBoughtCount(int plantFoodBoughtCount) {
         this.plantFoodBoughtCount = plantFoodBoughtCount;
+    }
+
+    public boolean isVictroy() {
+        return isVictroy;
+    }
+    public void setVictroy(boolean isVictroy){
+        this.isVictroy = isVictroy;
     }
 }

@@ -35,6 +35,7 @@ public class Level {
     private List<Barrel> barrels;
     private int removedPlantsCount;
     private SpecialLevelStrategy specialLevel;
+    private int levelDifficulty;
 
     public Level(LevelData data) {
         this.data = data;
@@ -59,6 +60,7 @@ public class Level {
         this.skySunProducer = new SkySunProducer();
         this.barrels = new ArrayList<>();
         this.removedPlantsCount = 0;
+        this.levelDifficulty = App.getCurrentUser().getDifficultyLevel();
         setUpSpecialLevel();
     }
 
@@ -285,5 +287,7 @@ public class Level {
         return specialLevel;
     }
 
-
+    public int getLevelDifficulty() {
+        return levelDifficulty;
+    }
 }

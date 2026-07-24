@@ -10,6 +10,7 @@ import models.User;
 import models.plants.Plant;
 import models.seasons.Season;
 import models.zombies.Barrel;
+import models.zombies.Zombie;
 
 import java.util.*;
 
@@ -20,6 +21,9 @@ public class QuestController {
     private static int explosivePlantsPlacedThisLevel = 0;
     private static boolean brokeFamilyRule = false;
     private static boolean usedForbiddenFamily = false;
+    private static boolean notMushrooms = false;
+    private static int winCount;
+    private int numberOfZombiesKilled;
 
     public static void generateAllQuests() {
         if (!questsModel.getAvailableQuests().isEmpty()) { // if the user is loaded from json
@@ -57,10 +61,14 @@ public class QuestController {
     public static void refreshDailyQuests() {
         //todo: check current time with the time daily quests were generated
     }
-    public void onLevelStarted() {
-        this.explosivePlantsPlacedThisLevel = 0;
-    } //todo: if we have quests that need to update their target value whenever a new level starts we update them here
-    //todo: add this method whenever a new level starts
+    public static void onLevelStarted() {
+        explosivePlantsPlacedThisLevel = 0;
+        brokeFamilyRule = false;
+        usedForbiddenFamily = false;
+        notMushrooms = false;
+
+    }
+
 
 
     public static Plant getRandomPlant(String type) {
@@ -195,6 +203,20 @@ public class QuestController {
 
     }
 
+    public static void notifyZombieKilled(Zombie zombie){
+        int col = (int) zombie.getX();
+        int row = zombie.getY();
+        if(col != 9 || App.lawnMowerUsed(row) != null){
+            return;
+        }
+        Quest almostVictorious = questsModel.getQuestByName("Almost Victorious");
+        numberOfZombiesKilled += 1;
+        if(numberOfZombiesKilled >= 10){
+            numberOfZombiesKilled =0;
+            claimReward(almostVictorious, almostVictorious.getRewardAmount());
+        }
+    }
+
     public static void notifyNoSunsLeft() {
         Quest defenseMaster = questsModel.getQuestByName("Defense Master");
         claimReward(defenseMaster, defenseMaster.getRewardAmount());
@@ -219,14 +241,20 @@ public class QuestController {
            professionalDemolisher.setCurrentValue(explosivePlantsPlacedThisLevel);
        }
        if(professionalDemolisher.getCurrentValue() == professionalDemolisher.getTargetValue()[0]){
-           claimReward(professionalDemolisher, professionalDemolisher.getRewardAmount());
-       }
+           claimReward(professionalDemolisher, professionalDemolisher.getRewardAmount());}
 
        Quest bloomingInLimits = questsModel.getQuestByName("Blooming in Limits");
        if(plant.getData().getCategory() == bloomingInLimits.getTargetPlant().getData().getCategory()){
            usedForbiddenFamily = true;
        }
-    } // Explanation: a daily quest that is used to see if the player has used 3 explosive type of plants in the current game/level
+
+       Quest nightOrMorning =questsModel.getQuestByName("Night or Morning");
+       if(GameManagerController.getInstance().getCurrentLevel().getData().isDay()){
+           if(plant.hasThisTag(PlantTag.SHROOM)){
+               notMushrooms = true;
+           }
+       }
+    }
 
     // TODO: make a method whenever levels are done they call this method to check quests that have to check when levels are completed
     public static void onLevelCompleted(boolean levelWon){
@@ -244,6 +272,26 @@ public class QuestController {
         if(!usedForbiddenFamily){
             claimReward(bloomingInLimits, bloomingInLimits.getRewardAmount());
         }
+
+        Quest nightOrMorning =questsModel.getQuestByName("Night or Morning");
+        if(GameManagerController.getInstance().getCurrentLevel().getData().isDay()){
+            if(!notMushrooms){
+                claimReward(nightOrMorning, nightOrMorning.getRewardAmount());
+            }
+        }
+
+        Quest winStreak = questsModel.getQuestByName("Win Streak");
+        if(App.getCurrentUser().isVictroy() && GameManagerController.getInstance().getCurrentLevel().getLevelDifficulty() == 5){
+            winCount += 1;
+            if(winCount >= 5){
+                winCount = 0;
+                claimReward(winStreak, winStreak.getRewardAmount());
+            }
+        }else{
+            winCount = 0;
+        }
+
+        onLevelStarted();
     }
 
     public static void onZombieDefeated(Plant killerPlant){
