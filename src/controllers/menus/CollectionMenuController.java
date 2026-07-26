@@ -176,7 +176,7 @@ public class CollectionMenuController {
             return;
         }
         user.setCoinsCount(user.getCoinsCount() - PLANT_PRICE);
-        user.getCollection().unlockPlant(plantData.getId());
+        user.getCollection().addPlant(new Plant(plantData, 0, 0, 1));
         System.out.println("plant purchased successfully");
     }
 
@@ -190,13 +190,12 @@ public class CollectionMenuController {
         if (collection == null) {
             return null;
         }
-        PlantData plant = PlantRepository.getInstance().findByName(name);
-        if (plant == null) {
-            return null;
-        }
-        for (String plantId : collection.getAvailablePlantsIds()) {
-            if (plant.getId().equalsIgnoreCase(plantId)) {
-                return plant; //todo: what to return? should it be PlantData type?
+        if (collection.getAvailablePlants() != null) {
+            for (Plant plant : collection.getAvailablePlants()) {
+                if (plant.getData().getDisplayName().equalsIgnoreCase(name)
+                        || plant.getData().getId().equalsIgnoreCase(name)) {
+                    return plant;
+                }
             }
         }
         return null;

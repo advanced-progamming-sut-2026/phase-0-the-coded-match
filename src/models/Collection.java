@@ -1,6 +1,7 @@
 package models;
 
 import models.MiniGameRelated.MiniGame;
+import models.plants.Plant;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,12 +9,14 @@ import java.util.List;
 public class Collection {
      private List<String> availableZombiesIds;
      private List<String> availablePlantsIds;
+     private List<Plant> availablePlants;
      private List<MiniGame> unlockedMinigames;
      private List<Level> unlockedLevels;
 
      public Collection() {
           this.availableZombiesIds = new ArrayList<>();
           this.availablePlantsIds = new ArrayList<>();
+          this.availablePlants = new ArrayList<>();
           this.unlockedMinigames = new ArrayList<>();
           this.unlockedLevels = new ArrayList<>();
      }
@@ -30,6 +33,19 @@ public class Collection {
 
      public List<String> getAvailablePlantsIds() {
           return availablePlantsIds;
+     }
+
+     public List<Plant> getAvailablePlants() {
+          return availablePlants;
+     }
+
+     public void addPlant(Plant plant) {
+          if (plant != null) {
+               availablePlants.add(plant);
+               if (!availablePlantsIds.contains(plant.getData().getId())) {
+                    availablePlantsIds.add(plant.getData().getId());
+               }
+          }
      }
 
      public void unlockPlant(String plantId) {
