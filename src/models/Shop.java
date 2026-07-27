@@ -4,26 +4,16 @@ import controllers.ShopController;
 import models.plants.Plant;
 import models.plants.PlantData;
 
+import java.time.LocalDate;
+
 public class Shop {
     private boolean dailyItemSoldOut = false;
     private PlantData randomSeedPack;
     private PlantData randomSpecialSeedPack;
     private PlantData seedPackByChoice;
-    private ShopController controller;
+    private String lastUpdateDate;
 
-    public Shop(){
-        this.controller = new ShopController(this);
-        initializeRandomPlants();
-    }
-
-    private void checkAndRefreshDailyOffer(){
-        //todo
-    }
-
-    private void initializeRandomPlants(){
-        randomSeedPack = controller.getRandomPlant();
-        randomSpecialSeedPack = controller.getRandomPlant();
-    }
+    public Shop(){}
 
     public boolean isDailyItemSoldOut() {
         return dailyItemSoldOut;
@@ -55,5 +45,13 @@ public class Shop {
 
     public void setSeedPackByChoice(PlantData seedPackByChoice) {
         this.seedPackByChoice = seedPackByChoice;
+    }
+
+    public String getLastUpdateDate() {
+        return lastUpdateDate;
+    }
+
+    public void setLastUpdateDate(String lastUpdateDate) {
+        this.lastUpdateDate = lastUpdateDate;
     }
 }

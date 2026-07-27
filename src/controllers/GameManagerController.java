@@ -1,5 +1,6 @@
 package controllers;
 
+import controllers.menus.SignupMenuController;
 import enums.Commands;
 import enums.LevelType;
 import models.App;
@@ -462,6 +463,7 @@ public class GameManagerController {
         currentLevel.getActiveProjectiles().clear();
         currentLevel.getActiveSuns().clear();
         App.getCurrentUser().setVictroy(false);
+        SignupMenuController.saveToJson();
     }
 
     public String gameWon(){
@@ -470,6 +472,7 @@ public class GameManagerController {
         }
         QuestController.notifyPlantsDestroyed(currentLevel.getRemovedPlantsCount());
         App.getCurrentUser().setVictroy(true);
+        SignupMenuController.saveToJson();
         QuestController.onLevelCompleted(true);
         return "Dear humanz, zis is not done yet; we will come back to eat your brainz, humanz.";
     }

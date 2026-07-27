@@ -32,6 +32,7 @@ public class User {
     private boolean stayLoggedIn;
     private Collection collection;
     private GreenHouse greenHouse;
+    private Shop shop;
     private ArrayList<Level> unlockedLevels = new ArrayList<>();
     private NewsManager personalNews;
     private Map<String, Integer> seedPackets = new HashMap<>();
@@ -47,6 +48,8 @@ public class User {
         this.questions = new HashMap<>();
         this.difficultyLevel = 3;
         this.collection = new Collection();
+        this.shop = new Shop();
+        this.greenHouse = new GreenHouse();
     }
 
     public void addGamesPlayed() {}
@@ -262,5 +265,9 @@ public class User {
 
     public GreenHouse getGreenHouse(){
         return greenHouse;
+    }
+
+    public Shop getShop() {
+        return shop;
     }
 }

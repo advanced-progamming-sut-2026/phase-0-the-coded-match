@@ -11,19 +11,29 @@ import models.greenhouse.GreenHousePot;
 import models.plants.PlantData;
 import models.plants.PlantRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ShopController {
-    private static Shop shop;
 
-    public ShopController(Shop shop) {
-        this.shop = shop;
+    public static void checkAndRefreshDailyOffer() {
+        Shop shop = App.getCurrentUser().getShop();
+        if (shop == null) return;
+        String todayDate = LocalDate.now().toString();
+        if (shop.getLastUpdateDate() == null || !shop.getLastUpdateDate().equals(todayDate)) {
+            shop.setRandomSeedPack(getRandomPlant());
+            shop.setRandomSpecialSeedPack(getRandomPlant());
+            shop.setDailyItemSoldOut(false);
+            shop.setLastUpdateDate(todayDate);
+        }
     }
 
     public static StringBuilder showShopList(StringBuilder sb) {
+        checkAndRefreshDailyOffer();
+        Shop shop = App.getCurrentUser().getShop();
         for (ShopItemData shopItem : ShopItemData.values()) {
             if (shopItem == ShopItemData.SEED_PACKET_DAILY) {
                 continue;
@@ -39,6 +49,8 @@ public class ShopController {
     }
 
     public static StringBuilder showDailyShop(StringBuilder sb) {
+        checkAndRefreshDailyOffer();
+        Shop shop = App.getCurrentUser().getShop();
         ShopItemData dailyItem = ShopItemData.SEED_PACKET_DAILY;
         sb.append("id: ").append(dailyItem.getId()).append(" - item name: ").append(dailyItem.getName()).append("\n");
         sb.append("plant: ").append(shop.getRandomSpecialSeedPack().getName()).append("\n");
@@ -48,6 +60,7 @@ public class ShopController {
     }
 
     public static String buyItem(String input) {
+        Shop shop = App.getCurrentUser().getShop();
         Pattern pattern = Pattern.compile(Commands.SHOP_BUY.getPattern());
         Matcher matcher = pattern.matcher(input);
         if (!matcher.matches()) {
@@ -91,7 +104,7 @@ public class ShopController {
         return "";
     }
 
-    public PlantData getRandomPlant(){
+    public static PlantData getRandomPlant(){
         List<String> unlockedPlants = App.getCurrentUser().getCollection().getAvailablePlantsIds();
         int randomIndex = new Random().nextInt(unlockedPlants.size());
         return PlantRepository.getInstance().findById(unlockedPlants.get(randomIndex));
@@ -107,13 +120,16 @@ public class ShopController {
     }
 
     public static String addItemToProfile(ShopItemData item, PlantData plant, int count) {
+        Shop shop = App.getCurrentUser().getShop();
         switch (item) {
             case POT -> {
-                if (GreenHouse.getPotsCount() + count > 20) {
+                GreenHouse greenHouse = App.getCurrentUser().getGreenHouse();
+                if (greenHouse.getPotsCount() + count > 20) {
                     return "greenhouse is full";
                 }
                 for (int i = 0; i < count; i++) {
-                    GreenHousePot pot = new GreenHousePot();//todo: where to put the pot?
+                    GreenHousePot pot = new GreenHousePot(greenHouse.getPotXOrY("x"), greenHouse.getPotXOrY("y"),
+                            false);
                 }
                 return count + " pot(s) bought successfully";
             }

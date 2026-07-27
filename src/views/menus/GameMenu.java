@@ -15,6 +15,8 @@ public class GameMenu {
             GameMenuController.enter(input, message);
         } else if (input.matches(Commands.CHEAT_ADD_CURRENCY.getPattern())) {
             GameMenuController.cheatAddCoinOrGem(input, message);
+        } else if (input.equalsIgnoreCase("exit")) {
+            GameMenuController.exitGame();
         } else {
             message[0] = "invalid command";
         }

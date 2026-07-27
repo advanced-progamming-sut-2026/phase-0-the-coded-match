@@ -8,6 +8,7 @@ import models.Level;
 import models.LevelData;
 import models.MiniGameRelated.VaseBreaker;
 import models.seasons.Season;
+import views.AppView;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -98,6 +99,11 @@ public class GameMenuController{
         }
         message[0] = amount + currency + " added successfully";
         return message;
+    }
+    public static void exitGame() {
+        SignupMenuController.saveToJson();
+        App.saveLoggedInUser(App.getCurrentUser().getUsername());
+        AppView.isRunning = false;
     }
 
 

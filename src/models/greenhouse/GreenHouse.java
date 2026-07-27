@@ -223,4 +223,18 @@ public class GreenHouse {
 
         return count;
     }
+    public int getPotXOrY(String z) {
+        for (GreenHousePot[] row : grid) {
+            for (GreenHousePot pot : row) {
+                if (pot.is_locked) {
+                    if (z.matches("x")) {
+                        return pot.x;
+                    } else {
+                        return pot.y;
+                    }
+                }
+            }
+        }
+        return -1;
+    }
 }
