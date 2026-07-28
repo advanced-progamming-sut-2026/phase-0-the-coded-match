@@ -1,6 +1,7 @@
 package models;
 
 import controllers.GameManagerController;
+import controllers.QuestController;
 import enums.Menu;
 import enums.Phases;
 import models.GameMapRelated.Lawnmower;
@@ -115,7 +116,6 @@ public class App {
         return null;
     }
 
-
     public static Menu getMenu(String menuName) {
         for (Menu menu : Menu.values()) {
             if (menu.getMenuName().equalsIgnoreCase(menuName)) {
@@ -167,27 +167,28 @@ public class App {
         int row = zombie.getY();
         Lawnmower mower = lawnMowerUsed(row);
         if(mower == null){
-            //TODO: needs to print "The zombie ate your brain; LOSER!!!" how do we send this to view?
-            //TODO: GAME OVER (needs an overall method in the game)
+
             System.out.println( "The zombie ate your brain; LOSER!!!");
             GameManagerController.getInstance().gameOver();
             return;
         }
         mower.setHasBeenUsed(true);
-        //TODO: print "The lawn mower in the row <r>is triggered and killed these zombies:"
+
         System.out.println("The lawn mower in the row "+ row +"is triggered and killed these zombies:");
         List<Zombie> killed = new ArrayList<>();
-        for(Zombie z : allZombies){
-            if(z.getY() == row){ //Todo: Make an exception for BOSS ZOMBIE!!!!!
-                killed.add(z);
-                z.setCurrentHp(0);
-                //TODO: PRINT "Zombie of type <type> is dead at (<x>, y>)"
-                //TODO: i think we should erase these dead zombies from the game? a new method perhaps?
+        List<Zombie> activeZombies = GameManagerController.getInstance().getCurrentLevel().getActiveZombies();
+        for (Zombie zombieInRow : new ArrayList<>(activeZombies)) {
+            if (zombieInRow.getY() == row) {
+                killed.add(zombieInRow);
+                zombieInRow.setCurrentHp(0);
             }
         }
+        activeZombies.removeAll(killed);
+
+        QuestController.notifyZombiesKilledByLawnmower(killed.size());
 
         for(Zombie z : killed){
-            // TODO: Print the zombie.getType() of that row that are now dead;
+
         }
 
     }
