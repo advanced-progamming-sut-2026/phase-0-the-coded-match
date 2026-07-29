@@ -31,6 +31,7 @@ public class Quest implements Comparable<Quest> {
         this.priority = questData.getPriority();
         this.objective = questData.getObjective();
         this.reward = questData.getReward();
+        this.rewardAmount = questData.getRewardAmount();
         this.isCompleted = false;
         this.category = questData.getCategory();
         this.missionDescription = questData.getConditionText();

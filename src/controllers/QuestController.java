@@ -26,13 +26,26 @@ public class QuestController {
     private static boolean notMushrooms = false;
     private static int winCount;
     private static int numberOfZombiesKilled;
+    private static int sunProducerPlantsPlacedThisLevel;
+    private static boolean cloudyDayRuleBroken;
 
     public static void generateAllQuests() {
-        if (!questsModel.getAvailableQuests().isEmpty()) { // if the user is loaded from json
+        if (!questsModel.getAvailableQuests().isEmpty()) {
             return;
         }
+        Random random = new Random();
         for (QuestData questData : QuestData.values()) {
             Quest quest = new Quest(questData);
+
+            switch (questData) {
+                case ONE_COLUMN_LESS -> quest.setTargetValue(new int[]{1 + random.nextInt(9)});
+                case DEFENSELESS_ROW, DEFENSELESS_CROSS ->
+                        quest.setTargetValue(new int[]{1 + random.nextInt(5)});
+                case MOWING_TIME -> {
+                    int[] possibleTargets = questData.getTargetValue();
+                    quest.setTargetValue(new int[]{possibleTargets[random.nextInt(possibleTargets.length)]});
+                }
+            }
             if (quest.getQuestData().isNeedsPlant()) {
                 PlantData targetPlant = null;
                 switch (quest.getQuestName()) {
@@ -61,17 +74,17 @@ public class QuestController {
     }
 
     public static void refreshDailyQuests() {
-        //todo: check current time with the time daily quests were generated
+
     }
     public static void onLevelStarted() {
         explosivePlantsPlacedThisLevel = 0;
         brokeFamilyRule = false;
         usedForbiddenFamily = false;
         notMushrooms = false;
+        sunProducerPlantsPlacedThisLevel = 0;
+        cloudyDayRuleBroken = false;
 
     }
-
-
 
     public static PlantData getRandomPlant(String type) {
         List<String> unlockedPlants = App.getCurrentUser().getCollection().getAvailablePlantsIds();
@@ -100,7 +113,7 @@ public class QuestController {
             PlantData plant = PlantRepository.getInstance().findByName("Cactus");
             return plant;
         }
-        
+
         return null;
     }
 
@@ -110,7 +123,6 @@ public class QuestController {
         int randomIndex = new Random().nextInt(unlockedPlants.size());
         return PlantRepository.getInstance().findById(unlockedPlants.get(randomIndex));
     }
-
 
     public void checkQuestObjectives() {}
 
@@ -257,9 +269,15 @@ public class QuestController {
                notMushrooms = true;
            }
        }
+
+       if (plant.getData().getAbilities() != null &&
+               plant.getData().getAbilities().contains("PRODUCE_SUN")) {
+           sunProducerPlantsPlacedThisLevel++;
+       } else {
+           cloudyDayRuleBroken = true;
+       }
     }
 
-    // TODO: make a method whenever levels are done they call this method to check quests that have to check when levels are completed
     public static void onLevelCompleted(boolean levelWon){
         Quest symmetry = questsModel.getQuestByName("Symmetry");
         if(GameManagerController.getInstance().getCurrentLevel().getGameMap().checkGardenSymmetry()) {
@@ -294,7 +312,102 @@ public class QuestController {
             winCount = 0;
         }
 
+        checkRemainingLevelCompletionQuests(levelWon);
         onLevelStarted();
+    }
+
+    private static void checkRemainingLevelCompletionQuests(boolean levelWon) {
+        if (!levelWon) {
+            return;
+        }
+
+        Quest noOcd = questsModel.getQuestByName("No OCD");
+        if (hasNoMirroredPlantPairs()) {
+            claimReward(noOcd, noOcd.getRewardAmount());
+        }
+
+        Quest cloudyDay = questsModel.getQuestByName("Cloudy Day");
+        if (!cloudyDayRuleBroken && sunProducerPlantsPlacedThisLevel == cloudyDay.getTargetValue()[0]) {
+            claimReward(cloudyDay, cloudyDay.getRewardAmount());
+        }
+
+        Quest oneColumnLess = questsModel.getQuestByName("One Column Less");
+        int targetColumn = oneColumnLess.getTargetValue()[0];
+        if (isColumnEmpty(targetColumn)) {
+            claimReward(oneColumnLess, oneColumnLess.getRewardAmount());
+        }
+
+        Quest defenselessRow = questsModel.getQuestByName("Defenseless Row");
+        int targetRow = defenselessRow.getTargetValue()[0];
+        if (isRowEmpty(targetRow)) {
+            claimReward(defenselessRow, defenselessRow.getRewardAmount());
+        }
+
+        Quest defenselessCross = questsModel.getQuestByName("Defenseless Cross");
+        int targetCross = defenselessCross.getTargetValue()[0];
+        if (isColumnEmpty(targetCross) && isRowEmpty(targetCross)) {
+            claimReward(defenselessCross, defenselessCross.getRewardAmount());
+        }
+    }
+
+    private static boolean isColumnEmpty(int column) {
+        for (Plant plant : GameManagerController.getInstance().getCurrentLevel().getActivePlants()) {
+            if (plant.getX() == column) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static boolean isRowEmpty(int row) {
+        for (Plant plant : GameManagerController.getInstance().getCurrentLevel().getActivePlants()) {
+            if (plant.getY() == row) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static boolean hasNoMirroredPlantPairs() {
+        int rows = GameManagerController.getInstance().getCurrentLevel().getGameMap().getRows();
+        int columns = GameManagerController.getInstance().getCurrentLevel().getGameMap().getColumns();
+
+        for (int column = 1; column <= columns; column++) {
+            for (int row = 1; row <= rows / 2; row++) {
+                String firstPlant = getPlantNameAt(column, row);
+                String mirroredPlant = getPlantNameAt(column, rows + 1 - row);
+                if (Objects.equals(firstPlant, mirroredPlant)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private static String getPlantNameAt(int column, int row) {
+        for (Plant plant : GameManagerController.getInstance().getCurrentLevel().getActivePlants()) {
+            if (plant.getX() == column && plant.getY() == row) {
+                return plant.getData().getName();
+            }
+        }
+        return null;
+    }
+
+    public static void notifyZombiesKilledByLawnmower(int killedCount) {
+        if (killedCount <= 0) {
+            return;
+        }
+        Quest mowingTime = questsModel.getQuestByName("Mowing Time");
+        if (mowingTime == null || mowingTime.isCompleted()) {
+            return;
+        }
+
+        mowingTime.setCurrentValue(mowingTime.getCurrentValue() + killedCount);
+        int target = mowingTime.getTargetValue()[0];
+        if (mowingTime.getCurrentValue() >= target) {
+            claimReward(mowingTime, target);
+            mowingTime.setCompleted(true);
+        }
     }
 
     public static void onZombieDefeated(Plant killerPlant){

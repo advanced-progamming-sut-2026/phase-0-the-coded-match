@@ -6,12 +6,10 @@ public class BonusGameController {
     }
 
     public String handleZombiesKilled() {
-
+        return "";
     }
 
     void EndGame() {
 
     }
-
-
 }
