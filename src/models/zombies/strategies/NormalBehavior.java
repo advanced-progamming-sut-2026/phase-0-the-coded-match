@@ -16,6 +16,7 @@ import models.zombies.Zombie;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 public class NormalBehavior implements ZombieBehavior {
     private int abilityTimer = 6;
@@ -91,11 +92,18 @@ public class NormalBehavior implements ZombieBehavior {
     }
 
     public void stealDroppedSuns(Zombie zombie) {
-        Level level = GameManagerController.getInstance().getCurrentLevel();
-        for (Sun sun : level.getActiveSuns()) {
-            //TODO: the sun must have a speed?
-            level.getActiveSuns().remove(sun);
-            zombie.getStolenActiveSuns().add(sun);
+        List<Sun> activeSuns = GameManagerController.getInstance().getCurrentLevel().getActiveSuns();
+        if (zombie.getAbilityTickTimer() == abilityTimer) {
+            if (activeSuns != null && !activeSuns.isEmpty()) {
+                Random random = new Random();
+                int randomIndex = random.nextInt(activeSuns.size());
+                Sun stolenSun = activeSuns.get(randomIndex);
+                activeSuns.remove(randomIndex);
+                zombie.getStolenActiveSuns().add(stolenSun);
+            }
+            zombie.setAbilityTickTimer(0);
+        } else {
+            zombie.setAbilityTickTimer(zombie.getAbilityTickTimer() + 1);
         }
     }
 
@@ -108,12 +116,13 @@ public class NormalBehavior implements ZombieBehavior {
 
     @Override
     public void onProjectileHit(Zombie zombie, Projectile projectile) {
-        if (zombie.getData().getId().equalsIgnoreCase("ZombieLostCityJane")) {
+        String zombieId = zombie.getData().getId();
+        if (zombieId.equalsIgnoreCase("ZombieLostCityJane")) {
             if (projectile.getCreatorPlantCategory().getData().getCategory() == PlantCategory.LOBBER) {
                 return;
             }
         }
-        if (zombie.getData().getId().equalsIgnoreCase("ZombieDarkImpDragon")) {
+        if (zombieId.equalsIgnoreCase("ZombieDarkImpDragon")) {
             if (projectile.getCreatorPlantCategory().hasThisTag(PlantTag.FIRE)) {
                 return;
             }

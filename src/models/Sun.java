@@ -16,7 +16,7 @@ public class Sun implements Update {
     protected boolean isFalling;
     protected boolean hasFallen;
 
-    public Sun(int x, int y, int value, int timeToReachGround, boolean isFalling, SunType type) { //TODO: if plant is producing: 0, false
+    public Sun(int x, int y, int value, int timeToReachGround, boolean isFalling, SunType type) { //if plant is producing: 0, false
 
         this.x = x;
         this.y = y;
@@ -44,18 +44,12 @@ public class Sun implements Update {
     public void explode() {
         for (Zombie zombie : GameManagerController.getInstance().getCurrentLevel().getActiveZombies()) {
             if ((zombie.getX() - this.x <= 2) && (zombie.getY() - this.y <= 2)) {
-                zombie.setCurrentHp(zombie.getCurrentHp() - 150);
-                if (zombie.isDead()) {
-                    //TODO: call the method that should be called after a zombie dies
-                }
+                zombie.takeDamage(150, null);
             }
         }
         for (Plant plant : GameManagerController.getInstance().getCurrentLevel().getActivePlants()) {
             if ((plant.getX() - this.x <= 1) && (plant.getY() - this.y <= 1)) {
-                plant.setCurrentHp(plant.getCurrentHp() - 80);
-                if (plant.isDead()) {
-                    //TODO: call the method that should be called after a plant dies
-                }
+                plant.takeDamage(80);
             }
         }
     }

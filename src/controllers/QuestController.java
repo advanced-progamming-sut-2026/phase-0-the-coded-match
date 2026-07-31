@@ -411,7 +411,7 @@ public class QuestController {
     }
 
     public static void onZombieDefeated(Plant killerPlant){
-
+        if (killerPlant == null) return;
         Quest proPlantPlayer = questsModel.getQuestByName("Pro Plant Player");
         if (killerPlant.getData().getName().equalsIgnoreCase(proPlantPlayer.getTargetPlant().getName())) {
             proPlantPlayer.setCurrentValue(proPlantPlayer.getCurrentValue() + 1);

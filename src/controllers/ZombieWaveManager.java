@@ -22,6 +22,8 @@ public class ZombieWaveManager implements Update {
     private static List<Zombie> previousWaveZombies = new ArrayList<>();
     private List<WavePatternData> wavePattern = GameManagerController.getInstance().getCurrentLevel().getData()
             .getWavePatterns();
+    private boolean isLastWave = false;
+    private boolean newWaveStarted = false;
 
     public List<WavePatternData> getWavePattern(){return wavePattern;}
 
@@ -99,9 +101,9 @@ public class ZombieWaveManager implements Update {
                 GameManagerController.getInstance().gameWon();
             }
             if(currentWave == wavePattern.size()){
-                System.out.println("The final wave has come.");
-            } else{
-                System.out.println("Wave " + currentWave + " started.");
+                isLastWave = true;
+            } else {
+                newWaveStarted = true;
             }
             calculateWaveDifficulty();
             spawnZombies();
@@ -117,5 +119,21 @@ public class ZombieWaveManager implements Update {
 
     public double getTimeWaveStarted() {
         return timeWaveStarted;
+    }
+
+    public boolean isLastWave() {
+        return isLastWave;
+    }
+
+    public void setLastWave(boolean lastWave) {
+        isLastWave = lastWave;
+    }
+
+    public boolean isNewWaveStarted() {
+        return newWaveStarted;
+    }
+
+    public void setNewWaveStarted(boolean newWaveStarted) {
+        this.newWaveStarted = newWaveStarted;
     }
 }

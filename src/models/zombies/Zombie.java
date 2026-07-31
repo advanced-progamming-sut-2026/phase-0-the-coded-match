@@ -127,7 +127,14 @@ public class Zombie implements Update {
     }
 
     public void takeDamage(int damage, Plant killerPlant) {
-        if (data.getDisplayName().equalsIgnoreCase("knight zombie") && !armors.isEmpty()) {
+        if (killerPlant.hasThisTag(PlantTag.POISON) &&
+                (data.getId().equalsIgnoreCase("ZombieArmor1") ||
+                        data.getId().equalsIgnoreCase("ZombieArmor2") ||
+                        data.getId().equalsIgnoreCase("ZombieDarkArmor3") ||
+                        data.getId().equalsIgnoreCase("ZombieArmor4"))) {
+            currentHp = Math.max(0, currentHp - damage);
+        }
+        else if (data.getDisplayName().equalsIgnoreCase("knight zombie") && !armors.isEmpty()) {
             int remainingDamage = armors.get(armors.size() - 1).takeDamage(this ,damage);
             if (remainingDamage > 0) {
                 if (armors.size() == 2) {
