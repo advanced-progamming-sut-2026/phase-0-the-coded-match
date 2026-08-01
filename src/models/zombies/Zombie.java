@@ -208,6 +208,7 @@ public class Zombie implements Update {
     }
 
     public void addArmor(ArmorType type) {
+        armors = new ArrayList<>();
         ZombieArmor armor = new ZombieArmor(new ZombieArmorData(type));
         armors.add(armor);
     }

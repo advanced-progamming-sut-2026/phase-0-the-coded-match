@@ -11,7 +11,7 @@ import java.util.Random;
 
 public class SkySunProducer implements Update {
     private double timeSinceLastDrop;
-    private Random random;
+    private transient Random random;
     private boolean producedASun;
     private Sun sun;
 

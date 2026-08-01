@@ -18,6 +18,7 @@ import models.zombies.*;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -497,7 +498,8 @@ public class GameManagerController {
                 tile.takeDamage(projectile.getDamage());
                 projectile.destroy();
             }
-            for (Barrel barrel : currentLevel.getBarrels()) {
+            List<Barrel> barrels = currentLevel.getBarrels();
+            for (Barrel barrel : barrels) {
                 if (projectile.checkBarrelCollision(barrel)) {
                     barrel.onProjectileHit(projectile);
                 }

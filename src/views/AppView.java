@@ -27,7 +27,7 @@ public class AppView {
                 MenuController.showCurrentMenu(message);
                 System.out.println(message[0]);
             } else if (input.matches(Commands.ENTER_MENU.getPattern())) {
-                MenuController.enterMenu(input);
+                System.out.println(MenuController.enterMenu(input));
             } else if (input.matches(Commands.EXIT_MENU.getPattern())) {
                 MenuController.exitMenu();
             } else if (currentMenu == Menu.SIGNUP_MENU) {

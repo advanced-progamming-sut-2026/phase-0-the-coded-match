@@ -8,7 +8,7 @@ public class Beghouled extends MiniGame {
     private Plant[][] grid;
     private int matchCount;
     private int targetMatches;
-    private final Random random = new Random();
+    private transient final Random random = new Random();
     private boolean[][] craters;
 
     public Beghouled(LevelData data) {

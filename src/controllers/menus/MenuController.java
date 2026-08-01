@@ -15,22 +15,22 @@ public class MenuController {
         return message;
     }
 
-    public static void enterMenu(String input) {
+    public static String enterMenu(String input) {
         Pattern pattern = Pattern.compile(Commands.ENTER_MENU.getPattern());
         Matcher matcher = pattern.matcher(input);
         if (!matcher.matches()) {
-            return;
+            return "invalid command";
         }
-        String menuName = matcher.group("menu_name");
+        String menuName = matcher.group("menuName");
         Menu targetMenu = App.getMenu(menuName);
         if (targetMenu == null) {
-            System.out.println("invalid menu");
-            return;
+            return "invalid menu";
         }
         if (canEnter(targetMenu)) {
             App.setCurrentMenu(targetMenu);
+            return "entered " + menuName;
         } else {
-            System.out.println("cannot enter menu");
+            return "cannot enter menu";
         }
     }
 

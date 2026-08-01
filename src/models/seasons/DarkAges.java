@@ -44,7 +44,7 @@ public class DarkAges extends Season {
         int rows = level.getGameMap().getRows();
         int cols = level.getGameMap().getColumns();
         List<String> necromancyZombies = List.of();
-        necromancyZombies.addAll(level.getData().getAllowedZombies());
+//        necromancyZombies.addAll(level.getData().getAllowedZombies());
 
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {

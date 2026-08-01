@@ -21,7 +21,7 @@ public class LoginMenuController{
 
         String username = matcher.group("username");
         String password = matcher.group("password");
-        String stayLoggedIn = matcher.group(3); //right??
+        String stayLoggedIn = matcher.group(1); //right??
 
         User target = App.getUserByUsername(username);
         if(target == null){

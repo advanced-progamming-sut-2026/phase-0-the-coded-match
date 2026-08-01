@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Random;
 
 public class ZombieWaveManager implements Update {
-    Random random = new Random();
+    transient Random random = new Random();
     private Level currentLevel = GameManagerController.getInstance().getCurrentLevel();
     private int currentWave = -1;
     private double timeWaveStarted = 0;

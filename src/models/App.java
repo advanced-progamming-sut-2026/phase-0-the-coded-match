@@ -95,6 +95,9 @@ public class App {
     }
 
     public static User getUserByUsername(String username) {
+        if (users.isEmpty()) {
+            System.out.println("users fucking empty bitch");
+        }
         for (User user : users) {
             if (user.getUsername().equals(username)) {
                 return user;
@@ -135,7 +138,7 @@ public class App {
     }
 
     public static void saveLoggedInUser(String username) {
-        try (FileWriter writer = new FileWriter("assets/loggedInUser.txt")) {
+        try (FileWriter writer = new FileWriter("src/assets/loggedInUser.txt")) {
             writer.write(username);
         } catch (IOException e) {
             System.err.println("Could not save user: " + e.getMessage());
@@ -143,7 +146,7 @@ public class App {
     }
 
     public static void loadLoggedInUser() {
-        File file = new File("assets/loggedInUser.txt");
+        File file = new File("src/assets/loggedInUser.txt");
         if (!file.exists()) {
             setCurrentUser(null);
             return;

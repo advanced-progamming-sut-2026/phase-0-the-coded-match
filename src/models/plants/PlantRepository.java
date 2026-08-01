@@ -22,7 +22,7 @@ public class PlantRepository {
 
     public static PlantRepository getInstance() {
         if (instance == null) {
-            instance = new PlantRepository("assets/Plants.json");
+            instance = new PlantRepository("src/assets/Plants.json");
         }
         return instance;
     }

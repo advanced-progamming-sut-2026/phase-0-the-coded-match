@@ -66,7 +66,7 @@ public class ShopController {
         if (!matcher.matches()) {
             return "invalid command";
         }
-        int id = Integer.parseInt(matcher.group("item_id"));
+        int id = Integer.parseInt(matcher.group("itemId"));
         ShopItemData item = getItemById(id);
         int count = Integer.parseInt(matcher.group("count"));
 

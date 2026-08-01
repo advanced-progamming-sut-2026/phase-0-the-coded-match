@@ -23,7 +23,7 @@ public class WallNutBowling extends MiniGame {
     private final int stageNumber;
     private final Queue<BowlingNutType> conveyorBelt;
     private final List<RollingNut> activeRollingNuts;
-    private final Random random;
+    private transient final Random random;
     private final double redLineCoordinateX;
     private final int conveyorSpawnCooldownTicks;
     private int currentCooldownTimer;
