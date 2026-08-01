@@ -56,7 +56,7 @@ public class SeasonRepository {
     public SeasonData findByType(String seasonType) {
         if (seasonType == null) return null;
        for(SeasonData season : seasons){
-           if(season.getSeasonType().equalsIgnoreCase(seasonType)){
+           if(season.getSeasonType().toString().equalsIgnoreCase(seasonType)){
                return season;
            }
        }
