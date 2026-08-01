@@ -90,12 +90,12 @@ public class BigWaveBeach extends Season {
     @Override
     public void WaveStarted(Level level, int waveNumber) {
         Random random = new Random();
-        if (waveNumber == 3 || waveNumber == level.getData().getWaveCount()) {
+        if (waveNumber == 2 || waveNumber == level.getData().getWaveCount() - 1) {
             triggerLowTideEvent(level);
         }
 
         // Shift tide boundary by 1 column (left or right)
-        if (waveNumber > 1) {
+        if (waveNumber > 0) {
             int tideShift = random.nextBoolean() ? -1 : 1;
             currentTideColumn = Math.max(3, Math.min(7, currentTideColumn + tideShift));
             updateTideBoundary(level, currentTideColumn);

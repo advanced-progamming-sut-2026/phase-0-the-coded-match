@@ -18,7 +18,8 @@ public class GiantBehavior implements ZombieBehavior {
             }
         } else if (zombie.getCurrentState() == ZombieState.WALKING) {
             zombie.walk();
-        } else if (zombie.getCurrentHp() <= (zombie.getData().getMaxHP() / 2) && !zombie.isHasThrownImp()) {
+        }
+        if (zombie.getCurrentHp() <= (zombie.getData().getHP() / 2) && !zombie.isHasThrownImp()) {
             spawnImp(3.0, zombie);
             zombie.setHasThrownImp(true);
         }

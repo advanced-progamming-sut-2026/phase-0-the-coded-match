@@ -17,7 +17,7 @@ import java.util.Random;
 public class ZombieWaveManager implements Update {
     Random random = new Random();
     private Level currentLevel = GameManagerController.getInstance().getCurrentLevel();
-    private int currentWave = 0;
+    private int currentWave = -1;
     private double timeWaveStarted = 0;
     private static List<Zombie> previousWaveZombies = new ArrayList<>();
     private List<WavePatternData> wavePattern = GameManagerController.getInstance().getCurrentLevel().getData()
@@ -28,7 +28,7 @@ public class ZombieWaveManager implements Update {
     public List<WavePatternData> getWavePattern(){return wavePattern;}
 
     public void calculateWaveDifficulty() {
-        if(currentWave == 1){
+        if(currentWave == 0){
             return;
         }
         int difficultyLevel = App.getCurrentUser().getDifficultyLevel();
@@ -57,7 +57,7 @@ public class ZombieWaveManager implements Update {
             GameManagerController.getInstance().getCurrentLevel().getActiveZombies().add(z);
             previousWaveZombies.add(z); // if tracking per wave
 
-            System.out.println("Zombie " + z.getData().getDisplayName() + " spawned at wave " + currentWave
+            System.out.println("Zombie " + z.getData().getDisplayName() + " spawned at wave " + (currentWave + 1)
                     + " in lane " + lane + " which costed " + z.getWaveCost() + ".");
 
             remainingCost -= z.getWaveCost();
@@ -66,20 +66,21 @@ public class ZombieWaveManager implements Update {
 
     private Zombie createRandomZombie(){
         int index = random.nextInt(ZombieRepository.getInstance().getAllZombies().size());
-        ZombieData template = ZombieRepository.getInstance().getAllZombies().get(index);
+        ZombieData template = GameManagerController.getInstance().getCurrentLevel().getCurrentSeason()
+                .getAllowedZombies().get(index);
         Zombie zombie = new Zombie(template, 0, 0);
         return zombie;
     }
 
     public boolean shouldNextWaveStart() {
-        if (currentWave == 0) return true;
+        if (currentWave == -1) return true;
 
         int totalHealth = 0;
         int currentHealth = 0;
 
         for (Zombie z : previousWaveZombies) {
+            totalHealth += z.getData().getHP();
             if (!z.isDead()) {
-                totalHealth += z.getData().getMaxHP();
                 currentHealth += z.getCurrentHp();
             }
         }
@@ -97,10 +98,12 @@ public class ZombieWaveManager implements Update {
     public void update() {
         if(shouldNextWaveStart()){
             currentWave++;
-            if(currentWave > wavePattern.size()){
+            previousWaveZombies.clear();
+            if(currentWave >= wavePattern.size()){
                 GameManagerController.getInstance().gameWon();
+                return;
             }
-            if(currentWave == wavePattern.size()){
+            if(currentWave == wavePattern.size() - 1){
                 isLastWave = true;
             } else {
                 newWaveStarted = true;

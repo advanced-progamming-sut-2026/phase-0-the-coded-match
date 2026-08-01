@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Random;
 
 public class NormalBehavior implements ZombieBehavior {
-    private int abilityTimer = 6;
+    private int abilityTimer = 60;
 
     @Override
     public void updateZombie(Zombie zombie, Plant targetPlant) {
@@ -98,13 +98,17 @@ public class NormalBehavior implements ZombieBehavior {
                 Random random = new Random();
                 int randomIndex = random.nextInt(activeSuns.size());
                 Sun stolenSun = activeSuns.get(randomIndex);
-                activeSuns.remove(randomIndex);
+                removeSun(stolenSun);
                 zombie.getStolenActiveSuns().add(stolenSun);
             }
             zombie.setAbilityTickTimer(0);
         } else {
             zombie.setAbilityTickTimer(zombie.getAbilityTickTimer() + 1);
         }
+    }
+
+    public void removeSun(Sun sun) {
+        GameManagerController.getInstance().getCurrentLevel().getActiveSuns().remove(sun);
     }
 
     public void shootProjectile(Zombie zombie) { //TODO: include projectile TYPE

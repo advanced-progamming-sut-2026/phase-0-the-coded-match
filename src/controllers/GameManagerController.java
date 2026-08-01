@@ -139,6 +139,7 @@ public class GameManagerController {
                 iterator.remove();
                 handleZombieDrop();
                 QuestController.notifyZombieKilled(zombie);
+                QuestController.notifyZombieKilled(currentLevel.getCurrentSeason());
             }
         }
     }
@@ -152,7 +153,7 @@ public class GameManagerController {
             if (currentLevel.getZombieWave().isLastWave()) {
                 append(message, "The final wave has come.");
             } else if (currentLevel.getZombieWave().isNewWaveStarted()){
-                append(message, "Wave " + currentLevel.getZombieWave().getCurrentWave() + " started.");
+                append(message, "Wave " + (currentLevel.getZombieWave().getCurrentWave() + 1) + " started.");
             }
         }
     }

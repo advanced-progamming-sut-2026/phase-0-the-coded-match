@@ -110,7 +110,7 @@ public class CollectionMenuController {
         result.append("name: ").append(zombie.getDisplayName()).append("\n");
         result.append("id: ").append(zombie.getId()).append("\n");
         result.append("seasons: ").append(zombie.getSeasons()).append("\n");
-        result.append("health: ").append(zombie.getMaxHP()).append("\n");
+        result.append("health: ").append(zombie.getHP()).append("\n");
         result.append("damage: ").append(zombie.getEatDPS()).append("\n");
         result.append("speed: ").append(zombie.getSpeed()).append("\n");
         result.append("wave cost: ").append(zombie.getWaveCost()).append("\n");

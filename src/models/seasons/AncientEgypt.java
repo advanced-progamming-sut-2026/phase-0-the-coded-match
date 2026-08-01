@@ -58,7 +58,7 @@ public class AncientEgypt extends Season {
 
     @Override
     public void WaveStarted(Level level, int waveNumber) {
-        if(waveNumber == level.getData().getWaveCount()){
+        if(waveNumber == level.getData().getWaveCount() - 1){
             for(Zombie zombie : level.getActiveZombies()){
                 if(checkZombieForSandstorm(zombie)){
                     Random random = new Random();
@@ -77,7 +77,7 @@ public class AncientEgypt extends Season {
     }
 
     private boolean checkZombieForSandstorm(Zombie zombie){
-        return zombie.getData().getDisplayName().equalsIgnoreCase("ZombieTutorialDefault") ||
+        return zombie.getData().getDisplayName().equalsIgnoreCase("ZombieTutorialDefault") || //TODO: ID, not display name
                 zombie.getData().getDisplayName().equalsIgnoreCase("ZombieSandstorm");
     }
 

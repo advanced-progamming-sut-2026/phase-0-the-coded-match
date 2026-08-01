@@ -4,6 +4,9 @@ import enums.SeasonType;
 import models.*;
 import models.GameMapRelated.Tile;
 import models.plants.Plant;
+import models.zombies.Zombie;
+import models.zombies.ZombieData;
+import models.zombies.ZombieRepository;
 
 public abstract class Season {
 
@@ -13,6 +16,7 @@ public abstract class Season {
     protected SeasonType type;
     protected List<Level> levels;
     protected Tile[][] field;
+    private List<ZombieData> allowedZombies;
 
     public Season(SeasonData data) {
         this.data = data;
@@ -61,6 +65,15 @@ public abstract class Season {
 
     public void setUnlocked(boolean unlocked) {
         isUnlocked = unlocked;
+    }
+
+    public List<ZombieData> getAllowedZombies() {
+        for (ZombieData zombie : ZombieRepository.getInstance().getAllZombies()) {
+            if (zombie.getSeasons().contains(this.type)) {
+                allowedZombies.add(zombie);
+            }
+        }
+        return allowedZombies;
     }
 }
 

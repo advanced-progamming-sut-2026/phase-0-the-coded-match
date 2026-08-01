@@ -203,7 +203,7 @@ public class QuestController {
                 claimReward(quest, quest.getRewardAmount());
             }
         }
-        if (GameManagerController.getInstance().getCurrentLevel().getZombieWave().getCurrentWave() == 1) {
+        if (GameManagerController.getInstance().getCurrentLevel().getZombieWave().getCurrentWave() == 0) {
             Quest speedExecution = questsModel.getQuestByName("Speed Execution");
 
             double currentTick = GameManagerController.getInstance().getCurrentLevel().getCurrentTick();
