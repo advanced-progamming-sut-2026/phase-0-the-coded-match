@@ -6,5 +6,9 @@ import models.zombies.Zombie;
 
 public interface ZombieBehavior {
     void updateZombie(Zombie zombie, Plant targetPlant);
-    void onProjectileHit(Zombie zombie, Projectile projectile); //TODO: gets called in projectile related method and class
+
+    void onProjectileHit(Zombie zombie, Projectile projectile);
+
+    default void onDeath(Zombie zombie) {
+    }
 }

@@ -1,6 +1,7 @@
 package views;
 
 import controllers.LeaderBoardController;
+import controllers.SeasonController;
 import controllers.menus.MenuController;
 import controllers.menus.SignupMenuController;
 import enums.Commands;
@@ -17,6 +18,7 @@ public class AppView {
 
     public static void run() {
         SignupMenuController.loadFromJson();
+        SeasonController.loadSeason();
         App.loadLoggedInUser();
         Scanner scanner = new Scanner(System.in);
         while (scanner.hasNextLine() && isRunning) {
@@ -27,7 +29,7 @@ public class AppView {
                 MenuController.showCurrentMenu(message);
                 System.out.println(message[0]);
             } else if (input.matches(Commands.ENTER_MENU.getPattern())) {
-                System.out.println(MenuController.enterMenu(input));
+                MenuController.enterMenu(input);
             } else if (input.matches(Commands.EXIT_MENU.getPattern())) {
                 MenuController.exitMenu();
             } else if (currentMenu == Menu.SIGNUP_MENU) {
@@ -62,6 +64,8 @@ public class AppView {
                 QuestView.check(input);
             } else if (currentMenu == Menu.MINIGAMES) {
                 MiniGameView.check(input);
+            } else if (currentMenu == Menu.BONUS_GAME) {
+                BonusGameView.check(input);
             } else {
                 System.out.println("invalid command");
             }

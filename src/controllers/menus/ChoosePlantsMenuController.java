@@ -1,114 +1,177 @@
 package controllers.menus;
 
 import controllers.GameManagerController;
+import controllers.QuestController;
+import controllers.SeasonController;
+import controllers.ZombieWaveManager;
 import enums.Menu;
-import models.*;
-import models.plants.*;
+import models.App;
+import models.Level;
+import models.LevelData;
+import models.User;
+import models.plants.PlantData;
+import models.plants.PlantRepository;
+import models.specialLevels.ConveyorBeltStrategy;
 
 public class ChoosePlantsMenuController {
-
     public static String showAllPlants() {
         StringBuilder message = new StringBuilder();
-        for(PlantData p : PlantRepository.getInstance().getAllPlants()){
-            message.append(p.getDisplayName()).append("\n");
+        for (PlantData plant : PlantRepository.getInstance().getAllPlants()) {
+            message.append(plant.getDisplayName()).append('\n');
         }
         return message.toString();
     }
 
     public static String showAvailablePlants() {
-        User current = App.getCurrentUser();
-        LevelData level = current.getLastLevel();
-        StringBuilder message = new StringBuilder();
-        for (String plantName: level.getAvailablePlants()){
-            message.append(plantName+"\n");
+        Level level = GameManagerController.getInstance().getCurrentLevel();
+        if (level == null) {
+            return "no active level";
         }
-        return message.toString();
+        StringBuilder message = new StringBuilder();
+        for (String plantName : level.getData().getAvailablePlants()) {
+            if (isPlantAvailable(plantName) && isPlantUnlocked(plantName)) {
+                PlantData data = PlantRepository.getInstance().findByName(plantName);
+                message.append(data == null ? plantName : data.getDisplayName()).append('\n');
+            }
+        }
+        return message.length() == 0 ? "no available plants" : message.toString();
     }
 
     public static String addPlant(String plantName) {
         Level level = GameManagerController.getInstance().getCurrentLevel();
-        if(plantName == null || !isPlantAvailable(plantName)){
+        if (level == null) {
+            return "no active level";
+        }
+        plantName = extractPlantName(plantName);
+        if (plantName == null || !isPlantAvailable(plantName)) {
             return "Plant is not available";
         }
-        if(!isPlantUnlocked(plantName)){
+        if (!isPlantUnlocked(plantName)) {
             return "Plant is locked";
         }
-        if(!hasPlantBeenChosen(plantName)){
+        if (hasPlantBeenChosen(plantName)) {
             return "Plant is already selected";
         }
-        level.addChosenPlant(plantName);
+        int limit = getSelectionLimit(level);
+        if (limit > 0 && level.getChosenPlants().size() >= limit) {
+            return "Plant selection is full";
+        }
+        PlantData data = PlantRepository.getInstance().findByName(plantName);
+        level.addChosenPlant(data == null ? plantName : data.getName());
         return "Plant added successfully";
-
     }
 
-    private static boolean isPlantAvailable(String p){
-        User current = App.getCurrentUser();
-        LevelData level = current.getLastLevel();
-        for (String plantName: level.getAvailablePlants()){
-            if (plantName.equalsIgnoreCase(p)) {
-                return true;
-            }
+    private static int getSelectionLimit(Level level) {
+        int limit = level.getData().getPlantSelectionLimit();
+        if (limit > 0) {
+            return limit;
         }
-        return false;
-    }
-
-    private static boolean isPlantUnlocked(String p){
-        PlantData plant = PlantRepository.getInstance().findByName(p);
-        User current = App.getCurrentUser();
-        for(String plantId : current.getCollection().getAvailablePlantsIds()){
-            if(plantId.equalsIgnoreCase(plant.getId())){
-                return true;
-            }
+        if (level.getSpecialLevel() instanceof ConveyorBeltStrategy) {
+            return 0;
         }
-        return false;
+        return 8;
     }
 
-    public static boolean hasPlantBeenChosen(String p) {
-        User current = App.getCurrentUser();
+    private static String extractPlantName(String input) {
+        if (input == null) {
+            return null;
+        }
+        int index = input.indexOf("-t");
+        return index >= 0 ? input.substring(index + 2).trim() : input.trim();
+    }
+
+    private static boolean isPlantAvailable(String name) {
         Level level = GameManagerController.getInstance().getCurrentLevel();
-        for(String plant : level.getChosenPlants()){
-            if(plant.equalsIgnoreCase(p)){
-                return true;
-            }
+        if (level == null) {
+            return false;
         }
-        return false;
+        LevelData data = level.getData();
+        PlantData plantData = PlantRepository.getInstance().findByName(name);
+        if (plantData == null) {
+            return false;
+        }
+        boolean available = data.getAvailablePlants().stream().anyMatch(plant -> samePlant(plant, plantData));
+        boolean locked = data.getLockedPlants().stream().anyMatch(plant -> samePlant(plant, plantData));
+        return available && !locked;
+    }
 
+    private static boolean isPlantUnlocked(String name) {
+        PlantData plant = PlantRepository.getInstance().findByName(name);
+        if (plant == null || App.getCurrentUser() == null) {
+            return false;
+        }
+        User user = App.getCurrentUser();
+        return user.getCollection().getAvailablePlantsIds().stream().anyMatch(id -> id.equalsIgnoreCase(plant.getId()));
+    }
+
+    private static boolean samePlant(String value, PlantData data) {
+        return value != null && (value.equalsIgnoreCase(data.getId()) || value.equalsIgnoreCase(data.getName())
+                || value.equalsIgnoreCase(data.getDisplayName()));
+    }
+
+    public static boolean hasPlantBeenChosen(String name) {
+        Level level = GameManagerController.getInstance().getCurrentLevel();
+        PlantData data = PlantRepository.getInstance().findByName(name);
+        if (level == null || data == null) {
+            return false;
+        }
+        return level.getChosenPlants().stream().anyMatch(plant -> samePlant(plant, data));
     }
 
     public static String removePlant(String plantName) {
         Level level = GameManagerController.getInstance().getCurrentLevel();
-        if(plantName == null || !isPlantAvailable(plantName)){
-            return "Plant is not available";
+        if (level == null) {
+            return "no active level";
         }
-        if(!hasPlantBeenChosen(plantName)){
-            return "Plant has not been chosen";
+        plantName = extractPlantName(plantName);
+        PlantData data = PlantRepository.getInstance().findByName(plantName);
+        if (data == null) {
+            return "Plant does not exist";
         }
-        for(Plant plant : level.getActivePlants()){
-            if(plant.getData().getName().equalsIgnoreCase(plantName)){
-                level.getChosenPlants().remove(plant);
+        for (String chosen : level.getChosenPlants().toArray(new String[0])) {
+            if (samePlant(chosen, data)) {
+                level.getChosenPlants().remove(chosen);
+                level.getBoostedPlantNames().remove(normalize(data.getName()));
                 return "Plant removed successfully";
             }
         }
-        return null;
+        return "Plant has not been chosen";
     }
 
-
-
     public static String boostPlant(String plantName) {
-        User current = App.getCurrentUser();
         Level level = GameManagerController.getInstance().getCurrentLevel();
-        for(Plant plant : level.getActivePlants()){
-            if(plant.getData().getName().equalsIgnoreCase(plantName)){
-                plant.setBoosted(true);
-                current.setGemsCount(current.getGemsCount()-2);
-                return "Plant boosted successfully";
-            }
+        plantName = extractPlantName(plantName);
+        PlantData data = PlantRepository.getInstance().findByName(plantName);
+        if (level == null || data == null || !hasPlantBeenChosen(plantName)) {
+            return "Plant has not been chosen";
         }
-        return "Plant type does not exist";
+        if (level.isPlantBoostedForLevel(data.getName())) {
+            return "Plant is already boosted";
+        }
+        if (App.getCurrentUser().getGemsCount() < 2) {
+            return "not enough gems";
+        }
+        App.getCurrentUser().setGemsCount(App.getCurrentUser().getGemsCount() - 2);
+        level.boostPlantForLevel(data.getName());
+        return "Plant boosted successfully";
+    }
+
+    private static String normalize(String name) {
+        return name.trim().toLowerCase().replace('_', ' ').replace('-', ' ').replaceAll("\\s+", " ");
     }
 
     public static void startGame() {
+        Level level = GameManagerController.getInstance().getCurrentLevel();
+        if (level == null) {
+            return;
+        }
+        if (level.getZombieWave() == null) {
+            level.setZombieWave(new ZombieWaveManager(level));
+        }
+        SeasonController.startLevel(level);
+        QuestController.initializeForCurrentUser();
+        QuestController.onLevelStarted();
+        App.getCurrentUser().addGamesPlayed();
         App.setCurrentMenu(Menu.GAME_MANAGER);
-        return;
     }
 }

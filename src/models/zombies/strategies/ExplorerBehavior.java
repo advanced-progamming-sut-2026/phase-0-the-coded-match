@@ -1,5 +1,6 @@
 package models.zombies.strategies;
 
+import enums.PlantTag;
 import enums.ZombieEffect;
 import enums.ZombieState;
 import models.Projectile;
@@ -7,30 +8,38 @@ import models.plants.Plant;
 import models.zombies.Zombie;
 
 public class ExplorerBehavior implements ZombieBehavior {
-    private boolean isTorchOn = true;
+    private boolean torchOn = true;
 
     @Override
     public void updateZombie(Zombie zombie, Plant targetPlant) {
-        if (zombie.getEffects().contains(ZombieEffect.FROZEN)) {
-            isTorchOn = false;
-        } else if (zombie.getEffects().contains(ZombieEffect.BURNING)) {
-            isTorchOn = true;
+        if (zombie.getEffects().contains(ZombieEffect.FROZEN) || zombie.getEffects().contains(ZombieEffect.CHILLED)) {
+            torchOn = false;
         }
-        if (zombie.getCurrentState() == ZombieState.WALKING) {
-            zombie.walk();
+        if (zombie.getEffects().contains(ZombieEffect.BURNING)) {
+            torchOn = true;
+        }
+        if (zombie.getCurrentState() == ZombieState.EATING && targetPlant != null) {
+            if (torchOn && zombie.getX() - targetPlant.getX() <= 1) {
+                zombie.destroyPlant(targetPlant);
+            } else {
+                zombie.attack(targetPlant);
+            }
+            if (targetPlant.isDead()) {
+                zombie.setCurrentState(ZombieState.WALKING);
+            }
         } else {
-            burn(targetPlant, zombie);
-        }
-    }
-
-    public void burn(Plant targetPlant, Zombie zombie) {
-        if (zombie.getX() - targetPlant.getX() <= 1 && isTorchOn) {
-            zombie.destroyPlant(targetPlant);
+            zombie.walk();
         }
     }
 
     @Override
     public void onProjectileHit(Zombie zombie, Projectile projectile) {
-        zombie.takeDamage(projectile.getDamage(), projectile.getCreatorPlantCategory());
+        Plant creator = projectile.getCreatorPlantCategory();
+        if (creator != null && creator.hasThisTag(PlantTag.ICE)) {
+            torchOn = false;
+        } else if (creator != null && creator.hasThisTag(PlantTag.FIRE)) {
+            torchOn = true;
+        }
+        zombie.takeDamage(projectile.getDamage(), creator);
     }
 }

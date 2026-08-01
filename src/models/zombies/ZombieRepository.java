@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import enums.SeasonType;
 
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -15,7 +16,7 @@ public class ZombieRepository {
     private List<ZombieData> zombies;
 
     public ZombieRepository() {
-        loadZombies("src/assets/Zombies.json");
+        loadZombies(resolvePath("assets/Zombies.json"));
     }
 
     public static ZombieRepository getInstance() {
@@ -25,13 +26,21 @@ public class ZombieRepository {
         return instance;
     }
 
+    private String resolvePath(String path) {
+        if (new File(path).exists()) {
+            return path;
+        }
+        return "src/" + path;
+    }
+
     private void loadZombies(String jsonPath) {
         try (FileReader reader = new FileReader(jsonPath)) {
             Gson gson = new Gson();
-            Type listType = new TypeToken<ArrayList<ZombieData>>(){}.getType();
-            this.zombies = gson.fromJson(reader, listType);
-        } catch (IOException e) {
-            e.printStackTrace();
+            Type listType = new TypeToken<ArrayList<ZombieData>>() { }.getType();
+            List<ZombieData> loaded = gson.fromJson(reader, listType);
+            this.zombies = loaded == null ? new ArrayList<>() : loaded;
+        } catch (IOException | RuntimeException e) {
+            System.err.println("Failed to load zombies JSON: " + e.getMessage());
             this.zombies = new ArrayList<>();
         }
     }
@@ -41,17 +50,23 @@ public class ZombieRepository {
     }
 
     public ZombieData findByDisplayName(String name) {
+        if (name == null) {
+            return null;
+        }
         for (ZombieData zombie : zombies) {
             if (zombie.getDisplayName() != null && zombie.getDisplayName().equalsIgnoreCase(name)) {
                 return zombie;
             }
         }
-        return null;
+        return findById(name);
     }
 
     public ZombieData findById(String id) {
+        if (id == null) {
+            return null;
+        }
         for (ZombieData zombie : zombies) {
-            if (zombie.getId().equalsIgnoreCase(id)) {
+            if (zombie.getId() != null && zombie.getId().equalsIgnoreCase(id)) {
                 return zombie;
             }
         }
@@ -61,7 +76,7 @@ public class ZombieRepository {
     public List<ZombieData> findBySeason(SeasonType season) {
         List<ZombieData> result = new ArrayList<>();
         for (ZombieData zombie : zombies) {
-            if (zombie.getSeasons() != null && zombie.getSeasons().contains(season)) {
+            if (zombie.getSeasons().contains(season)) {
                 result.add(zombie);
             }
         }

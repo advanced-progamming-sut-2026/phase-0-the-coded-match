@@ -21,7 +21,7 @@ public class LoginMenuController{
 
         String username = matcher.group("username");
         String password = matcher.group("password");
-        String stayLoggedIn = matcher.group(1); //right??
+        boolean stayLoggedIn = input.matches("(?s).*-stay-logged-in\\s*$");
 
         User target = App.getUserByUsername(username);
         if(target == null){
@@ -32,12 +32,14 @@ public class LoginMenuController{
             return "Incorrect password";
         }
         App.setCurrentUser(target);
-        App.saveLoggedInUser(username);
-        if(!stayLoggedIn.isEmpty()){
-            App.getCurrentUser().setStayLoggedIn(true); //TODO: is this necessary?
+        App.setCurrentMenu(Menu.MAIN_MENU);
+        target.setStayLoggedIn(stayLoggedIn);
+        if (stayLoggedIn) {
+            App.saveLoggedInUser(username);
         }
-        QuestController.generateAllQuests();
-        QuestController.refreshDailyQuests();
+        QuestController.initializeForCurrentUser();
+        QuestController.onLevelStarted();
+        SignupMenuController.saveToJson();
         return "Logged in successfully";
     }
 

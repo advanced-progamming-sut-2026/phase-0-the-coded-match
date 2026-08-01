@@ -2,165 +2,223 @@ package models.zombies;
 
 import controllers.GameManagerController;
 import controllers.QuestController;
-import enums.*;
-import models.*;
+import enums.ArmorType;
+import enums.PlantTag;
+import enums.ZombieEffect;
+import enums.ZombieState;
+import models.App;
+import models.Level;
+import models.Sun;
+import models.Update;
 import models.factories.ZombieBehaviorFactory;
 import models.plants.Plant;
 import models.zombies.strategies.ZombieBehavior;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Zombie implements Update {
-    private ZombieData data;
-    private int difficultyLevel;
+    private final ZombieData data;
+    private final int difficultyLevel;
+    private final int maxHp;
     private int currentHp;
     private int eatDPS;
     private ZombieState currentState;
     private double x;
     private int y;
-    private List<ZombieArmor> armors;
+    private final List<ZombieArmor> armors;
     private ZombieBehavior behavior;
-    private List<ZombieEffect> effects;
+    private final List<ZombieEffect> effects;
+    private final Map<ZombieEffect, Integer> effectDurations;
     private boolean hasThrownImp;
-    private double runningSpeed;
+    private final double runningSpeed;
     private boolean wasRunning;
     private boolean hasParasol;
     private int stolenSuns;
-    private int abilityTickTimer = 0;
+    private int abilityTickTimer;
     private boolean abilityDone;
     private List<Sun> stolenActiveSuns;
-    private boolean isSubmerged;
-    private boolean isFrozen;
-    private int frozenTimer;
+    private boolean submerged;
+    private boolean frozen;
     private boolean sunProduced;
+    private boolean deathHandled;
+    private int attackTickTimer;
+    private final boolean glowing;
 
     public Zombie(ZombieData data, double x, int y) {
+        if (data == null) {
+            throw new IllegalArgumentException("zombie type does not exist");
+        }
         this.data = data;
-        this.difficultyLevel = App.getCurrentUser().getDifficultyLevel();
-        this.currentHp = (int) (data.getHP() * (difficultyLevel / 3.0));
-        this.eatDPS = (int) (data.getEatDPS() * (difficultyLevel / 3.0));
+        this.difficultyLevel = App.getCurrentUser() == null ? 3 : App.getCurrentUser().getDifficultyLevel();
+        this.maxHp = Math.max(1, (int) Math.round(data.getMaxHP() * difficultyLevel / 3.0));
+        this.currentHp = maxHp;
+        this.eatDPS = Math.max(0, (int) Math.round(data.getEatDPS() * difficultyLevel / 3.0));
         this.currentState = data.getState();
         this.x = x;
         this.y = y;
-        this.effects = new ArrayList<>();
-        this.hasThrownImp = false;
-        this.runningSpeed = data.getRunningSpeed();
-        this.wasRunning = false;
-        this.hasParasol = data.isHasParasol();
-        this.abilityDone = false;
-        this.stolenActiveSuns = new ArrayList<>();
-        this.isSubmerged = false;
-        this.isFrozen = false;
-        this.sunProduced = false;
-
-        if (data.getArmors() != null) {
-            this.armors = new ArrayList<>();
-            for (ZombieArmorData armorData : data.getArmors()) {
-                this.armors.add(new ZombieArmor(armorData));
-            }
+        this.armors = new ArrayList<>();
+        for (ZombieArmorData armorData : data.getArmors()) {
+            this.armors.add(new ZombieArmor(armorData));
         }
-
+        this.effects = new ArrayList<>();
+        this.effectDurations = new EnumMap<>(ZombieEffect.class);
+        this.runningSpeed = data.getRunningSpeed();
+        this.hasParasol = data.isHasParasol();
+        this.stolenActiveSuns = new ArrayList<>();
         this.behavior = ZombieBehaviorFactory.getBehavior(data.getBehaviorType());
+        this.glowing = ThreadLocalRandom.current().nextInt(100) < 5;
     }
 
     @Override
     public void update() {
-       if(isFrozen){
-           return;
-       }
-
-        Plant target = GameManagerController.getInstance().getCurrentLevel().getFrontMostPlantInRow(this.y);
-        if (data.getId().equalsIgnoreCase("ZombieIceAgeDodo")) {
-            target = GameManagerController.getInstance().getCurrentLevel().getPlantInFrontOfZombie(this);
+        updateEffects();
+        if (frozen || effects.contains(ZombieEffect.FROZEN) || isDead()) {
+            return;
         }
-
-        if (target != null && isAdjacentTo(target)){
+        Level level = GameManagerController.getInstance().getCurrentLevel();
+        if (level == null) {
+            return;
+        }
+        Plant target = level.getFrontMostPlantInRow(y, x);
+        if (data.getId().equalsIgnoreCase("ZombieIceAgeDodo")) {
+            target = level.getPlantInFrontOfZombie(this);
+        }
+        if (target != null && isAdjacentTo(target)) {
             if (currentState == ZombieState.RUNNING) {
                 wasRunning = true;
             }
             currentState = ZombieState.EATING;
-        } else {
-            if (currentState != ZombieState.RUNNING) {//TODO: and if not paralyzed
-                currentState = ZombieState.WALKING;
-            }
+        } else if (currentState != ZombieState.RUNNING && currentState != ZombieState.WALKING_BACKWARD
+                && currentState != ZombieState.STEALING) {
+            currentState = ZombieState.WALKING;
+            attackTickTimer = 0;
         }
-
-        if (behavior != null) {
-            behavior.updateZombie(this, target);
-        }
-
+        behavior.updateZombie(this, target);
     }
 
-    private boolean isAdjacentTo(Plant target){
-        if (this.x >= target.getX() - 0.5 && this.x <= target.getX() + 0.5 && this.y == target.getY()){ //TODO: Maybe later on change the condition to be more flexible
-            return true;
+    private void updateEffects() {
+        List<ZombieEffect> expired = new ArrayList<>();
+        for (Map.Entry<ZombieEffect, Integer> entry : new ArrayList<>(effectDurations.entrySet())) {
+            int remaining = entry.getValue() - 1;
+            if (remaining <= 0) {
+                expired.add(entry.getKey());
+            } else {
+                effectDurations.put(entry.getKey(), remaining);
+            }
         }
-        return false;
+        for (ZombieEffect effect : expired) {
+            effectDurations.remove(effect);
+            effects.remove(effect);
+        }
+    }
+
+    private boolean isAdjacentTo(Plant target) {
+        return target != null && y == target.getY() && x <= target.getX() + 0.5 && x >= target.getX() - 0.2;
     }
 
     public void walk() {
-        if (currentState == ZombieState.EATING) {
-            return;
+        if (currentState != ZombieState.EATING) {
+            double multiplier = effects.contains(ZombieEffect.CHILLED) ? 0.5 : 1.0;
+            x -= data.getSpeed() * multiplier;
         }
-        x -= data.getSpeed();
     }
 
     public void run() {
-        x -= runningSpeed;
+        double multiplier = effects.contains(ZombieEffect.CHILLED) ? 0.5 : 1.0;
+        x -= runningSpeed * multiplier;
     }
 
     public void attack(Plant plant) {
-        if (this.getData().getId().equalsIgnoreCase("ZombieArmZombieNewspaper")) {
-            plant.takeDamage(eatDPS * 2);
-        } else {
-            plant.takeDamage(eatDPS);
+        if (plant == null) {
+            attackTickTimer = 0;
+            return;
         }
+        attackTickTimer++;
+        double intervalSeconds = data.getAttackInterval() > 0 ? data.getAttackInterval() : 1.0;
+        int intervalTicks = Math.max(1, (int) Math.ceil(intervalSeconds * 10));
+        if (attackTickTimer < intervalTicks) {
+            return;
+        }
+        attackTickTimer = 0;
+        int damage = eatDPS;
+        if (data.getId().equalsIgnoreCase("ZombieArmZombieNewspaper") && armors.isEmpty()) {
+            damage *= 2;
+        }
+        plant.takeDamage(damage);
     }
 
     public void destroyPlant(Plant plant) {
-        plant.setCurrentHp(0);
+        if (plant != null) {
+            plant.setCurrentHp(0);
+        }
     }
 
     public void takeDamage(int damage, Plant killerPlant) {
-        if (killerPlant.hasThisTag(PlantTag.POISON) &&
-                (data.getId().equalsIgnoreCase("ZombieArmor1") ||
-                        data.getId().equalsIgnoreCase("ZombieArmor2") ||
-                        data.getId().equalsIgnoreCase("ZombieDarkArmor3") ||
-                        data.getId().equalsIgnoreCase("ZombieArmor4"))) {
-            currentHp = Math.max(0, currentHp - damage);
+        int remainingDamage = Math.max(0, damage);
+        boolean bypassArmor = killerPlant != null && killerPlant.hasThisTag(PlantTag.POISON);
+        if (!bypassArmor) {
+            while (remainingDamage > 0 && !armors.isEmpty()) {
+                remainingDamage = armors.get(0).takeDamage(this, remainingDamage);
+            }
         }
-        else if (data.getDisplayName().equalsIgnoreCase("knight zombie") && !armors.isEmpty()) {
-            int remainingDamage = armors.get(armors.size() - 1).takeDamage(this ,damage);
-            if (remainingDamage > 0) {
-                if (armors.size() == 2) {
-                    remainingDamage = armors.get(armors.size() - 2).takeDamage(this, remainingDamage);
-                } else {
-                    currentHp = Math.max(0, currentHp - remainingDamage);
-                }
-            }
-        } else if (!armors.isEmpty()) {
-            int remainingDamage = armors.get(0).takeDamage(this ,damage);
-            if (remainingDamage > 0) {
-                currentHp = Math.max(0, currentHp - remainingDamage);
-            }
-        } else {
-            currentHp = Math.max(0, currentHp - damage);
+        if (remainingDamage > 0) {
+            currentHp = Math.max(0, currentHp - remainingDamage);
         }
         if (isDead()) {
-            Level level = GameManagerController.getInstance().getCurrentLevel();
-            if (data.getId().matches("ZombieCrystalSkull")) {
-                level.setCollectedSunsAmount(level.getCollectedSunsAmount() + (int) (stolenSuns / 2));
-            } else if (data.getId().matches("ZombieRa")) {
-                for (Sun sun : stolenActiveSuns)
-                level.getActiveSuns().add(sun);
-            }
-            QuestController.onZombieDefeated(killerPlant);
+            handleDeath(killerPlant);
         }
+    }
+
+
+    private void handleDeath(Plant killerPlant) {
+        if (deathHandled) {
+            return;
+        }
+        deathHandled = true;
+        Level level = GameManagerController.getInstance().getCurrentLevel();
+        if (level != null) {
+            if (data.getId().equalsIgnoreCase("ZombieCrystalSkull")) {
+                level.setCollectedSunsAmount(level.getCollectedSunsAmount() + stolenSuns / 2);
+            } else if (data.getId().equalsIgnoreCase("ZombieRa")) {
+                level.getActiveSuns().addAll(stolenActiveSuns);
+                stolenActiveSuns.clear();
+            }
+            if (QuestController.isReady()) {
+                QuestController.onZombieDefeated(killerPlant);
+            }
+        }
+        behavior.onDeath(this);
+    }
+
+    public void addEffect(ZombieEffect effect, int durationTicks) {
+        if (!effects.contains(effect)) {
+            effects.add(effect);
+        }
+        if (durationTicks > 0) {
+            effectDurations.put(effect, durationTicks);
+        }
+    }
+
+
+    public void removeEffect(ZombieEffect effect) {
+        effects.remove(effect);
+        effectDurations.remove(effect);
+    }
+
+    public double getEffectRemainingSeconds(ZombieEffect effect) {
+        return effectDurations.getOrDefault(effect, 0) / 10.0;
     }
 
     public boolean isDead() {
         return currentHp <= 0;
+    }
+
+    public boolean isBoss() {
+        return data.isBoss();
     }
 
     public ZombieData getData() {
@@ -172,7 +230,22 @@ public class Zombie implements Update {
     }
 
     public void setCurrentHp(int currentHp) {
-        this.currentHp = currentHp;
+        this.currentHp = Math.max(0, currentHp);
+        if (this.currentHp == 0) {
+            handleDeath(null);
+        }
+    }
+
+    public int getMaxHp() {
+        return maxHp;
+    }
+
+    public int getTotalHealth() {
+        int total = currentHp;
+        for (ZombieArmor armor : armors) {
+            total += Math.max(0, armor.getCurrentHp());
+        }
+        return total;
     }
 
     public int getEatDPS() {
@@ -195,22 +268,24 @@ public class Zombie implements Update {
         return x;
     }
 
-    public void setX(double x) {this.x = x;}
+    public void setX(double x) {
+        this.x = x;
+    }
 
     public int getY() {
         return y;
     }
 
-    public void setY(int y) {this.y = y;}
+    public void setY(int y) {
+        this.y = y;
+    }
 
     public List<ZombieArmor> getArmors() {
         return armors;
     }
 
     public void addArmor(ArmorType type) {
-        armors = new ArrayList<>();
-        ZombieArmor armor = new ZombieArmor(new ZombieArmorData(type));
-        armors.add(armor);
+        armors.add(new ZombieArmor(new ZombieArmorData(type)));
     }
 
     public List<ZombieEffect> getEffects() {
@@ -270,19 +345,19 @@ public class Zombie implements Update {
     }
 
     public boolean isSubmerged() {
-        return isSubmerged;
+        return submerged;
     }
 
     public void setSubmerged(boolean submerged) {
-        isSubmerged = submerged;
+        this.submerged = submerged;
     }
 
     public boolean isFrozen() {
-        return isFrozen;
+        return frozen;
     }
 
     public void setFrozen(boolean frozen) {
-        isFrozen = frozen;
+        this.frozen = frozen;
     }
 
     public ZombieBehavior getBehavior() {
@@ -299,6 +374,14 @@ public class Zombie implements Update {
 
     public void setStolenActiveSuns(List<Sun> stolenActiveSuns) {
         this.stolenActiveSuns = stolenActiveSuns;
+    }
+
+    public boolean isGlowing() {
+        return glowing;
+    }
+
+    public int getAttackTickTimer() {
+        return attackTickTimer;
     }
 
     public boolean isSunProduced() {

@@ -5,6 +5,10 @@ import java.util.List;
 public class GameMapData {
     private int rows;
     private int columns;
+    private int length;
+    private int width;
+    private int zombieStartColumn;
+    private int homeColumn;
     private String defaultPathDirection;
     private List<Tile> tiles;
 
@@ -14,6 +18,14 @@ public class GameMapData {
 
     public int getColumns() {
         return columns;
+    }
+
+    public int getZombieStartColumn() {
+        return zombieStartColumn;
+    }
+
+    public int getHomeColumn() {
+        return homeColumn;
     }
 
     public String getDefaultPathDirection() {
@@ -33,5 +45,11 @@ public class GameMapData {
         return null;
     }
 
+    public int getLength() {
+        return length;
+    }
 
+    public int getWidth() {
+        return width;
+    }
 }

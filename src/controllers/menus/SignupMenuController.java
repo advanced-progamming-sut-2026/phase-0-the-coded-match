@@ -46,8 +46,8 @@ public class SignupMenuController{
             message[0] = "Error: nickname is too short";
         } else if (!validateEmail(email)) {
             message[0] = "Error: email pattern in not valid";
-        } else if (!(genderSt.equalsIgnoreCase("male")) && !(genderSt.equalsIgnoreCase("female"))) {
-            message[0] = "Error: gender is not valid " + genderSt;
+        } else if (!genderSt.equalsIgnoreCase("male") && !genderSt.equalsIgnoreCase("female")) {
+            message[0] = "Error: gender is not valid";
         } else {
             SignupMenu.registered = true;
             Gender gender = whichGender(genderSt);
@@ -144,23 +144,21 @@ public class SignupMenuController{
         }
     }
 
+    private static File resolveAssetFile(String name) {
+        File sourceAssets = new File("src/assets");
+        File assets = new File("assets");
+        File directory = sourceAssets.isDirectory() ? sourceAssets : assets;
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+        return new File(directory, name);
+    }
+
     public static void saveToJson() {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        File file = new File("src/assets/Users.json");
-        ArrayList<User> users = App.getUsers();
-
-        if (file.exists() && file.length() > 0) {
-            try (FileReader reader = new FileReader(file)) {
-                Type userListType = new TypeToken<ArrayList<User>>(){}.getType();
-                ArrayList<User> existingUsers = gson.fromJson(reader, userListType);
-
-            } catch (IOException e) {
-                System.out.println("Error reading users: " + e.getMessage());
-            }
-        }
-
-        try (FileWriter writer = new FileWriter("src/assets/Users.json")){
-            gson.toJson(users, writer);
+        File file = resolveAssetFile("Users.json");
+        try (FileWriter writer = new FileWriter(file)) {
+            gson.toJson(App.getUsers(), writer);
         } catch (IOException e) {
             System.out.println("Error saving users: " + e.getMessage());
         }
@@ -168,7 +166,8 @@ public class SignupMenuController{
 
     public static void loadFromJson() {
         Gson gson = new Gson();
-        try (FileReader reader = new FileReader("src/assets/Users.json")){
+        File file = resolveAssetFile("Users.json");
+        try (FileReader reader = new FileReader(file)) {
             Type userListType = new TypeToken<ArrayList<User>>(){}.getType();
             ArrayList<User> loadedUsers = gson.fromJson(reader, userListType);
             App.setUsers(loadedUsers != null ? loadedUsers : new ArrayList<>());

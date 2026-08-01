@@ -8,7 +8,7 @@ import models.zombies.Zombie;
 import java.util.Random;
 
 public class DeadLineStrategy implements SpecialLevelStrategy{
-    transient Random random = new Random();
+    Random random = new Random();
     private final int deadLineColumn;
 
     public DeadLineStrategy(int deadLineColumn) {

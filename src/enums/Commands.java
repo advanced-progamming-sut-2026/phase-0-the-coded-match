@@ -62,6 +62,8 @@ public enum Commands {
     CHEAT_SPAWN_ZOMBIE("^\\s*cheat\\s+spawn-zombie\\s+-t\\s+(?<zombieType>.+?)\\s+-l\\s*<?\\s*(?<x>\\d+)\\s*," +
             "\\s*(?<y>\\d+)\\s*>?\\s*$"),
     RELEASE_THE_NUKE("^\\s*release\\s+the\\s+nuke\\s*$"),
+    SHOW_LEADERBOARD("^\\s*show\\s+leaderboard\\s*$"),
+    START_ZOMBIE_WAVES("^\\s*start\\s+zombie\\s+waves\\s*$"),
     SORT_LEADERBOARD("^\\s*sort\\s+by\\s+(.+)\\s+ascending:\\s+(.+)\\s*$"),
     SHOP_LIST("^\\s*shop\\s+list\\s*$"),
     SHOP_DAILY("^\\s*shop\\s+daily\\s*$"),

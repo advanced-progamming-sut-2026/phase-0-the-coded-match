@@ -57,7 +57,7 @@ public class PlantController {
 
     public static void produceSun(Plant plant) {
         plant.setProducedSun(true);
-        Sun sun = new Sun(plant.getX(), plant.getY(), SunType.NORMAL.getValue(), 0, false, SunType.NORMAL);
+        Sun sun = new Sun(plant.getX(), plant.getY(), SunType.NORMAL.getValue(), 0, false, SunType.NORMAL, plant);
         Level level = GameManagerController.getInstance().getCurrentLevel();
         if (level != null) {
             level.getActiveSuns().add(sun);
@@ -65,20 +65,7 @@ public class PlantController {
     }
 
     public static boolean canPlaceOnTile(Plant plant, Tile tile) {
-        if (plant == null || tile == null) {
-            return false;
-        }
-        if (!tile.getType().isCanPlant()) {
-            return false;
-        }
-        if (tile.getType() == TileType.WATER && !plant.hasThisTag(PlantTag.WATER)) {
-            return false;
-        }
-        if (tile.isEmpty()) {
-            return true;
-        }
-        Plant currentPlant = tile.getPlant();
-        return plant.hasThisTag(PlantTag.STACK) || currentPlant.hasThisTag(PlantTag.STACK);
+        return plant != null && tile != null && tile.isPlantable(plant);
     }
 
     public static void shootProjectile() {

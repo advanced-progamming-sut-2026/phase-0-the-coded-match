@@ -1,59 +1,65 @@
 package models.seasons;
-import java.util.List;
+
 import enums.SeasonType;
-import models.*;
+import models.Level;
+import models.LevelData;
+import models.SpecialFeatureData;
 import models.GameMapRelated.Tile;
 import models.plants.Plant;
-import models.zombies.Zombie;
-import models.zombies.ZombieData;
-import models.zombies.ZombieRepository;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class Season {
-
-    protected SeasonData data;
-    protected String name;
-    private boolean isUnlocked;
-    protected SeasonType type;
-    protected List<Level> levels;
+    protected final SeasonData data;
+    protected final String name;
+    private boolean unlocked;
+    protected final SeasonType type;
+    protected final List<Level> levels;
     protected Tile[][] field;
-    private List<ZombieData> allowedZombies;
 
     public Season(SeasonData data) {
         this.data = data;
-        this.name = data.getDisplayName();
-        this.type = data.getSeasonType();
-        this.isUnlocked = data.isUnlocked();
-        if (data.getLevels() != null) {
-            for (LevelData lData : data.getLevels()) {
-                Level lvl = new Level(lData);
-                lvl.setCurrentSeason(this);
-                this.levels.add(lvl);
-            }
-        }
+        this.name = data.getDisplayName() == null ? data.getName() : data.getDisplayName();
+        this.type = SeasonType.valueOf(data.getSeasonType());
+        this.levels = new ArrayList<>();
     }
 
     public void initializeGrid() {
-
-    };
+    }
 
     public abstract void LevelStarted(Level level);
+
     public abstract void Update(Level level);
+
     public abstract void WaveStarted(Level level, int waveNumber);
+
     public abstract void PlantPlaced(Level level, Plant plant, int x, int y);
 
-//    public Tile getTile(int x, int y) {
-//        return null;
-//    }
+    public Tile getTile(int x, int y) {
+        if (field == null || y < 1 || y > field.length || x < 1 || x > field[0].length) {
+            return null;
+        }
+        return field[y - 1][x - 1];
+    }
 
     public SeasonData getData() {
         return data;
     }
 
-    public List<Level> getLevelsInSeason(){return levels;}
+    public List<Level> getLevelsInSeason() {
+        return levels;
+    }
 
     public List<LevelData> getLevels() {
         return data.getLevels();
     }
+
+    public List<SpecialFeatureData> getSpecialFeatures() {
+        return data.getSpecialFeatures();
+    }
+
+    public abstract void applySpecialRules();
 
     public SeasonType getType() {
         return type;
@@ -64,20 +70,10 @@ public abstract class Season {
     }
 
     public boolean isUnlocked() {
-        return isUnlocked;
+        return unlocked;
     }
 
     public void setUnlocked(boolean unlocked) {
-        isUnlocked = unlocked;
-    }
-
-    public List<ZombieData> getAllowedZombies() {
-        for (ZombieData zombie : ZombieRepository.getInstance().getAllZombies()) {
-            if (zombie.getSeasons().contains(this.type)) {
-                allowedZombies.add(zombie);
-            }
-        }
-        return allowedZombies;
+        this.unlocked = unlocked;
     }
 }
-

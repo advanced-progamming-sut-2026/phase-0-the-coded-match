@@ -11,24 +11,24 @@ import models.zombies.ZombieRepository;
 public class GiantBehavior implements ZombieBehavior {
     @Override
     public void updateZombie(Zombie zombie, Plant targetPlant) {
+        if (zombie.getCurrentHp() <= zombie.getMaxHp() / 2 && !zombie.isHasThrownImp()) {
+            spawnImp(zombie);
+            zombie.setHasThrownImp(true);
+        }
         if (zombie.getCurrentState() == ZombieState.EATING) {
             zombie.destroyPlant(targetPlant);
-            if(targetPlant.isDead()) {
-                zombie.setCurrentState(ZombieState.WALKING);
-            }
-        } else if (zombie.getCurrentState() == ZombieState.WALKING) {
+            zombie.setCurrentState(ZombieState.WALKING);
+        } else {
             zombie.walk();
-        }
-        if (zombie.getCurrentHp() <= (zombie.getData().getHP() / 2) && !zombie.isHasThrownImp()) {
-            spawnImp(3.0, zombie);
-            zombie.setHasThrownImp(true);
         }
     }
 
-    public void spawnImp(double x, Zombie zombie) {
-        ZombieData impData = ZombieRepository.getInstance().findByDisplayName("Imp");
-        Zombie newImp = new Zombie(impData, x, zombie.getY());
-        GameManagerController.getInstance().getCurrentLevel().getActiveZombies().add(newImp);
+    private void spawnImp(Zombie zombie) {
+        ZombieData impData = ZombieRepository.getInstance().findById("ZombieImp");
+        if (impData != null) {
+            Zombie imp = new Zombie(impData, 3, zombie.getY());
+            GameManagerController.getInstance().getCurrentLevel().getActiveZombies().add(imp);
+        }
     }
 
     @Override

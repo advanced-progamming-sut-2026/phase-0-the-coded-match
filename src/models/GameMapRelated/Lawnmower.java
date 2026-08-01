@@ -1,12 +1,14 @@
 package models.GameMapRelated;
 
-public class  Lawnmower {
+public class Lawnmower {
+    private final int row;
+    private boolean hasBeenUsed;
 
-    int row;
-    boolean hasBeenUsed;
+    public Lawnmower(int row) {
+        this.row = row;
+    }
 
     public static void trigger() {
-
     }
 
     public boolean HasBeenUsed() {
@@ -17,7 +19,7 @@ public class  Lawnmower {
         this.hasBeenUsed = hasBeenUsed;
     }
 
-    public int getRow(){
+    public int getRow() {
         return row;
     }
 }

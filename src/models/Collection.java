@@ -2,71 +2,104 @@ package models;
 
 import models.MiniGameRelated.MiniGame;
 import models.plants.Plant;
+import models.plants.PlantData;
+import models.plants.PlantRepository;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Collection {
-     private List<String> availableZombiesIds;
-     private List<String> availablePlantsIds;
-     private List<Plant> availablePlants;
-     private List<MiniGame> unlockedMinigames;
-     private List<Level> unlockedLevels;
+    private List<String> availableZombiesIds;
+    private List<String> availablePlantsIds;
+    private transient List<Plant> availablePlants;
+    private transient List<MiniGame> unlockedMinigames;
+    private transient List<Level> unlockedLevels;
 
-     public Collection() {
-          this.availableZombiesIds = new ArrayList<>();
-          this.availablePlantsIds = new ArrayList<>();
-          this.availablePlants = new ArrayList<>();
-          this.unlockedMinigames = new ArrayList<>();
-          this.unlockedLevels = new ArrayList<>();
-     }
+    public Collection() {
+        initialize();
+    }
 
-     public List<String> getAvailableZombiesIds() {
-          return availableZombiesIds;
-     }
+    private void initialize() {
+        if (availableZombiesIds == null) {
+            availableZombiesIds = new ArrayList<>();
+        }
+        if (availablePlantsIds == null) {
+            availablePlantsIds = new ArrayList<>();
+        }
+        if (availablePlants == null) {
+            availablePlants = new ArrayList<>();
+        }
+        if (availablePlants.isEmpty() && !availablePlantsIds.isEmpty()) {
+            for (String plantId : availablePlantsIds) {
+                PlantData data = PlantRepository.getInstance().findById(plantId);
+                if (data != null) {
+                    availablePlants.add(new Plant(data, 0, 0, 1));
+                }
+            }
+        }
+        if (unlockedMinigames == null) {
+            unlockedMinigames = new ArrayList<>();
+        }
+        if (unlockedLevels == null) {
+            unlockedLevels = new ArrayList<>();
+        }
+    }
 
-     public void unlockZombie(String zombieId) {
-          if (!availableZombiesIds.contains(zombieId)) {
-               availableZombiesIds.add(zombieId);
-          }
-     }
+    public List<String> getAvailableZombiesIds() {
+        initialize();
+        return availableZombiesIds;
+    }
 
-     public List<String> getAvailablePlantsIds() {
-          return availablePlantsIds;
-     }
+    public void unlockZombie(String zombieId) {
+        initialize();
+        if (zombieId != null && !availableZombiesIds.contains(zombieId)) {
+            availableZombiesIds.add(zombieId);
+        }
+    }
 
-     public List<Plant> getAvailablePlants() {
-          return availablePlants;
-     }
+    public List<String> getAvailablePlantsIds() {
+        initialize();
+        return availablePlantsIds;
+    }
 
-     public void addPlant(Plant plant) {
-          if (plant != null) {
-               availablePlants.add(plant);
-               if (!availablePlantsIds.contains(plant.getData().getId())) {
-                    availablePlantsIds.add(plant.getData().getId());
-               }
-          }
-     }
+    public List<Plant> getAvailablePlants() {
+        initialize();
+        return availablePlants;
+    }
 
-     public void unlockPlant(String plantId) {
-          if (!availablePlantsIds.contains(plantId)) {
-               availablePlantsIds.add(plantId);
-          }
-     }
+    public void addPlant(Plant plant) {
+        initialize();
+        if (plant != null) {
+            availablePlants.add(plant);
+            String plantId = plant.getData().getId();
+            if (plantId != null && !availablePlantsIds.contains(plantId)) {
+                availablePlantsIds.add(plantId);
+            }
+        }
+    }
 
-     public List<MiniGame> getUnlockedMinigames() {
-          return unlockedMinigames;
-     }
+    public void unlockPlant(String plantId) {
+        initialize();
+        if (plantId != null && !availablePlantsIds.contains(plantId)) {
+            availablePlantsIds.add(plantId);
+        }
+    }
 
-     public void setUnlockedMinigames(List<MiniGame> unlockedMinigames) {
-          this.unlockedMinigames = unlockedMinigames;
-     }
+    public List<MiniGame> getUnlockedMinigames() {
+        initialize();
+        return unlockedMinigames;
+    }
 
-     public List<Level> getUnlockedLevels() {
-          return unlockedLevels;
-     }
+    public void setUnlockedMinigames(List<MiniGame> unlockedMinigames) {
+        this.unlockedMinigames = unlockedMinigames == null ? new ArrayList<>() : unlockedMinigames;
+    }
 
-     public void setUnlockedLevels(List<Level> unlockedLevels) {
-          this.unlockedLevels = unlockedLevels;
-     }
+    public List<Level> getUnlockedLevels() {
+        initialize();
+        return unlockedLevels;
+    }
+
+    public void setUnlockedLevels(List<Level> unlockedLevels) {
+        this.unlockedLevels = unlockedLevels == null ? new ArrayList<>() : unlockedLevels;
+    }
 }

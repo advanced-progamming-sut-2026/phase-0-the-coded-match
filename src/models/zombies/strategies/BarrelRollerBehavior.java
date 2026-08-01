@@ -6,15 +6,14 @@ import models.plants.Plant;
 import models.zombies.Zombie;
 
 public class BarrelRollerBehavior implements ZombieBehavior {
-
     @Override
     public void updateZombie(Zombie zombie, Plant targetPlant) {
         if (zombie.getCurrentState() == ZombieState.EATING) {
             zombie.attack(targetPlant);
-            if(targetPlant.isDead()) {
+            if (targetPlant == null || targetPlant.isDead()) {
                 zombie.setCurrentState(ZombieState.WALKING);
             }
-        } else if (zombie.getCurrentState() == ZombieState.WALKING) {
+        } else {
             zombie.walk();
         }
     }

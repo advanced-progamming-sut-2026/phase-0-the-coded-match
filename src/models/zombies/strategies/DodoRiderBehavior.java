@@ -10,28 +10,21 @@ import models.zombies.Zombie;
 public class DodoRiderBehavior implements ZombieBehavior {
     @Override
     public void updateZombie(Zombie zombie, Plant targetPlant) {
-        if (zombie.getCurrentState() == ZombieState.WALKING) {
+        if (zombie.getCurrentState() != ZombieState.EATING || targetPlant == null) {
             zombie.walk();
-        } else if (zombie.getCurrentState() == ZombieState.EATING) {
-            if (targetPlant.getData().getCategory() == PlantCategory.EXPLOSIVE ||
-                    targetPlant.getData().getCategory() == PlantCategory.WALL_NUT ||
-                    targetPlant.getData().getTags().contains(PlantTag.EXPLOSIVE) ||
-                    targetPlant.getData().getTags().contains(PlantTag.MOVE_ZOMBIES)) {
-                if (targetPlant.getData().getCategory() == PlantCategory.WALL_NUT &&
-                        targetPlant.getData().getDisplayName().equalsIgnoreCase("Tall-nut")) {
-                    zombie.attack(targetPlant);
-                    return;
-                }
-                fly(targetPlant, zombie);
-                zombie.setCurrentState(ZombieState.WALKING);
-            } else {
-                zombie.attack(targetPlant);
-            }
+            return;
         }
-    }
-
-    public void fly(Plant target, Zombie zombie) {
-        zombie.setX(target.getX() + 1); // shifts the zombie by one tile
+        boolean obstacle = targetPlant.getData().getCategory() == PlantCategory.EXPLOSIVE
+                || targetPlant.getData().getCategory() == PlantCategory.WALL_NUT
+                || targetPlant.hasThisTag(PlantTag.EXPLOSIVE)
+                || targetPlant.hasThisTag(PlantTag.MOVE_ZOMBIES);
+        boolean tallNut = targetPlant.getData().getDisplayName().equalsIgnoreCase("Tall-nut");
+        if (obstacle && !tallNut) {
+            zombie.setX(Math.max(0, targetPlant.getX() - 1));
+            zombie.setCurrentState(ZombieState.WALKING);
+        } else {
+            zombie.attack(targetPlant);
+        }
     }
 
     @Override
