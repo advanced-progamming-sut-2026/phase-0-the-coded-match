@@ -23,7 +23,7 @@ public class LoveYourPlantsStrategy implements SpecialLevelStrategy {
     }
 
     @Override
-    public void plantLost(Level level, Plant Plant) {
+    public void plantLost(Level level, Plant plant) {
         lostPlantsCount++;
 
         if (lostPlantsCount >= maxAllowedLosses) {

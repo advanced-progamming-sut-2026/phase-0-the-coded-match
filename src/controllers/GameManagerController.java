@@ -14,6 +14,7 @@ import models.plants.Plant;
 import models.plants.PlantData;
 import models.plants.PlantRepository;
 import models.seasons.Season;
+import models.specialLevels.LockedPlantsLevel;
 import models.zombies.*;
 
 import java.util.HashMap;
@@ -280,7 +281,13 @@ public class GameManagerController {
         }
         PlantData data = PlantRepository.getInstance().findByName(type);
         Plant plant = new Plant(data, x, y, 1);
+        if(currentLevel.getData().getLevelType() == LevelType.SPECIAL && currentLevel.getSpecialLevel() instanceof LockedPlantsLevel){
+            ((LockedPlantsLevel) currentLevel.getSpecialLevel()).isPlantLocked(plant.getData().getName());
+        }
         currentLevel.getActivePlants().add(plant);
+        if (currentLevel.getCurrentSeason() != null) {
+            currentLevel.getCurrentSeason().PlantPlaced(currentLevel, plant, x, y);
+        }
         currentLevel.getGameMap().getTile(plant.getX(), plant.getY()).setPlant(plant);
         currentLevel.setCollectedSunsAmount(currentLevel.getCollectedSunsAmount() - data.getSunCost());
         if (!cooldownRemoved) {
@@ -590,7 +597,7 @@ public class GameManagerController {
             System.out.println("You do not have a " + plantName + " seed packet!");
             return;
         }
-
+        
         level.consumeSeedPacket(plantName);
         PlantData data = PlantRepository.getInstance().findByName(plantName);
         Plant plant = new Plant(data, x, y, 1);

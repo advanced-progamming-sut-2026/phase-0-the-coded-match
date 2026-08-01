@@ -1,6 +1,7 @@
 package controllers.menus;
 
 import controllers.GameManagerController;
+import controllers.SeasonController;
 import enums.Commands;
 import enums.Menu;
 import models.App;

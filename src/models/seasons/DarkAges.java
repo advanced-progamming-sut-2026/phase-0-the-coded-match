@@ -6,12 +6,15 @@ import models.plants.Plant;
 import models.zombies.Zombie;
 import models.zombies.ZombieRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class DarkAges extends Season {
     public DarkAges(SeasonData data) {
         super(data);
+        this.name = data.getName();
+        this.setUnlocked(true);
     }
 
     @Override
@@ -43,8 +46,7 @@ public class DarkAges extends Season {
         Random random = new Random();
         int rows = level.getGameMap().getRows();
         int cols = level.getGameMap().getColumns();
-        List<String> necromancyZombies = List.of();
-        necromancyZombies.addAll(level.getData().getAllowedZombies());
+        List<String> necromancyZombies = new ArrayList<>(this.getData().getAllowedZombies());
 
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
@@ -53,8 +55,9 @@ public class DarkAges extends Season {
                 if (tile != null && tile.holdsNecromancyPotential() && tile.isGrave()) {
                     String chosenZombie = necromancyZombies.get(random.nextInt(necromancyZombies.size()));
                     Zombie zombie = new Zombie(ZombieRepository.getInstance().findById(chosenZombie), c, r);
-
-                    level.getActiveZombies().add(zombie);
+                    if(zombie != null) {
+                        level.getActiveZombies().add(zombie);
+                    }
                 }
             }
         }
