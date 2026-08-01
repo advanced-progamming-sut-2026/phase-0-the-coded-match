@@ -4,6 +4,7 @@ import models.GameMapRelated.Tile;
 import models.Level;
 import models.plants.Plant;
 import models.zombies.Zombie;
+import models.zombies.ZombieData;
 import models.zombies.ZombieRepository;
 
 import java.util.ArrayList;
@@ -17,10 +18,7 @@ public class DarkAges extends Season {
         this.setUnlocked(true);
     }
 
-    @Override
-    public void applySpecialRules() {
-        // TODO: apply dark ages rules later
-    }
+
 
     @Override
     public void initializeGrid() {
@@ -46,14 +44,14 @@ public class DarkAges extends Season {
         Random random = new Random();
         int rows = level.getGameMap().getRows();
         int cols = level.getGameMap().getColumns();
-        List<String> necromancyZombies = new ArrayList<>(this.getData().getAllowedZombies());
+        List<ZombieData> necromancyZombies = new ArrayList<>(this.getAllowedZombies());
 
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
                 Tile tile = level.getGameMap().getTile(c, r);
 
                 if (tile != null && tile.holdsNecromancyPotential() && tile.isGrave()) {
-                    String chosenZombie = necromancyZombies.get(random.nextInt(necromancyZombies.size()));
+                    String chosenZombie = necromancyZombies.get(random.nextInt(necromancyZombies.size())).getId();
                     Zombie zombie = new Zombie(ZombieRepository.getInstance().findById(chosenZombie), c, r);
                     if(zombie != null) {
                         level.getActiveZombies().add(zombie);

@@ -17,11 +17,6 @@ public class FrostbiteCaves extends Season {
     }
 
     @Override
-    public void applySpecialRules() {
-        // TODO i dont think we need this method
-    }
-
-    @Override
     public void initializeGrid() {
         // i dont think we need this as well
     }

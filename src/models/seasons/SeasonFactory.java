@@ -5,7 +5,7 @@ public class SeasonFactory {
         if (data == null || data.getSeasonType() == null) {
             return null;
         }
-        String typeStr = data.getSeasonType().toUpperCase();
+        String typeStr = data.getSeasonType().toString().toUpperCase();
 
         switch (typeStr) {
             case "ANCIENT_EGYPT":

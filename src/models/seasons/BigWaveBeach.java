@@ -10,6 +10,7 @@ import models.zombies.Zombie;
 import models.zombies.ZombieData;
 import models.zombies.ZombieRepository;
 
+import java.util.List;
 import java.util.Random;
 
 public class BigWaveBeach extends Season {
@@ -20,11 +21,6 @@ public class BigWaveBeach extends Season {
         super(data);
         this.name = data.getName();
         this.setUnlocked(true);
-    }
-
-    @Override
-    public void applySpecialRules() {
-        // TODO
     }
 
     @Override
@@ -116,8 +112,8 @@ public class BigWaveBeach extends Season {
             int randomRow = random.nextInt(level.getGameMap().getRows());
 
             int randomCol = currentTideColumn + random.nextInt(9 - currentTideColumn);
-            int randomZombie = random.nextInt(this.getData().getAllowedZombies().size());
-            String name = this.getData().getAllowedZombies().get(randomZombie);
+            int randomZombie = random.nextInt(this.getAllowedZombies().size());
+            String name = this.getAllowedZombies().get(randomZombie).getId();
             Zombie lowTideZombie = new Zombie (ZombieRepository.getInstance().findById(name), randomCol, randomRow);
             level.getActiveZombies().add(lowTideZombie);
         }

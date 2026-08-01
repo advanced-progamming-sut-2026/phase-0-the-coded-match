@@ -7,7 +7,6 @@ import java.util.List;
 public class WavePatternData {
     private int waveNumber;
     private int startTick;
-    private List<ZombieSpawnData> zombies;
     private double waveDifficulty;
 
     public int getWaveNumber() {
@@ -16,10 +15,6 @@ public class WavePatternData {
 
     public int getStartTick() {
         return startTick;
-    }
-
-    public List<ZombieSpawnData> getZombies() {
-        return zombies;
     }
 
     public double getWaveDifficulty() {

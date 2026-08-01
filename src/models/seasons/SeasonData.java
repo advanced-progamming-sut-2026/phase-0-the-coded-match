@@ -1,7 +1,7 @@
 package models.seasons;
 
+import enums.SeasonType;
 import models.LevelData;
-import models.SpecialFeatureData;
 
 import java.util.List;
 
@@ -10,8 +10,8 @@ public class SeasonData {
     private String name;
     private String displayName;
     private String seasonType;
+    private boolean unlocked;
     private List<String> unlockedPlants;
-    private List<SpecialFeatureData> specialFeatures;
     private List<LevelData> levels;
 
     public int getId() {
@@ -26,19 +26,28 @@ public class SeasonData {
         return displayName;
     }
 
-    public String getSeasonType() {
-        return seasonType;
+    public SeasonType getSeasonType() {
+        switch (seasonType){
+            case "ANCIENT_EGYPT":
+                return SeasonType.ANCIENT_EGYPT;
+            case "FROSTBITE_CAVES":
+                return SeasonType.FROSTBITE_CAVES;
+            case "BIG_WAVE_BEACH":
+                return SeasonType.BIG_WAVE_BEACH;
+            case "DARK_AGES":
+                return SeasonType.DARK_AGES;
+        }
+        return null;
     }
 
     public List<String> getUnlockedPlants() {
         return unlockedPlants;
     }
 
-    public List<SpecialFeatureData> getSpecialFeatures() {
-        return specialFeatures;
-    }
-
     public List<LevelData> getLevels() {
         return levels;
+    }
+    public boolean isUnlocked(){
+        return unlocked;
     }
 }

@@ -264,7 +264,7 @@ public class QuestController {
        }
 
        Quest nightOrMorning =questsModel.getQuestByName("Night or Morning");
-       if(GameManagerController.getInstance().getCurrentLevel().getData().isDay()){
+       if(GameManagerController.getInstance().getCurrentLevel().isDay()){
            if(plant.hasThisTag(PlantTag.SHROOM)){
                notMushrooms = true;
            }
@@ -295,7 +295,7 @@ public class QuestController {
         }
 
         Quest nightOrMorning =questsModel.getQuestByName("Night or Morning");
-        if(GameManagerController.getInstance().getCurrentLevel().getData().isDay()){
+        if(GameManagerController.getInstance().getCurrentLevel().isDay()){
             if(!notMushrooms){
                 claimReward(nightOrMorning, nightOrMorning.getRewardAmount());
             }

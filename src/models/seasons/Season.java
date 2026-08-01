@@ -20,6 +20,16 @@ public abstract class Season {
 
     public Season(SeasonData data) {
         this.data = data;
+        this.name = data.getDisplayName();
+        this.type = data.getSeasonType();
+        this.isUnlocked = data.isUnlocked();
+        if (data.getLevels() != null) {
+            for (LevelData lData : data.getLevels()) {
+                Level lvl = new Level(lData);
+                lvl.setCurrentSeason(this);
+                this.levels.add(lvl);
+            }
+        }
     }
 
     public void initializeGrid() {
@@ -31,9 +41,9 @@ public abstract class Season {
     public abstract void WaveStarted(Level level, int waveNumber);
     public abstract void PlantPlaced(Level level, Plant plant, int x, int y);
 
-    public Tile getTile(int x, int y) {
-        return null;
-    }
+//    public Tile getTile(int x, int y) {
+//        return null;
+//    }
 
     public SeasonData getData() {
         return data;
@@ -44,12 +54,6 @@ public abstract class Season {
     public List<LevelData> getLevels() {
         return data.getLevels();
     }
-
-    public List<SpecialFeatureData> getSpecialFeatures() {
-        return data.getSpecialFeatures();
-    }
-
-    public abstract void applySpecialRules();
 
     public SeasonType getType() {
         return type;

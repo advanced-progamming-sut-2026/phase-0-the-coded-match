@@ -17,11 +17,6 @@ public class AncientEgypt extends Season {
     }
 
     @Override
-    public void applySpecialRules() {
-        // TODO
-    }
-
-    @Override
     public void initializeGrid() {
         // I'm not sure if this is needed?
     }

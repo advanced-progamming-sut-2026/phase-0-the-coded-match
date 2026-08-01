@@ -50,6 +50,7 @@ public class User {
         this.collection = new Collection();
         this.shop = new Shop();
         this.greenHouse = new GreenHouse();
+        this.questsModel = new QuestsModel();
     }
 
     public void addGamesPlayed() {}
@@ -69,6 +70,16 @@ public class User {
     public void addMinigamesWon() {}
 
     public void addDailyQuests() {}
+    public void recordLevelVictory(Season season, LevelData level, int score) {
+        this.lastSeason = season;
+        if (season != null && season.getData() != null) {
+            this.lastSeasonId = season.getData().getId();
+        }
+        this.lastLevel = level;
+        if (score > this.highestPointAchieved) {
+            this.highestPointAchieved = score;
+        }
+    }
 
     public int getCompletedQuestsCount() {
         int count = 0;
