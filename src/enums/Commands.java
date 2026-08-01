@@ -1,21 +1,20 @@
 package enums;
 
 public enum Commands {
-    ENTER_MENU("^\\s*menu\\s+enter\\s+(?<menu_name>.*)\\s*$"),
+    ENTER_MENU("^\\s*menu\\s+enter\\s+(?<menuName>.*)\\s*$"),
     SHOW_MENU("^\\s*menu\\s+show\\s+current\\s*$"),
     EXIT_MENU("^\\s*menu\\s+exit\\s*$"),
     REGISTER("^\\s*register\\s+-u\\s+(?<username>[A-Za-z0-9_]+)\\s+-p\\s+" +
-            "(?<password>[A-Za-z0-9!#$%^&*()=+{}\\[\\]|\\/:;\\\"',<>?\\\\]+)\\s+" +
-            "(?<password_confirm>[A-Za-z0-9!#$%^&*()=+{}\\[\\]|\\/:;\\\"',<>?\\\\]+)\\s+-n\\s+(?<nickname>.*)\\s+-e\\s+" +
-            "(?<email>[A-Za-z0-9](?:[A-Za-z0-9_-]|(?<!\\.)\\.)*[A-Za-z0-9]@[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?\\." +
-            "[A-Za-z]{2,})\\s+-g\\s+(?<gender>.*)\\s*$"),
+            "(?<password>\\S+)\\s+" +
+            "(?<passwordConfirm>\\S+)\\s+-n\\s+(?<nickname>\\S+)\\s+-e\\s+" +
+            "(?<email>[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,})\\s+-g\\s+(?<gender>\\S+)\\s*$"),
     PASSWORD("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!#$%^&*()=+{}\\[\\]|\\/\\\\:;\\\"',<>?])" +
             "[A-Za-z0-9!#$%^&*()=+{}\\[\\]|\\/:;\\\"',<>?\\\\]{8,}$"),
     NICKNAME("^.{3,30}$"),
     EMAIL("^[a-zA-Z0-9]+([._-][a-zA-Z0-9]+)*@([a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,}$"),
     LOGIN("^\\s*login\\s+-u\\s+(?<username>\\S+)\\s+-p\\s+(?<password>\\S+)(?:\\s+-stay-logged-in)?\\s*$"),
     PICK_QUESTION("^\\s*pick\\s+question\\s+-q\\s+(?<question_number>.*)\\s+-a\\s+(?<answer>.*)\\s+-c" +
-            "\\s+(?<answer_confirm>.*)\\s*$"),
+            "\\s+(?<answerConfirm>.*)\\s*$"),
     FORGET_PASSWORD("^\\s*forget\\s+password\\s+-u\\s+(?<username>\\S+)\\s+-e\\s+(?<email>\\S+)\\s*$"),
     ANSWER("^\\s*answer\\s+-a\\s+(?<answer>.*)\\s*$"),
     LOGOUT("^\\s*menu\\s+logout\\s*$"),

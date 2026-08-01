@@ -21,7 +21,7 @@ public class MenuController {
         if (!matcher.matches()) {
             return;
         }
-        String menuName = matcher.group("menu_name");
+        String menuName = matcher.group("menuName");
         Menu targetMenu = App.getMenu(menuName);
         if (targetMenu == null) {
             System.out.println("invalid menu");
@@ -66,7 +66,7 @@ public class MenuController {
         }
         if (currentMenu == Menu.MAIN_MENU) {
             return targetMenu == Menu.GAME_MENU || targetMenu == Menu.SETTINGS_MENU || targetMenu == Menu.NEWS_MENU
-                    || targetMenu == Menu.PROFILE_MENU;
+                    || targetMenu == Menu.PROFILE_MENU || targetMenu == Menu.LEADERBOARD;
         }
         if (currentMenu == Menu.GAME_MENU) {
             return targetMenu == Menu.COLLECTION_MENU;

@@ -31,7 +31,7 @@ public class SignupMenuController{
 
         String username = matcher.group("username");
         String password = matcher.group("password");
-        String passwordConfirm = matcher.group("password_confirm");
+        String passwordConfirm = matcher.group("passwordConfirm");
         String nickname = matcher.group("nickname");
         String email = matcher.group("email");
         String genderSt = matcher.group("gender");
@@ -46,7 +46,7 @@ public class SignupMenuController{
             message[0] = "Error: nickname is too short";
         } else if (!validateEmail(email)) {
             message[0] = "Error: email pattern in not valid";
-        } else if (!(genderSt.equalsIgnoreCase("male") && genderSt.equalsIgnoreCase("female"))) {
+        } else if (!genderSt.equalsIgnoreCase("male") && !genderSt.equalsIgnoreCase("female")) {
             message[0] = "Error: gender is not valid";
         } else {
             SignupMenu.registered = true;
@@ -104,7 +104,7 @@ public class SignupMenuController{
         }
         int questionNum = Integer.parseInt(matcher.group("question_number"));
         String answer = matcher.group("answer");
-        String confirmAnswer = matcher.group("answer_confirm");
+        String confirmAnswer = matcher.group("answerConfirm");
         SecurityQuestions question = getQuestionByNumber(questionNum);
         if (answer.equals(confirmAnswer)) {
             App.getUsers().get(App.getUsers().size() - 1).addQuestion(question, answer);
