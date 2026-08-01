@@ -76,7 +76,7 @@ public class GameManagerController {
             updatePlants(message);
             updateBarrels();
             updateZombies();
-            updateWaves();
+            updateWaves(message);
             updateSkySuns(message);
             updateSuns(message);
             updateTiles();
@@ -140,16 +140,22 @@ public class GameManagerController {
                 iterator.remove();
                 handleZombieDrop();
                 QuestController.notifyZombieKilled(zombie);
+                QuestController.notifyZombieKilled(currentLevel.getCurrentSeason());
             }
         }
     }
 
-    private void updateWaves() {
+    private void updateWaves(String[] message) {
         if (currentLevel instanceof VaseBreaker) {
             return;
         }
         if (currentLevel.getZombieWave() != null) {
             currentLevel.getZombieWave().update();
+            if (currentLevel.getZombieWave().isLastWave()) {
+                append(message, "The final wave has come.");
+            } else if (currentLevel.getZombieWave().isNewWaveStarted()){
+                append(message, "Wave " + (currentLevel.getZombieWave().getCurrentWave() + 1) + " started.");
+            }
         }
     }
 
@@ -239,20 +245,15 @@ public class GameManagerController {
         return currentLevel.getCollectedSunsAmount();
     }
 
-    public void cheatAddSuns(String input) {
+    public String cheatAddSuns(String input) {
         Matcher matcher = Pattern.compile(Commands.CHEAT_ADD_SUNS.getPattern()).matcher(input);
         if (!matcher.matches()) {
-            System.out.println("invalid command");
-            return;
+            return "invalid command";
         }
         int count = Integer.parseInt(matcher.group("count"));
         currentLevel.setCollectedSunsAmount(currentLevel.getCollectedSunsAmount() + count);
-        System.out.println("you have " + currentLevel.getCollectedSunsAmount() + " suns now");
+        return "you have " + currentLevel.getCollectedSunsAmount() + " suns now";
     }
-
-    public String[] startWave() {
-        return new String[] {"wave system is not ready yet"};
-    }// do we need this method?
 
     public void cheatReleaseTheNuke() {
         ZombieWaveManager.releaseTheNuke();
@@ -459,16 +460,8 @@ public class GameManagerController {
         return builder;
     }
 
-    public void ifAZombieWasKilled() {
-        handleZombieDrop();
-    }
-
     public void gameOver() {
-//        this.currentLevel = null;
-        currentLevel.getActiveZombies().clear();
-        currentLevel.getActivePlants().clear();
-        currentLevel.getActiveProjectiles().clear();
-        currentLevel.getActiveSuns().clear();
+        this.currentLevel = null;
         App.getCurrentUser().setVictroy(false);
         SignupMenuController.saveToJson();
     }
@@ -516,23 +509,6 @@ public class GameManagerController {
                     barrel.onProjectileHit(projectile);
                 }
             }
-        }
-    }
-
-    private void handleProjectileCollisions() {
-        updateProjectiles();
-    }
-
-    private void cleanUpDestroyedProjectiles() {
-        if (currentLevel == null || currentLevel.getActiveProjectiles() == null) {
-            return;
-        }
-        currentLevel.getActiveProjectiles().removeIf(Projectile::isDestroyed);
-    }
-
-    public void spawnProjectile(models.Projectile projectile) {
-        if (currentLevel != null && projectile != null) {
-            currentLevel.getActiveProjectiles().add(projectile);
         }
     }
 

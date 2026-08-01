@@ -123,4 +123,6 @@ public class GameMap {
     public void setLawnmowers(ArrayList<Lawnmower> lawnmowers) {
         this.lawnmowers = lawnmowers;
     }
+
+
 }

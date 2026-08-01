@@ -18,7 +18,6 @@ public class LevelData {
     private int waveCount;
     private int baseWaveCost;
     private Season type;
-    private List<String> allowedZombies;
     private List<String> availablePlants;
     private List<String> conveyorPlants;
     private List<String> lockedPlants;
@@ -53,10 +52,6 @@ public class LevelData {
 
     public int getBaseWaveCost() {
         return baseWaveCost;
-    }
-
-    public List<String> getAllowedZombies() {
-        return allowedZombies;
     }
 
     public List<String> getAvailablePlants() {

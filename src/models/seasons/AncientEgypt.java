@@ -17,10 +17,14 @@ public class AncientEgypt extends Season {
     }
 
     @Override
-    public void applySpecialRules() {}
+    public void applySpecialRules() {
+        // TODO
+    }
 
     @Override
-    public void initializeGrid() {}
+    public void initializeGrid() {
+        // I'm not sure if this is needed?
+    }
 
     @Override
     public void LevelStarted(Level level) {
@@ -56,7 +60,7 @@ public class AncientEgypt extends Season {
 
     @Override
     public void WaveStarted(Level level, int waveNumber) {
-        if(waveNumber == level.getData().getWaveCount()){
+        if(waveNumber == level.getData().getWaveCount() - 1){
             for(Zombie zombie : level.getActiveZombies()){
                 if(checkZombieForSandstorm(zombie)){
                     Random random = new Random();

@@ -51,7 +51,7 @@ public class Level {
         this.collectedSunsAmount = 0;
         this.currentSeason = data.getType();
         this.currentTick = 0;
-        this.zombieWave = null;
+        this.zombieWave = new ZombieWaveManager();
         this.activeProjectiles = new ArrayList<>();
         if (App.getCurrentUser().getPlantFoodBoughtCount() != 0) {
             this.plantFoodCount = App.getCurrentUser().getPlantFoodBoughtCount();
@@ -271,10 +271,9 @@ public class Level {
     }
 
     public Plant getPlantInFrontOfZombie(Zombie zombie) {
-        Plant target = null;
         for (Plant p : activePlants) {
-            if (p.getX() == zombie.getX() && p.getY() == zombie.getY()) {
-                return target;
+            if (p.getX() <= zombie.getX() + 0.5 && p.getX() >= zombie.getX() && p.getY() == zombie.getY()) {
+                return p;
             }
         }
         return null;

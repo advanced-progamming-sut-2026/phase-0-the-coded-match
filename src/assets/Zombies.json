@@ -92,7 +92,7 @@
     "speed": 0.185,
     "waveCost": 700,
     "armors": {
-      "type": "BUCKET",
+      "type": "BRICK",
       "hp": 1100,
       "metallic": true
     },

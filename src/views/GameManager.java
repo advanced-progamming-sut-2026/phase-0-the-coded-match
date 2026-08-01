@@ -15,9 +15,9 @@ public class GameManager {
         } else if (input.matches(Commands.COLLECT_SUN.getPattern())) {
             instance.collectSun(input);
         } else if (input.matches(Commands.SUN_AMOUNT.getPattern())) {
-            System.out.println(instance.showSunsAmount());
+            System.out.println("sun amount = " + instance.showSunsAmount());
         } else if (input.matches(Commands.CHEAT_ADD_SUNS.getPattern())) {
-            instance.cheatAddSuns(input);
+            System.out.println(instance.cheatAddSuns(input));
         } else if (input.matches(Commands.PLANT_PLANT.getPattern())) {
             instance.plantPlant(input);
         } else if (input.matches(Commands.CHEAT_REMOVE_COOLDOWN.getPattern())) {

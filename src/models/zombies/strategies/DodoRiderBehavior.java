@@ -10,7 +10,6 @@ import models.zombies.Zombie;
 public class DodoRiderBehavior implements ZombieBehavior {
     @Override
     public void updateZombie(Zombie zombie, Plant targetPlant) {
-        //TODO: complete when understood plants
         if (zombie.getCurrentState() == ZombieState.WALKING) {
             zombie.walk();
         } else if (zombie.getCurrentState() == ZombieState.EATING) {

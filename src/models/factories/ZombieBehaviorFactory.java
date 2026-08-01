@@ -27,7 +27,7 @@ public class ZombieBehaviorFactory {
                 return new SnorkelBehavior();
             case "king" :
                 return new KingBehavior();
-            case "SunProducer" :
+            case "sunproducer" :
                 return new SunProducerBehavior();
             default:
                 return null;

@@ -203,7 +203,7 @@ public class QuestController {
                 claimReward(quest, quest.getRewardAmount());
             }
         }
-        if (GameManagerController.getInstance().getCurrentLevel().getZombieWave().getCurrentWave() == 1) {
+        if (GameManagerController.getInstance().getCurrentLevel().getZombieWave().getCurrentWave() == 0) {
             Quest speedExecution = questsModel.getQuestByName("Speed Execution");
 
             double currentTick = GameManagerController.getInstance().getCurrentLevel().getCurrentTick();
@@ -411,7 +411,7 @@ public class QuestController {
     }
 
     public static void onZombieDefeated(Plant killerPlant){
-
+        if (killerPlant == null) return;
         Quest proPlantPlayer = questsModel.getQuestByName("Pro Plant Player");
         if (killerPlant.getData().getName().equalsIgnoreCase(proPlantPlayer.getTargetPlant().getName())) {
             proPlantPlayer.setCurrentValue(proPlantPlayer.getCurrentValue() + 1);
