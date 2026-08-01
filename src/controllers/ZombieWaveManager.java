@@ -1,6 +1,5 @@
 package controllers;
 
-
 import models.App;
 import models.Level;
 import models.Update;
@@ -9,113 +8,230 @@ import models.zombies.Barrel;
 import models.zombies.Zombie;
 import models.zombies.ZombieData;
 import models.zombies.ZombieRepository;
+import models.zombies.ZombieSpawnData;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
 public class ZombieWaveManager implements Update {
-    Random random = new Random();
-    private Level currentLevel = GameManagerController.getInstance().getCurrentLevel();
-    private int currentWave = -1;
-    private double timeWaveStarted = 0;
-    private static List<Zombie> previousWaveZombies = new ArrayList<>();
-    private List<WavePatternData> wavePattern = GameManagerController.getInstance().getCurrentLevel().getData()
-            .getWavePatterns();
-    private boolean isLastWave = false;
-    private boolean newWaveStarted = false;
+    private final Random random;
+    private final Level currentLevel;
+    private final List<WavePatternData> wavePattern;
+    private final List<Zombie> previousWaveZombies = new ArrayList<>();
+    private int currentWave;
+    private double timeWaveStarted;
+    private int previousWaveInitialHealth;
+    private boolean completed;
 
-    public List<WavePatternData> getWavePattern(){return wavePattern;}
+    public ZombieWaveManager(Level level) {
+        currentLevel = level;
+        wavePattern = new ArrayList<>(level.getData().getWavePatterns());
+        long seed = BonusGameController.isActive()
+                ? BonusGameController.getDailySeed() + level.getData().getId().hashCode()
+                : System.nanoTime();
+        random = new Random(seed);
+    }
 
-    public void calculateWaveDifficulty() {
-        if(currentWave == 0){
-            return;
+    public List<WavePatternData> getWavePattern() {
+        return wavePattern;
+    }
+
+    public double calculateWaveDifficulty() {
+        int minimumCost = getAllowedZombieData().stream()
+                .mapToInt(this::effectiveWaveCost)
+                .filter(cost -> cost > 0)
+                .min()
+                .orElse(1);
+        double base = Math.max(currentLevel.getData().getBaseWaveCost(), minimumCost);
+        if (getTotalWaves() == 1) {
+            return base * 2;
         }
-        int difficultyLevel = App.getCurrentUser().getDifficultyLevel();
-        double multiplier = 1.0 + (0.25 * (difficultyLevel / 3.0));
-        wavePattern.get(currentWave).setWaveDifficulty(wavePattern.get(currentWave).getWaveDifficulty() * multiplier);
+        if (currentWave <= 1) {
+            return base;
+        }
+        if (currentWave == getTotalWaves()) {
+            return base * Math.pow(1.25, Math.max(0, currentWave - 2)) * 2;
+        }
+        return base * Math.pow(1.25, currentWave - 1);
     }
 
     public void spawnZombies() {
-        int remainingCost = (int) wavePattern.get(currentWave).getWaveDifficulty();
-        timeWaveStarted = GameManagerController.getInstance().getCurrentLevel().getCurrentTick();
+        previousWaveZombies.clear();
+        previousWaveInitialHealth = 0;
+        timeWaveStarted = currentLevel.getCurrentTick();
+        WavePatternData pattern = getCurrentPattern();
+        if (pattern != null && pattern.getZombies() != null && !pattern.getZombies().isEmpty()) {
+            spawnPattern(pattern);
+            return;
+        }
+        int budget = pattern != null && pattern.getWaveDifficulty() > 0
+                ? (int) Math.ceil(pattern.getWaveDifficulty())
+                : (int) Math.ceil(calculateWaveDifficulty());
+        spawnByCost(budget);
+    }
 
-        while (remainingCost > 0) {
-            Zombie z = createRandomZombie();   // weighted random based on cost
-            if (z.getWaveCost() > remainingCost) continue;
-
-            App.getCurrentUser().getCollection().unlockZombie(z.getData().getId());
-            int lane = random.nextInt(GameManagerController.getInstance().getCurrentLevel().getGameMap().getRows()); // todo: fixed number of rows and columns!!!!
-            z.setY(lane);
-            z.setX(9);   // right side : starts from the first column (figure out the number)
-
-            if (z.getData().getId().equalsIgnoreCase("ZombieBarrelRoller")) {
-                Barrel barrel = new Barrel(z.getX() - 0.5 , lane, z);
-                GameManagerController.getInstance().getCurrentLevel().addBarrel(barrel);
+    private void spawnPattern(WavePatternData pattern) {
+        for (ZombieSpawnData spawn : pattern.getZombies()) {
+            ZombieData data = ZombieRepository.getInstance().findById(spawn.getZombieAlias());
+            if (data == null) {
+                continue;
             }
-
-            GameManagerController.getInstance().getCurrentLevel().getActiveZombies().add(z);
-            previousWaveZombies.add(z); // if tracking per wave
-
-            System.out.println("Zombie " + z.getData().getDisplayName() + " spawned at wave " + (currentWave + 1)
-                    + " in lane " + lane + " which costed " + z.getWaveCost() + ".");
-
-            remainingCost -= z.getWaveCost();
+            int count = Math.max(1, spawn.getCount());
+            for (int i = 0; i < count; i++) {
+                int lane = normalizeLane(spawn.getLane());
+                addZombie(new Zombie(data, currentLevel.getGameMap().getZombieStartColumn(), lane));
+            }
         }
     }
 
-    private Zombie createRandomZombie(){
-        int index = random.nextInt(ZombieRepository.getInstance().getAllZombies().size());
-        ZombieData template = GameManagerController.getInstance().getCurrentLevel().getCurrentSeason()
-                .getAllowedZombies().get(index);
-        Zombie zombie = new Zombie(template, 0, 0);
-        return zombie;
+    private void spawnByCost(int budget) {
+        List<ZombieData> allowed = getAllowedZombieData();
+        if (allowed.isEmpty()) {
+            return;
+        }
+        allowed.sort(Comparator.comparingInt(this::effectiveWaveCost));
+        int minimumCost = Math.max(1, effectiveWaveCost(allowed.get(0)));
+        int remaining = Math.max(budget, minimumCost);
+        while (remaining >= minimumCost) {
+            List<ZombieData> affordable = new ArrayList<>();
+            for (ZombieData data : allowed) {
+                int cost = effectiveWaveCost(data);
+                if (cost > 0 && cost <= remaining) {
+                    affordable.add(data);
+                }
+            }
+            if (affordable.isEmpty()) {
+                break;
+            }
+            ZombieData data = affordable.get(random.nextInt(affordable.size()));
+            int lane = random.nextInt(currentLevel.getGameMap().getRows()) + 1;
+            addZombie(new Zombie(data, currentLevel.getGameMap().getZombieStartColumn(), lane));
+            remaining -= effectiveWaveCost(data);
+        }
+    }
+
+    private int effectiveWaveCost(ZombieData data) {
+        if (data == null || data.getWaveCost() <= 0) {
+            return 0;
+        }
+        int difficulty = App.getCurrentUser() == null ? 3 : App.getCurrentUser().getDifficultyLevel();
+        return Math.max(1, (int) Math.ceil(data.getWaveCost() * 3.0 / difficulty));
+    }
+
+    private List<ZombieData> getAllowedZombieData() {
+        List<ZombieData> result = new ArrayList<>();
+        for (String id : currentLevel.getData().getAllowedZombies()) {
+            ZombieData data = ZombieRepository.getInstance().findById(id);
+            if (data != null && !result.contains(data)) {
+                result.add(data);
+            }
+        }
+        if (result.isEmpty() && currentLevel.getCurrentSeason() != null) {
+            for (String id : currentLevel.getCurrentSeason().getData().getAllowedZombies()) {
+                ZombieData data = ZombieRepository.getInstance().findById(id);
+                if (data != null && !result.contains(data)) {
+                    result.add(data);
+                }
+            }
+        }
+        if (result.isEmpty()) {
+            result.addAll(ZombieRepository.getInstance().getAllZombies());
+        }
+        result.removeIf(data -> data.getWaveCost() <= 0);
+        return result;
+    }
+
+    private void addZombie(Zombie zombie) {
+        if (App.getCurrentUser() != null) {
+            App.getCurrentUser().getCollection().unlockZombie(zombie.getData().getId());
+        }
+        currentLevel.addActiveZombie(zombie);
+        previousWaveZombies.add(zombie);
+        previousWaveInitialHealth += zombie.getTotalHealth();
+        String id = zombie.getData().getId();
+        if (id.equalsIgnoreCase("ZombieBarrelRoller")) {
+            currentLevel.addBarrel(new Barrel(zombie.getX() - 0.5, zombie.getY(), zombie, true));
+        } else if (id.equalsIgnoreCase("ZombieArcade") || id.equalsIgnoreCase("ZombieTroglobite")) {
+            currentLevel.addBarrel(new Barrel(zombie.getX() - 0.5, zombie.getY(), zombie, false));
+        }
+        System.out.println("Zombie " + zombie.getData().getDisplayName() + " spawned at wave " + currentWave
+                + " in lane " + zombie.getY() + " which costed " + effectiveWaveCost(zombie.getData()) + ".");
+    }
+
+    private int normalizeLane(int lane) {
+        if (lane >= 1 && lane <= currentLevel.getGameMap().getRows()) {
+            return lane;
+        }
+        if (lane >= 0 && lane < currentLevel.getGameMap().getRows()) {
+            return lane + 1;
+        }
+        return random.nextInt(currentLevel.getGameMap().getRows()) + 1;
+    }
+
+    private WavePatternData getCurrentPattern() {
+        for (WavePatternData pattern : wavePattern) {
+            if (pattern.getWaveNumber() == currentWave) {
+                return pattern;
+            }
+        }
+        return null;
     }
 
     public boolean shouldNextWaveStart() {
-        if (currentWave == -1) return true;
-
-        int totalHealth = 0;
-        int currentHealth = 0;
-
-        for (Zombie z : previousWaveZombies) {
-            totalHealth += z.getData().getHP();
-            if (!z.isDead()) {
-                currentHealth += z.getCurrentHp();
-            }
+        if (currentWave == 0) {
+            return true;
         }
-
-        return (double)currentHealth / totalHealth <= 0.25; // 75% dead
+        if (previousWaveInitialHealth <= 0) {
+            return previousWaveZombies.stream().allMatch(Zombie::isDead);
+        }
+        int remainingHealth = 0;
+        for (Zombie zombie : previousWaveZombies) {
+            remainingHealth += zombie.getTotalHealth();
+        }
+        return remainingHealth <= previousWaveInitialHealth * 0.25;
     }
 
-    public static void releaseTheNuke(){
-        for(Zombie z: previousWaveZombies){
-            z.setCurrentHp(0);
+    public static void releaseTheNuke() {
+        Level level = GameManagerController.getInstance().getCurrentLevel();
+        if (level == null) {
+            return;
+        }
+        for (Zombie zombie : new ArrayList<>(level.getActiveZombies())) {
+            zombie.setCurrentHp(0);
         }
     }
 
     @Override
     public void update() {
-        if(shouldNextWaveStart()){
-            currentWave++;
-            previousWaveZombies.clear();
-            if(currentWave >= wavePattern.size()){
-                GameManagerController.getInstance().gameWon();
-                return;
-            }
-            if(currentWave == wavePattern.size() - 1){
-                isLastWave = true;
-            } else {
-                newWaveStarted = true;
-            }
-            calculateWaveDifficulty();
-            spawnZombies();
-
-            if (currentLevel.getCurrentSeason() != null) {
-                currentLevel.getCurrentSeason().WaveStarted(currentLevel, currentWave);
-            }
-            //currentLevel.getSpecialRuleManager().onWaveStarted(currentLevel, currentWave);
+        if (completed || !currentLevel.isZombieWavesEnabled()) {
+            return;
         }
+        if (currentWave >= getTotalWaves()) {
+            boolean anyLivingZombie = currentLevel.getActiveZombies().stream().anyMatch(zombie -> !zombie.isDead());
+            if (!anyLivingZombie) {
+                completed = true;
+                System.out.println(GameManagerController.getInstance().gameWon());
+            }
+            return;
+        }
+        if (!shouldNextWaveStart()) {
+            return;
+        }
+        currentWave++;
+        if (currentWave == getTotalWaves()) {
+            System.out.println("The final wave has come.");
+        } else {
+            System.out.println("Wave " + currentWave + " started.");
+        }
+        spawnZombies();
+        QuestController.notifyWaveStarted(currentWave, timeWaveStarted);
+        SeasonController.advanceWave(currentLevel, currentWave);
+    }
+
+    public int getTotalWaves() {
+        return Math.max(1, currentLevel.getData().getWaveCount());
     }
 
     public int getCurrentWave() {
@@ -126,19 +242,7 @@ public class ZombieWaveManager implements Update {
         return timeWaveStarted;
     }
 
-    public boolean isLastWave() {
-        return isLastWave;
-    }
-
-    public void setLastWave(boolean lastWave) {
-        isLastWave = lastWave;
-    }
-
-    public boolean isNewWaveStarted() {
-        return newWaveStarted;
-    }
-
-    public void setNewWaveStarted(boolean newWaveStarted) {
-        this.newWaveStarted = newWaveStarted;
+    public boolean isCompleted() {
+        return completed;
     }
 }

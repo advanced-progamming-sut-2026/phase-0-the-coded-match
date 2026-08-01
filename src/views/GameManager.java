@@ -15,9 +15,9 @@ public class GameManager {
         } else if (input.matches(Commands.COLLECT_SUN.getPattern())) {
             instance.collectSun(input);
         } else if (input.matches(Commands.SUN_AMOUNT.getPattern())) {
-            System.out.println("sun amount = " + instance.showSunsAmount());
+            System.out.println(instance.showSunsAmount());
         } else if (input.matches(Commands.CHEAT_ADD_SUNS.getPattern())) {
-            System.out.println(instance.cheatAddSuns(input));
+            instance.cheatAddSuns(input);
         } else if (input.matches(Commands.PLANT_PLANT.getPattern())) {
             instance.plantPlant(input);
         } else if (input.matches(Commands.CHEAT_REMOVE_COOLDOWN.getPattern())) {
@@ -38,6 +38,8 @@ public class GameManager {
             System.out.println(ZombieController.showZombiesInfo().toString());
         } else if (input.matches(Commands.CHEAT_SPAWN_ZOMBIE.getPattern())) {
             ZombieController.cheatSpawnZombies(input);
+        } else if (input.matches(Commands.START_ZOMBIE_WAVES.getPattern())) {
+            System.out.println(instance.startWave()[0]);
         } else if(input.matches(Commands.RELEASE_THE_NUKE.getPattern())){
             instance.cheatReleaseTheNuke();
         } else {

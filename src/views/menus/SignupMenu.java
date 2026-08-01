@@ -13,11 +13,11 @@ public class SignupMenu {
     public static void check(String input, Scanner scanner) {
         if (input.matches(Commands.REGISTER.getPattern())) {
             registered = false;
+            questionPicked = false;
             SignupMenuController.register(input, message);
             System.out.println(message[0]);
 
             if (registered) {
-                input = scanner.nextLine();
                 SignupMenuController.showQuestions(input, message);
                 System.out.println(message[0]);
 

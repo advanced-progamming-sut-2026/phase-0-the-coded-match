@@ -9,7 +9,8 @@ import models.zombies.Zombie;
 import java.util.Random;
 
 public class PianistBehavior implements ZombieBehavior {
-    private int abilityTimer = 50;
+    private static final int ABILITY_TICKS = 50;
+    private final Random random = new Random();
 
     @Override
     public void updateZombie(Zombie zombie, Plant targetPlant) {
@@ -17,24 +18,27 @@ public class PianistBehavior implements ZombieBehavior {
         if (zombie.getCurrentState() == ZombieState.EATING) {
             zombie.destroyPlant(targetPlant);
             zombie.setCurrentState(ZombieState.WALKING);
-        } else if (zombie.getCurrentState() == ZombieState.WALKING) {
+        } else {
             zombie.walk();
         }
-        if (zombie.getAbilityTickTimer() == abilityTimer) {
+        if (zombie.getAbilityTickTimer() >= ABILITY_TICKS) {
             shuffleZombies(zombie);
             zombie.setAbilityTickTimer(0);
         }
     }
 
-    public void shuffleZombies(Zombie pianist) {
+    private void shuffleZombies(Zombie pianist) {
+        int rows = GameManagerController.getInstance().getCurrentLevel().getGameMap().getRows();
         for (Zombie zombie : GameManagerController.getInstance().getCurrentLevel().getActiveZombies()) {
-            if (zombie != pianist) {
-                Random random = new Random();
-                int totalRows = GameManagerController.getInstance().getCurrentLevel().getGameMap().getRows();
-                int newRow = random.nextInt(totalRows);
-                while (newRow == zombie.getY()) {
-                    newRow = random.nextInt(totalRows);
-                }
+            if (zombie == pianist || zombie.getY() != pianist.getY()) {
+                continue;
+            }
+            int direction = random.nextBoolean() ? 1 : -1;
+            int newRow = zombie.getY() + direction;
+            if (newRow < 1 || newRow > rows) {
+                newRow = zombie.getY() - direction;
+            }
+            if (newRow >= 1 && newRow <= rows) {
                 zombie.setY(newRow);
             }
         }

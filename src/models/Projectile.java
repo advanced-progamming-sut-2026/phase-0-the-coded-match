@@ -59,7 +59,6 @@ public class Projectile {
     }
     public void destroy() {
         isDestroyed = true;
-        GameManagerController.getInstance().getCurrentLevel().getActiveProjectiles().remove(this);
     }
 
     public double getxCoordinate() {

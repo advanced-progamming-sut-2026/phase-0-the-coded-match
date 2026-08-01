@@ -2,66 +2,78 @@
   {
     "id": "ZombieDefault",
     "displayName": "Default",
-    "seasons": ["ANCIENT_EGYPT",
+    "seasons": [
+      "ANCIENT_EGYPT",
       "FROSTBITE_CAVES",
       "BIG_WAVE_BEACH",
-      "DARK_AGES"],
-    "HP": 190,
+      "DARK_AGES"
+    ],
     "eatDPS": 100,
     "speed": 0.185,
     "waveCost": 100,
     "behaviorType": "Normal",
     "state": "WALKING",
-    "cost": 50
+    "cost": 50,
+    "maxHP": 190,
+    "armors": []
   },
   {
     "id": "ZombieArmor1",
     "displayName": "Conehead Zombie",
-    "seasons": ["ANCIENT_EGYPT",
+    "seasons": [
+      "ANCIENT_EGYPT",
       "FROSTBITE_CAVES",
       "BIG_WAVE_BEACH",
-      "DARK_AGES"],
-    "HP": 190,
+      "DARK_AGES"
+    ],
     "eatDPS": 100,
     "speed": 0.185,
     "waveCost": 200,
-    "armors": {
-      "type": "CONE",
-      "hp": 370,
-      "metallic": false
-    },
+    "armors": [
+      {
+        "type": "CONE",
+        "hp": 370,
+        "metallic": false
+      }
+    ],
     "behaviorType": "Normal",
     "state": "WALKING",
-    "cost": 100
+    "cost": 100,
+    "maxHP": 190
   },
   {
     "id": "ZombieArmor2",
     "displayName": "Buckethead Zombie",
-    "seasons": ["ANCIENT_EGYPT",
+    "seasons": [
+      "ANCIENT_EGYPT",
       "FROSTBITE_CAVES",
       "BIG_WAVE_BEACH",
-      "DARK_AGES"],
-    "HP": 190,
+      "DARK_AGES"
+    ],
     "eatDPS": 100,
     "speed": 0.185,
     "waveCost": 400,
-    "armors": {
-      "type": "BUCKET",
-      "hp": 1100,
-      "metallic": true
-    },
+    "armors": [
+      {
+        "type": "BUCKET",
+        "hp": 1100,
+        "metallic": true
+      }
+    ],
     "behaviorType": "Normal",
     "state": "WALKING",
-    "cost": 100
+    "cost": 100,
+    "maxHP": 190
   },
   {
     "id": "ZombieDarkArmor3",
     "displayName": "Knight Zombie",
-    "seasons": ["ANCIENT_EGYPT",
+    "seasons": [
+      "ANCIENT_EGYPT",
       "FROSTBITE_CAVES",
       "BIG_WAVE_BEACH",
-      "DARK_AGES"],
-    "HP": 190,
+      "DARK_AGES"
+    ],
     "eatDPS": 100,
     "speed": 0.185,
     "waveCost": 550,
@@ -75,326 +87,408 @@
         "type": "SHOULDER_ARMOR",
         "hp": 1600,
         "metallic": true
-      }],
+      }
+    ],
     "behaviorType": "Normal",
     "state": "WALKING",
-    "cost": 120
+    "cost": 120,
+    "maxHP": 190
   },
   {
     "id": "ZombieArmor4",
     "displayName": "Brickhead Zombie",
-    "seasons": ["ANCIENT_EGYPT",
+    "seasons": [
+      "ANCIENT_EGYPT",
       "FROSTBITE_CAVES",
       "BIG_WAVE_BEACH",
-      "DARK_AGES"],
-    "HP": 190,
+      "DARK_AGES"
+    ],
     "eatDPS": 100,
     "speed": 0.185,
     "waveCost": 700,
-    "armors": {
-      "type": "BRICK",
-      "hp": 1100,
-      "metallic": true
-    },
+    "armors": [
+      {
+        "type": "BUCKET",
+        "hp": 1100,
+        "metallic": true
+      }
+    ],
     "behaviorType": "Normal",
     "state": "WALKING",
-    "cost": 100
+    "cost": 100,
+    "maxHP": 190
   },
   {
     "id": "ZombieGargantuar",
     "displayName": "Gargantuar",
-    "seasons": ["ANCIENT_EGYPT",
+    "seasons": [
+      "ANCIENT_EGYPT",
       "FROSTBITE_CAVES",
       "BIG_WAVE_BEACH",
-      "DARK_AGES"],
-    "HP": 3600,
+      "DARK_AGES"
+    ],
     "eatDPS": 1500,
     "speed": 0.24,
     "waveCost": 1500,
     "behaviorType": "Giant",
     "state": "WALKING",
-    "cost": 150
+    "cost": 150,
+    "maxHP": 3600,
+    "armors": []
   },
   {
     "id": "ZombieImp",
     "displayName": "Imp",
-    "seasons": ["ANCIENT_EGYPT",
+    "seasons": [
+      "ANCIENT_EGYPT",
       "FROSTBITE_CAVES",
       "BIG_WAVE_BEACH",
-      "DARK_AGES"],
-    "HP": 190,
+      "DARK_AGES"
+    ],
     "eatDPS": 100,
     "speed": 0.22,
     "waveCost": 100,
     "behaviorType": "Normal",
     "state": "WALKING",
-    "cost": 50
+    "cost": 50,
+    "maxHP": 190,
+    "armors": []
   },
   {
     "id": "ZombieModernAllStar",
     "displayName": "AllStar",
-    "seasons": ["ANCIENT_EGYPT",
+    "seasons": [
+      "ANCIENT_EGYPT",
       "FROSTBITE_CAVES",
       "BIG_WAVE_BEACH",
-      "DARK_AGES"],
-    "HP": 1100,
+      "DARK_AGES"
+    ],
     "eatDPS": 100,
     "speed": 0.16,
     "waveCost": 1000,
     "behaviorType": "AllStar",
     "state": "RUNNING",
     "runningSpeed": 0.5,
-    "cost": 150
+    "cost": 150,
+    "maxHP": 1100,
+    "armors": []
   },
   {
     "id": "ZombieArcade",
     "displayName": "Arcade",
-    "seasons": ["ANCIENT_EGYPT",
+    "seasons": [
+      "ANCIENT_EGYPT",
       "FROSTBITE_CAVES",
       "BIG_WAVE_BEACH",
-      "DARK_AGES"],
-    "HP": 490,
+      "DARK_AGES"
+    ],
     "eatDPS": 100,
     "speed": 0.19,
     "waveCost": 600,
-    "cost": 150
+    "cost": 150,
+    "maxHP": 490,
+    "armors": [],
+    "behaviorType": "Arcade"
   },
   {
     "id": "ZombieLostCityJane",
     "displayName": "Parasol Zombie",
-    "seasons": ["ANCIENT_EGYPT",
+    "seasons": [
+      "ANCIENT_EGYPT",
       "FROSTBITE_CAVES",
       "BIG_WAVE_BEACH",
-      "DARK_AGES"],
-    "HP": 350,
+      "DARK_AGES"
+    ],
     "eatDPS": 100,
     "speed": 0.25,
     "waveCost": 200,
     "behaviorType": "Normal",
     "state": "WALKING",
     "hasParasol": true,
-    "cost": 100
+    "cost": 100,
+    "maxHP": 350,
+    "armors": []
   },
   {
     "id": "ZombieCrystalSkull",
     "displayName": "Turquoise Zombie",
-    "seasons": ["ANCIENT_EGYPT",
+    "seasons": [
+      "ANCIENT_EGYPT",
       "FROSTBITE_CAVES",
       "BIG_WAVE_BEACH",
-      "DARK_AGES"],
-    "HP": 250,
+      "DARK_AGES"
+    ],
     "eatDPS": 100,
     "speed": 0.185,
     "waveCost": 500,
     "behaviorType": "Turquoise",
-    "state": "WALKING"
+    "state": "WALKING",
+    "maxHP": 250,
+    "armors": []
   },
   {
     "id": "ZombieProspector",
     "displayName": "Prospector Zombie",
-    "seasons": ["ANCIENT_EGYPT",
+    "seasons": [
+      "ANCIENT_EGYPT",
       "FROSTBITE_CAVES",
       "BIG_WAVE_BEACH",
-      "DARK_AGES"],
-    "HP": 190,
+      "DARK_AGES"
+    ],
     "eatDPS": 100,
     "speed": 0.16,
     "waveCost": 200,
     "behaviorType": "Prospector",
-    "state": "WALKING"
+    "state": "WALKING",
+    "maxHP": 190,
+    "armors": []
   },
   {
     "id": "ZombiePiano",
     "displayName": "Pianist Zombie",
-    "seasons": ["ANCIENT_EGYPT",
+    "seasons": [
+      "ANCIENT_EGYPT",
       "FROSTBITE_CAVES",
       "BIG_WAVE_BEACH",
-      "DARK_AGES"],
-    "HP": 840,
+      "DARK_AGES"
+    ],
     "eatDPS": 4000,
     "speed": 0.12,
     "waveCost": 450,
     "behaviorType": "Pianist",
-    "state": "WALKING"
+    "state": "WALKING",
+    "maxHP": 840,
+    "armors": []
   },
   {
     "id": "ZombieArmZombieNewspaper",
     "displayName": "Newspaper Zombie",
-    "seasons": ["ANCIENT_EGYPT",
+    "seasons": [
+      "ANCIENT_EGYPT",
       "FROSTBITE_CAVES",
       "BIG_WAVE_BEACH",
-      "DARK_AGES"],
-    "HP": 460,
+      "DARK_AGES"
+    ],
     "eatDPS": 200,
     "speed": 0.22,
     "waveCost": 700,
-    "armors": {
-      "type": "NEWSPAPER",
-      "hp": 800,
-      "metallic": false
-    },
+    "armors": [
+      {
+        "type": "NEWSPAPER",
+        "hp": 800,
+        "metallic": false
+      }
+    ],
     "behaviorType": "Normal",
     "state": "WALKING",
-    "runningState": 0.44
+    "runningState": 0.44,
+    "maxHP": 460
   },
   {
     "id": "ZombieBarrelRoller",
     "displayName": "Barrel Roller Zombie",
-    "seasons": ["ANCIENT_EGYPT",
+    "seasons": [
+      "ANCIENT_EGYPT",
       "FROSTBITE_CAVES",
       "BIG_WAVE_BEACH",
-      "DARK_AGES"],
-    "HP": 190,
+      "DARK_AGES"
+    ],
     "eatDPS": 100,
     "speed": 0.185,
     "waveCost": 500,
     "behaviorType": "BarrelRoller",
-    "state": "WALKING"
+    "state": "WALKING",
+    "maxHP": 190,
+    "armors": []
   },
   {
     "id": "ZombieRa",
     "displayName": "Ra Zombie",
-    "seasons": ["ANCIENT_EGYPT"],
-    "HP": 190,
+    "seasons": [
+      "ANCIENT_EGYPT"
+    ],
     "eatDPS": 100,
     "speed": 0.2,
     "waveCost": 100,
     "behaviorType": "Normal",
-    "state": "WALKING"
+    "state": "WALKING",
+    "maxHP": 190,
+    "armors": []
   },
   {
     "id": "ZombieExplorer",
     "displayName": "Explorer Zombie",
-    "seasons": ["ANCIENT_EGYPT"],
-    "HP": 250,
+    "seasons": [
+      "ANCIENT_EGYPT"
+    ],
     "eatDPS": 100,
     "speed": 0.25,
     "waveCost": 250,
     "behaviorType": "Explorer",
-    "state": "WALKING"
+    "state": "WALKING",
+    "maxHP": 250,
+    "armors": []
   },
   {
     "id": "ZombieTombRaiser",
     "displayName": "Tombraiser",
-    "seasons": ["ANCIENT_EGYPT"],
-    "HP": 380,
+    "seasons": [
+      "ANCIENT_EGYPT"
+    ],
     "eatDPS": 100,
     "speed": 0.185,
     "waveCost": 300,
     "behaviorType": "Normal",
-    "state": "WALKING"
+    "state": "WALKING",
+    "maxHP": 380,
+    "armors": []
   },
   {
     "id": "ZombieIceAgeDodo",
     "displayName": "Dodo Rider Zombie",
-    "seasons": ["FROSTBITE_CAVES"],
-    "HP": 490,
+    "seasons": [
+      "FROSTBITE_CAVES"
+    ],
     "eatDPS": 100,
     "speed": 0.3,
     "waveCost": 600,
     "behaviorType": "DodoRider",
-    "state": "WALKING"
+    "state": "WALKING",
+    "maxHP": 490,
+    "armors": []
   },
   {
     "id": "ZombieIceAgeHunter",
     "displayName": "Hunter Zombie",
-    "seasons": ["FROSTBITE_CAVES"],
-    "HP": 700,
+    "seasons": [
+      "FROSTBITE_CAVES"
+    ],
     "eatDPS": 100,
     "speed": 0.13,
     "waveCost": 500,
-    "behaviorType": "Normal",
-    "state": "WALKING"
+    "behaviorType": "Hunter",
+    "state": "WALKING",
+    "maxHP": 700,
+    "armors": []
   },
   {
     "id": "ZombieIceAgeTroglobite",
     "displayName": "Troglobite",
-    "seasons": ["FROSTBITE_CAVES"],
-    "HP": 470,
+    "seasons": [
+      "FROSTBITE_CAVES"
+    ],
     "eatDPS": 100,
     "speed": 0.185,
-    "waveCost": 600
+    "waveCost": 600,
+    "maxHP": 470,
+    "armors": [],
+    "behaviorType": "Troglobite"
   },
   {
     "id": "ZombieBeachFisherman",
     "displayName": "Fisherman Zombie",
-    "seasons": ["BIG_WAVE_BEACH"],
-    "HP": 1000,
+    "seasons": [
+      "BIG_WAVE_BEACH"
+    ],
     "eatDPS": 100,
     "speed": 0.185,
-    "waveCost": 700
+    "waveCost": 700,
+    "maxHP": 1000,
+    "armors": [],
+    "behaviorType": "Fisherman"
   },
   {
     "id": "ZombieBeachSnorkel",
     "displayName": "Snorkel Zombie",
-    "seasons": ["BIG_WAVE_BEACH"],
-    "HP": 350,
+    "seasons": [
+      "BIG_WAVE_BEACH"
+    ],
     "eatDPS": 100,
     "speed": 0.185,
     "waveCost": 200,
     "behaviorType": "Snorkel",
-    "state": "WALKING"
+    "state": "WALKING",
+    "maxHP": 350,
+    "armors": []
   },
   {
     "id": "ZombieBeachOctopus",
     "displayName": "Octopus Zombie",
-    "seasons": ["BIG_WAVE_BEACH"],
-    "HP": 910,
+    "seasons": [
+      "BIG_WAVE_BEACH"
+    ],
     "eatDPS": 100,
     "speed": 0.12,
     "waveCost": 900,
-    "behaviorType": "Normal",
-    "state": "WALKING"
+    "behaviorType": "Octopus",
+    "state": "WALKING",
+    "maxHP": 910,
+    "armors": []
   },
   {
     "id": "ZombieDarkJuggler",
     "displayName": "Juggler",
-    "seasons": ["DARK_AGES"],
-    "HP": 420,
+    "seasons": [
+      "DARK_AGES"
+    ],
     "eatDPS": 100,
     "speed": 0.2,
-    "waveCost": 450
+    "waveCost": 450,
+    "maxHP": 420,
+    "armors": [],
+    "behaviorType": "Juggler"
   },
   {
     "id": "ZombieWizard",
     "displayName": "Wizard Zombie",
-    "seasons": ["DARK_AGES"],
-    "HP": 490,
+    "seasons": [
+      "DARK_AGES"
+    ],
     "eatDPS": 100,
     "speed": 0.12,
-    "waveCost": 800
+    "waveCost": 800,
+    "maxHP": 490,
+    "armors": [],
+    "behaviorType": "Wizard"
   },
   {
     "id": "ZombieDarkKing",
     "displayName": "King",
-    "seasons": ["DARK_AGES"],
-    "HP": 1000,
+    "seasons": [
+      "DARK_AGES"
+    ],
     "eatDPS": 100,
     "speed": 0.0,
     "waveCost": 750,
     "behaviorType": "King",
-    "state": "IDLE"
+    "state": "IDLE",
+    "maxHP": 1000,
+    "armors": []
   },
   {
     "id": "ZombieDarkImpDragon",
     "displayName": "Imp Dragon",
-    "seasons": ["DARK_AGES"],
-    "HP": 190,
+    "seasons": [
+      "DARK_AGES"
+    ],
     "eatDPS": 100,
     "speed": 0.185,
     "waveCost": 150,
     "behaviorType": "Normal",
-    "state": "WALKING"
+    "state": "WALKING",
+    "maxHP": 190,
+    "armors": []
   },
   {
     "id": "SunProducerZombie",
     "displayName": "Sun Zombie",
     "seasons": [],
-    "HP": 190,
     "eatDPS": 100,
     "speed": 0.185,
     "behaviorType": "SunProducer",
     "state": "WALKING",
-    "cost": 50
+    "cost": 50,
+    "maxHP": 190,
+    "armors": []
   }
 ]

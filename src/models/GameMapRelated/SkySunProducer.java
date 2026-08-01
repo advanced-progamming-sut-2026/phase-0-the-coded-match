@@ -10,14 +10,16 @@ import models.Update;
 import java.util.Random;
 
 public class SkySunProducer implements Update {
+    private static final int TICKS_PER_SECOND = 10;
+    private static final int FALL_DURATION_TICKS = 5 * TICKS_PER_SECOND;
     private double timeSinceLastDrop;
-    private Random random;
+    private final Random random;
     private boolean producedASun;
     private Sun sun;
 
     public SkySunProducer() {
-        this.timeSinceLastDrop = 0.0;
-        this.random = new Random();
+        timeSinceLastDrop = 0.0;
+        random = new Random();
         producedASun = false;
     }
 
@@ -26,7 +28,7 @@ public class SkySunProducer implements Update {
     }
 
     public void setTimeSinceLastDrop(int timeSinceLastDrop) {
-        this.timeSinceLastDrop = timeSinceLastDrop;
+        this.timeSinceLastDrop = Math.max(0, timeSinceLastDrop);
     }
 
     public boolean isProducedASun() {
@@ -46,37 +48,46 @@ public class SkySunProducer implements Update {
     }
 
     public void calculateDropTime() {
-        double time = Math.max(6 + 0.05 * GameManagerController.getInstance().getCurrentLevel().getCurrentTick(), 12);
-        int dl = App.getCurrentUser().getDifficultyLevel();
-        time = time * (dl / 3.0);
-        if (timeSinceLastDrop >= time) {
+        Level level = GameManagerController.getInstance().getCurrentLevel();
+        if (level == null) {
+            return;
+        }
+        double elapsedSeconds = level.getCurrentTick() / TICKS_PER_SECOND;
+        double intervalSeconds = Math.max(6 + 0.05 * elapsedSeconds, 12);
+        int difficulty = App.getCurrentUser() == null ? 3 : App.getCurrentUser().getDifficultyLevel();
+        intervalSeconds *= difficulty / 3.0;
+        double intervalTicks = intervalSeconds * TICKS_PER_SECOND;
+        if (timeSinceLastDrop >= intervalTicks) {
             spawnRandomSun();
             timeSinceLastDrop = 0.0;
         }
     }
 
     public void spawnRandomSun() {
-        Level currentLevel = GameManagerController.getInstance().getCurrentLevel();
-        int chance = random.nextInt();
-        int randomX = random.nextInt(currentLevel.getGameMap().getLength()); //x and y >= 0
-        int randomY = random.nextInt(currentLevel.getGameMap().getWidth());
-
-        Sun droppedSun = null;
+        Level level = GameManagerController.getInstance().getCurrentLevel();
+        if (level == null || level.getGameMap() == null) {
+            return;
+        }
+        int columns = level.getGameMap().getColumns();
+        int rows = level.getGameMap().getRows();
+        if (columns <= 0 || rows <= 0) {
+            return;
+        }
+        int chance = random.nextInt(100);
+        int x = random.nextInt(columns) + 1;
+        int y = random.nextInt(rows) + 1;
+        SunType type;
         if (chance < SunType.NORMAL.getDropChancePercentage()) {
-            droppedSun = new Sun(randomX, randomY, SunType.NORMAL.getValue(), 5,
-                    true, SunType.NORMAL);
-        } else if (SunType.NORMAL.getDropChancePercentage() < chance && chance < SunType.SPECIAL.getDropChancePercentage()) {
-            droppedSun = new Sun(randomX, randomY, SunType.SPECIAL.getValue(), 5,
-                    true, SunType.SPECIAL);
+            type = SunType.NORMAL;
+        } else if (chance < SunType.NORMAL.getDropChancePercentage() + SunType.SPECIAL.getDropChancePercentage()) {
+            type = SunType.SPECIAL;
         } else {
-            droppedSun = new Sun(randomX, randomY, SunType.RADIOACTIVE.getDropChancePercentage(), 5,
-                    true, SunType.RADIOACTIVE);
+            type = SunType.RADIOACTIVE;
         }
-        if (droppedSun != null) {
-            currentLevel.getActiveSuns().add(droppedSun);
-            sun = droppedSun;
-            producedASun = true;
-        }
+        Sun droppedSun = new Sun(x, y, type.getValue(), FALL_DURATION_TICKS, true, type);
+        level.getActiveSuns().add(droppedSun);
+        sun = droppedSun;
+        producedASun = true;
     }
 
     @Override

@@ -19,7 +19,7 @@ public class SettingsMenuController{
             message[0] = "invalid command";
             return message;
         }
-        int newDifficulty = Integer.parseInt(matcher.group("difficulty_level"));
+        int newDifficulty = Integer.parseInt(matcher.group("difficultyLevel"));
 
         if (newDifficulty == App.getCurrentUser().getDifficultyLevel()) {
             message[0] = "difficulty already set";

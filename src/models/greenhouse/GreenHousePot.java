@@ -9,10 +9,11 @@ public class GreenHousePot {
     public Long planted_timestamp;
     public int growth_duration_hours;
 
-    public GreenHousePot(int x, int y, boolean locked){
+    public GreenHousePot(int x, int y, boolean locked) {
         this.x = x;
         this.y = y;
-        this.is_locked = locked;
+        is_locked = locked;
+        status = locked ? "LOCKED" : "EMPTY";
     }
 
     public boolean isReady() {
@@ -20,7 +21,6 @@ public class GreenHousePot {
             return false;
         }
         long now = System.currentTimeMillis() / 1000;
-        return (now - planted_timestamp) >= (growth_duration_hours * 3600L);
+        return now - planted_timestamp >= growth_duration_hours * 3600L;
     }
-
 }

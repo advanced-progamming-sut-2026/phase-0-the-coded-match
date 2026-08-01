@@ -2,7 +2,6 @@ package models.zombies.strategies;
 
 import controllers.GameManagerController;
 import enums.ZombieState;
-import models.GameMapRelated.GameMap;
 import models.GameMapRelated.Tile;
 import models.Level;
 import models.Projectile;
@@ -10,59 +9,46 @@ import models.plants.Plant;
 import models.zombies.Zombie;
 
 public class TurquoiseBehavior implements ZombieBehavior {
-    private boolean isCastingAbility = false;
-    private int abilityTimer = 10;
+    private static final int CAST_TICKS = 50;
+    private boolean casting;
 
     @Override
     public void updateZombie(Zombie zombie, Plant targetPlant) {
-        if (!isCastingAbility) {
-            if (GameManagerController.getInstance().getCurrentLevel().isPlantWithinDistance(zombie, 4)) {
-                zombie.setCurrentState(ZombieState.STEALING);
-                isCastingAbility = true;
-            } else {
-                zombie.walk();
-            }
-        } else {
-            if (zombie.getAbilityTickTimer() == abilityTimer) {
-                lazer(zombie);
-                zombie.setAbilityTickTimer(0);
-                isCastingAbility = false;
-                zombie.setCurrentState(ZombieState.WALKING);
-            } else {
-                zombie.setStolenSuns(zombie.getStolenSuns() + stealSuns());
-                zombie.setAbilityTickTimer(zombie.getAbilityTickTimer() + 1);
-            }
-            if (zombie.getCurrentState() == ZombieState.EATING) {
-                zombie.attack(targetPlant);
-                if(targetPlant.isDead()) {
-                    zombie.setCurrentState(ZombieState.WALKING);
-                }
-            }
+        Level level = GameManagerController.getInstance().getCurrentLevel();
+        if (!casting && level.isPlantWithinDistance(zombie, 4)) {
+            casting = true;
+            zombie.setCurrentState(ZombieState.STEALING);
+            zombie.setAbilityTickTimer(0);
+        }
+        if (!casting) {
+            zombie.walk();
+            return;
+        }
+        int timer = zombie.getAbilityTickTimer() + 1;
+        zombie.setAbilityTickTimer(timer);
+        if (timer % 10 == 0) {
+            int stolen = Math.min(25, level.getCollectedSunsAmount());
+            level.setCollectedSunsAmount(level.getCollectedSunsAmount() - stolen);
+            zombie.setStolenSuns(zombie.getStolenSuns() + stolen);
+        }
+        if (timer >= CAST_TICKS) {
+            laser(zombie);
+            zombie.setAbilityTickTimer(0);
+            zombie.setCurrentState(ZombieState.WALKING);
+            casting = false;
         }
     }
 
-    public void lazer(Zombie zombie) {
-        GameMap map = GameManagerController.getInstance().getCurrentLevel().getGameMap();
-
-        for (int i = 0; i < map.getColumns(); i++) {
-            for (int j = 0; j < map.getRows(); j++) {
-                if (j == zombie.getY() && zombie.getX() - i <= 4) {
-                    Tile tile = map.getTile(j, i);
-                    if (!tile.isEmpty()) {
-                        tile.getPlant().setCurrentHp(0);
-                    }
-                }
+    private void laser(Zombie zombie) {
+        Level level = GameManagerController.getInstance().getCurrentLevel();
+        int startX = (int) Math.floor(zombie.getX()) - 1;
+        int endX = Math.max(1, startX - 3);
+        for (int x = startX; x >= endX; x--) {
+            Tile tile = level.getGameMap().getTile(x, zombie.getY());
+            if (tile != null && tile.getPlant() != null) {
+                tile.getPlant().setCurrentHp(0);
             }
         }
-    }
-
-    public int stealSuns() {
-        int sunsToSteal = Math.min(25, GameManagerController.getInstance().getCurrentLevel().getCollectedSunsAmount());
-        if (sunsToSteal > 0) {
-            Level level = GameManagerController.getInstance().getCurrentLevel();
-            level.setCollectedSunsAmount(level.getCollectedSunsAmount() - sunsToSteal);
-        }
-        return sunsToSteal;
     }
 
     @Override

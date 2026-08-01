@@ -1,5 +1,6 @@
 package models.seasons;
 
+import enums.TileType;
 import models.GameMapRelated.Tile;
 import models.Level;
 import models.plants.Plant;
@@ -12,27 +13,37 @@ import java.util.List;
 import java.util.Random;
 
 public class DarkAges extends Season {
+    private final Random random = new Random();
+
     public DarkAges(SeasonData data) {
         super(data);
-        this.name = data.getName();
-        this.setUnlocked(true);
     }
 
-
+    @Override
+    public void applySpecialRules() {
+    }
 
     @Override
     public void initializeGrid() {
-        // i think i should erase these
     }
 
     @Override
     public void LevelStarted(Level level) {
         level.setSkySunProducer(null);
+        int count = Math.min(3, level.getGameMap().getRows());
+        for (int i = 0; i < count; i++) {
+            int x = 2 + random.nextInt(Math.max(1, level.getGameMap().getColumns() - 2));
+            int y = random.nextInt(level.getGameMap().getRows()) + 1;
+            Tile tile = level.getGameMap().getTile(x, y);
+            if (tile != null) {
+                tile.setHoldsNecromancyPotential(true);
+            }
+        }
     }
 
-
     @Override
-    public void Update(Level level) {return;}
+    public void Update(Level level) {
+    }
 
     @Override
     public void WaveStarted(Level level, int waveNumber) {
@@ -40,66 +51,55 @@ public class DarkAges extends Season {
         spawnRandomWaveGraves(level);
     }
 
-    private void triggerNecromancy(Level level){
-        Random random = new Random();
-        int rows = level.getGameMap().getRows();
-        int cols = level.getGameMap().getColumns();
-        List<ZombieData> necromancyZombies = new ArrayList<>(this.getAllowedZombies());
-
-        for (int r = 0; r < rows; r++) {
-            for (int c = 0; c < cols; c++) {
-                Tile tile = level.getGameMap().getTile(c, r);
-
-                if (tile != null && tile.holdsNecromancyPotential() && tile.isGrave()) {
-                    String chosenZombie = necromancyZombies.get(random.nextInt(necromancyZombies.size())).getId();
-                    Zombie zombie = new Zombie(ZombieRepository.getInstance().findById(chosenZombie), c, r);
-                    if(zombie != null) {
-                        level.getActiveZombies().add(zombie);
-                    }
+    private void triggerNecromancy(Level level) {
+        List<String> zombies = new ArrayList<>(level.getData().getAllowedZombies());
+        if (zombies.isEmpty()) {
+            return;
+        }
+        for (int y = 1; y <= level.getGameMap().getRows(); y++) {
+            for (int x = 1; x <= level.getGameMap().getColumns(); x++) {
+                Tile tile = level.getGameMap().getTile(x, y);
+                if (tile == null || !tile.holdsNecromancyPotential() || !tile.isGrave()) {
+                    continue;
+                }
+                ZombieData data = ZombieRepository.getInstance().findById(zombies.get(random.nextInt(zombies.size())));
+                if (data != null) {
+                    level.addActiveZombie(new Zombie(data, x, y));
                 }
             }
         }
     }
 
-    private void spawnRandomWaveGraves(Level level){
-        Random random = new Random();
-        int rows = level.getGameMap().getRows();
-        int cols = level.getGameMap().getColumns();
-
+    private void spawnRandomWaveGraves(Level level) {
         int graveCount = 1 + random.nextInt(2);
         for (int i = 0; i < graveCount; i++) {
-            int randomRow = random.nextInt(rows);
-            int randomCol = 2 + random.nextInt(cols - 3); // middle right cols
-
-            Tile tile = level.getGameMap().getTile(randomCol, randomRow);
-            if (tile != null && tile.getPlant() == null && !tile.isGrave()) {
+            int x = 2 + random.nextInt(Math.max(1, level.getGameMap().getColumns() - 2));
+            int y = random.nextInt(level.getGameMap().getRows()) + 1;
+            Tile tile = level.getGameMap().getTile(x, y);
+            if (tile != null && tile.getPlant() == null && !tile.isGrave()
+                    && tile.getType() != TileType.WATER) {
                 Tile.GraveReward reward = rollRandomReward();
                 tile.setGrave(true, reward);
-
-                // DISPLAY MESSAGE
-                System.out.println("ALERT: A new grave (" + reward + ") has spawned at position ["
-                        + randomCol + ", " + randomRow + "]!");
+                if (random.nextBoolean()) {
+                    tile.setHoldsNecromancyPotential(true);
+                }
+                System.out.println("A new grave (" + reward + ") appeared at (" + x + ", " + y + ").");
             }
         }
     }
 
-    private Tile.GraveReward rollRandomReward(){
-        Random random = new Random();
+    private Tile.GraveReward rollRandomReward() {
         int roll = random.nextInt(100);
         if (roll < 20) {
             return Tile.GraveReward.SUN_50;
-        } else if (roll < 35) {
-            return Tile.GraveReward.PLANT_FOOD;
-        } else {
-            return Tile.GraveReward.NONE;
         }
+        if (roll < 35) {
+            return Tile.GraveReward.PLANT_FOOD;
+        }
+        return Tile.GraveReward.NONE;
     }
 
     @Override
     public void PlantPlaced(Level level, Plant plant, int x, int y) {
-
     }
-
-
 }
-

@@ -76,7 +76,7 @@ public class CollectionMenuController {
         if (!matcher.matches()) {
             return new StringBuilder();
         }
-        String plantName = matcher.group("plant_name");
+        String plantName = matcher.group("plantName");
         PlantData plant = PlantRepository.getInstance().findByName(plantName);
         if (plant == null) {
             return new StringBuilder("plant not found\n");
@@ -101,7 +101,7 @@ public class CollectionMenuController {
         if (!matcher.matches()) {
             return new StringBuilder();
         }
-        String zombieName = matcher.group("zombie_name");
+        String zombieName = matcher.group("zombieName");
         ZombieData zombie = ZombieRepository.getInstance().findByDisplayName(zombieName);
         if (zombie == null) {
             return new StringBuilder("zombie not found\n");
@@ -110,7 +110,7 @@ public class CollectionMenuController {
         result.append("name: ").append(zombie.getDisplayName()).append("\n");
         result.append("id: ").append(zombie.getId()).append("\n");
         result.append("seasons: ").append(zombie.getSeasons()).append("\n");
-        result.append("health: ").append(zombie.getHP()).append("\n");
+        result.append("health: ").append(zombie.getMaxHP()).append("\n");
         result.append("damage: ").append(zombie.getEatDPS()).append("\n");
         result.append("speed: ").append(zombie.getSpeed()).append("\n");
         result.append("wave cost: ").append(zombie.getWaveCost()).append("\n");
@@ -127,7 +127,7 @@ public class CollectionMenuController {
             System.out.println("no user is logged in");
             return;
         }
-        Plant plant = findAvailablePlant(matcher.group("plant_name"));
+        Plant plant = findAvailablePlant(matcher.group("plantName"));
         if (plant == null) {
             System.out.println("plant is not purchased");
             return;
@@ -161,7 +161,7 @@ public class CollectionMenuController {
             System.out.println("no user is logged in");
             return;
         }
-        String plantName = matcher.group("plant_name");
+        String plantName = matcher.group("plantName");
         PlantData plantData = PlantRepository.getInstance().findByName(plantName);
         if (plantData == null) {
             System.out.println("plant not found");

@@ -89,6 +89,7 @@ public class SignupMenuController{
     }
 
     public static String[] showQuestions(String input, String[] message) {
+        message[0] = "";
         for (SecurityQuestions securityQuestion : SecurityQuestions.values()) {
             message[0] += securityQuestion.getNum() + ": " + securityQuestion.getText() + "\n";
         }
@@ -102,7 +103,7 @@ public class SignupMenuController{
             message[0] = "pick a question!";
             return message;
         }
-        int questionNum = Integer.parseInt(matcher.group("question_number"));
+        int questionNum = Integer.parseInt(matcher.group("questionNumber"));
         String answer = matcher.group("answer");
         String confirmAnswer = matcher.group("answerConfirm");
         SecurityQuestions question = getQuestionByNumber(questionNum);
@@ -143,23 +144,21 @@ public class SignupMenuController{
         }
     }
 
+    private static File resolveAssetFile(String name) {
+        File sourceAssets = new File("src/assets");
+        File assets = new File("assets");
+        File directory = sourceAssets.isDirectory() ? sourceAssets : assets;
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+        return new File(directory, name);
+    }
+
     public static void saveToJson() {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        File file = new File("assets/Users.json");
-        ArrayList<User> users = App.getUsers();
-
-        if (file.exists() && file.length() > 0) {
-            try (FileReader reader = new FileReader(file)) {
-                Type userListType = new TypeToken<ArrayList<User>>(){}.getType();
-                ArrayList<User> existingUsers = gson.fromJson(reader, userListType);
-
-            } catch (IOException e) {
-                System.out.println("Error reading users: " + e.getMessage());
-            }
-        }
-
-        try (FileWriter writer = new FileWriter("assets/Users.json")){
-            gson.toJson(users, writer);
+        File file = resolveAssetFile("Users.json");
+        try (FileWriter writer = new FileWriter(file)) {
+            gson.toJson(App.getUsers(), writer);
         } catch (IOException e) {
             System.out.println("Error saving users: " + e.getMessage());
         }
@@ -167,7 +166,8 @@ public class SignupMenuController{
 
     public static void loadFromJson() {
         Gson gson = new Gson();
-        try (FileReader reader = new FileReader("assets/Users.json")){
+        File file = resolveAssetFile("Users.json");
+        try (FileReader reader = new FileReader(file)) {
             Type userListType = new TypeToken<ArrayList<User>>(){}.getType();
             ArrayList<User> loadedUsers = gson.fromJson(reader, userListType);
             App.setUsers(loadedUsers != null ? loadedUsers : new ArrayList<>());

@@ -18,7 +18,8 @@ public enum Menu {
     GEM_WALLET("gem-wallet"),
     SHOP("shop"),
     QUESTS("quests"),
-    MINIGAMES("minigames");
+    MINIGAMES("minigames"),
+    BONUS_GAME("bonus game");
 
     private final String menuName;
 

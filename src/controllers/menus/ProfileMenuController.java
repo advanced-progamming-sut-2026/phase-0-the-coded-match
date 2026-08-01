@@ -72,8 +72,8 @@ public class ProfileMenuController {
             return "invalid command";
         }
         User user = App.getCurrentUser();
-        String newPassword = matcher.group("new_password");
-        String oldPassword = matcher.group("old_password");
+        String newPassword = matcher.group("newPassword");
+        String oldPassword = matcher.group("oldPassword");
         String hashedNewPassword = SignupMenuController.hashPassword(newPassword);
         String hashedOldPassword = SignupMenuController.hashPassword(oldPassword);
         if (user == null) {

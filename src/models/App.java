@@ -126,16 +126,33 @@ public class App {
     }
 
     public static Season getSeason(String seasonName) {
+        if (seasonName == null) {
+            return null;
+        }
+        String normalized = seasonName.trim().replace('_', ' ');
         for (Season season : allSeasons) {
-            if (season.getType().getName().equalsIgnoreCase(seasonName)) {
+            if (season.getType().getName().equalsIgnoreCase(normalized)
+                    || season.getName().equalsIgnoreCase(normalized)
+                    || season.getData().getName().equalsIgnoreCase(normalized)
+                    || season.getType().name().replace('_', ' ').equalsIgnoreCase(normalized)) {
                 return season;
             }
         }
         return null;
     }
 
+    private static File resolveAssetFile(String name) {
+        File sourceAssets = new File("src/assets");
+        File assets = new File("assets");
+        File directory = sourceAssets.isDirectory() ? sourceAssets : assets;
+        if (!directory.exists()) {
+            directory.mkdirs();
+        }
+        return new File(directory, name);
+    }
+
     public static void saveLoggedInUser(String username) {
-        try (FileWriter writer = new FileWriter("assets/loggedInUser.txt")) {
+        try (FileWriter writer = new FileWriter(resolveAssetFile("loggedInUser.txt"))) {
             writer.write(username);
         } catch (IOException e) {
             System.err.println("Could not save user: " + e.getMessage());
@@ -143,7 +160,7 @@ public class App {
     }
 
     public static void loadLoggedInUser() {
-        File file = new File("assets/loggedInUser.txt");
+        File file = resolveAssetFile("loggedInUser.txt");
         if (!file.exists()) {
             setCurrentUser(null);
             return;
@@ -155,6 +172,8 @@ public class App {
                 if (user != null) {
                     setCurrentUser(user);
                     setCurrentMenu(Menu.MAIN_MENU);
+                    QuestController.initializeForCurrentUser();
+                    QuestController.onLevelStarted();
                     return;
                 }
             }
@@ -163,45 +182,45 @@ public class App {
         }
     }
 
-    public static void handleLawnMower(Zombie zombie){
+    public static void handleLawnMower(Zombie zombie) {
         int row = zombie.getY();
         Lawnmower mower = lawnMowerUsed(row);
-        if(mower == null){
-
-            System.out.println( "The zombie ate your brain; LOSER!!!");
+        if (mower == null) {
+            System.out.println("The zombie ate your brain; LOSER!!!");
             GameManagerController.getInstance().gameOver();
             return;
         }
         mower.setHasBeenUsed(true);
-
-        System.out.println("The lawn mower in the row "+ row +"is triggered and killed these zombies:");
-        List<Zombie> killed = new ArrayList<>();
-        List<Zombie> activeZombies = GameManagerController.getInstance().getCurrentLevel().getActiveZombies();
-        for (Zombie zombieInRow : new ArrayList<>(activeZombies)) {
-            if (zombieInRow.getY() == row) {
-                killed.add(zombieInRow);
+        StringBuilder killed = new StringBuilder();
+        int killedCount = 0;
+        for (Zombie zombieInRow : GameManagerController.getInstance().getCurrentLevel().getActiveZombies()) {
+            if (zombieInRow.getY() == row && !zombieInRow.isDead() && !zombieInRow.isBoss()) {
+                if (killed.length() > 0) {
+                    killed.append(", ");
+                }
+                killed.append(zombieInRow.getData().getDisplayName()).append("@(")
+                        .append(String.format("%.2f", zombieInRow.getX())).append(", ")
+                        .append(zombieInRow.getY()).append(')');
                 zombieInRow.setCurrentHp(0);
+                killedCount++;
             }
         }
-        activeZombies.removeAll(killed);
-
-        QuestController.notifyZombiesKilledByLawnmower(killed.size());
-
-        for(Zombie z : killed){
-
+        System.out.println("The lawn mower in the row " + row + " is triggered and killed these zombies:");
+        System.out.println(killed.length() == 0 ? "none" : killed);
+        if (QuestController.isReady()) {
+            QuestController.notifyZombiesKilledByLawnmower(killedCount);
         }
-
     }
 
-    public static Lawnmower lawnMowerUsed(int row){
-        for(Lawnmower mower: allLawnMowers){
-            if (mower.getRow() != row){
-                continue;
+    public static Lawnmower lawnMowerUsed(int row) {
+        if (GameManagerController.getInstance().getCurrentLevel() == null
+                || GameManagerController.getInstance().getCurrentLevel().getGameMap() == null) {
+            return null;
+        }
+        for (Lawnmower mower : GameManagerController.getInstance().getCurrentLevel().getGameMap().getLawnmowers()) {
+            if (mower.getRow() == row && !mower.HasBeenUsed()) {
+                return mower;
             }
-            if (mower.HasBeenUsed()){
-                return null;
-            }
-            return mower;
         }
         return null;
     }

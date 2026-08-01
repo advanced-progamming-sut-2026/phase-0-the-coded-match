@@ -3,13 +3,14 @@ package models.zombies;
 import enums.SeasonType;
 import enums.ZombieState;
 
+import java.util.Collections;
 import java.util.List;
 
 public class ZombieData {
     private String id;
     private String displayName;
     private List<SeasonType> seasons;
-    private int HP;
+    private int maxHP;
     private int eatDPS;
     private double speed;
     private double attackInterval;
@@ -19,7 +20,8 @@ public class ZombieData {
     private ZombieState state;
     private double runningSpeed;
     private boolean hasParasol;
-    private int cost; //for IZombie minigame
+    private int cost;
+    private boolean boss;
 
     public String getId() {
         return id;
@@ -30,11 +32,11 @@ public class ZombieData {
     }
 
     public List<SeasonType> getSeasons() {
-        return seasons;
+        return seasons == null ? Collections.emptyList() : seasons;
     }
 
-    public int getHP() {
-        return HP;
+    public int getMaxHP() {
+        return maxHP;
     }
 
     public int getEatDPS() {
@@ -54,15 +56,15 @@ public class ZombieData {
     }
 
     public List<ZombieArmorData> getArmors() {
-        return armors;
+        return armors == null ? Collections.emptyList() : armors;
     }
 
     public String getBehaviorType() {
-        return behaviorType;
+        return behaviorType == null || behaviorType.isBlank() ? "Normal" : behaviorType;
     }
 
     public ZombieState getState() {
-        return state;
+        return state == null ? ZombieState.WALKING : state;
     }
 
     public boolean isHasParasol() {
@@ -70,10 +72,20 @@ public class ZombieData {
     }
 
     public double getRunningSpeed() {
-        return runningSpeed;
+        return runningSpeed > 0 ? runningSpeed : speed * 2;
     }
 
     public int getCost() {
         return cost;
+    }
+
+    public boolean isBoss() {
+        if (boss) {
+            return true;
+        }
+        String idValue = id == null ? "" : id.toLowerCase();
+        String nameValue = displayName == null ? "" : displayName.toLowerCase();
+        String behaviorValue = behaviorType == null ? "" : behaviorType.toLowerCase();
+        return idValue.contains("boss") || nameValue.contains("boss") || behaviorValue.contains("boss");
     }
 }

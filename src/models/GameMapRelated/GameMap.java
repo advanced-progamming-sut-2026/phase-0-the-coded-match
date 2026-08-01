@@ -1,95 +1,98 @@
 package models.GameMapRelated;
 
-import enums.PlantTag;
 import enums.TileType;
-import models.plants.Plant;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class GameMap {
-
     private int rows;
     private int columns;
     private int length;
     private int width;
+    private int zombieStartColumn;
+    private int homeColumn;
     private String defaultPathDirection;
     private List<Tile> tiles;
     private transient Tile[][] grid;
-    private ArrayList<Lawnmower> lawnmowers;
+    private transient ArrayList<Lawnmower> lawnmowers;
 
     public GameMap(int rows, int columns) {
         this.rows = rows;
         this.columns = columns;
+        this.zombieStartColumn = columns;
         initializeGrid();
     }
 
     public void initializeGrid() {
-        if (rows <= 0) rows = 5;
-        if (columns <= 0) columns = 9;
-        this.grid = new Tile[rows][columns];
-
-        if (tiles != null && !tiles.isEmpty()) {
+        if (rows <= 0) {
+            rows = 5;
+        }
+        if (columns <= 0) {
+            columns = 9;
+        }
+        if (zombieStartColumn <= 0) {
+            zombieStartColumn = columns;
+        }
+        grid = new Tile[rows][columns];
+        for (int y = 1; y <= rows; y++) {
+            for (int x = 1; x <= columns; x++) {
+                grid[y - 1][x - 1] = new Tile(y, x, TileType.NORMAL);
+            }
+        }
+        if (tiles != null) {
             for (Tile tile : tiles) {
-                int r = tile.getRow();
-                int c = tile.getColumn();
-                if (r >= 0 && r < rows && c >= 0 && c < columns) {
-                    grid[r][c] = tile;
+                if (tile == null) {
+                    continue;
+                }
+                tile.initialize();
+                int x = tile.getColumn();
+                int y = tile.getRow();
+                if (x >= 1 && x <= columns && y >= 1 && y <= rows) {
+                    grid[y - 1][x - 1] = tile;
                 }
             }
         }
-
-        for (int r = 0; r < rows; r++) {
-            for (int c = 0; c < columns; c++) {
-                if (grid[r][c] == null) {
-                    grid[r][c] = new Tile(r, c, TileType.NORMAL);
-                }
-            }
+        lawnmowers = new ArrayList<>();
+        for (int y = 1; y <= rows; y++) {
+            lawnmowers.add(new Lawnmower(y));
         }
     }
 
-    private String getPlantNameAt(int col, int row){
-        if(grid [col][row].getPlant() != null){
-            return grid [col][row].getPlant().getData().getName();
+    private String getPlantNameAt(int x, int y) {
+        Tile tile = getTile(x, y);
+        if (tile != null && tile.getPlant() != null) {
+            return tile.getPlant().getData().getName();
         }
         return null;
     }
 
     public boolean checkGardenSymmetry() {
-        int totalRows = 5;
-        int totalColumns = 9;
-
-        for (int x = 0; x < totalColumns; x++) {
-
-            String plantRow1 = getPlantNameAt(x, 0);
-            String plantRow5 = getPlantNameAt(x, 4);
-
-            if (!isSamePlant(plantRow1, plantRow5)) {
-                return false;
-            }
-
-            String plantRow2 = getPlantNameAt(x, 1);
-            String plantRow4 = getPlantNameAt(x, 3);
-
-            if (!isSamePlant(plantRow2, plantRow4)) {
-                return false;
+        for (int x = 1; x <= columns; x++) {
+            for (int y = 1; y <= rows / 2; y++) {
+                if (!isSamePlant(getPlantNameAt(x, y), getPlantNameAt(x, rows - y + 1))) {
+                    return false;
+                }
             }
         }
-
         return true;
     }
 
-    private boolean isSamePlant(String plantA, String plantB) {
-        if (plantA == null && plantB == null) return true;  // Both tiles are empty (Symmetrical)
-        if (plantA == null || plantB == null) return false; // One is empty, one has a plant (Asymmetrical)
-        return plantA.equals(plantB);                       // Check if they are the exact same plant type
+    private boolean isSamePlant(String first, String second) {
+        if (first == null && second == null) {
+            return true;
+        }
+        return first != null && first.equals(second);
     }
 
-    public Tile getTile(int row, int column) {
-        if (row >= 0 && row <= rows && column >= 0 && column <= columns) {
-            return grid[row][column];
+    public Tile getTile(int x, int y) {
+        if (grid == null) {
+            initializeGrid();
         }
-        return null;
+        if (x < 1 || x > columns || y < 1 || y > rows) {
+            return null;
+        }
+        return grid[y - 1][x - 1];
     }
 
     public int getRows() {
@@ -124,7 +127,22 @@ public class GameMap {
         this.width = width;
     }
 
+    public int getZombieStartColumn() {
+        return zombieStartColumn;
+    }
+
+    public int getHomeColumn() {
+        return homeColumn;
+    }
+
+    public String getDefaultPathDirection() {
+        return defaultPathDirection;
+    }
+
     public Tile[][] getGrid() {
+        if (grid == null) {
+            initializeGrid();
+        }
         return grid;
     }
 
@@ -133,6 +151,9 @@ public class GameMap {
     }
 
     public ArrayList<Lawnmower> getLawnmowers() {
+        if (lawnmowers == null) {
+            initializeGrid();
+        }
         return lawnmowers;
     }
 
@@ -140,5 +161,7 @@ public class GameMap {
         this.lawnmowers = lawnmowers;
     }
 
-
+    public List<Tile> getTiles() {
+        return tiles;
+    }
 }

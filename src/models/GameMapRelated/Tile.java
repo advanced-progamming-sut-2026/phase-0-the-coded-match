@@ -1,5 +1,6 @@
 package models.GameMapRelated;
 
+import com.google.gson.annotations.SerializedName;
 import controllers.GameManagerController;
 import enums.PlantTag;
 import enums.TileType;
@@ -12,24 +13,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Tile implements Update {
+    @SerializedName(value = "row", alternate = {"y"})
     private int row;
+    @SerializedName(value = "column", alternate = {"x"})
     private int column;
-    private int tileWidth; //TODO: choose an optional width?
+    private int tileWidth;
     private TileType type;
+    @SerializedName(value = "currentHp", alternate = {"hp"})
     private int currentHp;
     private Plant plant;
     private VaseBreaker.Vase vase;
     private Plant lilyPadPlant;
     private List<Zombie> zombies;
-    private boolean isGettingDamaged = false;
-    private boolean isGrave = false;
+    private boolean isGettingDamaged;
+    private boolean isGrave;
+    private GraveReward graveReward = GraveReward.NONE;
+    private boolean holdsNecromancyPotential;
+    private boolean frozenZombie;
+
     public enum GraveReward {
         NONE,
         SUN_50,
         PLANT_FOOD
     }
-    private GraveReward graveReward = GraveReward.NONE;
-    private boolean holdsNecromancyPotential = false;
 
     public Tile(int row, int column, TileType type) {
         this.row = row;
@@ -37,56 +43,59 @@ public class Tile implements Update {
         this.type = type;
         this.currentHp = type.getMaxHp();
         this.zombies = new ArrayList<>();
+        this.isGrave = type == TileType.GRAVE;
+    }
+
+    public void initialize() {
+        if (type == null) {
+            type = TileType.NORMAL;
+        }
+        if (currentHp <= 0 && type.getMaxHp() > 0) {
+            currentHp = type.getMaxHp();
+        }
+        if (zombies == null) {
+            zombies = new ArrayList<>();
+        }
+        if (type == TileType.GRAVE) {
+            isGrave = true;
+        }
+        if (graveReward == null) {
+            graveReward = GraveReward.NONE;
+        }
     }
 
     public void takeDamage(int damage) {
-        if (currentHp > 0) {
-            currentHp -= damage;
-            if (currentHp <= 0) {
-                currentHp = 0;
-                if(this.type == TileType.GRAVE){
-                    destroyGrave();
-                }
-                this.type = TileType.NORMAL;
-                this.isGrave = false;
+        if (currentHp <= 0) {
+            return;
+        }
+        currentHp -= Math.max(0, damage);
+        if (currentHp <= 0) {
+            currentHp = 0;
+            if (type == TileType.GRAVE) {
+                destroyGrave();
+            }
+            type = TileType.NORMAL;
+            isGrave = false;
+        }
+    }
+
+    private void destroyGrave() {
+        if (GameManagerController.getInstance().getCurrentLevel() != null) {
+            if (graveReward == GraveReward.SUN_50) {
+                GameManagerController.getInstance().getCurrentLevel().setCollectedSunsAmount(
+                        GameManagerController.getInstance().getCurrentLevel().getCollectedSunsAmount() + 50);
+            } else if (graveReward == GraveReward.PLANT_FOOD) {
+                GameManagerController.getInstance().getCurrentLevel().setPlantFoodCount(
+                        GameManagerController.getInstance().getCurrentLevel().getPlantFoodCount() + 1);
             }
         }
-    }
-
-    private void destroyGrave(){
-        switch (this.getGraveReward()) {
-            case SUN_50:
-                GameManagerController.getInstance().getCurrentLevel().setCollectedSunsAmount(GameManagerController.getInstance().getCurrentLevel().getCollectedSunsAmount()+50);
-                break;
-
-            case PLANT_FOOD:
-                GameManagerController.getInstance().getCurrentLevel().setPlantFoodCount(GameManagerController.getInstance().getCurrentLevel().getPlantFoodCount()+1);
-                System.out.println("Grave dropped 1 Plant Food!");
-                break;
-
-            case NONE:
-            default:
-                break;
-        }
-        this.setGrave(false, GraveReward.NONE);
-    }
-
-    public void startTakingDamage() {
-        if (type == TileType.ICE && firePlantExists()) {
-            currentHp -= 60;
-            this.isGettingDamaged = true;
-        }
-    }
-
-    public void stopTakingDamage() {
-        if (type == TileType.ICE && currentHp <= 0) {
-            currentHp = 0;
-            this.isGettingDamaged = false;
-            this.type = TileType.NORMAL;
-        }
+        graveReward = GraveReward.NONE;
     }
 
     public boolean firePlantExists() {
+        if (GameManagerController.getInstance().getCurrentLevel() == null) {
+            return false;
+        }
         for (Plant p : GameManagerController.getInstance().getCurrentLevel().getActivePlants()) {
             int dx = Math.abs(p.getX() - column);
             int dy = Math.abs(p.getY() - row);
@@ -96,14 +105,30 @@ public class Tile implements Update {
         }
         return false;
     }
-    public boolean isPlantable(Plant plant) {
-        if (this.getType() == TileType.WATER) {
-            if (plant.getData().getName().equalsIgnoreCase("LilyPad") || plant.hasThisTag(PlantTag.WATER)) {
-                return this.getPlant() == null; // Can plant if empty
-            }
-            return this.lilyPadPlant != null && this.getPlant() == null;
+
+    public boolean isPlantable(Plant candidate) {
+        if (candidate == null || isGrave) {
+            return false;
         }
-        return this.getPlant() == null && !isGrave();
+        if (type == TileType.WATER) {
+            String plantName = candidate.getData().getName() == null ? "" : candidate.getData().getName();
+            boolean lilyPad = plantName.replace("_", " ").replace("-", " ").replaceAll("\\s+", " ")
+                    .trim().equalsIgnoreCase("Lily Pad");
+            if (lilyPad) {
+                return lilyPadPlant == null;
+            }
+            if (candidate.hasThisTag(PlantTag.WATER)) {
+                return plant == null;
+            }
+            return lilyPadPlant != null && plant == null;
+        }
+        if (!type.isCanPlant()) {
+            return false;
+        }
+        if (plant == null) {
+            return true;
+        }
+        return candidate.hasThisTag(PlantTag.STACK) || plant.hasThisTag(PlantTag.STACK);
     }
 
     public boolean isEmpty() {
@@ -111,9 +136,7 @@ public class Tile implements Update {
     }
 
     public void setPlant(Plant plant) {
-        if(isPlantable(plant)) {
-            this.plant = plant;
-        }
+        this.plant = plant;
     }
 
     public Plant getPlant() {
@@ -126,8 +149,12 @@ public class Tile implements Update {
 
     @Override
     public void update() {
-        startTakingDamage();
-        stopTakingDamage();
+        if (type == TileType.ICE && firePlantExists()) {
+            takeDamage(6);
+            isGettingDamaged = true;
+        } else {
+            isGettingDamaged = false;
+        }
     }
 
     public int getRow() {
@@ -143,7 +170,13 @@ public class Tile implements Update {
     }
 
     public void setType(TileType type) {
-        this.type = type;
+        this.type = type == null ? TileType.NORMAL : type;
+        if (currentHp <= 0 && this.type.getMaxHp() > 0) {
+            currentHp = this.type.getMaxHp();
+        }
+        if (this.type != TileType.GRAVE) {
+            isGrave = false;
+        }
     }
 
     public int getCurrentHp() {
@@ -155,31 +188,73 @@ public class Tile implements Update {
     }
 
     public List<Zombie> getZombies() {
+        if (zombies == null) {
+            zombies = new ArrayList<>();
+        }
         return zombies;
     }
 
-    public void setGrave(boolean isGrave){this.isGrave = isGrave;}
-
-    public boolean isGrave(){return isGrave;}
-    public GraveReward getGraveReward() { return graveReward; }
-    public boolean holdsNecromancyPotential() { return holdsNecromancyPotential; }
-
-    public void setGrave(boolean active, GraveReward reward) {
-        this.isGrave = active;
-        this.graveReward = reward;
-        this.setType(TileType.GRAVE);
+    public void setGrave(boolean grave) {
+        setGrave(grave, grave ? graveReward : GraveReward.NONE);
     }
 
+    public boolean isGrave() {
+        return isGrave;
+    }
 
-    public VaseBreaker.Vase getVase() {return vase;}
+    public GraveReward getGraveReward() {
+        return graveReward;
+    }
 
-    public void setVase(VaseBreaker.Vase vase) {this.vase = vase;}
+    public boolean holdsNecromancyPotential() {
+        return holdsNecromancyPotential;
+    }
 
-    public boolean hasVase() {return vase != null && !vase.isBroken();}
+    public void setHoldsNecromancyPotential(boolean value) {
+        holdsNecromancyPotential = value;
+    }
 
-    public void removeVase() {this.vase = null;}
+    public void setGrave(boolean active, GraveReward reward) {
+        isGrave = active;
+        graveReward = reward == null ? GraveReward.NONE : reward;
+        if (active) {
+            type = TileType.GRAVE;
+            currentHp = TileType.GRAVE.getMaxHp();
+        } else if (type == TileType.GRAVE) {
+            type = TileType.NORMAL;
+            currentHp = 0;
+        }
+    }
 
-    public Plant getLilyPadPlant() { return lilyPadPlant; }
+    public VaseBreaker.Vase getVase() {
+        return vase;
+    }
 
-    public void setLilyPadPlant(Plant lilyPad) { this.lilyPadPlant = lilyPad; }
+    public void setVase(VaseBreaker.Vase vase) {
+        this.vase = vase;
+    }
+
+    public boolean hasVase() {
+        return vase != null && !vase.isBroken();
+    }
+
+    public void removeVase() {
+        vase = null;
+    }
+
+    public Plant getLilyPadPlant() {
+        return lilyPadPlant;
+    }
+
+    public void setLilyPadPlant(Plant lilyPad) {
+        lilyPadPlant = lilyPad;
+    }
+
+    public boolean hasFrozenZombie() {
+        return frozenZombie;
+    }
+
+    public void setFrozenZombie(boolean frozenZombie) {
+        this.frozenZombie = frozenZombie;
+    }
 }
