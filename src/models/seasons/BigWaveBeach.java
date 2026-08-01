@@ -10,6 +10,7 @@ import models.zombies.Zombie;
 import models.zombies.ZombieData;
 import models.zombies.ZombieRepository;
 
+import java.util.List;
 import java.util.Random;
 
 public class BigWaveBeach extends Season {
@@ -18,11 +19,8 @@ public class BigWaveBeach extends Season {
 
     public BigWaveBeach(SeasonData data) {
         super(data);
-    }
-
-    @Override
-    public void applySpecialRules() {
-        // TODO
+        this.name = data.getName();
+        this.setUnlocked(true);
     }
 
     @Override
@@ -41,10 +39,14 @@ public class BigWaveBeach extends Season {
 
         for (int r = 0; r < rows; r++) {
             for (int c = 0; c < cols; c++) {
-                Tile tile = level.getGameMap().getTile(c, r);
+                Tile tile = level.getGameMap().getTile(r, c);
                 if (tile != null) {
-                    if(tile.getColumn() >= tideColumn){
+                    if(c >= tideColumn){
                         tile.setType(TileType.WATER);
+                    }else {
+                        if (tile.getType() == TileType.WATER) {
+                            tile.setType(TileType.NORMAL);
+                        }
                     }
                 }
             }
@@ -73,7 +75,7 @@ public class BigWaveBeach extends Season {
         }
 
         for (Zombie zombie : level.getActiveZombies()) {
-            if (zombie.getData().getDisplayName().equalsIgnoreCase("Snorkel")) {
+            if (zombie.getData().getId().contains("Beach")) {
                 int zombieCol = (int) zombie.getX();
                 int zombieRow = (int) zombie.getY();
 
@@ -110,7 +112,9 @@ public class BigWaveBeach extends Season {
             int randomRow = random.nextInt(level.getGameMap().getRows());
 
             int randomCol = currentTideColumn + random.nextInt(9 - currentTideColumn);
-            Zombie lowTideZombie = new Zombie (ZombieRepository.getInstance().findById("ZombieBeachSnorkel"), randomCol, randomRow);
+            int randomZombie = random.nextInt(this.getAllowedZombies().size());
+            String name = this.getAllowedZombies().get(randomZombie).getId();
+            Zombie lowTideZombie = new Zombie (ZombieRepository.getInstance().findById(name), randomCol, randomRow);
             level.getActiveZombies().add(lowTideZombie);
         }
     }

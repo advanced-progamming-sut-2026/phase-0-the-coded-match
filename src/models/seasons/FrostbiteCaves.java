@@ -12,11 +12,8 @@ public class FrostbiteCaves extends Season {
 
     public FrostbiteCaves(SeasonData data) {
         super(data);
-    }
-
-    @Override
-    public void applySpecialRules() {
-        // TODO i dont think we need this method
+        this.name = data.getName();
+        this.setUnlocked(true);
     }
 
     @Override
@@ -34,7 +31,8 @@ public class FrostbiteCaves extends Season {
     }
 
     private boolean zombieShouldBeFrozen(Zombie zombie){
-        return zombie.getData().getDisplayName().toLowerCase().contains("frozen");
+        if (zombie == null || zombie.getData() == null) return false;
+        return zombie.getData().getId().toLowerCase().contains("IceAge");
     }
 
     @Override
@@ -59,7 +57,7 @@ public class FrostbiteCaves extends Season {
         for(Plant plant : level.getActivePlants()){
             if(plant.isFullyFrozen()){
                 if(hasNeighboringFirePlant(level, plant)){
-                    plant.decreaseIceHP((int) (60)); // later on work with delta time;
+                    plant.decreaseIceHP((int) (6)); // later on work with delta time;
                 }
             }
         }
@@ -82,11 +80,14 @@ public class FrostbiteCaves extends Season {
     public void WaveStarted(Level level, int waveNumber) {
         Random random = new Random();
          int randomRow = random.nextInt(5);
-         for(Plant plant : level.getActivePlants()){
-             if(plant.getY() == randomRow){
-                 plant.addFreezeLevel(1);
-             }
-         }
+        int affectedRows = random.nextInt(2) + 1;
+        for (int i = 0; i < affectedRows; i++) {
+            for (Plant plant : level.getActivePlants()) {
+                if (plant.getY() == randomRow && !plant.hasThisTag(PlantTag.FIRE)) {
+                    plant.addFreezeLevel(1);
+                }
+            }
+        }
 
     }
 

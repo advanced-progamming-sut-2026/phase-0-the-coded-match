@@ -111,7 +111,9 @@ public class Tile implements Update {
     }
 
     public void setPlant(Plant plant) {
-        this.plant = plant;
+        if(isPlantable(plant)) {
+            this.plant = plant;
+        }
     }
 
     public Plant getPlant() {

@@ -12,11 +12,8 @@ import java.util.Random;
 public class AncientEgypt extends Season {
     public AncientEgypt(SeasonData data) {
         super(data);
-    }
-
-    @Override
-    public void applySpecialRules() {
-        // TODO
+        this.name = data.getName();
+        this.setUnlocked(true);
     }
 
     @Override
@@ -42,17 +39,17 @@ public class AncientEgypt extends Season {
 
     @Override
     public void Update(Level level) {
-        for(Projectile projectile : level.getActiveProjectiles()){
-            int row = (int) projectile.getyCoordinate();
-            int col = (int) projectile.getxCoordinate();
-
-            Tile tile = level.getGameMap().getTile(row, col);
-
-            if(tile != null && tile.isGrave()){
-                tile.takeDamage(projectile.getDamage());
-                projectile.destroy();
-            }
-        }
+//        for(Projectile projectile : level.getActiveProjectiles()){
+//            int row = (int) projectile.getyCoordinate();
+//            int col = (int) projectile.getxCoordinate();
+//
+//            Tile tile = level.getGameMap().getTile(row, col);
+//
+//            if(tile != null && tile.isGrave()){
+//                tile.takeDamage(projectile.getDamage());
+//                projectile.destroy();
+//            }
+//        }
 
     }
 
@@ -62,7 +59,7 @@ public class AncientEgypt extends Season {
             for(Zombie zombie : level.getActiveZombies()){
                 if(checkZombieForSandstorm(zombie)){
                     Random random = new Random();
-                    int advanceCol = random.nextInt(4) + 1;
+                    int advanceCol = random.nextInt(3) + 2;
                     int currentCol = (int) zombie.getX();
                     int newCol = currentCol - advanceCol;
 
@@ -77,8 +74,9 @@ public class AncientEgypt extends Season {
     }
 
     private boolean checkZombieForSandstorm(Zombie zombie){
-        return zombie.getData().getDisplayName().equalsIgnoreCase("ZombieTutorialDefault") || //TODO: ID, not display name
-                zombie.getData().getDisplayName().equalsIgnoreCase("ZombieSandstorm");
+        return zombie.getData().getId().equalsIgnoreCase("ZombieDefault") ||
+                zombie.getData().getId().equalsIgnoreCase("ZombieArmor1") ||
+                zombie.getData().getId().equalsIgnoreCase("ZombieArmor2");
     }
 
     @Override

@@ -44,6 +44,11 @@ public class Level {
         this.isUnlocked = data.isUnlocked();
         this.levelType = data.getLevelType();
         this.gameMap = data.getMap();
+        if (this.gameMap != null) {
+            this.gameMap.initializeGrid();
+        } else {
+            this.gameMap = new GameMap(5, 9);
+        }
         this.chosenPlants = new ArrayList<>();
         this.activeZombies = new ArrayList<>();
         this.activePlants = new ArrayList<>();
@@ -302,5 +307,12 @@ public class Level {
 
     public int getLevelDifficulty() {
         return levelDifficulty;
+    }
+
+    public boolean isDay(){
+        if(this.getData().getName().contains("Dark Ages")){
+            return true;
+        }
+        return false;
     }
 }

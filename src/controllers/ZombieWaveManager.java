@@ -111,7 +111,9 @@ public class ZombieWaveManager implements Update {
             calculateWaveDifficulty();
             spawnZombies();
 
-            currentLevel.getCurrentSeason().WaveStarted(currentLevel, currentWave);
+            if (currentLevel.getCurrentSeason() != null) {
+                currentLevel.getCurrentSeason().WaveStarted(currentLevel, currentWave);
+            }
             //currentLevel.getSpecialRuleManager().onWaveStarted(currentLevel, currentWave);
         }
     }
