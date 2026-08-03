@@ -1,6 +1,7 @@
 package views;
 
 import controllers.LeaderBoardController;
+import controllers.menus.LoginMenuController;
 import controllers.menus.MenuController;
 import controllers.menus.SignupMenuController;
 import enums.Commands;
@@ -17,17 +18,19 @@ public class AppView {
 
     public static void run() {
         SignupMenuController.loadFromJson();
-        App.loadLoggedInUser();
+        App.initialize();
+        LoginMenuController.loadPlayer();
         Scanner scanner = new Scanner(System.in);
         while (scanner.hasNextLine() && isRunning) {
-            String input = scanner.nextLine();
+            String input = scanner.nextLine().trim();
+            if (input.isEmpty()) continue;
             Menu currentMenu = App.getCurrentMenu();
 
             if (input.matches(Commands.SHOW_MENU.getPattern())) {
                 MenuController.showCurrentMenu(message);
                 System.out.println(message[0]);
-            } else if (input.matches(Commands.ENTER_MENU.getPattern())) {
-                MenuController.enterMenu(input);
+            } else if (input.matches(Commands.ENTER_MENU.getPattern()) && !input.matches(Commands.ENTER_SEASON.getPattern()) && !input.matches(Commands.ENTER_LEVEL.getPattern())) {
+                System.out.println(MenuController.enterMenu(input));
             } else if (input.matches(Commands.EXIT_MENU.getPattern())) {
                 MenuController.exitMenu();
             } else if (currentMenu == Menu.SIGNUP_MENU) {
@@ -56,6 +59,8 @@ public class AppView {
                 TravelLogView.check(input);
             } else if (currentMenu == Menu.LEADERBOARD) {
                 LeaderBoardView.check(input);
+            } else if (currentMenu == Menu.BONUS_GAME) {
+                BonusGameView.check(input);
             } else if (currentMenu == Menu.SHOP) {
                 ShopView.check(input);
             } else if (currentMenu == Menu.QUESTS) {

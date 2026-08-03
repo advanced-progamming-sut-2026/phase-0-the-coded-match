@@ -6,6 +6,7 @@ import models.LevelData;
 import models.plants.Plant;
 import models.zombies.Zombie;
 import models.zombies.ZombieData;
+import models.zombies.ZombieRepository;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,7 +15,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class Zombotany extends MiniGame {
+public final class Zombotany extends MiniGame {
     private static final int ROWS = 5;
     private static final int COLUMNS = 9;
     private static final int TICKS_PER_SECOND = 10;
@@ -86,7 +87,24 @@ public class Zombotany extends MiniGame {
     public final void initializeStage() {
         plantZombieStates.clear();
         activePeas.clear();
+        getActiveZombies().clear();
+        getActivePlants().clear();
+        setCollectedSunsAmount(300 + stageNumber * 100);
         won = false;
+        isGameOver = false;
+        ZombieData baseData = ZombieRepository.getInstance().findByDisplayName("Default");
+        if (baseData == null) {
+            throw new IllegalStateException("default zombie data is missing");
+        }
+        PlantZombieType[] types = switch (stageNumber) {
+            case 1 -> new PlantZombieType[]{PlantZombieType.PEASHOOTER, PlantZombieType.WALL_NUT};
+            case 2 -> new PlantZombieType[]{PlantZombieType.PEASHOOTER, PlantZombieType.WALL_NUT, PlantZombieType.JALAPENO};
+            default -> PlantZombieType.values();
+        };
+        int count = stageNumber + 3;
+        for (int i = 0; i < count; i++) {
+            spawnPlantZombie(baseData, types[i % types.length], COLUMNS - i % 2, i % ROWS + 1);
+        }
     }
 
     public Zombie spawnPlantZombie(ZombieData baseData, PlantZombieType type,
@@ -138,7 +156,6 @@ public class Zombotany extends MiniGame {
                     updatePeashooterZombie(zombie, state);
                     break;
                 case WALL_NUT:
-                    zombie.walk();
                     break;
                 case JALAPENO:
                     updateJalapenoZombie(zombie, state);
@@ -153,7 +170,6 @@ public class Zombotany extends MiniGame {
     }
 
     private void updatePeashooterZombie(Zombie zombie, PlantZombieState state) {
-        zombie.walk();
         if (state.abilityCooldown > 0) {
             state.abilityCooldown--;
         }
@@ -164,7 +180,6 @@ public class Zombotany extends MiniGame {
     }
 
     private void updateJalapenoZombie(Zombie zombie, PlantZombieState state) {
-        zombie.walk();
         if (!state.abilityUsed && state.ageTicks >= JALAPENO_FUSE_TICKS) {
             burnEntireRow(zombie.getY());
             zombie.setCurrentHp(0);
@@ -173,7 +188,7 @@ public class Zombotany extends MiniGame {
     }
 
     private void updateSquashZombie(Zombie zombie, PlantZombieState state) {
-        zombie.setX(zombie.getX() - Math.max(0.15, zombie.getData().getSpeed() * 3));
+        zombie.setX(zombie.getX() - Math.max(0.015, zombie.getData().getSpeed() * 0.3));
         Plant target = findCollidingPlant(zombie, 0.55);
         if (target != null && !state.abilityUsed) {
             target.setCurrentHp(0);
@@ -249,7 +264,15 @@ public class Zombotany extends MiniGame {
     }
 
     private void removeDestroyedEntities() {
-        getActivePlants().removeIf(Plant::isDead);
+        Iterator<Plant> plantIterator = getActivePlants().iterator();
+        while (plantIterator.hasNext()) {
+            Plant plant = plantIterator.next();
+            if (!plant.isDead()) continue;
+            if (getGameMap().getTile(plant.getX(), plant.getY()) != null) {
+                getGameMap().getTile(plant.getX(), plant.getY()).removePlant();
+            }
+            plantIterator.remove();
+        }
         getActiveZombies().removeIf(Zombie::isDead);
         plantZombieStates.keySet().removeIf(Zombie::isDead);
     }

@@ -17,7 +17,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-public class VaseBreaker extends MiniGame {
+public final class VaseBreaker extends MiniGame {
 
     private final int stageNumber;
     private final List<Vase> activeVases;

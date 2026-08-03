@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class IZombie extends MiniGame {
+public final class IZombie extends MiniGame {
 
     private final int stageNumber;
     private int sunAmount;
@@ -29,6 +29,7 @@ public class IZombie extends MiniGame {
         this.stageNumber = stageNumber;
         this.sunAmount = 150;
         this.brainsEatenInLane = new Boolean[5];
+        java.util.Arrays.fill(this.brainsEatenInLane, false);
         this.availableZombies = new ArrayList<>();
         isGameOver = false;
 
@@ -57,14 +58,15 @@ public class IZombie extends MiniGame {
         switch (stage) {
             case 1:
                 setUpStage1(plants);
-
+                break;
             case 2:
                 setUpStage2(plants);
-
+                break;
             case 3:
                 setUpStage3(plants);
-
+                break;
         }
+        for (models.GameMapRelated.Tile[] row : getGameMap().getGrid()) for (models.GameMapRelated.Tile tile : row) if (tile.getPlant() != null) addActivePlants(tile.getPlant());
     }
 
     public void setUpStage1(PlantRepository plants) {
@@ -75,9 +77,9 @@ public class IZombie extends MiniGame {
         availableZombies.add("Brickhead Zombie");
 
         for (int row = 1; row <= 5; row++) {
-            getGameMap().getTile(row, 1).setPlant(new Plant(plants.findByName("Peashooter"),
+            getGameMap().getTile(1, row).setPlant(new Plant(plants.findByName("Peashooter"),
                     1, row, 1));
-            getGameMap().getTile(row, 5).setPlant(new Plant(plants.findByName("Wall-nut"),
+            getGameMap().getTile(5, row).setPlant(new Plant(plants.findByName("Wall-nut"),
                     5, row, 1));
         }
 
@@ -101,11 +103,11 @@ public class IZombie extends MiniGame {
         availableZombies.add("Parasol Zombie");
 
         for (int row = 1; row <= 5; row++) {
-            getGameMap().getTile(row, 1).setPlant(new Plant(plants.findByName("Peashooter"),
+            getGameMap().getTile(1, row).setPlant(new Plant(plants.findByName("Peashooter"),
                     1, row, 1));
-            getGameMap().getTile(row, 2).setPlant(new Plant(plants.findByName("Cabbage-pult"),
+            getGameMap().getTile(2, row).setPlant(new Plant(plants.findByName("Cabbage-pult"),
                     2, row, 1));
-            getGameMap().getTile(row, 5).setPlant(new Plant(plants.findByName("Wall-nut"),
+            getGameMap().getTile(5, row).setPlant(new Plant(plants.findByName("Wall-nut"),
                     5, row, 1));
         }
 
@@ -125,13 +127,13 @@ public class IZombie extends MiniGame {
         availableZombies.add("Buckethead Zombie");
 
         for (int row = 1; row <= 5; row++) {
-            getGameMap().getTile(row, 1).setPlant(new Plant(plants.findByName("Peashooter"),
+            getGameMap().getTile(1, row).setPlant(new Plant(plants.findByName("Peashooter"),
                     1, row, 1));
-            getGameMap().getTile(row, 2).setPlant(new Plant(plants.findByName("Cabbage-pult"),
+            getGameMap().getTile(2, row).setPlant(new Plant(plants.findByName("Cabbage-pult"),
                     2, row, 1));
-            getGameMap().getTile(row, 4).setPlant(new Plant(plants.findByName("Cabbage-pult"),
+            getGameMap().getTile(4, row).setPlant(new Plant(plants.findByName("Cabbage-pult"),
                     4, row, 1));
-            getGameMap().getTile(row, 5).setPlant(new Plant(plants.findByName("Wall-nut"),
+            getGameMap().getTile(5, row).setPlant(new Plant(plants.findByName("Wall-nut"),
                     5, row, 1));
         }
     }
@@ -159,6 +161,7 @@ public class IZombie extends MiniGame {
         String zombieName = matcher.group("name");
         int col = Integer.parseInt(matcher.group("x"));
         int row = Integer.parseInt(matcher.group("y"));
+        if (row < 1 || row > 5 || col < 1 || col > 9) return "invalid location";
         if (col < redLineCoordinateX) {
             return "place zombies on the right side of the red line";
         }
@@ -192,6 +195,7 @@ public class IZombie extends MiniGame {
         return null;
     }
 
+    public boolean allBrainsEaten() { for (Boolean eaten : brainsEatenInLane) if (!Boolean.TRUE.equals(eaten)) return false; return true; }
     public int getSunAmount() { return sunAmount; }
     public void addSun() { this.sunAmount += 50; }
 }

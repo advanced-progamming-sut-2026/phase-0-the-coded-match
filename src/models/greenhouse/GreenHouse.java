@@ -2,9 +2,13 @@ package models.greenhouse;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import models.App;
+import models.plants.PlantData;
+import models.plants.PlantRepository;
+import utils.AssetPaths;
 
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.Reader;
+import java.io.Writer;
 import java.io.IOException;
 import java.util.*;
 
@@ -18,6 +22,7 @@ public class GreenHouse {
     public GreenHouse() {
         greenhouse_currency.putIfAbsent("coins", 0);
         greenhouse_currency.putIfAbsent("diamonds", 0);
+        for (int y = 1; y <= 4; y++) for (int x = 1; x <= 5; x++) if (grid[y - 1][x - 1] == null) grid[y - 1][x - 1] = new GreenHousePot(x, y, y > 1);
     }
 
 
@@ -44,13 +49,21 @@ public class GreenHouse {
             return;
         }
 
-        boolean isMarigold = new Random().nextBoolean();
-        if (isMarigold || unlockedPlants.isEmpty()) {
+        Random random = new Random();
+        List<PlantData> boostablePlants = new ArrayList<>();
+        for (String plantId : unlockedPlants) {
+            PlantData plant = PlantRepository.getInstance().findById(plantId);
+            if (plant != null && plant.getPlantFoodAbilities() != null && !plant.getPlantFoodAbilities().isEmpty()) {
+                boostablePlants.add(plant);
+            }
+        }
+        boolean isMarigold = random.nextBoolean();
+        if (isMarigold || boostablePlants.isEmpty()) {
             pot.plant_type = "marigold";
             pot.growth_duration_hours = 2;
         } else {
-            int randomIndex = new Random().nextInt(unlockedPlants.size());
-            pot.plant_type = unlockedPlants.get(randomIndex);
+            PlantData plant = boostablePlants.get(random.nextInt(boostablePlants.size()));
+            pot.plant_type = plant.getName().toLowerCase();
             pot.growth_duration_hours = 8;
         }
 
@@ -74,8 +87,7 @@ public class GreenHouse {
         }
 
         if ("marigold".equalsIgnoreCase(pot.plant_type)) {
-            int currentCoins = greenhouse_currency.getOrDefault("coins", 0);
-            greenhouse_currency.put("coins", currentCoins + 500);
+            if (App.getCurrentUser() != null) App.getCurrentUser().addCoins(500);
             System.out.println("Collected Marigold! Earned 500 coins.");
         } else {
             if (!stored_boosts.getOrDefault(pot.plant_type, false)) {
@@ -110,14 +122,14 @@ public class GreenHouse {
         double remainingHours = pot.growth_duration_hours - elapsedHours;
 
         int diamondCost = (int) Math.ceil(remainingHours);
-        int currentDiamonds = greenhouse_currency.getOrDefault("diamonds", 0);
+        int currentDiamonds = App.getCurrentUser() == null ? 0 : App.getCurrentUser().getGemsCount();
 
         if (currentDiamonds < diamondCost) {
             System.out.println("Error: Not enough diamonds. Cost: " + diamondCost);
             return;
         }
 
-        greenhouse_currency.put("diamonds", currentDiamonds - diamondCost);
+        App.getCurrentUser().setGemsCount(currentDiamonds - diamondCost);
         pot.planted_timestamp = now - (pot.growth_duration_hours * 3600L);
 
         System.out.println("Speed up successful! Spent " + diamondCost + " diamonds.");
@@ -158,7 +170,7 @@ public class GreenHouse {
     }
 
     public static GreenHouse loadFromFile() {
-        try (FileReader reader = new FileReader(FILE_PATH)) {
+        try (Reader reader = AssetPaths.reader(FILE_PATH)) {
             GreenhouseDataDTO data = gson.fromJson(reader, GreenhouseDataDTO.class);
 
             GreenHouse greenhouse = new GreenHouse();
@@ -186,9 +198,9 @@ public class GreenHouse {
             }
         }
 
-        try (FileWriter writer = new FileWriter(FILE_PATH)) {
+        try (Writer writer = AssetPaths.writer(FILE_PATH)) {
             gson.toJson(data, writer);
-            System.out.println("Game saved to " + FILE_PATH);
+            System.out.println("Game saved to " + AssetPaths.resolve(FILE_PATH));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -215,12 +227,32 @@ public class GreenHouse {
         int count = 0;
         for (GreenHousePot[] row : grid) {
             for (GreenHousePot pot : row) {
-                if (pot != null && !pot.is_locked && !"EMPTY".equals(pot.status)) {
+                if (pot != null && !pot.is_locked) {
                     count++;
                 }
             }
         }
 
         return count;
+    }
+    public int unlockPots(int count) {
+        int unlocked = 0;
+        for (GreenHousePot[] row : grid) for (GreenHousePot pot : row) if (pot.is_locked && unlocked < count) { pot.is_locked = false; unlocked++; }
+        return unlocked;
+    }
+
+    public int getPotXOrY(String z) {
+        for (GreenHousePot[] row : grid) {
+            for (GreenHousePot pot : row) {
+                if (pot.is_locked) {
+                    if (z.matches("x")) {
+                        return pot.x;
+                    } else {
+                        return pot.y;
+                    }
+                }
+            }
+        }
+        return -1;
     }
 }

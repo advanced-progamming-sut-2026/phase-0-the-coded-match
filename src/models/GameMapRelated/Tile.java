@@ -97,6 +97,9 @@ public class Tile implements Update {
         return false;
     }
     public boolean isPlantable(Plant plant) {
+        if (!this.getType().isCanPlant()) {
+            return false;
+        }
         if (this.getType() == TileType.WATER) {
             if (plant.getData().getName().equalsIgnoreCase("LilyPad") || plant.hasThisTag(PlantTag.WATER)) {
                 return this.getPlant() == null; // Can plant if empty
@@ -111,7 +114,9 @@ public class Tile implements Update {
     }
 
     public void setPlant(Plant plant) {
-        this.plant = plant;
+        if(isPlantable(plant)) {
+            this.plant = plant;
+        }
     }
 
     public Plant getPlant() {

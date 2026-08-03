@@ -1,6 +1,8 @@
 package models;
 
 import controllers.GameManagerController;
+import controllers.QuestController;
+import controllers.SeasonController;
 import enums.Menu;
 import enums.Phases;
 import models.GameMapRelated.Lawnmower;
@@ -10,13 +12,15 @@ import models.plants.PlantRepository;
 import models.seasons.Season;
 import models.zombies.Zombie;
 import models.zombies.ZombieData;
+import models.zombies.ZombieRepository;
 
-import java.io.File;
-import java.io.FileWriter;
+import java.io.Reader;
+import java.io.Writer;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import utils.AssetPaths;
 
 public class App {
     private static User currentUser;
@@ -27,6 +31,13 @@ public class App {
     private static List<Season> allSeasons = new ArrayList<>();
     private static List<ZombieData> allZombies = new ArrayList<>();
     private static List<Lawnmower> allLawnMowers = new ArrayList<>();
+
+    public static void initialize() {
+        PlantRepository.getInstance();
+        allZombies = ZombieRepository.getInstance().getAllZombies();
+        allSeasons = new ArrayList<>(SeasonController.getInstance().getActiveSeasons());
+        for (User user : users) user.ensureDefaults();
+    }
 
     public static void addZombie(ZombieData zombieData) {
         allZombies.add(zombieData);
@@ -40,9 +51,7 @@ public class App {
         return currentUser;
     }
 
-    public static void setCurrentUser(User currentUser) {
-        App.currentUser = currentUser;
-    }
+    public static void setCurrentUser(User currentUser) { App.currentUser = currentUser; if (currentUser != null) currentUser.ensureDefaults(); }
 
     public static void setUserUndergoingReset(User user){
         userUndergoingReset = user;
@@ -52,9 +61,7 @@ public class App {
         return userUndergoingReset;
     }
 
-    public static void setCurrentMenu(Menu currentMenu) {
-        App.currentMenu = currentMenu;
-    }
+    public static void setCurrentMenu(Menu currentMenu) { if (currentMenu != null) App.currentMenu = currentMenu; }
 
     public static Phases getCurrentPhase() {
         return currentPhase;
@@ -68,9 +75,7 @@ public class App {
         return users;
     }
 
-    public static void setUsers(ArrayList<User> users) {
-        App.users = users;
-    }
+    public static void setUsers(ArrayList<User> users) { App.users = users == null ? new ArrayList<>() : users; }
 
     public static List<Season> getAllSeasons() {
         return allSeasons;
@@ -94,11 +99,7 @@ public class App {
     }
 
     public static User getUserByUsername(String username) {
-        for (User user : users) {
-            if (user.getUsername().equals(username)) {
-                return user;
-            }
-        }
+        if (username != null) for (User user : users) if (username.equalsIgnoreCase(user.getUsername())) return user;
         return null;
     }
 
@@ -107,6 +108,7 @@ public class App {
     }
 
     public static LevelData getLevelByNumber(int num, Season season) {
+        if (season == null) return null;
         for (LevelData level : season.getLevels()) {
             if (level.getLevelNumber() == num) {
                 return level;
@@ -115,8 +117,9 @@ public class App {
         return null;
     }
 
-
     public static Menu getMenu(String menuName) {
+        if (menuName == null) return null;
+        menuName = menuName.trim();
         for (Menu menu : Menu.values()) {
             if (menu.getMenuName().equalsIgnoreCase(menuName)) {
                 return menu;
@@ -126,8 +129,10 @@ public class App {
     }
 
     public static Season getSeason(String seasonName) {
+        if (seasonName == null) return null;
+        seasonName = seasonName.trim();
         for (Season season : allSeasons) {
-            if (season.getType().getName().equalsIgnoreCase(seasonName)) {
+            if (season.getType().getName().equalsIgnoreCase(seasonName) || season.getName().equalsIgnoreCase(seasonName) || season.getType().name().equalsIgnoreCase(seasonName.replace(" ", "_"))) {
                 return season;
             }
         }
@@ -135,60 +140,57 @@ public class App {
     }
 
     public static void saveLoggedInUser(String username) {
-        try (FileWriter writer = new FileWriter("assets/loggedInUser.txt")) {
-            writer.write(username);
+        try (Writer writer = AssetPaths.writer("loggedInUser.txt")) {
+            writer.write(username == null ? "" : username);
         } catch (IOException e) {
             System.err.println("Could not save user: " + e.getMessage());
         }
     }
 
+    public static void clearLoggedInUser() { saveLoggedInUser(""); }
+
     public static void loadLoggedInUser() {
-        File file = new File("assets/loggedInUser.txt");
-        if (!file.exists()) {
-            setCurrentUser(null);
-            return;
-        }
-        try (Scanner scanner = new Scanner(file)) {
+        try (Reader reader = AssetPaths.reader("loggedInUser.txt"); Scanner scanner = new Scanner(reader)) {
             if (scanner.hasNext()) {
                 String username =  scanner.next();
                 User user = getUserByUsername(username);
-                if (user != null) {
+                if (user != null && user.isStayLoggedIn()) {
                     setCurrentUser(user);
                     setCurrentMenu(Menu.MAIN_MENU);
                     return;
                 }
+                clearLoggedInUser();
             }
         } catch (IOException e) {
-            System.err.println("Could not read file: " + e.getMessage());
+            setCurrentUser(null);
         }
     }
+
+    public static void initializeLawnMowers(int rows) { allLawnMowers.clear(); for (int row = 1; row <= rows; row++) allLawnMowers.add(new Lawnmower(row)); }
 
     public static void handleLawnMower(Zombie zombie){
         int row = zombie.getY();
         Lawnmower mower = lawnMowerUsed(row);
         if(mower == null){
-            //TODO: needs to print "The zombie ate your brain; LOSER!!!" how do we send this to view?
-            //TODO: GAME OVER (needs an overall method in the game)
+
             System.out.println( "The zombie ate your brain; LOSER!!!");
             GameManagerController.getInstance().gameOver();
             return;
         }
         mower.setHasBeenUsed(true);
-        //TODO: print "The lawn mower in the row <r>is triggered and killed these zombies:"
-        System.out.println("The lawn mower in the row "+ row +"is triggered and killed these zombies:");
+
+        System.out.println("The lawn mower in the row " + row + " is triggered and killed these zombies:");
         List<Zombie> killed = new ArrayList<>();
-        for(Zombie z : allZombies){
-            if(z.getY() == row){ //Todo: Make an exception for BOSS ZOMBIE!!!!!
-                killed.add(z);
-                z.setCurrentHp(0);
-                //TODO: PRINT "Zombie of type <type> is dead at (<x>, y>)"
-                //TODO: i think we should erase these dead zombies from the game? a new method perhaps?
+        List<Zombie> activeZombies = GameManagerController.getInstance().getCurrentLevel().getActiveZombies();
+        for (Zombie zombieInRow : new ArrayList<>(activeZombies)) {
+            if (zombieInRow.getY() == row) {
+                killed.add(zombieInRow);
+                zombieInRow.setCurrentHp(0);
             }
         }
+        QuestController.notifyZombiesKilledByLawnmower(killed.size());
 
-        for(Zombie z : killed){
-            // TODO: Print the zombie.getType() of that row that are now dead;
-        }
+        for (Zombie z : killed) System.out.println(z.getData().getDisplayName());
 
     }
 
@@ -207,7 +209,7 @@ public class App {
 
     public static List<PlantData> getLockedPlants() {
         List<PlantData> lockedPlants = new ArrayList<>();
-        List<String> unlockedPlants = currentUser.getCollection().getAvailablePlantsIds();
+        List<String> unlockedPlants = currentUser == null ? List.of() : currentUser.getCollection().getAvailablePlantsIds();
         for (PlantData plant : PlantRepository.getInstance().getAllPlants()) {
             if (!unlockedPlants.contains(plant.getId())) {
                 lockedPlants.add(plant);

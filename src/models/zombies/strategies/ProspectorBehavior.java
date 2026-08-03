@@ -8,7 +8,7 @@ import models.zombies.Zombie;
 
 public class ProspectorBehavior implements ZombieBehavior {
     private boolean isCastingAbility = true;
-    private int abilityTimer = 10;
+    private int abilityTimer = 100;
 
     @Override
     public void updateZombie(Zombie zombie, Plant targetPlant) {
@@ -41,7 +41,7 @@ public class ProspectorBehavior implements ZombieBehavior {
     }
 
     public void walkBackWard(Zombie zombie) {
-        zombie.setX(zombie.getX() + zombie.getData().getSpeed());
+        zombie.setX(zombie.getX() + zombie.getData().getSpeed() / 10.0);
     }
 
     @Override

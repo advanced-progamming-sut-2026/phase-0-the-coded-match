@@ -15,22 +15,22 @@ public class MenuController {
         return message;
     }
 
-    public static void enterMenu(String input) {
+    public static String enterMenu(String input) {
         Pattern pattern = Pattern.compile(Commands.ENTER_MENU.getPattern());
         Matcher matcher = pattern.matcher(input);
         if (!matcher.matches()) {
-            return;
+            return "invalid command";
         }
-        String menuName = matcher.group("menu_name");
+        String menuName = matcher.group("menuName");
         Menu targetMenu = App.getMenu(menuName);
         if (targetMenu == null) {
-            System.out.println("invalid menu");
-            return;
+            return "invalid menu";
         }
         if (canEnter(targetMenu)) {
             App.setCurrentMenu(targetMenu);
+            return "entered " + menuName;
         } else {
-            System.out.println("cannot enter menu");
+            return "cannot enter menu";
         }
     }
 
@@ -46,8 +46,15 @@ public class MenuController {
         } else if (currentMenu == Menu.GAME_MENU || currentMenu == Menu.NEWS_MENU
                 || currentMenu == Menu.SETTINGS_MENU || currentMenu == Menu.PROFILE_MENU) {
             App.setCurrentMenu(Menu.MAIN_MENU);
-        } else if (currentMenu == Menu.COLLECTION_MENU) {
+        } else if (currentMenu == Menu.COLLECTION_MENU || currentMenu == Menu.GREEN_HOUSE || currentMenu == Menu.TRAVEL_LOG
+                || currentMenu == Menu.QUESTS) {
             App.setCurrentMenu(Menu.GAME_MENU);
+        } else if (currentMenu == Menu.LEADERBOARD || currentMenu == Menu.BONUS_GAME) {
+            App.setCurrentMenu(Menu.MAIN_MENU);
+        } else if (currentMenu == Menu.MINIGAMES) {
+            App.setCurrentMenu(Menu.TRAVEL_LOG);
+        } else if (currentMenu == Menu.SHOP) {
+            App.setCurrentMenu(Menu.GREEN_HOUSE);
         } else {
             App.setCurrentMenu(Menu.GAME_MENU);
         }
@@ -58,6 +65,7 @@ public class MenuController {
         if (targetMenu == null) {
             return false;
         }
+        if (targetMenu == currentMenu) return true;
         if (currentMenu == Menu.SIGNUP_MENU) {
             return targetMenu == Menu.LOGIN_MENU;
         }
@@ -66,11 +74,12 @@ public class MenuController {
         }
         if (currentMenu == Menu.MAIN_MENU) {
             return targetMenu == Menu.GAME_MENU || targetMenu == Menu.SETTINGS_MENU || targetMenu == Menu.NEWS_MENU
-                    || targetMenu == Menu.PROFILE_MENU;
+                    || targetMenu == Menu.PROFILE_MENU || targetMenu == Menu.LEADERBOARD || targetMenu == Menu.BONUS_GAME;
         }
         if (currentMenu == Menu.GAME_MENU) {
-            return targetMenu == Menu.COLLECTION_MENU;
+            return targetMenu == Menu.COLLECTION_MENU || targetMenu == Menu.GREEN_HOUSE || targetMenu == Menu.TRAVEL_LOG || targetMenu == Menu.LEADERBOARD || targetMenu == Menu.QUESTS || targetMenu == Menu.MINIGAMES;
         }
+        if (currentMenu == Menu.GREEN_HOUSE) return targetMenu == Menu.SHOP;
         return false;
     }
 }

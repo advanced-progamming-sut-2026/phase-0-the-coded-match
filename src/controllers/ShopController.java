@@ -11,19 +11,29 @@ import models.greenhouse.GreenHousePot;
 import models.plants.PlantData;
 import models.plants.PlantRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ShopController {
-    private static Shop shop;
 
-    public ShopController(Shop shop) {
-        this.shop = shop;
+    public static void checkAndRefreshDailyOffer() {
+        Shop shop = App.getCurrentUser().getShop();
+        if (shop == null) return;
+        String todayDate = LocalDate.now().toString();
+        if (shop.getLastUpdateDate() == null || !shop.getLastUpdateDate().equals(todayDate)) {
+            shop.setRandomSeedPack(getRandomPlant());
+            shop.setRandomSpecialSeedPack(getRandomPlant());
+            shop.setDailyItemSoldOut(false);
+            shop.setLastUpdateDate(todayDate);
+        }
     }
 
     public static StringBuilder showShopList(StringBuilder sb) {
+        checkAndRefreshDailyOffer();
+        Shop shop = App.getCurrentUser().getShop();
         for (ShopItemData shopItem : ShopItemData.values()) {
             if (shopItem == ShopItemData.SEED_PACKET_DAILY) {
                 continue;
@@ -39,6 +49,8 @@ public class ShopController {
     }
 
     public static StringBuilder showDailyShop(StringBuilder sb) {
+        checkAndRefreshDailyOffer();
+        Shop shop = App.getCurrentUser().getShop();
         ShopItemData dailyItem = ShopItemData.SEED_PACKET_DAILY;
         sb.append("id: ").append(dailyItem.getId()).append(" - item name: ").append(dailyItem.getName()).append("\n");
         sb.append("plant: ").append(shop.getRandomSpecialSeedPack().getName()).append("\n");
@@ -48,51 +60,56 @@ public class ShopController {
     }
 
     public static String buyItem(String input) {
+        Shop shop = App.getCurrentUser().getShop();
         Pattern pattern = Pattern.compile(Commands.SHOP_BUY.getPattern());
         Matcher matcher = pattern.matcher(input);
         if (!matcher.matches()) {
             return "invalid command";
         }
-        int id = Integer.parseInt(matcher.group("item_id"));
+        int id = Integer.parseInt(matcher.group("itemId"));
         ShopItemData item = getItemById(id);
         int count = Integer.parseInt(matcher.group("count"));
+        if (count < 1) return "invalid count";
 
         if (item == null) {
             return "invalid item id";
         }
 
         PlantData plantChosen = null;
+        if (item == ShopItemData.SEED_PACKET_DAILY && shop.isDailyItemSoldOut()) return "daily item has been sold out, come back tomorrow";
 
-        if (item == ShopItemData.SEED_PACKET_BY_CHOICE) {
+        if (item == ShopItemData.SEED_PACKET_BY_CHANCE) plantChosen = shop.getRandomSeedPack();
+        else if (item == ShopItemData.SEED_PACKET_DAILY) plantChosen = shop.getRandomSpecialSeedPack();
+        else if (item == ShopItemData.SEED_PACKET_BY_CHOICE) {
             String plantChosenSt = matcher.group(3);
             plantChosen = PlantRepository.getInstance().findByName(plantChosenSt);
-            if (plantChosen == null) {
+            if (plantChosen == null || !App.getCurrentUser().getCollection().getAvailablePlantsIds().contains(plantChosen.getId())) {
                 return "invalid plant name";
             }
-        } else if (item == ShopItemData.SEED_PACKET_DAILY && shop.isDailyItemSoldOut()) {
-            return "daily item has been sold out, come back tomorrow";
         }
 
+        if (item == ShopItemData.POT && App.getCurrentUser().getGreenHouse().getPotsCount() + count > 20) return "greenhouse is full";
+        if (item == ShopItemData.PLANT_FOOD && App.getCurrentUser().getPlantFoodBoughtCount() + count > 3) return "plant food count is maximum";
+        int price = item.getPrice() * count;
         if (item.getPaymentType() == PaymentType.COIN) {
-            if (item.getPrice() > App.getCurrentUser().getCoinsCount()) {
+            if (price > App.getCurrentUser().getCoinsCount()) {
                 return "not enough coins to buy this item";
             } else {
-                App.getCurrentUser().setCoinsCount(App.getCurrentUser().getCoinsCount() - item.getPrice());
-                addItemToProfile(item, plantChosen, count);
+                App.getCurrentUser().setCoinsCount(App.getCurrentUser().getCoinsCount() - price);
             }
         } else {
-            if (item.getPrice() > App.getCurrentUser().getGemsCount()) {
+            if (price > App.getCurrentUser().getGemsCount()) {
                 return "not enough gems to buy this item";
             } else {
-                App.getCurrentUser().setGemsCount(App.getCurrentUser().getGemsCount() - item.getPrice());
-                addItemToProfile(item, plantChosen, count);
+                App.getCurrentUser().setGemsCount(App.getCurrentUser().getGemsCount() - price);
             }
         }
-        return "";
+        return addItemToProfile(item, plantChosen, count);
     }
 
-    public PlantData getRandomPlant(){
+    public static PlantData getRandomPlant(){
         List<String> unlockedPlants = App.getCurrentUser().getCollection().getAvailablePlantsIds();
+        if (unlockedPlants.isEmpty()) return PlantRepository.getInstance().getAllPlants().get(0);
         int randomIndex = new Random().nextInt(unlockedPlants.size());
         return PlantRepository.getInstance().findById(unlockedPlants.get(randomIndex));
     }
@@ -107,15 +124,15 @@ public class ShopController {
     }
 
     public static String addItemToProfile(ShopItemData item, PlantData plant, int count) {
+        Shop shop = App.getCurrentUser().getShop();
         switch (item) {
             case POT -> {
-                if (GreenHouse.getPotsCount() + count > 20) {
+                GreenHouse greenHouse = App.getCurrentUser().getGreenHouse();
+                if (greenHouse.getPotsCount() + count > 20) {
                     return "greenhouse is full";
                 }
-                for (int i = 0; i < count; i++) {
-                    GreenHousePot pot = new GreenHousePot();//todo: where to put the pot?
-                }
-                return count + " pot(s) bought successfully";
+                int unlocked = greenHouse.unlockPots(count);
+                return unlocked + " pot(s) bought successfully";
             }
             case PLANT_FOOD -> {
                 if (App.getCurrentUser().getPlantFoodBoughtCount() + count > 3) {

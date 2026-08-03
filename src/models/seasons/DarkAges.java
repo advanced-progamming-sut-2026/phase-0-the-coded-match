@@ -4,20 +4,21 @@ import models.GameMapRelated.Tile;
 import models.Level;
 import models.plants.Plant;
 import models.zombies.Zombie;
+import models.zombies.ZombieData;
 import models.zombies.ZombieRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class DarkAges extends Season {
+public final class DarkAges extends Season {
     public DarkAges(SeasonData data) {
         super(data);
+        this.name = data.getName();
+        this.setUnlocked(true);
     }
 
-    @Override
-    public void applySpecialRules() {
-        // TODO: apply dark ages rules later
-    }
+
 
     @Override
     public void initializeGrid() {
@@ -43,18 +44,18 @@ public class DarkAges extends Season {
         Random random = new Random();
         int rows = level.getGameMap().getRows();
         int cols = level.getGameMap().getColumns();
-        List<String> necromancyZombies = List.of();
-        necromancyZombies.addAll(level.getData().getAllowedZombies());
+        List<ZombieData> necromancyZombies = new ArrayList<>(this.getAllowedZombies());
 
-        for (int r = 0; r < rows; r++) {
-            for (int c = 0; c < cols; c++) {
+        for (int r = 1; r <= rows; r++) {
+            for (int c = 1; c <= cols; c++) {
                 Tile tile = level.getGameMap().getTile(c, r);
 
                 if (tile != null && tile.holdsNecromancyPotential() && tile.isGrave()) {
-                    String chosenZombie = necromancyZombies.get(random.nextInt(necromancyZombies.size()));
+                    String chosenZombie = necromancyZombies.get(random.nextInt(necromancyZombies.size())).getId();
                     Zombie zombie = new Zombie(ZombieRepository.getInstance().findById(chosenZombie), c, r);
-
-                    level.getActiveZombies().add(zombie);
+                    if(zombie != null) {
+                        level.getActiveZombies().add(zombie);
+                    }
                 }
             }
         }
@@ -67,7 +68,7 @@ public class DarkAges extends Season {
 
         int graveCount = 1 + random.nextInt(2);
         for (int i = 0; i < graveCount; i++) {
-            int randomRow = random.nextInt(rows);
+            int randomRow = 1 + random.nextInt(rows);
             int randomCol = 2 + random.nextInt(cols - 3); // middle right cols
 
             Tile tile = level.getGameMap().getTile(randomCol, randomRow);

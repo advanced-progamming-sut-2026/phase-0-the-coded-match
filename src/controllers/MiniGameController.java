@@ -2,9 +2,8 @@ package controllers;
 
 import enums.Commands;
 import models.Level;
-import models.MiniGameRelated.IZombie;
-import models.MiniGameRelated.MiniGame;
-import models.MiniGameRelated.VaseBreaker;
+import models.App;
+import models.MiniGameRelated.*;
 import views.MiniGameView;
 
 import java.util.regex.Matcher;
@@ -12,6 +11,7 @@ import java.util.regex.Pattern;
 
 public class MiniGameController {
     private static MiniGame miniGame;
+    private static boolean resultRecorded;
     private Level currentLevel;
 
     public static String enterMinigame(String input) {
@@ -29,29 +29,30 @@ public class MiniGameController {
             return "invalid level";
         }
 
-        switch (name) {
-            case "izombie" :
-                miniGame = new IZombie(stage);
-                GameManagerController.getInstance().setCurrentLevel(miniGame);
-                break;
-            case "vasebreaker":
-                miniGame = new VaseBreaker(stage);
-                GameManagerController.getInstance().setCurrentLevel(miniGame);
-                break;
+        switch (name.replace("-", "").replace(" ", "")) {
+            case "izombie" -> miniGame = new IZombie(stage);
+            case "vasebreaker" -> miniGame = new VaseBreaker(stage);
+            case "wallnutbowling" -> miniGame = new WallNutBowling(stage);
+            case "beghouled" -> miniGame = new Beghouled(stage);
+            case "zombotany" -> miniGame = new Zombotany(stage);
+            default -> { return "minigame does not exist"; }
         }
-
-        return "entered minigame" + name;
+        GameManagerController.getInstance().setCurrentLevel(miniGame);
+        resultRecorded = false;
+        return "entered minigame " + name + " stage " + stage;
     }
 
-    public void loadMiniGame(){}
+    public void loadMiniGame(){ currentLevel = miniGame; }
 
-    public void StartGame(){}
+    public void StartGame(){
+        loadMiniGame();
+        if (currentLevel != null) GameManagerController.getInstance().setCurrentLevel(currentLevel);
+    }
 
     public static void verifyWinLossConditions() {
         if (miniGame instanceof IZombie) {
-            boolean allBrainsEaten = false;
-            boolean outOfSunAndZombies = (((IZombie) miniGame).getSunAmount() < 50 &&
-                    miniGame.getActiveZombies().isEmpty());
+            boolean allBrainsEaten = ((IZombie) miniGame).allBrainsEaten();
+            boolean outOfSunAndZombies = ((IZombie) miniGame).getSunAmount() < 50 && miniGame.getActiveZombies().isEmpty();
 
             if (allBrainsEaten) {
                 EndGame(true);
@@ -59,17 +60,23 @@ public class MiniGameController {
                 EndGame(false);
             }
         }
-        if(miniGame instanceof VaseBreaker){
-            if(((VaseBreaker) miniGame).winConditionsChecked()){
-                EndGame(true);
-            }else{
-                EndGame(false);
-            }
+        if (miniGame instanceof VaseBreaker && ((VaseBreaker) miniGame).winConditionsChecked()) EndGame(true);
+        if (miniGame instanceof WallNutBowling game && game.isGameOver) EndGame(game.hasWon());
+        if (miniGame instanceof Zombotany game && game.isGameOver) EndGame(game.hasWon());
+        if (miniGame instanceof Beghouled game) {
+            game.checkRules();
+            if (game.isGameOver) EndGame(game.hasWon());
         }
     }
 
     public static void EndGame(Boolean won){
+        if (resultRecorded) return;
+        resultRecorded = true;
         if (won) {
+            if (App.getCurrentUser() != null) {
+                App.getCurrentUser().addMinigamesWon();
+                controllers.menus.SignupMenuController.saveToJson();
+            }
             MiniGameView.miniGameWon();
         } else {
             MiniGameView.miniGameLost();

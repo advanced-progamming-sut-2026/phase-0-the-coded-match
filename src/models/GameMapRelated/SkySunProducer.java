@@ -11,7 +11,7 @@ import java.util.Random;
 
 public class SkySunProducer implements Update {
     private double timeSinceLastDrop;
-    private Random random;
+    private transient Random random;
     private boolean producedASun;
     private Sun sun;
 
@@ -46,10 +46,12 @@ public class SkySunProducer implements Update {
     }
 
     public void calculateDropTime() {
-        double time = Math.max(6 + 0.05 * GameManagerController.getInstance().getCurrentLevel().getCurrentTick(), 12);
-        int dl = App.getCurrentUser().getDifficultyLevel();
-        time = time * (dl / 3.0);
-        if (timeSinceLastDrop >= time) {
+        Level level = GameManagerController.getInstance().getCurrentLevel();
+        double seconds = level.getCurrentTick() / 10.0;
+        double time = Math.min(12, 6 + 0.05 * seconds) * 10;
+        int dl = App.getCurrentUser() == null ? 3 : App.getCurrentUser().getDifficultyLevel();
+        time *= dl / 3.0;
+        if (level.isDay() && timeSinceLastDrop >= time) {
             spawnRandomSun();
             timeSinceLastDrop = 0.0;
         }
@@ -57,19 +59,20 @@ public class SkySunProducer implements Update {
 
     public void spawnRandomSun() {
         Level currentLevel = GameManagerController.getInstance().getCurrentLevel();
-        int chance = random.nextInt();
-        int randomX = random.nextInt(currentLevel.getGameMap().getLength()); //x and y >= 0
-        int randomY = random.nextInt(currentLevel.getGameMap().getWidth());
+        if (random == null) random = new Random();
+        int chance = random.nextInt(100);
+        int randomX = 1 + random.nextInt(currentLevel.getGameMap().getColumns());
+        int randomY = 1 + random.nextInt(currentLevel.getGameMap().getRows());
 
         Sun droppedSun = null;
         if (chance < SunType.NORMAL.getDropChancePercentage()) {
-            droppedSun = new Sun(randomX, randomY, SunType.NORMAL.getValue(), 5,
+            droppedSun = new Sun(randomX, randomY, SunType.NORMAL.getValue(), 50,
                     true, SunType.NORMAL);
-        } else if (SunType.NORMAL.getDropChancePercentage() < chance && chance < SunType.SPECIAL.getDropChancePercentage()) {
-            droppedSun = new Sun(randomX, randomY, SunType.SPECIAL.getValue(), 5,
+        } else if (chance < SunType.NORMAL.getDropChancePercentage() + SunType.SPECIAL.getDropChancePercentage()) {
+            droppedSun = new Sun(randomX, randomY, SunType.SPECIAL.getValue(), 50,
                     true, SunType.SPECIAL);
         } else {
-            droppedSun = new Sun(randomX, randomY, SunType.RADIOACTIVE.getDropChancePercentage(), 5,
+            droppedSun = new Sun(randomX, randomY, SunType.RADIOACTIVE.getValue(), 50,
                     true, SunType.RADIOACTIVE);
         }
         if (droppedSun != null) {

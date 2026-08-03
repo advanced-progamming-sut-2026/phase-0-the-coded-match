@@ -4,6 +4,8 @@ import enums.Gender;
 import enums.QuestRelated.QuestCategory;
 import enums.SecurityQuestions;
 import models.greenhouse.GreenHouse;
+import models.plants.PlantData;
+import models.plants.PlantRepository;
 import models.seasons.Season;
 
 import java.util.ArrayList;
@@ -22,9 +24,10 @@ public class User {
     private int gemsCount;
     private int levelsCount;
     private int meowPoints;
-    private LevelData lastLevel;
+    private transient LevelData lastLevel;
+    private int lastLevelNumber;
     private boolean isVictroy;
-    private Season lastSeason;
+    private transient Season lastSeason;
     private int lastSeasonId;
     private int difficultyLevel;
     private int minigamesWonCount;
@@ -32,11 +35,13 @@ public class User {
     private boolean stayLoggedIn;
     private Collection collection;
     private GreenHouse greenHouse;
-    private ArrayList<Level> unlockedLevels = new ArrayList<>();
+    private Shop shop;
+    private transient ArrayList<Level> unlockedLevels = new ArrayList<>();
     private NewsManager personalNews;
     private Map<String, Integer> seedPackets = new HashMap<>();
     private QuestsModel questsModel;
     private int plantFoodBoughtCount = 0;
+    private String lastDailyQuestRefreshDate;
 
     public User(String username, String password, String nickname, String email, Gender gender) {
         this.username = username;
@@ -47,9 +52,13 @@ public class User {
         this.questions = new HashMap<>();
         this.difficultyLevel = 3;
         this.collection = new Collection();
+        this.shop = new Shop();
+        this.greenHouse = new GreenHouse();
+        this.questsModel = new QuestsModel();
+        this.personalNews = new NewsManager();
     }
 
-    public void addGamesPlayed() {}
+    public void addGamesPlayed() { gamesPlayedCount++; }
 
     public void addCoins(int amount) {
         this.coinsCount = coinsCount + amount;
@@ -59,15 +68,71 @@ public class User {
         this.gemsCount = gemsCount + amount;
     }
 
-    public void addChapters() {}
+    public void addChapters() { levelsCount++; }
 
-    public void addMeowPoints() {}
+    public void addMeowPoints() { meowPoints++; }
+    public void addMeowPoints(int amount) { meowPoints += Math.max(0, amount); }
 
-    public void addMinigamesWon() {}
+    public void addMinigamesWon() { minigamesWonCount++; }
 
     public void addDailyQuests() {}
 
+    public void ensureDefaults() {
+        if (questions == null) questions = new HashMap<>();
+        if (collection == null) collection = new Collection();
+        if (collection.getAvailablePlantsIds().isEmpty()) for (String name : List.of("Peashooter", "Sunflower", "Wall-nut")) { PlantData p = PlantRepository.getInstance().findByName(name); if (p != null) collection.unlockPlant(p.getId()); }
+        if (greenHouse == null) greenHouse = new GreenHouse();
+        if (shop == null) shop = new Shop();
+        if (unlockedLevels == null) unlockedLevels = new ArrayList<>();
+        if (personalNews == null) personalNews = new NewsManager();
+        if (seedPackets == null) seedPackets = new HashMap<>();
+        if (questsModel == null) questsModel = new QuestsModel();
+        if (difficultyLevel < 1 || difficultyLevel > 5) difficultyLevel = 3;
+        restoreProgress();
+    }
+
+    private void restoreProgress() {
+        if (lastSeasonId <= 0) return;
+        for (Season season : App.getAllSeasons()) {
+            int seasonId = season.getData().getId();
+            if (seasonId < lastSeasonId) {
+                season.setUnlocked(true);
+                for (LevelData level : season.getLevels()) level.setUnlocked(true);
+            } else if (seasonId == lastSeasonId) {
+                season.setUnlocked(true);
+                lastSeason = season;
+                int maxLevel = 0;
+                for (LevelData level : season.getLevels()) {
+                    maxLevel = Math.max(maxLevel, level.getLevelNumber());
+                    if (level.getLevelNumber() <= Math.max(1, lastLevelNumber + 1)) level.setUnlocked(true);
+                    if (level.getLevelNumber() == lastLevelNumber) lastLevel = level;
+                }
+                if (lastLevelNumber >= maxLevel) {
+                    for (Season nextSeason : App.getAllSeasons()) {
+                        if (nextSeason.getData().getId() == lastSeasonId + 1) {
+                            nextSeason.setUnlocked(true);
+                            if (!nextSeason.getLevels().isEmpty()) nextSeason.getLevels().get(0).setUnlocked(true);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    public void recordLevelVictory(Season season, LevelData level, int score) {
+        this.lastSeason = season;
+        if (season != null && season.getData() != null) {
+            this.lastSeasonId = season.getData().getId();
+        }
+        this.lastLevel = level;
+        if (level != null) this.lastLevelNumber = level.getLevelNumber();
+        if (score > this.highestPointAchieved) {
+            this.highestPointAchieved = score;
+        }
+    }
+
     public int getCompletedQuestsCount() {
+        ensureDefaults();
         int count = 0;
         for (Quest quest : questsModel.getAvailableQuests()) {
             if (quest.isCompleted) {
@@ -78,6 +143,7 @@ public class User {
     }
 
     public int getCompletedDailyQuestsCount() {
+        ensureDefaults();
         int count = 0;
         for (Quest quest : questsModel.getAvailableQuests()) {
             if (quest.isCompleted && quest.getQuestData().getCategory() == QuestCategory.DAILY) {
@@ -111,7 +177,7 @@ public class User {
 
     public void setLastSeason(Season lastSeason) {
         this.lastSeason = lastSeason;
-        this.lastSeasonId = lastSeason.getData().getId();
+        if (lastSeason != null && lastSeason.getData() != null) this.lastSeasonId = lastSeason.getData().getId();
     }
 
     public int getMinigamesWonCount() {
@@ -131,6 +197,7 @@ public class User {
     }
 
     public void addQuestion(SecurityQuestions question, String answer){
+        ensureDefaults();
         this.questions.put(question, answer);
     }
 
@@ -158,15 +225,17 @@ public class User {
         this.email = email;
     }
 
-    public void setStayLoggedIn(boolean stayLoggedIn){
-        this.stayLoggedIn = stayLoggedIn;
-    }
+    public void setStayLoggedIn(boolean stayLoggedIn){ this.stayLoggedIn = stayLoggedIn; }
+
+    public boolean isStayLoggedIn() { return stayLoggedIn; }
 
     public Map<SecurityQuestions, String> getQuestions(){
+        ensureDefaults();
         return questions;
     }
 
     public NewsManager getPersonalNews(){
+        ensureDefaults();
         return personalNews;
     }
 
@@ -207,6 +276,7 @@ public class User {
     }
 
     public int getSeedPacketCount(String plantName) {
+        ensureDefaults();
         return seedPackets.getOrDefault(plantName.toLowerCase(), 0);
     }
 
@@ -234,10 +304,12 @@ public class User {
     }
 
     public Collection getCollection(){
+        ensureDefaults();
         return collection;
     }
 
     public QuestsModel getQuestsModel() {
+        ensureDefaults();
         return questsModel;
     }
 
@@ -253,6 +325,14 @@ public class User {
         this.plantFoodBoughtCount = plantFoodBoughtCount;
     }
 
+    public String getLastDailyQuestRefreshDate() {
+        return lastDailyQuestRefreshDate;
+    }
+
+    public void setLastDailyQuestRefreshDate(String lastDailyQuestRefreshDate) {
+        this.lastDailyQuestRefreshDate = lastDailyQuestRefreshDate;
+    }
+
     public boolean isVictroy() {
         return isVictroy;
     }
@@ -261,6 +341,12 @@ public class User {
     }
 
     public GreenHouse getGreenHouse(){
+        ensureDefaults();
         return greenHouse;
+    }
+
+    public Shop getShop() {
+        ensureDefaults();
+        return shop;
     }
 }

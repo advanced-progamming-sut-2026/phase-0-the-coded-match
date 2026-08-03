@@ -3,22 +3,31 @@ package models.seasons;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.Reader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
+import utils.AssetPaths;
 
 public class SeasonRepository {
+    private static SeasonRepository instance;
     private final List<SeasonData> seasons;
 
     public SeasonRepository(String jsonPath) {
         this.seasons = loadSeasons(jsonPath);
     }
 
+    public static SeasonRepository getInstance() {
+        if (instance == null) {
+            instance = new SeasonRepository("assets/Seasons.json");
+        }
+        return instance;
+    }
+
     private List<SeasonData> loadSeasons(String jsonPath) {
         Gson gson = new Gson();
-        try (FileReader reader = new FileReader(jsonPath)) {
+        try (Reader reader = AssetPaths.reader(jsonPath)) {
             Type listType = new TypeToken<ArrayList<SeasonData>>(){}.getType();
             return gson.fromJson(reader, listType);
         } catch (IOException e) {
@@ -41,8 +50,9 @@ public class SeasonRepository {
     }
 
     public SeasonData findByType(String seasonType) {
+        if (seasonType == null) return null;
        for(SeasonData season : seasons){
-           if(season.getSeasonType().equalsIgnoreCase(seasonType)){
+           if(season.getSeasonType().toString().equalsIgnoreCase(seasonType)){
                return season;
            }
        }

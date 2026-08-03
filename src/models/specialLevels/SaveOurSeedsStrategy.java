@@ -18,16 +18,18 @@ public class SaveOurSeedsStrategy implements SpecialLevelStrategy{
         int rows = level.getGameMap().getRows();
         int cols = level.getGameMap().getColumns();
 
-        int protectedPlants = level.getData().getProtectedPlants().size();
-        for(int i =0; i < protectedPlants; i++){
-            int randomRow = random.nextInt(rows);
-            int randomCol = random.nextInt(cols);
-            Tile tile = level.getGameMap().getTile(randomRow, randomCol);
-            if (tile != null && tile.getPlant() == null ){
-                for (String data : level.getData().getProtectedPlants()) {
+        for(String data : level.getData().getProtectedPlants()) {
+            boolean placed = false;
+            while(!placed) {
+                int randomRow = 1 + random.nextInt(rows);
+                int randomCol = 1 + random.nextInt(cols);
+                Tile tile = level.getGameMap().getTile(randomCol, randomRow);
+                if (tile != null && tile.getPlant() == null) {
                     Plant protectedPlant = new Plant(PlantRepository.getInstance().findByName(data), randomCol, randomRow, level.getLevelNumber());
+                    tile.setPlant(protectedPlant);
                     level.getActivePlants().add(protectedPlant);
                     protectedPlantsList.add(protectedPlant);
+                    placed = true;
                 }
             }
         }

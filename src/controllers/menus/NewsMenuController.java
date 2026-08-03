@@ -9,7 +9,7 @@ public class NewsMenuController{
     public static String showUnreadNews() {
         User current = App.getCurrentUser();
         StringBuilder message = new StringBuilder();
-        for(News n : current.getPersonalNews().getUnreadNews()){
+        for (News n : new java.util.ArrayList<>(current.getPersonalNews().getUnreadNews())) {
             message.append(n.getNewsText()).append("\n");
             n.setUnread(false);
             current.getPersonalNews().removeReadNews(n);
@@ -21,7 +21,7 @@ public class NewsMenuController{
     public static String showAll() {
         User current = App.getCurrentUser();
         StringBuilder message = new StringBuilder();
-        for(News n : current.getPersonalNews().getAllNews()){
+        for (News n : new java.util.ArrayList<>(current.getPersonalNews().getAllNews())) {
             message.append(n.getNewsText()).append("\n");
             if(n.isUnread()) {
                 current.getPersonalNews().removeReadNews(n);

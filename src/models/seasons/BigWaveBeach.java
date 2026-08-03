@@ -10,19 +10,17 @@ import models.zombies.Zombie;
 import models.zombies.ZombieData;
 import models.zombies.ZombieRepository;
 
+import java.util.List;
 import java.util.Random;
 
-public class BigWaveBeach extends Season {
+public final class BigWaveBeach extends Season {
 
     private int currentTideColumn = 5;
 
     public BigWaveBeach(SeasonData data) {
         super(data);
-    }
-
-    @Override
-    public void applySpecialRules() {
-        // TODO
+        this.name = data.getName();
+        this.setUnlocked(true);
     }
 
     @Override
@@ -39,12 +37,16 @@ public class BigWaveBeach extends Season {
         int rows = level.getGameMap().getRows();
         int cols = level.getGameMap().getColumns();
 
-        for (int r = 0; r < rows; r++) {
-            for (int c = 0; c < cols; c++) {
+        for (int r = 1; r <= rows; r++) {
+            for (int c = 1; c <= cols; c++) {
                 Tile tile = level.getGameMap().getTile(c, r);
                 if (tile != null) {
-                    if(tile.getColumn() >= tideColumn){
+                    if (c >= tideColumn) {
                         tile.setType(TileType.WATER);
+                    }else {
+                        if (tile.getType() == TileType.WATER) {
+                            tile.setType(TileType.NORMAL);
+                        }
                     }
                 }
             }
@@ -56,9 +58,9 @@ public class BigWaveBeach extends Season {
         int rows = level.getGameMap().getRows();
         int cols = level.getGameMap().getColumns();
 
-        for (int r = 0; r < rows; r++) {
-            for (int c = 0; c < cols; c++) {
-                Tile tile = level.getGameMap().getTile(r, c);
+        for (int r = 1; r <= rows; r++) {
+            for (int c = 1; c <= cols; c++) {
+                Tile tile = level.getGameMap().getTile(c, r);
 
                 if (tile != null && tile.getType()==TileType.WATER) {
                     Plant plant = tile.getPlant();
@@ -66,16 +68,16 @@ public class BigWaveBeach extends Season {
                     // If water covers a plant that isn't aquatic and has no Lily Pad support, wash it away
                     if (plant != null && !plant.hasThisTag(PlantTag.WATER) && tile.getLilyPadPlant() == null) {
                         level.getActivePlants().remove(plant);
-                        tile.setPlant(null);
+                        tile.removePlant();
                     }
                 }
             }
         }
 
         for (Zombie zombie : level.getActiveZombies()) {
-            if (zombie.getData().getDisplayName().equalsIgnoreCase("Snorkel")) {
+            if (zombie.getData().getId().contains("Beach")) {
                 int zombieCol = (int) zombie.getX();
-                int zombieRow = (int) zombie.getY();
+                int zombieRow = zombie.getY();
 
                 Tile tile = level.getGameMap().getTile(zombieCol, zombieRow);
                 if (tile != null && tile.getType() == TileType.WATER && zombie.getCurrentState() != ZombieState.EATING) {
@@ -90,12 +92,12 @@ public class BigWaveBeach extends Season {
     @Override
     public void WaveStarted(Level level, int waveNumber) {
         Random random = new Random();
-        if (waveNumber == 3 || waveNumber == level.getData().getWaveCount()) {
+        if (waveNumber == 2 || waveNumber == level.getData().getWaveCount() - 1) {
             triggerLowTideEvent(level);
         }
 
         // Shift tide boundary by 1 column (left or right)
-        if (waveNumber > 1) {
+        if (waveNumber > 0) {
             int tideShift = random.nextBoolean() ? -1 : 1;
             currentTideColumn = Math.max(3, Math.min(7, currentTideColumn + tideShift));
             updateTideBoundary(level, currentTideColumn);
@@ -107,10 +109,12 @@ public class BigWaveBeach extends Season {
         int extraZombies = 3 + random.nextInt(3); // Spawn 3 to 5 zombies
 
         for (int i = 0; i < extraZombies; i++) {
-            int randomRow = random.nextInt(level.getGameMap().getRows());
+            int randomRow = 1 + random.nextInt(level.getGameMap().getRows());
 
             int randomCol = currentTideColumn + random.nextInt(9 - currentTideColumn);
-            Zombie lowTideZombie = new Zombie (ZombieRepository.getInstance().findById("ZombieBeachSnorkel"), randomCol, randomRow);
+            int randomZombie = random.nextInt(this.getAllowedZombies().size());
+            String name = this.getAllowedZombies().get(randomZombie).getId();
+            Zombie lowTideZombie = new Zombie (ZombieRepository.getInstance().findById(name), randomCol, randomRow);
             level.getActiveZombies().add(lowTideZombie);
         }
     }

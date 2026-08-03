@@ -92,7 +92,7 @@
     "speed": 0.185,
     "waveCost": 700,
     "armors": {
-      "type": "BUCKET",
+      "type": "BRICK",
       "hp": 1100,
       "metallic": true
     },
@@ -301,7 +301,7 @@
     "seasons": ["FROSTBITE_CAVES"],
     "HP": 700,
     "eatDPS": 100,
-    "speed": 0.13,
+    "speed": 0.12,
     "waveCost": 500,
     "behaviorType": "Normal",
     "state": "WALKING"

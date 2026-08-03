@@ -11,7 +11,7 @@ import models.zombies.Zombie;
 
 public class TurquoiseBehavior implements ZombieBehavior {
     private boolean isCastingAbility = false;
-    private int abilityTimer = 5;
+    private int abilityTimer = 10;
 
     @Override
     public void updateZombie(Zombie zombie, Plant targetPlant) {
@@ -44,10 +44,10 @@ public class TurquoiseBehavior implements ZombieBehavior {
     public void lazer(Zombie zombie) {
         GameMap map = GameManagerController.getInstance().getCurrentLevel().getGameMap();
 
-        for (int i = 0; i < map.getColumns(); i++) {
-            for (int j = 0; j < map.getRows(); j++) {
-                if (j == zombie.getY() && zombie.getX() - i <= 4) {
-                    Tile tile = map.getTile(j, i);
+        for (int x = 1; x <= map.getColumns(); x++) {
+            for (int y = 1; y <= map.getRows(); y++) {
+                if (y == zombie.getY() && zombie.getX() - x <= 4) {
+                    Tile tile = map.getTile(x, y);
                     if (!tile.isEmpty()) {
                         tile.getPlant().setCurrentHp(0);
                     }
@@ -57,7 +57,7 @@ public class TurquoiseBehavior implements ZombieBehavior {
     }
 
     public int stealSuns() {
-        int sunsToSteal = Math.max(25, GameManagerController.getInstance().getCurrentLevel().getCollectedSunsAmount());
+        int sunsToSteal = Math.min(25, GameManagerController.getInstance().getCurrentLevel().getCollectedSunsAmount());
         if (sunsToSteal > 0) {
             Level level = GameManagerController.getInstance().getCurrentLevel();
             level.setCollectedSunsAmount(level.getCollectedSunsAmount() - sunsToSteal);

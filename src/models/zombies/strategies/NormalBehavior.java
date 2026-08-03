@@ -16,9 +16,10 @@ import models.zombies.Zombie;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 public class NormalBehavior implements ZombieBehavior {
-    private int abilityTimer = 6;
+    private int abilityTimer = 60;
 
     @Override
     public void updateZombie(Zombie zombie, Plant targetPlant) {
@@ -74,9 +75,9 @@ public class NormalBehavior implements ZombieBehavior {
     public List<Tile> getValidTilesForGrave() {
         List<Tile> validTiles = new ArrayList<>();
         GameMap map = GameManagerController.getInstance().getCurrentLevel().getGameMap();
-        for (int row = 0; row < map.getRows(); row++) {
-            for (int col = 0; col < map.getColumns(); col++) {
-                Tile tile = map.getTile(row, col);
+        for (int row = 1; row <= map.getRows(); row++) {
+            for (int col = 1; col <= map.getColumns(); col++) {
+                Tile tile = map.getTile(col, row);
 
                 if (tile == null) {
                     continue;
@@ -91,12 +92,23 @@ public class NormalBehavior implements ZombieBehavior {
     }
 
     public void stealDroppedSuns(Zombie zombie) {
-        Level level = GameManagerController.getInstance().getCurrentLevel();
-        for (Sun sun : level.getActiveSuns()) {
-            //TODO: the sun must have a speed?
-            level.getActiveSuns().remove(sun);
-            zombie.getStolenActiveSuns().add(sun);
+        List<Sun> activeSuns = GameManagerController.getInstance().getCurrentLevel().getActiveSuns();
+        if (zombie.getAbilityTickTimer() == abilityTimer) {
+            if (activeSuns != null && !activeSuns.isEmpty()) {
+                Random random = new Random();
+                int randomIndex = random.nextInt(activeSuns.size());
+                Sun stolenSun = activeSuns.get(randomIndex);
+                removeSun(stolenSun);
+                zombie.getStolenActiveSuns().add(stolenSun);
+            }
+            zombie.setAbilityTickTimer(0);
+        } else {
+            zombie.setAbilityTickTimer(zombie.getAbilityTickTimer() + 1);
         }
+    }
+
+    public void removeSun(Sun sun) {
+        GameManagerController.getInstance().getCurrentLevel().getActiveSuns().remove(sun);
     }
 
     public void shootProjectile(Zombie zombie) { //TODO: include projectile TYPE
@@ -108,12 +120,13 @@ public class NormalBehavior implements ZombieBehavior {
 
     @Override
     public void onProjectileHit(Zombie zombie, Projectile projectile) {
-        if (zombie.getData().getId().equalsIgnoreCase("ZombieLostCityJane")) {
+        String zombieId = zombie.getData().getId();
+        if (zombieId.equalsIgnoreCase("ZombieLostCityJane")) {
             if (projectile.getCreatorPlantCategory().getData().getCategory() == PlantCategory.LOBBER) {
                 return;
             }
         }
-        if (zombie.getData().getId().equalsIgnoreCase("ZombieDarkImpDragon")) {
+        if (zombieId.equalsIgnoreCase("ZombieDarkImpDragon")) {
             if (projectile.getCreatorPlantCategory().hasThisTag(PlantTag.FIRE)) {
                 return;
             }

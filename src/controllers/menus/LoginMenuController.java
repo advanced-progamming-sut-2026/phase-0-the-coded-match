@@ -4,6 +4,7 @@ import controllers.QuestController;
 import enums.Commands;
 import enums.Menu;
 import enums.Phases;
+import enums.SecurityQuestions;
 import models.App;
 import models.User;
 
@@ -21,7 +22,7 @@ public class LoginMenuController{
 
         String username = matcher.group("username");
         String password = matcher.group("password");
-        String stayLoggedIn = matcher.group(3); //right??
+        boolean stayLoggedIn = matcher.group("stay") != null;
 
         User target = App.getUserByUsername(username);
         if(target == null){
@@ -32,16 +33,18 @@ public class LoginMenuController{
             return "Incorrect password";
         }
         App.setCurrentUser(target);
-        App.saveLoggedInUser(username);
-        if(!stayLoggedIn.isEmpty()){
-            App.getCurrentUser().setStayLoggedIn(true); //TODO: is this necessary?
-        }
+        target.setStayLoggedIn(stayLoggedIn);
+        if (stayLoggedIn) App.saveLoggedInUser(username); else App.clearLoggedInUser();
+        App.setCurrentMenu(Menu.MAIN_MENU);
         QuestController.generateAllQuests();
         QuestController.refreshDailyQuests();
         return "Logged in successfully";
     }
 
-    public String forgotPassword(String username, String email) {
+    public static String forgotPassword(String input) {
+        Matcher matcher = Pattern.compile(Commands.FORGET_PASSWORD.getPattern()).matcher(input);
+        if (!matcher.matches()) return "invalid command";
+        String username = matcher.group("username"), email = matcher.group("email");
         User target = App.getUserByUsername(username);
         if(target == null){
             return "User does not exist";
@@ -50,13 +53,21 @@ public class LoginMenuController{
             return "Incorrect email";
         }
         App.setUserUndergoingReset(target);
-        return target.getQuestions().keySet().toString();
-
+        for (SecurityQuestions questions : target.getQuestions().keySet()) {
+            return questions.getText();
+        }
+        return "no question";
     }
 
-    public static String isAnswerCorrect(String answer) {
+    public static String isAnswerCorrect(String input) {
+        Pattern pattern = Pattern.compile(Commands.ANSWER.getPattern());
+        Matcher matcher = pattern.matcher(input);
+        if (!matcher.matches()) {
+            return "invalid command";
+        }
+        String answer = matcher.group("answer");
         User target = App.getUserUndergoingReset();
-        if (!target.getQuestions().containsValue(answer)){
+        if (target == null || !target.getQuestions().containsValue(answer)){
             App.setCurrentMenu(Menu.SIGNUP_MENU);
             return "Wrong answer";
         }
@@ -64,26 +75,21 @@ public class LoginMenuController{
         return "Please enter your new password";
     }
 
-    public static String resetPassword(String newPassword) {
-        if (newPassword == null || newPassword.length() < 8) {
-            return "Invalid password: It must be at least 8 characters long.";
+    public static String resetPassword(String input) {
+        Pattern pattern = Pattern.compile(Commands.NEW_PASSWORD.getPattern());
+        Matcher matcher = pattern.matcher(input);
+        if (!matcher.matches()) {
+            return "invalid command";
         }
-        if (!newPassword.matches(".*[A-Z].*")) {
-            return "Invalid password: It must contain at least one uppercase letter.";
-        }
-        if (!newPassword.matches(".*[a-z].*")) {
-            return "Invalid password: It must contain at least one lowercase letter.";
-        }
-        if (!newPassword.matches(".*\\d.*")) {
-            return "Invalid password: It must contain at least one number.";
-        }
-        String specialCharsRegex = ".*[?><,\"';:\\\\/|\\[\\]}{+=\\(\\)*&^%$#!].*";
-        if (!newPassword.matches(specialCharsRegex)) {
-            return "Invalid password: It must contain at least one special character.";
+        String newPassword = matcher.group("password");
+        if (newPassword == null || !SignupMenuController.validatePassword(newPassword)) {
+            return "invalid password";
         }
         User target = App.getUserUndergoingReset();
+        if (target == null) return "No password reset request";
         target.setPassword(SignupMenuController.hashPassword(newPassword));
         App.setCurrentPhase(Phases.NORMAL_GAMEPLAY);
+        SignupMenuController.saveToJson();
         return "Password reset successfully";
     }
 

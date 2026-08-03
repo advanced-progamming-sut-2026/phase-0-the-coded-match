@@ -21,8 +21,8 @@
     "plantFoodAbilities": [
       "INSTANT_SUN"
     ],
-    "baseAbility": "تولید ۵۰ خورشید هر ۲۴ ثانیه.",
-    "plantFoodEffect": "تولید فوری ۱۵۰ خورشید.",
+    "baseAbility": "Produces 50 sun every 24 seconds.",
+    "plantFoodEffect": "Instantly produces 150 sun.",
     "upgrades": [
       {
         "level": 2,
@@ -37,7 +37,7 @@
         "description": "Double Sun Chance"
       }
     ],
-    "description": "تولید ۵۰ خورشید هر ۲۴ ثانیه."
+    "description": "Produces 50 sun every 24 seconds."
   },
   {
     "id": "twin_sunflower",
@@ -61,8 +61,8 @@
     "plantFoodAbilities": [
       "INSTANT_SUN"
     ],
-    "baseAbility": "تولید ۱۰۰ خورشید در هر دور.",
-    "plantFoodEffect": "تولید فوری ۲۵۰ خورشید.",
+    "baseAbility": "Produces 100 sun each production cycle.",
+    "plantFoodEffect": "Instantly produces 250 sun.",
     "upgrades": [
       {
         "level": 2,
@@ -77,7 +77,7 @@
         "description": "Cost -25"
       }
     ],
-    "description": "تولید ۱۰۰ خورشید در هر دور."
+    "description": "Produces 100 sun each production cycle."
   },
   {
     "id": "sun_shroom",
@@ -103,8 +103,8 @@
     "plantFoodAbilities": [
       "INSTANT_SUN"
     ],
-    "baseAbility": "رشد در ۳ مرحله و تولید خورشید بیشتر(۲۵/۵۰/۷۵). To Stg2: 24s | To Stg3: 72s",
-    "plantFoodEffect": "رشد آنی به سایز آخر و تولید ۲۲۵ خورشید.",
+    "baseAbility": "Grows through three stages and produces 25, 50, then 75 sun. Stage 2: 24s; Stage 3: 72s.",
+    "plantFoodEffect": "Immediately reaches its final growth stage and produces 225 sun.",
     "upgrades": [
       {
         "level": 2,
@@ -119,7 +119,7 @@
         "description": "Double Sun Chance"
       }
     ],
-    "description": "رشد در ۳ مرحله و تولید خورشید بیشتر(۲۵/۵۰/۷۵). To Stg2: 24s | To Stg3: 72s"
+    "description": "Grows through three stages and produces 25, 50, then 75 sun. Stage 2: 24s; Stage 3: 72s."
   },
   {
     "id": "primal_sunflower",
@@ -141,8 +141,8 @@
     "plantFoodAbilities": [
       "INSTANT_SUN"
     ],
-    "baseAbility": "تولید خورشید بزرگ ۷۵ تایی از ابتدا.",
-    "plantFoodEffect": "تولید فوری ۲۲۵ خورشید.",
+    "baseAbility": "Produces a large 75-sun orb from the start.",
+    "plantFoodEffect": "Instantly produces 225 sun.",
     "upgrades": [
       {
         "level": 2,
@@ -157,7 +157,7 @@
         "description": "Cost -25"
       }
     ],
-    "description": "تولید خورشید بزرگ ۷۵ تایی از ابتدا."
+    "description": "Produces a large 75-sun orb from the start."
   },
   {
     "id": "gold_bloom",
@@ -177,8 +177,8 @@
       "PRODUCE_SUN"
     ],
     "plantFoodAbilities": [],
-    "baseAbility": "تولید فوری و یک‌باره مقدار زیادی خورشید و سپس ناپدید شدن.(۳۷۵ خورشید)",
-    "plantFoodEffect": "ندارد (مصرفی آنی)",
+    "baseAbility": "Instantly produces 375 sun once, then disappears.",
+    "plantFoodEffect": "None; this is an instant-use plant.",
     "upgrades": [
       {
         "level": 2,
@@ -193,7 +193,7 @@
         "description": "Cost -25"
       }
     ],
-    "description": "تولید فوری و یک‌باره مقدار زیادی خورشید و سپس ناپدید شدن.(۳۷۵ خورشید)"
+    "description": "Instantly produces 375 sun once, then disappears."
   },
   {
     "id": "peashooter",
@@ -217,8 +217,8 @@
     "plantFoodAbilities": [
       "RAPID_SHOOT"
     ],
-    "baseAbility": "شلیک تیر مستقیم.",
-    "plantFoodEffect": "شلیک رگباری سریع برای چند ثانیه.",
+    "baseAbility": "Fires a pea straight ahead.",
+    "plantFoodEffect": "Rapidly fires peas for several seconds.",
     "upgrades": [
       {
         "level": 2,
@@ -233,7 +233,7 @@
         "description": "Cost -25"
       }
     ],
-    "description": "شلیک تیر مستقیم."
+    "description": "Fires a pea straight ahead."
   },
   {
     "id": "repeater",
@@ -257,8 +257,8 @@
     "plantFoodAbilities": [
       "RAPID_SHOOT"
     ],
-    "baseAbility": "شلیک ۲ تیر مستقیم متوالی.",
-    "plantFoodEffect": "شلیک رگباری سنگین + ۱ نخود غول‌پیکر (دمیج 20 برابر).",
+    "baseAbility": "Fires two peas in quick succession.",
+    "plantFoodEffect": "Fires a heavy barrage and one giant pea dealing 20x damage.",
     "upgrades": [
       {
         "level": 2,
@@ -273,7 +273,7 @@
         "description": "Cost -25"
       }
     ],
-    "description": "شلیک ۲ تیر مستقیم متوالی."
+    "description": "Fires two peas in quick succession."
   },
   {
     "id": "threepeater",
@@ -297,8 +297,8 @@
     "plantFoodAbilities": [
       "RAPID_SHOOT"
     ],
-    "baseAbility": "شلیک همزمان تیر در ۳ لاین موازی.",
-    "plantFoodEffect": "شلیک رگباری بادبزنی در تمام لاین‌ها.",
+    "baseAbility": "Fires peas simultaneously across three adjacent lanes.",
+    "plantFoodEffect": "Fires a fan-shaped barrage across all lanes.",
     "upgrades": [
       {
         "level": 2,
@@ -313,7 +313,7 @@
         "description": "HP +200"
       }
     ],
-    "description": "شلیک همزمان تیر در ۳ لاین موازی."
+    "description": "Fires peas simultaneously across three adjacent lanes."
   },
   {
     "id": "snow_pea",
@@ -339,8 +339,8 @@
     "plantFoodAbilities": [
       "RAPID_SHOOT"
     ],
-    "baseAbility": "شلیک تیر مستقیم کندکننده سرعت.",
-    "plantFoodEffect": "انجماد لاین و شلیک رگباری یخی.",
+    "baseAbility": "Fires chilling peas that slow zombies.",
+    "plantFoodEffect": "Freezes the lane and fires an icy barrage.",
     "upgrades": [
       {
         "level": 2,
@@ -355,7 +355,7 @@
         "description": "Cost -25"
       }
     ],
-    "description": "شلیک تیر مستقیم کندکننده سرعت."
+    "description": "Fires chilling peas that slow zombies."
   },
   {
     "id": "rotobaga",
@@ -377,8 +377,8 @@
     "plantFoodAbilities": [
       "RAPID_SHOOT"
     ],
-    "baseAbility": "شلیک در ۴ جهت اریب.",
-    "plantFoodEffect": "شلیک رگباری در هر ۴ جهت اریب.",
+    "baseAbility": "Fires diagonally in four directions.",
+    "plantFoodEffect": "Fires a barrage in all four diagonal directions.",
     "upgrades": [
       {
         "level": 2,
@@ -393,7 +393,7 @@
         "description": "Cost -25"
       }
     ],
-    "description": "شلیک در ۴ جهت اریب."
+    "description": "Fires diagonally in four directions."
   },
   {
     "id": "pea_pod",
@@ -418,8 +418,8 @@
     "plantFoodAbilities": [
       "RAPID_SHOOT"
     ],
-    "baseAbility": "شلیک تیر مستقیم به ازای هر سر کاشته شده روی هم (تا ۵ سر).",
-    "plantFoodEffect": "شلیک یک نخود غول‌پیکر به ازای هر سر(دمیج 20 برابر).",
+    "baseAbility": "Fires one pea per stacked head, up to five heads.",
+    "plantFoodEffect": "Fires one giant pea per head, each dealing 20x damage.",
     "upgrades": [
       {
         "level": 2,
@@ -434,7 +434,7 @@
         "description": "Cost -25"
       }
     ],
-    "description": "شلیک تیر مستقیم به ازای هر سر کاشته شده روی هم (تا ۵ سر)."
+    "description": "Fires one pea per stacked head, up to five heads."
   },
   {
     "id": "split_pea",
@@ -458,8 +458,8 @@
     "plantFoodAbilities": [
       "RAPID_SHOOT"
     ],
-    "baseAbility": "شلیک ۱ تیر به جلو و ۲ تیر به عقب.",
-    "plantFoodEffect": "شلیک رگباری همزمان از جلو و عقب.",
+    "baseAbility": "Fires one pea forward and two backward.",
+    "plantFoodEffect": "Fires simultaneous barrages forward and backward.",
     "upgrades": [
       {
         "level": 2,
@@ -474,7 +474,7 @@
         "description": "Cost -25"
       }
     ],
-    "description": "شلیک ۱ تیر به جلو و ۲ تیر به عقب."
+    "description": "Fires one pea forward and two backward."
   },
   {
     "id": "citron",
@@ -498,8 +498,8 @@
     "plantFoodAbilities": [
       "RAPID_SHOOT"
     ],
-    "baseAbility": "شلیک تیر سنگین مستقیم (نیازمند زمان شارژ).",
-    "plantFoodEffect": "شلیک توپ پلاسمایی پاکسازی‌کننده کل لاین.",
+    "baseAbility": "Charges and fires a heavy shot straight ahead.",
+    "plantFoodEffect": "Fires a plasma ball that clears the entire lane.",
     "upgrades": [
       {
         "level": 2,
@@ -514,7 +514,7 @@
         "description": "Cost -50"
       }
     ],
-    "description": "شلیک تیر سنگین مستقیم (نیازمند زمان شارژ)."
+    "description": "Charges and fires a heavy shot straight ahead."
   },
   {
     "id": "caulipower",
@@ -539,8 +539,8 @@
     "plantFoodAbilities": [
       "POWER_HOMING"
     ],
-    "baseAbility": "شلیک تیر جادویی (جهت رندوم، عبور از موانع، هیپنوتیزم‌کننده).",
-    "plantFoodEffect": "هیپنوتیزم کردن چند زامبی تصادفی در باغچه.",
+    "baseAbility": "Launches magical shots at random targets, ignores obstacles, and hypnotizes zombies.",
+    "plantFoodEffect": "Hypnotizes several random zombies in the garden.",
     "upgrades": [
       {
         "level": 2,
@@ -555,7 +555,7 @@
         "description": "Cost -50"
       }
     ],
-    "description": "شلیک تیر جادویی (جهت رندوم، عبور از موانع، هیپنوتیزم‌کننده)."
+    "description": "Launches magical shots at random targets, ignores obstacles, and hypnotizes zombies."
   },
   {
     "id": "electric_blueberry",
@@ -579,8 +579,8 @@
     "plantFoodAbilities": [
       "POWER_HOMING"
     ],
-    "baseAbility": "شلیک رعدوبرق (جهت رندوم، نابودی کامل یک زامبی).",
-    "plantFoodEffect": "نابودی کامل ۳ زامبی تصادفی.",
+    "baseAbility": "Calls lightning on a random zombie and instantly defeats it.",
+    "plantFoodEffect": "Instantly defeats three random zombies.",
     "upgrades": [
       {
         "level": 2,
@@ -595,7 +595,7 @@
         "description": "Cost -25"
       }
     ],
-    "description": "شلیک رعدوبرق (جهت رندوم، نابودی کامل یک زامبی)."
+    "description": "Calls lightning on a random zombie and instantly defeats it."
   },
   {
     "id": "bowling_bulb",
@@ -619,8 +619,8 @@
     "plantFoodAbilities": [
       "RAPID_SHOOT"
     ],
-    "baseAbility": "شلیک 3 نوع پیاز که بین لاین‌ها کمانه می‌کند (مثل wall nut bowling). تاخیر هر یک Cyan: 2s | Blue: 5s | Orange: 10s",
-    "plantFoodEffect": "شلیک ۳ پیاز انفجاری بزرگ که کمانه می‌کنند.",
+    "baseAbility": "Fires three bulb types that ricochet between lanes. Cyan: 2s; Blue: 5s; Orange: 10s.",
+    "plantFoodEffect": "Fires three large explosive bulbs that ricochet.",
     "upgrades": [
       {
         "level": 2,
@@ -635,7 +635,7 @@
         "description": "Cost -25"
       }
     ],
-    "description": "شلیک 3 نوع پیاز که بین لاین‌ها کمانه می‌کند (مثل wall nut bowling). تاخیر هر یک Cyan: 2s | Blue: 5s | Orange: 10s"
+    "description": "Fires three bulb types that ricochet between lanes. Cyan: 2s; Blue: 5s; Orange: 10s."
   },
   {
     "id": "cactus",
@@ -657,8 +657,8 @@
     "plantFoodAbilities": [
       "RAPID_SHOOT"
     ],
-    "baseAbility": "شلیک خار مستقیم (عبور از ۳ زامبی).",
-    "plantFoodEffect": "تیغ‌های برقی با دمیج بالا و نفوذ نامحدود.",
+    "baseAbility": "Fires a piercing spike through up to three zombies.",
+    "plantFoodEffect": "Fires high-damage electric spikes with unlimited piercing.",
     "upgrades": [
       {
         "level": 2,
@@ -673,7 +673,7 @@
         "description": "Cost -25"
       }
     ],
-    "description": "شلیک خار مستقیم (عبور از ۳ زامبی)."
+    "description": "Fires a piercing spike through up to three zombies."
   },
   {
     "id": "fire_peashooter",
@@ -699,8 +699,8 @@
     "plantFoodAbilities": [
       "RAPID_SHOOT"
     ],
-    "baseAbility": "شلیک تیر مستقیم آتشی (دمیج ۲ برابر).",
-    "plantFoodEffect": "شلیک رگباری آتشین در کل لاین.",
+    "baseAbility": "Fires flaming peas that deal double damage and melt ice.",
+    "plantFoodEffect": "Fires a flaming barrage across the lane.",
     "upgrades": [
       {
         "level": 2,
@@ -715,7 +715,7 @@
         "description": "Cost -25"
       }
     ],
-    "description": "شلیک تیر مستقیم آتشی (دمیج ۲ برابر)."
+    "description": "Fires flaming peas that deal double damage and melt ice."
   },
   {
     "id": "starfruit",
@@ -737,8 +737,8 @@
     "plantFoodAbilities": [
       "RAPID_SHOOT"
     ],
-    "baseAbility": "شلیک در ۵ جهت ستاره‌ای شامل عقب.",
-    "plantFoodEffect": "شلیک رگباری ستاره در تمام جهات.",
+    "baseAbility": "Fires stars in five directions, including backward.",
+    "plantFoodEffect": "Fires a star barrage in every direction.",
     "upgrades": [
       {
         "level": 2,
@@ -753,7 +753,7 @@
         "description": "Cost -25"
       }
     ],
-    "description": "شلیک در ۵ جهت ستاره‌ای شامل عقب."
+    "description": "Fires stars in five directions, including backward."
   },
   {
     "id": "goo_peashooter",
@@ -778,8 +778,8 @@
     "plantFoodAbilities": [
       "RAPID_SHOOT"
     ],
-    "baseAbility": "شلیک تیر مستقیم (نادیده گرفتن زره + آسیب مستمر).",
-    "plantFoodEffect": "شلیک رگباری سمی که زامبی‌ها را درجا مسموم می‌کند.",
+    "baseAbility": "Fires toxic peas that ignore armor and deal damage over time.",
+    "plantFoodEffect": "Fires a toxic barrage that immediately poisons zombies.",
     "upgrades": [
       {
         "level": 2,
@@ -794,7 +794,7 @@
         "description": "Cost -25"
       }
     ],
-    "description": "شلیک تیر مستقیم (نادیده گرفتن زره + آسیب مستمر)."
+    "description": "Fires toxic peas that ignore armor and deal damage over time."
   },
   {
     "id": "mega_gatling_pea",
@@ -818,8 +818,8 @@
     "plantFoodAbilities": [
       "RAPID_SHOOT"
     ],
-    "baseAbility": "شلیک ۴ تیر مستقیم متوالی با سرعت بسیار بالا.",
-    "plantFoodEffect": "شلیک رگباری عظیم و طولانی در لاین به همراه 4 تیر غول‌پیکر.",
+    "baseAbility": "Rapidly fires four peas in succession.",
+    "plantFoodEffect": "Fires a massive sustained barrage plus four giant peas.",
     "upgrades": [
       {
         "level": 2,
@@ -834,7 +834,7 @@
         "description": "Cost -50"
       }
     ],
-    "description": "شلیک ۴ تیر مستقیم متوالی با سرعت بسیار بالا."
+    "description": "Rapidly fires four peas in succession."
   },
   {
     "id": "sea_shroom",
@@ -859,8 +859,8 @@
     "plantFoodAbilities": [
       "RAPID_SHOOT"
     ],
-    "baseAbility": "شلیک تیر با برد کوتاه. دارای طول عمر محدود 60 ثانیه.",
-    "plantFoodEffect": "شلیک رگباری و ریست شدن طول عمر تمام Sea-shroomها.",
+    "baseAbility": "Fires short-range spores and expires after 60 seconds.",
+    "plantFoodEffect": "Fires a barrage and resets the lifetime of every Sea-shroom.",
     "upgrades": [
       {
         "level": 2,
@@ -875,7 +875,7 @@
         "description": "Lifespan +10s"
       }
     ],
-    "description": "شلیک تیر با برد کوتاه. دارای طول عمر محدود 60 ثانیه."
+    "description": "Fires short-range spores and expires after 60 seconds."
   },
   {
     "id": "puff_shroom",
@@ -899,8 +899,8 @@
     "plantFoodAbilities": [
       "RAPID_SHOOT"
     ],
-    "baseAbility": "شلیک تیر با برد کوتاه. دارای طول عمر محدود 60 ثانیه.",
-    "plantFoodEffect": "شلیک رگباری و ریست شدن طول عمر تمامی Puff-shroomها.",
+    "baseAbility": "Fires short-range spores and expires after 60 seconds.",
+    "plantFoodEffect": "Fires a barrage and resets the lifetime of every Puff-shroom.",
     "upgrades": [
       {
         "level": 2,
@@ -915,7 +915,7 @@
         "description": "Range +1 Tile"
       }
     ],
-    "description": "شلیک تیر با برد کوتاه. دارای طول عمر محدود 60 ثانیه."
+    "description": "Fires short-range spores and expires after 60 seconds."
   },
   {
     "id": "fume_shroom",
@@ -939,8 +939,8 @@
     "plantFoodAbilities": [
       "RAPID_SHOOT"
     ],
-    "baseAbility": "شلیک دود با برد متوسط که از زامبی‌ها رد می‌شود.",
-    "plantFoodEffect": "پرتاب توده دود عظیم که زامبی‌ها را به عقب می‌راند.",
+    "baseAbility": "Fires penetrating fumes at medium range.",
+    "plantFoodEffect": "Releases a huge cloud of fumes that pushes zombies backward.",
     "upgrades": [
       {
         "level": 2,
@@ -955,7 +955,7 @@
         "description": "Cost -25"
       }
     ],
-    "description": "شلیک دود با برد متوسط که از زامبی‌ها رد می‌شود."
+    "description": "Fires penetrating fumes at medium range."
   },
   {
     "id": "cabbage_pult",
@@ -977,8 +977,8 @@
     "plantFoodAbilities": [
       "RAPID_LOB"
     ],
-    "baseAbility": "شلیک هوایی از روی موانع.",
-    "plantFoodEffect": "پرتاب کلم به چند زامبی تصادفی.",
+    "baseAbility": "Lobs cabbages over obstacles.",
+    "plantFoodEffect": "Lobs cabbages at several random zombies.",
     "upgrades": [
       {
         "level": 2,
@@ -993,7 +993,7 @@
         "description": "HP +150"
       }
     ],
-    "description": "شلیک هوایی از روی موانع."
+    "description": "Lobs cabbages over obstacles."
   },
   {
     "id": "kernel_pult",
@@ -1015,8 +1015,8 @@
     "plantFoodAbilities": [
       "RAPID_LOB"
     ],
-    "baseAbility": "شلیک دانه ذرت (آسیب کم) یا کره (توقف موقت زامبی).",
-    "plantFoodEffect": "پرتاب کره به سر تمامی زامبی‌های زمین.",
+    "baseAbility": "Lobs either low-damage kernels or butter that temporarily stuns zombies.",
+    "plantFoodEffect": "Drops butter on every zombie on the lawn.",
     "upgrades": [
       {
         "level": 2,
@@ -1031,7 +1031,7 @@
         "description": "HP +150"
       }
     ],
-    "description": "شلیک دانه ذرت (آسیب کم) یا کره (توقف موقت زامبی)."
+    "description": "Lobs either low-damage kernels or butter that temporarily stuns zombies."
   },
   {
     "id": "melon_pult",
@@ -1056,8 +1056,8 @@
     "plantFoodAbilities": [
       "RAPID_LOB"
     ],
-    "baseAbility": "شلیک هوایی سنگین با آسیب مساحتی.",
-    "plantFoodEffect": "پرتاب هندوانه غول‌پیکر به زامبی‌های تصادفی.",
+    "baseAbility": "Lobs heavy melons that deal splash damage.",
+    "plantFoodEffect": "Lobs giant melons at random zombies.",
     "upgrades": [
       {
         "level": 2,
@@ -1072,7 +1072,7 @@
         "description": "Dmg +30"
       }
     ],
-    "description": "شلیک هوایی سنگین با آسیب مساحتی."
+    "description": "Lobs heavy melons that deal splash damage."
   },
   {
     "id": "winter_melon",
@@ -1099,8 +1099,8 @@
     "plantFoodAbilities": [
       "RAPID_LOB"
     ],
-    "baseAbility": "شلیک هوایی سنگین با آسیب مساحتی (کندکننده سرعت).",
-    "plantFoodEffect": "پرتاب هندوانه یخی به زامبی‌های تصادفی.",
+    "baseAbility": "Lobs icy melons that deal splash damage and slow zombies.",
+    "plantFoodEffect": "Lobs giant frozen melons at random zombies.",
     "upgrades": [
       {
         "level": 2,
@@ -1115,7 +1115,7 @@
         "description": "Cost -25"
       }
     ],
-    "description": "شلیک هوایی سنگین با آسیب مساحتی (کندکننده سرعت)."
+    "description": "Lobs icy melons that deal splash damage and slow zombies."
   },
   {
     "id": "pepper_pult",
@@ -1142,8 +1142,8 @@
     "plantFoodAbilities": [
       "RAPID_LOB"
     ],
-    "baseAbility": "شلیک هوایی با آسیب مساحتی (گرم‌کننده محیط اطراف).",
-    "plantFoodEffect": "پرتاب فلفل‌های بزرگ به ۳ زامبی تصادفی.",
+    "baseAbility": "Lobs peppers that deal splash damage and warm nearby tiles.",
+    "plantFoodEffect": "Lobs large peppers at three random zombies.",
     "upgrades": [
       {
         "level": 2,
@@ -1158,7 +1158,7 @@
         "description": "Cost -25"
       }
     ],
-    "description": "شلیک هوایی با آسیب مساحتی (گرم‌کننده محیط اطراف)."
+    "description": "Lobs peppers that deal splash damage and warm nearby tiles."
   },
   {
     "id": "potato_mine",
@@ -1183,8 +1183,8 @@
     "plantFoodAbilities": [
       "POWER_EXPLODE"
     ],
-    "baseAbility": "مسلح شدن با تاخیر ۱۵ ثانیه؛ انفجار هنگام تماس.",
-    "plantFoodEffect": "مسلح شدن آنی و پرتاب ۲ مین کلون دیگر.",
+    "baseAbility": "Arms after 15 seconds and explodes on contact.",
+    "plantFoodEffect": "Arms instantly and creates two additional mines.",
     "upgrades": [
       {
         "level": 2,
@@ -1199,7 +1199,7 @@
         "description": "Dmg +600"
       }
     ],
-    "description": "مسلح شدن با تاخیر ۱۵ ثانیه؛ انفجار هنگام تماس."
+    "description": "Arms after 15 seconds and explodes on contact."
   },
   {
     "id": "primal_potato_mine",
@@ -1224,8 +1224,8 @@
     "plantFoodAbilities": [
       "POWER_EXPLODE"
     ],
-    "baseAbility": "مسلح شدن سریع‌تر ۵ ثانیه ای و انفجار مساحتی ۳x۳.",
-    "plantFoodEffect": "مسلح شدن آنی و پرتاب ۲ مین به نقاط دیگر.",
+    "baseAbility": "Arms after 5 seconds and explodes in a 3x3 area.",
+    "plantFoodEffect": "Arms instantly and launches two mines to other tiles.",
     "upgrades": [
       {
         "level": 2,
@@ -1240,7 +1240,7 @@
         "description": "Dmg +400"
       }
     ],
-    "description": "مسلح شدن سریع‌تر ۵ ثانیه ای و انفجار مساحتی ۳x۳."
+    "description": "Arms after 5 seconds and explodes in a 3x3 area."
   },
   {
     "id": "cherry_bomb",
@@ -1260,8 +1260,8 @@
       "EXPLODE"
     ],
     "plantFoodAbilities": [],
-    "baseAbility": "انفجار فوری مساحت ۳x۳.",
-    "plantFoodEffect": "ندارد (مصرفی آنی)",
+    "baseAbility": "Explodes immediately in a 3x3 area.",
+    "plantFoodEffect": "None; this is an instant-use plant.",
     "upgrades": [
       {
         "level": 2,
@@ -1276,7 +1276,7 @@
         "description": "Cost -25"
       }
     ],
-    "description": "انفجار فوری مساحت ۳x۳."
+    "description": "Explodes immediately in a 3x3 area."
   },
   {
     "id": "squash",
@@ -1300,8 +1300,8 @@
     "plantFoodAbilities": [
       "POWER_EXPLODE"
     ],
-    "baseAbility": "له کردن اولین زامبی مجاور.",
-    "plantFoodEffect": "له کردن ۲ زامبی تصادفی در سطح زمین.",
+    "baseAbility": "Crushes the first adjacent zombie.",
+    "plantFoodEffect": "Crushes two random ground zombies.",
     "upgrades": [
       {
         "level": 2,
@@ -1316,7 +1316,7 @@
         "description": "Can crush 2x"
       }
     ],
-    "description": "له کردن اولین زامبی مجاور."
+    "description": "Crushes the first adjacent zombie."
   },
   {
     "id": "grapeshot",
@@ -1336,8 +1336,8 @@
       "EXPLODE"
     ],
     "plantFoodAbilities": [],
-    "baseAbility": "انفجار مساحتی ۳x۳ و پرتاب حبه‌های کمانه‌کننده که پس از ۵ ثانیه نابود می‌شوند.",
-    "plantFoodEffect": "ندارد (مصرفی آنی)",
+    "baseAbility": "Explodes in a 3x3 area and launches bouncing grapes that disappear after 5 seconds.",
+    "plantFoodEffect": "None; this is an instant-use plant.",
     "upgrades": [
       {
         "level": 2,
@@ -1352,7 +1352,7 @@
         "description": "Cost -25"
       }
     ],
-    "description": "انفجار مساحتی ۳x۳ و پرتاب حبه‌های کمانه‌کننده که پس از ۵ ثانیه نابود می‌شوند."
+    "description": "Explodes in a 3x3 area and launches bouncing grapes that disappear after 5 seconds."
   },
   {
     "id": "jalapeno",
@@ -1375,8 +1375,8 @@
       "FIRE"
     ],
     "plantFoodAbilities": [],
-    "baseAbility": "آتش زدن کل زامبی‌های یک لاین به صورت آنی (ذوب یخ).",
-    "plantFoodEffect": "ندارد (مصرفی آنی)",
+    "baseAbility": "Burns every zombie in its lane instantly and melts ice.",
+    "plantFoodEffect": "None; this is an instant-use plant.",
     "upgrades": [
       {
         "level": 2,
@@ -1391,7 +1391,7 @@
         "description": "Cost -25"
       }
     ],
-    "description": "آتش زدن کل زامبی‌های یک لاین به صورت آنی (ذوب یخ)."
+    "description": "Burns every zombie in its lane instantly and melts ice."
   },
   {
     "id": "doom_shroom",
@@ -1413,8 +1413,8 @@
       "EXPLODE"
     ],
     "plantFoodAbilities": [],
-    "baseAbility": "انفجار مهیب در کل باغچه و ایجاد یک گودال غیرقابل کشت.",
-    "plantFoodEffect": "ندارد (مصرفی آنی)",
+    "baseAbility": "Causes a massive garden-wide explosion and leaves an unplantable crater.",
+    "plantFoodEffect": "None; this is an instant-use plant.",
     "upgrades": [
       {
         "level": 2,
@@ -1429,7 +1429,7 @@
         "description": "Cost -50"
       }
     ],
-    "description": "انفجار مهیب در کل باغچه و ایجاد یک گودال غیرقابل کشت."
+    "description": "Causes a massive garden-wide explosion and leaves an unplantable crater."
   },
   {
     "id": "tangle_kelp",
@@ -1454,8 +1454,8 @@
     "plantFoodAbilities": [
       "POWER_EXPLODE"
     ],
-    "baseAbility": "کشیدن اولین زامبی آبی به زیر آب و نابودی آن (مخصوص ساحل).",
-    "plantFoodEffect": "کشیدن چند زامبی تصادفی در آب به زیر آب.",
+    "baseAbility": "Pulls the first aquatic zombie underwater and defeats it.",
+    "plantFoodEffect": "Pulls several random aquatic zombies underwater.",
     "upgrades": [
       {
         "level": 2,
@@ -1470,7 +1470,7 @@
         "description": "Cost -25"
       }
     ],
-    "description": "کشیدن اولین زامبی آبی به زیر آب و نابودی آن (مخصوص ساحل)."
+    "description": "Pulls the first aquatic zombie underwater and defeats it."
   },
   {
     "id": "iceberg_lettuce",
@@ -1496,8 +1496,8 @@
     "plantFoodAbilities": [
       "POWER_EXPLODE"
     ],
-    "baseAbility": "یخ زدن اولین زامبی که روی آن پا بگذارد.",
-    "plantFoodEffect": "یخ زدن تمامی زامبی‌های موجود در تصویر.",
+    "baseAbility": "Freezes the first zombie that steps on it.",
+    "plantFoodEffect": "Freezes every visible zombie.",
     "upgrades": [
       {
         "level": 2,
@@ -1512,7 +1512,7 @@
         "description": "Cost -0"
       }
     ],
-    "description": "یخ زدن اولین زامبی که روی آن پا بگذارد."
+    "description": "Freezes the first zombie that steps on it."
   },
   {
     "id": "bonk_choy",
@@ -1534,8 +1534,8 @@
     "plantFoodAbilities": [
       "POWER_MELEE"
     ],
-    "baseAbility": "ضربه فیزیکی به خانه‌های جلو و عقب.",
-    "plantFoodEffect": "مشت زدن رگباری به شعاع ۳x۳ اطراف خود.",
+    "baseAbility": "Punches tiles directly in front and behind.",
+    "plantFoodEffect": "Rapidly punches every tile in a 3x3 area.",
     "upgrades": [
       {
         "level": 2,
@@ -1550,7 +1550,7 @@
         "description": "HP +200"
       }
     ],
-    "description": "ضربه فیزیکی به خانه‌های جلو و عقب."
+    "description": "Punches tiles directly in front and behind."
   },
   {
     "id": "phat_beet",
@@ -1575,8 +1575,8 @@
     "plantFoodAbilities": [
       "POWER_MELEE"
     ],
-    "baseAbility": "ضربه صوتی به مساحت ۳x۳ اطراف.",
-    "plantFoodEffect": "ضربه صوتی بسیار قدرتمند به تمام زامبی‌های اطراف.",
+    "baseAbility": "Deals sound damage in a 3x3 area.",
+    "plantFoodEffect": "Deals a very powerful sound attack to all nearby zombies.",
     "upgrades": [
       {
         "level": 2,
@@ -1591,7 +1591,7 @@
         "description": "HP +200"
       }
     ],
-    "description": "ضربه صوتی به مساحت ۳x۳ اطراف."
+    "description": "Deals sound damage in a 3x3 area."
   },
   {
     "id": "chomper",
@@ -1613,8 +1613,8 @@
     "plantFoodAbilities": [
       "POWER_MELEE"
     ],
-    "baseAbility": "بلعیدن آنی؛ نابودی یک زامبی درجا و سپس توقف برای هضم به مدت ۴۰ ثانیه.",
-    "plantFoodEffect": "بلعیدن همزمان ۳ زامبی از فاصله دور.",
+    "baseAbility": "Swallows one zombie instantly, then digests for 40 seconds.",
+    "plantFoodEffect": "Swallows three zombies simultaneously from long range.",
     "upgrades": [
       {
         "level": 2,
@@ -1629,7 +1629,7 @@
         "description": "Digest -3s"
       }
     ],
-    "description": "بلعیدن آنی؛ نابودی یک زامبی درجا و سپس توقف برای هضم به مدت ۴۰ ثانیه."
+    "description": "Swallows one zombie instantly, then digests for 40 seconds."
   },
   {
     "id": "wasabi_whip",
@@ -1654,8 +1654,8 @@
     "plantFoodAbilities": [
       "POWER_MELEE"
     ],
-    "baseAbility": "ضربه شلاق به خانه‌های جلو و عقب (گرم‌کننده محیط).",
-    "plantFoodEffect": "چرخش شلاق در مساحت ۳x۳.",
+    "baseAbility": "Whips tiles in front and behind and warms nearby tiles.",
+    "plantFoodEffect": "Spins its whip through a 3x3 area.",
     "upgrades": [
       {
         "level": 2,
@@ -1670,7 +1670,7 @@
         "description": "HP +200"
       }
     ],
-    "description": "ضربه شلاق به خانه‌های جلو و عقب (گرم‌کننده محیط)."
+    "description": "Whips tiles in front and behind and warms nearby tiles."
   },
   {
     "id": "kiwibeast",
@@ -1696,8 +1696,8 @@
     "plantFoodAbilities": [
       "POWER_MELEE"
     ],
-    "baseAbility": "موج صوتی مساحتی؛ با گذر زمان بزرگتر شده و دمیج بیشتر می‌دهد. To Stg2: 24s | To Stg3: 72s",
-    "plantFoodEffect": "پرش و کوبیدن محکم به زمین با دمیج مساحتی.",
+    "baseAbility": "Emits area sound waves; grows larger and stronger over time. Stage 2: 24s; Stage 3: 72s.",
+    "plantFoodEffect": "Jumps and slams the ground for area damage.",
     "upgrades": [
       {
         "level": 2,
@@ -1712,7 +1712,7 @@
         "description": "Max Size +1"
       }
     ],
-    "description": "موج صوتی مساحتی؛ با گذر زمان بزرگتر شده و دمیج بیشتر می‌دهد. To Stg2: 24s | To Stg3: 72s"
+    "description": "Emits area sound waves; grows larger and stronger over time. Stage 2: 24s; Stage 3: 72s."
   },
   {
     "id": "wall_nut",
@@ -1732,8 +1732,8 @@
     "plantFoodAbilities": [
       "REINFORCE"
     ],
-    "baseAbility": "سد دفاعی مقاوم برای متوقف کردن زامبی‌ها.",
-    "plantFoodEffect": "دریافت زره دائمی به اندازه ۴۰۰۰ جان اضافه‌تر.",
+    "baseAbility": "A durable defensive barrier that blocks zombies.",
+    "plantFoodEffect": "Gains permanent armor worth 4000 HP.",
     "upgrades": [
       {
         "level": 2,
@@ -1748,7 +1748,7 @@
         "description": "HP +1500"
       }
     ],
-    "description": "سد دفاعی مقاوم برای متوقف کردن زامبی‌ها."
+    "description": "A durable defensive barrier that blocks zombies."
   },
   {
     "id": "tall_nut",
@@ -1768,8 +1768,8 @@
     "plantFoodAbilities": [
       "REINFORCE"
     ],
-    "baseAbility": "سد بلند؛ جلوگیری از پریدن زامبی‌ها از روی آن.",
-    "plantFoodEffect": "دریافت زره دائمی ۸۰۰۰ تایی.",
+    "baseAbility": "A tall barrier that prevents jumping zombies from passing.",
+    "plantFoodEffect": "Gains permanent armor worth 8000 HP.",
     "upgrades": [
       {
         "level": 2,
@@ -1784,7 +1784,7 @@
         "description": "HP +3000"
       }
     ],
-    "description": "سد بلند؛ جلوگیری از پریدن زامبی‌ها از روی آن."
+    "description": "A tall barrier that prevents jumping zombies from passing."
   },
   {
     "id": "endurian",
@@ -1804,8 +1804,8 @@
     "plantFoodAbilities": [
       "REINFORCE"
     ],
-    "baseAbility": "سد دفاعی با قابلیت بازتاب دمیج به زامبی مهاجم.",
-    "plantFoodEffect": "دریافت زره فلزی و افزایش دمیج انعکاسی.",
+    "baseAbility": "A defensive barrier that reflects damage to attackers.",
+    "plantFoodEffect": "Gains metal armor and increased reflected damage.",
     "upgrades": [
       {
         "level": 2,
@@ -1820,7 +1820,7 @@
         "description": "Cost -25"
       }
     ],
-    "description": "سد دفاعی با قابلیت بازتاب دمیج به زامبی مهاجم."
+    "description": "A defensive barrier that reflects damage to attackers."
   },
   {
     "id": "garlic",
@@ -1842,8 +1842,8 @@
     "plantFoodAbilities": [
       "REINFORCE"
     ],
-    "baseAbility": "با خورده شدن، زامبی را مجبور به حرکت به لاین مجاور می‌کند.",
-    "plantFoodEffect": "انتقال اجباری تمام زامبی‌های لاین به لاین‌های دیگر.",
+    "baseAbility": "When bitten, forces the zombie into an adjacent lane.",
+    "plantFoodEffect": "Forces every zombie in the lane into other lanes.",
     "upgrades": [
       {
         "level": 2,
@@ -1858,7 +1858,7 @@
         "description": "HP +250"
       }
     ],
-    "description": "با خورده شدن، زامبی را مجبور به حرکت به لاین مجاور می‌کند."
+    "description": "When bitten, forces the zombie into an adjacent lane."
   },
   {
     "id": "sweet_potato",
@@ -1880,8 +1880,8 @@
     "plantFoodAbilities": [
       "REINFORCE"
     ],
-    "baseAbility": "جذب‌کننده؛ زامبی‌های لاین‌های مجاور را به لاین خود می‌کشد.",
-    "plantFoodEffect": "جذب تمام زامبی‌های اطراف و بازیابی کامل جان.",
+    "baseAbility": "Attracts zombies from adjacent lanes into its own lane.",
+    "plantFoodEffect": "Attracts every nearby zombie and fully restores its HP.",
     "upgrades": [
       {
         "level": 2,
@@ -1896,7 +1896,7 @@
         "description": "HP +1500"
       }
     ],
-    "description": "جذب‌کننده؛ زامبی‌های لاین‌های مجاور را به لاین خود می‌کشد."
+    "description": "Attracts zombies from adjacent lanes into its own lane."
   },
   {
     "id": "explode_o_nut",
@@ -1918,8 +1918,8 @@
     "plantFoodAbilities": [
       "REINFORCE"
     ],
-    "baseAbility": "سد دفاعی که به محض از بین رفتن جانش، انفجار مساحتی ایجاد می‌کند.",
-    "plantFoodEffect": "دریافت زره فلزی (هنگام نابودی زره نیز منفجر می‌شود).",
+    "baseAbility": "A defensive barrier that explodes when destroyed.",
+    "plantFoodEffect": "Gains metal armor that also explodes when destroyed.",
     "upgrades": [
       {
         "level": 2,
@@ -1934,7 +1934,7 @@
         "description": "Cost -25"
       }
     ],
-    "description": "سد دفاعی که به محض از بین رفتن جانش، انفجار مساحتی ایجاد می‌کند."
+    "description": "A defensive barrier that explodes when destroyed."
   },
   {
     "id": "pumpkin",
@@ -1956,8 +1956,8 @@
     "plantFoodAbilities": [
       "REINFORCE"
     ],
-    "baseAbility": "سد دفاعی پوششی؛ روی سایر گیاهان کاشته می‌شود تا از آن‌ها محافظت کند.",
-    "plantFoodEffect": "دریافت زره فلزی قدرتمند.",
+    "baseAbility": "Can be planted over another plant to protect it.",
+    "plantFoodEffect": "Gains powerful metal armor.",
     "upgrades": [
       {
         "level": 2,
@@ -1972,7 +1972,7 @@
         "description": "HP +1500"
       }
     ],
-    "description": "سد دفاعی پوششی؛ روی سایر گیاهان کاشته می‌شود تا از آن‌ها محافظت کند."
+    "description": "Can be planted over another plant to protect it."
   },
   {
     "id": "sun_bean",
@@ -1994,8 +1994,8 @@
     "plantFoodAbilities": [
       "REINFORCE"
     ],
-    "baseAbility": "مثل دیوار دفاعی عمل می‌کند و با هر ضربه 5 خورشید تولید می‌کند.",
-    "plantFoodEffect": "دریافت زره فلزی قدرتمند.",
+    "baseAbility": "Acts as a barrier and produces 5 sun whenever it is hit.",
+    "plantFoodEffect": "Gains powerful metal armor.",
     "upgrades": [
       {
         "level": 2,
@@ -2010,7 +2010,7 @@
         "description": "Cost -25"
       }
     ],
-    "description": "مثل دیوار دفاعی عمل می‌کند و با هر ضربه 5 خورشید تولید می‌کند."
+    "description": "Acts as a barrier and produces 5 sun whenever it is hit."
   },
   {
     "id": "torchwood",
@@ -2034,8 +2034,8 @@
     "plantFoodAbilities": [
       "MINT_BOOST"
     ],
-    "baseAbility": "تغییر خواص تیر؛ تبدیل تیر عبوری به آتشی (دمیج دو برابر و ذوب یخ).",
-    "plantFoodEffect": "ایجاد شعله آبی (دمیج تیرها را ۳ برابر می‌کند).",
+    "baseAbility": "Turns passing peas into fire peas with double damage and ice-melting effects.",
+    "plantFoodEffect": "Creates blue fire that triples pea damage.",
     "upgrades": [
       {
         "level": 2,
@@ -2050,7 +2050,7 @@
         "description": "Cost -25"
       }
     ],
-    "description": "تغییر خواص تیر؛ تبدیل تیر عبوری به آتشی (دمیج دو برابر و ذوب یخ)."
+    "description": "Turns passing peas into fire peas with double damage and ice-melting effects."
   },
   {
     "id": "magnet_shroom",
@@ -2075,8 +2075,8 @@
     "plantFoodAbilities": [
       "POWER_HOMING"
     ],
-    "baseAbility": "خلع سلاح؛ جذب اشیای فلزی (سطل/کلاهخود) از سر زامبی‌ها.",
-    "plantFoodEffect": "جذب چندین فلز همزمان و هضم آنها",
+    "baseAbility": "Removes metal equipment such as buckets and helmets from zombies.",
+    "plantFoodEffect": "Pulls several metal objects at once and digests them.",
     "upgrades": [
       {
         "level": 2,
@@ -2091,7 +2091,7 @@
         "description": "HP +200"
       }
     ],
-    "description": "خلع سلاح؛ جذب اشیای فلزی (سطل/کلاهخود) از سر زامبی‌ها."
+    "description": "Removes metal equipment such as buckets and helmets from zombies."
   },
   {
     "id": "hypno_shroom",
@@ -2114,8 +2114,8 @@
     "plantFoodAbilities": [
       "MINT_BOOST"
     ],
-    "baseAbility": "با خورده شدن، زامبی مهاجم هیپنوتیزم شده و به نفع بازیکن می‌جنگد.",
-    "plantFoodEffect": "تبدیل زامبی خورنده به غول متفق (Gargantuar).",
+    "baseAbility": "When eaten, hypnotizes the attacking zombie to fight for the player.",
+    "plantFoodEffect": "Transforms the eating zombie into an allied Gargantuar.",
     "upgrades": [
       {
         "level": 2,
@@ -2130,7 +2130,7 @@
         "description": "Zombie Dmg Buff"
       }
     ],
-    "description": "با خورده شدن، زامبی مهاجم هیپنوتیزم شده و به نفع بازیکن می‌جنگد."
+    "description": "When eaten, hypnotizes the attacking zombie to fight for the player."
   },
   {
     "id": "cat_tail",
@@ -2152,8 +2152,8 @@
     "plantFoodAbilities": [
       "POWER_HOMING"
     ],
-    "baseAbility": "تیر هدف‌دار به سمت نزدیک‌ترین زامبی شلیک می‌کند",
-    "plantFoodEffect": "شلیک رگباری تیر هدف‌دار",
+    "baseAbility": "Fires homing projectiles at the nearest zombie.",
+    "plantFoodEffect": "Fires a rapid homing barrage.",
     "upgrades": [
       {
         "level": 2,
@@ -2168,7 +2168,7 @@
         "description": "Cost -25"
       }
     ],
-    "description": "تیر هدف‌دار به سمت نزدیک‌ترین زامبی شلیک می‌کند"
+    "description": "Fires homing projectiles at the nearest zombie."
   },
   {
     "id": "imitater",
@@ -2186,8 +2186,8 @@
     "behaviorType": "MODIFIER",
     "abilities": [],
     "plantFoodAbilities": [],
-    "baseAbility": "کپی کردن یک گیاه دیگر (امکان استفاده از دو کارت یکسان).",
-    "plantFoodEffect": "ندارد (بر اساس گیاه کپی شده)",
+    "baseAbility": "Copies another plant, allowing two cards of the same plant.",
+    "plantFoodEffect": "None; uses the copied plant effect.",
     "upgrades": [
       {
         "level": 2,
@@ -2202,7 +2202,7 @@
         "description": "plant food on enterance"
       }
     ],
-    "description": "کپی کردن یک گیاه دیگر (امکان استفاده از دو کارت یکسان)."
+    "description": "Copies another plant, allowing two cards of the same plant."
   },
   {
     "id": "ice_shroom",
@@ -2226,8 +2226,8 @@
       "CHILL"
     ],
     "plantFoodAbilities": [],
-    "baseAbility": "یخ زدن و توقف موقت تمامی زامبی‌های موجود در کل نقشه.",
-    "plantFoodEffect": "ندارد (مصرفی آنی)",
+    "baseAbility": "Temporarily freezes every zombie on the map.",
+    "plantFoodEffect": "None; this is an instant-use plant.",
     "upgrades": [
       {
         "level": 2,
@@ -2242,7 +2242,7 @@
         "description": "Dmg +50"
       }
     ],
-    "description": "یخ زدن و توقف موقت تمامی زامبی‌های موجود در کل نقشه."
+    "description": "Temporarily freezes every zombie on the map."
   },
   {
     "id": "lily_pad",
@@ -2265,8 +2265,8 @@
     "plantFoodAbilities": [
       "MINT_BOOST"
     ],
-    "baseAbility": "بستر کاشت سایر گیاهان روی آب (ضروری برای ساحل).",
-    "plantFoodEffect": "ایجاد چند کپی از خود روی خانه‌های خالی آب.",
+    "baseAbility": "Provides a platform for planting non-aquatic plants on water.",
+    "plantFoodEffect": "Creates copies of itself on empty water tiles.",
     "upgrades": [
       {
         "level": 2,
@@ -2281,7 +2281,7 @@
         "description": "Cooldown -2s"
       }
     ],
-    "description": "بستر کاشت سایر گیاهان روی آب (ضروری برای ساحل)."
+    "description": "Provides a platform for planting non-aquatic plants on water."
   },
   {
     "id": "hot_potato",
@@ -2304,8 +2304,8 @@
       "FIRE"
     ],
     "plantFoodAbilities": [],
-    "baseAbility": "کاشت روی یخ برای آب کردن فوری آن (ضروری برای غار یخ‌زده).",
-    "plantFoodEffect": "ندارد (مصرفی آنی)",
+    "baseAbility": "Instantly melts ice on its tile.",
+    "plantFoodEffect": "None; this is an instant-use plant.",
     "upgrades": [
       {
         "level": 2,
@@ -2320,7 +2320,7 @@
         "description": "Explode on Finish"
       }
     ],
-    "description": "کاشت روی یخ برای آب کردن فوری آن (ضروری برای غار یخ‌زده)."
+    "description": "Instantly melts ice on its tile."
   },
   {
     "id": "grave_buster",
@@ -2340,8 +2340,8 @@
       "EXPLODE"
     ],
     "plantFoodAbilities": [],
-    "baseAbility": "از بین بردن قبرها. (ضروری برای مراحل مصر باستان و قرون تاریک).",
-    "plantFoodEffect": "ندارد (مصرفی آنی)",
+    "baseAbility": "Removes graves.",
+    "plantFoodEffect": "None; this is an instant-use plant.",
     "upgrades": [
       {
         "level": 2,
@@ -2356,7 +2356,7 @@
         "description": "Explode on Finish"
       }
     ],
-    "description": "از بین بردن قبرها. (ضروری برای مراحل مصر باستان و قرون تاریک)."
+    "description": "Removes graves."
   },
   {
     "id": "enlighten_mint",
@@ -2376,8 +2376,8 @@
       "MINT_BOOST"
     ],
     "plantFoodAbilities": [],
-    "baseAbility": "اعمال موقت پلنت فود به تمامی گیاهان خانواده خود",
-    "plantFoodEffect": "ندارد (مصرفی آنی)",
+    "baseAbility": "Temporarily activates Plant Food on every plant in its family.",
+    "plantFoodEffect": "None; this is an instant-use plant.",
     "upgrades": [
       {
         "level": 2,
@@ -2392,7 +2392,7 @@
         "description": "reset family cooldowns"
       }
     ],
-    "description": "اعمال موقت پلنت فود به تمامی گیاهان خانواده خود"
+    "description": "Temporarily activates Plant Food on every plant in its family."
   },
   {
     "id": "appease_mint",
@@ -2412,8 +2412,8 @@
       "MINT_BOOST"
     ],
     "plantFoodAbilities": [],
-    "baseAbility": "اعمال موقت پلنت فود به تمامی گیاهان خانواده خود",
-    "plantFoodEffect": "ندارد (مصرفی آنی)",
+    "baseAbility": "Temporarily activates Plant Food on every plant in its family.",
+    "plantFoodEffect": "None; this is an instant-use plant.",
     "upgrades": [
       {
         "level": 2,
@@ -2428,7 +2428,7 @@
         "description": "reset family cooldowns"
       }
     ],
-    "description": "اعمال موقت پلنت فود به تمامی گیاهان خانواده خود"
+    "description": "Temporarily activates Plant Food on every plant in its family."
   },
   {
     "id": "arma_mint",
@@ -2448,8 +2448,8 @@
       "MINT_BOOST"
     ],
     "plantFoodAbilities": [],
-    "baseAbility": "اعمال موقت پلنت فود به تمامی گیاهان خانواده خود",
-    "plantFoodEffect": "ندارد (مصرفی آنی)",
+    "baseAbility": "Temporarily activates Plant Food on every plant in its family.",
+    "plantFoodEffect": "None; this is an instant-use plant.",
     "upgrades": [
       {
         "level": 2,
@@ -2464,7 +2464,7 @@
         "description": "reset family cooldowns"
       }
     ],
-    "description": "اعمال موقت پلنت فود به تمامی گیاهان خانواده خود"
+    "description": "Temporarily activates Plant Food on every plant in its family."
   },
   {
     "id": "bombard_mint",
@@ -2484,8 +2484,8 @@
       "MINT_BOOST"
     ],
     "plantFoodAbilities": [],
-    "baseAbility": "اعمال موقت پلنت فود به تمامی گیاهان خانواده خود",
-    "plantFoodEffect": "ندارد (مصرفی آنی)",
+    "baseAbility": "Temporarily activates Plant Food on every plant in its family.",
+    "plantFoodEffect": "None; this is an instant-use plant.",
     "upgrades": [
       {
         "level": 2,
@@ -2500,7 +2500,7 @@
         "description": "reset family cooldowns"
       }
     ],
-    "description": "اعمال موقت پلنت فود به تمامی گیاهان خانواده خود"
+    "description": "Temporarily activates Plant Food on every plant in its family."
   },
   {
     "id": "enforce_mint",
@@ -2520,8 +2520,8 @@
       "MINT_BOOST"
     ],
     "plantFoodAbilities": [],
-    "baseAbility": "اعمال موقت پلنت فود به تمامی گیاهان خانواده خود",
-    "plantFoodEffect": "ندارد (مصرفی آنی)",
+    "baseAbility": "Temporarily activates Plant Food on every plant in its family.",
+    "plantFoodEffect": "None; this is an instant-use plant.",
     "upgrades": [
       {
         "level": 2,
@@ -2536,7 +2536,7 @@
         "description": "reset family cooldowns"
       }
     ],
-    "description": "اعمال موقت پلنت فود به تمامی گیاهان خانواده خود"
+    "description": "Temporarily activates Plant Food on every plant in its family."
   },
   {
     "id": "reinforce_mint",
@@ -2556,8 +2556,8 @@
       "MINT_BOOST"
     ],
     "plantFoodAbilities": [],
-    "baseAbility": "اعمال موقت پلنت فود به تمامی گیاهان خانواده خود",
-    "plantFoodEffect": "ندارد (مصرفی آنی)",
+    "baseAbility": "Temporarily activates Plant Food on every plant in its family.",
+    "plantFoodEffect": "None; this is an instant-use plant.",
     "upgrades": [
       {
         "level": 2,
@@ -2572,7 +2572,7 @@
         "description": "reset family cooldowns"
       }
     ],
-    "description": "اعمال موقت پلنت فود به تمامی گیاهان خانواده خود"
+    "description": "Temporarily activates Plant Food on every plant in its family."
   },
   {
     "id": "enchant_mint",
@@ -2592,8 +2592,8 @@
       "MINT_BOOST"
     ],
     "plantFoodAbilities": [],
-    "baseAbility": "اعمال موقت پلنت فود به تمامی گیاهان خانواده خود",
-    "plantFoodEffect": "ندارد (مصرفی آنی)",
+    "baseAbility": "Temporarily activates Plant Food on every plant in its family.",
+    "plantFoodEffect": "None; this is an instant-use plant.",
     "upgrades": [
       {
         "level": 2,
@@ -2608,7 +2608,7 @@
         "description": "reset family cooldowns"
       }
     ],
-    "description": "اعمال موقت پلنت فود به تمامی گیاهان خانواده خود"
+    "description": "Temporarily activates Plant Food on every plant in its family."
   },
   {
     "id": "pierce_mint",
@@ -2628,8 +2628,8 @@
       "MINT_BOOST"
     ],
     "plantFoodAbilities": [],
-    "baseAbility": "اعمال موقت پلنت فود به تمامی گیاهان خانواده خود",
-    "plantFoodEffect": "ندارد (مصرفی آنی)",
+    "baseAbility": "Temporarily activates Plant Food on every plant in its family.",
+    "plantFoodEffect": "None; this is an instant-use plant.",
     "upgrades": [
       {
         "level": 2,
@@ -2644,7 +2644,7 @@
         "description": "reset family cooldowns"
       }
     ],
-    "description": "اعمال موقت پلنت فود به تمامی گیاهان خانواده خود"
+    "description": "Temporarily activates Plant Food on every plant in its family."
   },
   {
     "id": "cattail_mint",
@@ -2664,8 +2664,8 @@
       "MINT_BOOST"
     ],
     "plantFoodAbilities": [],
-    "baseAbility": "اعمال موقت پلنت فود به تمامی گیاهان خانواده خود",
-    "plantFoodEffect": "ندارد (مصرفی آنی)",
+    "baseAbility": "Temporarily activates Plant Food on every plant in its family.",
+    "plantFoodEffect": "None; this is an instant-use plant.",
     "upgrades": [
       {
         "level": 2,
@@ -2680,6 +2680,6 @@
         "description": "reset family cooldowns"
       }
     ],
-    "description": "اعمال موقت پلنت فود به تمامی گیاهان خانواده خود"
+    "description": "Temporarily activates Plant Food on every plant in its family."
   }
 ]

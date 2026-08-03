@@ -12,15 +12,15 @@ public class GreenHousePot {
     public GreenHousePot(int x, int y, boolean locked){
         this.x = x;
         this.y = y;
-        this.is_locked = locked;
+        is_locked = locked;
+        status = "EMPTY";
     }
+
+    public void ensureDefaults() { if (status == null) status = plant_type == null ? "EMPTY" : "GROWING"; }
 
     public boolean isReady() {
-        if (!"GROWING".equals(status) || planted_timestamp == null) {
-            return false;
-        }
-        long now = System.currentTimeMillis() / 1000;
-        return (now - planted_timestamp) >= (growth_duration_hours * 3600L);
+        ensureDefaults();
+        if (!"GROWING".equals(status) || planted_timestamp == null) return false;
+        return System.currentTimeMillis() / 1000 - planted_timestamp >= growth_duration_hours * 3600L;
     }
-
 }

@@ -38,12 +38,18 @@ public class Level {
     private SpecialLevelStrategy specialLevel;
     private int levelDifficulty;
 
+    @SuppressWarnings("this-escape")
     public Level(LevelData data) {
         this.data = data;
         this.levelNumber = data.getLevelNumber();
         this.isUnlocked = data.isUnlocked();
         this.levelType = data.getLevelType();
         this.gameMap = data.getMap();
+        if (this.gameMap != null) {
+            this.gameMap.initializeGrid();
+        } else {
+            this.gameMap = new GameMap(5, 9);
+        }
         this.chosenPlants = new ArrayList<>();
         this.activeZombies = new ArrayList<>();
         this.activePlants = new ArrayList<>();
@@ -51,18 +57,16 @@ public class Level {
         this.collectedSunsAmount = 0;
         this.currentSeason = data.getType();
         this.currentTick = 0;
-        this.zombieWave = null;
+        this.zombieWave = new ZombieWaveManager(this);
         this.activeProjectiles = new ArrayList<>();
-        if (App.getCurrentUser().getPlantFoodBoughtCount() != 0) {
-            this.plantFoodCount = App.getCurrentUser().getPlantFoodBoughtCount();
-            App.getCurrentUser().setPlantFoodBoughtCount(0);
-        } else {
-            this.plantFoodCount = 0;
-        }
+        User user = App.getCurrentUser();
+        this.plantFoodCount = user == null ? 0 : Math.min(3, user.getPlantFoodBoughtCount());
+        if (user != null) user.setPlantFoodBoughtCount(0);
         this.skySunProducer = new SkySunProducer();
         this.barrels = new ArrayList<>();
         this.removedPlantsCount = 0;
-        this.levelDifficulty = App.getCurrentUser().getDifficultyLevel();
+        this.levelDifficulty = user == null ? 3 : user.getDifficultyLevel();
+        App.initializeLawnMowers(gameMap.getRows());
         setUpSpecialLevel();
     }
 
@@ -83,6 +87,9 @@ public class Level {
                     break;
                 case "SAVE_OUR_SEEDS":
                     this.specialLevel = new SaveOurSeedsStrategy();
+                    break;
+                case "LOCKED_PLANTS_LEVEL":
+                    this.specialLevel = new LockedPlantsLevel();
                     break;
                 default:
                     this.specialLevel = null;
@@ -271,10 +278,9 @@ public class Level {
     }
 
     public Plant getPlantInFrontOfZombie(Zombie zombie) {
-        Plant target = null;
         for (Plant p : activePlants) {
-            if (p.getX() == zombie.getX() && p.getY() == zombie.getY()) {
-                return target;
+            if (p.getX() <= zombie.getX() + 0.5 && p.getX() >= zombie.getX() && p.getY() == zombie.getY()) {
+                return p;
             }
         }
         return null;
@@ -282,6 +288,7 @@ public class Level {
 
     public Plant getPlantAt(int x, int y){
         Tile tile = this.getGameMap().getTile(x, y);
+        if (tile == null) return null;
         Plant plant = tile.getPlant();
         if(plant != null){
             return plant;
@@ -303,5 +310,9 @@ public class Level {
 
     public int getLevelDifficulty() {
         return levelDifficulty;
+    }
+
+    public boolean isDay(){
+        return !this.getData().getName().toLowerCase().contains("dark ages") && !(specialLevel instanceof NightOpsStrategy);
     }
 }

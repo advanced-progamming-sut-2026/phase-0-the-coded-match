@@ -9,14 +9,11 @@ import models.zombies.Zombie;
 
 import java.util.Random;
 
-public class AncientEgypt extends Season {
+public final class AncientEgypt extends Season {
     public AncientEgypt(SeasonData data) {
         super(data);
-    }
-
-    @Override
-    public void applySpecialRules() {
-        // TODO
+        this.name = data.getName();
+        this.setUnlocked(true);
     }
 
     @Override
@@ -29,9 +26,9 @@ public class AncientEgypt extends Season {
         int rows = level.getGameMap().getRows();
         int cols = level.getGameMap().getColumns();
 
-        for( int r = 0; r < rows; r++){
-            for( int c = 0; c < cols; c++){
-                Tile tile = level.getGameMap().getTile(r, c);
+        for (int r = 1; r <= rows; r++) {
+            for (int c = 1; c <= cols; c++) {
+                Tile tile = level.getGameMap().getTile(c, r);
 
                 if(tile != null && tile.getType() == TileType.GRAVE){
                     tile.setGrave(true);
@@ -42,27 +39,27 @@ public class AncientEgypt extends Season {
 
     @Override
     public void Update(Level level) {
-        for(Projectile projectile : level.getActiveProjectiles()){
-            int row = (int) projectile.getyCoordinate();
-            int col = (int) projectile.getxCoordinate();
-
-            Tile tile = level.getGameMap().getTile(row, col);
-
-            if(tile != null && tile.isGrave()){
-                tile.takeDamage(projectile.getDamage());
-                projectile.destroy();
-            }
-        }
+//        for(Projectile projectile : level.getActiveProjectiles()){
+//            int row = (int) projectile.getyCoordinate();
+//            int col = (int) projectile.getxCoordinate();
+//
+//            Tile tile = level.getGameMap().getTile(row, col);
+//
+//            if(tile != null && tile.isGrave()){
+//                tile.takeDamage(projectile.getDamage());
+//                projectile.destroy();
+//            }
+//        }
 
     }
 
     @Override
     public void WaveStarted(Level level, int waveNumber) {
-        if(waveNumber == level.getData().getWaveCount()){
+        if(waveNumber == level.getData().getWaveCount() - 1){
             for(Zombie zombie : level.getActiveZombies()){
                 if(checkZombieForSandstorm(zombie)){
                     Random random = new Random();
-                    int advanceCol = random.nextInt(4) + 1;
+                    int advanceCol = random.nextInt(3) + 2;
                     int currentCol = (int) zombie.getX();
                     int newCol = currentCol - advanceCol;
 
@@ -77,8 +74,9 @@ public class AncientEgypt extends Season {
     }
 
     private boolean checkZombieForSandstorm(Zombie zombie){
-        return zombie.getData().getDisplayName().equalsIgnoreCase("ZombieTutorialDefault") ||
-                zombie.getData().getDisplayName().equalsIgnoreCase("ZombieSandstorm");
+        return zombie.getData().getId().equalsIgnoreCase("ZombieDefault") ||
+                zombie.getData().getId().equalsIgnoreCase("ZombieArmor1") ||
+                zombie.getData().getId().equalsIgnoreCase("ZombieArmor2");
     }
 
     @Override

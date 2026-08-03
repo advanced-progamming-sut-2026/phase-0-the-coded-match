@@ -68,12 +68,12 @@ public class PlantController {
         if (plant == null || tile == null) {
             return false;
         }
-        if (!tile.getType().isCanPlant()) {
-            return false;
+        if (tile.isGrave()) return false;
+        if (tile.getType() == TileType.WATER) {
+            if (plant.getData().getName().equalsIgnoreCase("LilyPad") || plant.hasThisTag(PlantTag.WATER)) return tile.getPlant() == null;
+            return tile.getLilyPadPlant() != null && tile.getPlant() == null;
         }
-        if (tile.getType() == TileType.WATER && !plant.hasThisTag(PlantTag.WATER)) {
-            return false;
-        }
+        if (!tile.getType().isCanPlant()) return false;
         if (tile.isEmpty()) {
             return true;
         }

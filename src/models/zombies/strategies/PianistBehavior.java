@@ -6,8 +6,10 @@ import models.Projectile;
 import models.plants.Plant;
 import models.zombies.Zombie;
 
+import java.util.Random;
+
 public class PianistBehavior implements ZombieBehavior {
-    private int abilityTimer = 5; //TODO: optional?
+    private int abilityTimer = 50;
 
     @Override
     public void updateZombie(Zombie zombie, Plant targetPlant) {
@@ -27,7 +29,13 @@ public class PianistBehavior implements ZombieBehavior {
     public void shuffleZombies(Zombie pianist) {
         for (Zombie zombie : GameManagerController.getInstance().getCurrentLevel().getActiveZombies()) {
             if (zombie != pianist) {
-                //TODO: complete this
+                Random random = new Random();
+                int totalRows = GameManagerController.getInstance().getCurrentLevel().getGameMap().getRows();
+                int newRow = 1 + random.nextInt(totalRows);
+                while (newRow == zombie.getY()) {
+                    newRow = 1 + random.nextInt(totalRows);
+                }
+                zombie.setY(newRow);
             }
         }
     }

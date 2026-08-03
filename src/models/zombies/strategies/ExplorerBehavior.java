@@ -24,7 +24,7 @@ public class ExplorerBehavior implements ZombieBehavior {
     }
 
     public void burn(Plant targetPlant, Zombie zombie) {
-        if (zombie.getX() - targetPlant.getX() <= 1) {
+        if (zombie.getX() - targetPlant.getX() <= 1 && isTorchOn) {
             zombie.destroyPlant(targetPlant);
         }
     }

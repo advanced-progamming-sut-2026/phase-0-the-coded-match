@@ -19,7 +19,8 @@ public class ChoosePlantsMenuController {
         User current = App.getCurrentUser();
         LevelData level = current.getLastLevel();
         StringBuilder message = new StringBuilder();
-        for (String plantName: level.getAvailablePlants()){
+        if (level.getAvailablePlants() == null) return showAllPlants();
+        for (String plantName: level.getAvailablePlants()) {
             message.append(plantName+"\n");
         }
         return message.toString();
@@ -33,9 +34,8 @@ public class ChoosePlantsMenuController {
         if(!isPlantUnlocked(plantName)){
             return "Plant is locked";
         }
-        if(!hasPlantBeenChosen(plantName)){
-            return "Plant is already selected";
-        }
+        if(hasPlantBeenChosen(plantName)) return "Plant is already selected";
+        if (level.getChosenPlants().size() >= 8) return "You cannot choose more than 8 plants";
         level.addChosenPlant(plantName);
         return "Plant added successfully";
 
@@ -44,6 +44,7 @@ public class ChoosePlantsMenuController {
     private static boolean isPlantAvailable(String p){
         User current = App.getCurrentUser();
         LevelData level = current.getLastLevel();
+        if (level.getAvailablePlants() == null || level.getAvailablePlants().isEmpty()) return PlantRepository.getInstance().findByName(p) != null;
         for (String plantName: level.getAvailablePlants()){
             if (plantName.equalsIgnoreCase(p)) {
                 return true;
@@ -54,6 +55,7 @@ public class ChoosePlantsMenuController {
 
     private static boolean isPlantUnlocked(String p){
         PlantData plant = PlantRepository.getInstance().findByName(p);
+        if (plant == null) return false;
         User current = App.getCurrentUser();
         for(String plantId : current.getCollection().getAvailablePlantsIds()){
             if(plantId.equalsIgnoreCase(plant.getId())){
@@ -83,13 +85,11 @@ public class ChoosePlantsMenuController {
         if(!hasPlantBeenChosen(plantName)){
             return "Plant has not been chosen";
         }
-        for(Plant plant : level.getActivePlants()){
-            if(plant.getData().getName().equalsIgnoreCase(plantName)){
-                level.getChosenPlants().remove(plant);
-                return "Plant removed successfully";
-            }
+        for (String plant : new java.util.ArrayList<>(level.getChosenPlants())) if (plant.equalsIgnoreCase(plantName)) {
+            level.getChosenPlants().remove(plant);
+            return "Plant removed successfully";
         }
-        return null;
+        return "Plant has not been chosen";
     }
 
 
@@ -97,14 +97,11 @@ public class ChoosePlantsMenuController {
     public static String boostPlant(String plantName) {
         User current = App.getCurrentUser();
         Level level = GameManagerController.getInstance().getCurrentLevel();
-        for(Plant plant : level.getActivePlants()){
-            if(plant.getData().getName().equalsIgnoreCase(plantName)){
-                plant.setBoosted(true);
-                current.setGemsCount(current.getGemsCount()-2);
-                return "Plant boosted successfully";
-            }
-        }
-        return "Plant type does not exist";
+        if (!hasPlantBeenChosen(plantName)) return "Plant has not been chosen";
+        if (current.getGemsCount() < 2) return "Not enough gems";
+        current.setGemsCount(current.getGemsCount() - 2);
+        current.getGreenHouse().stored_boosts.put(plantName.toLowerCase(), true);
+        return "Plant boosted successfully";
     }
 
     public static void startGame() {

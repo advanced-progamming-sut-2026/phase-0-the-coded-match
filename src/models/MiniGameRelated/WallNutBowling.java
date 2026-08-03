@@ -6,6 +6,8 @@ import models.GameMapRelated.GameMap;
 import models.LevelData;
 import models.RollingNut;
 import models.zombies.Zombie;
+import models.zombies.ZombieData;
+import models.zombies.ZombieRepository;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -15,7 +17,7 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Random;
 
-public class WallNutBowling extends MiniGame {
+public final class WallNutBowling extends MiniGame {
     private static final int ROWS = 5;
     private static final int COLUMNS = 9;
     private static final int EXPLOSION_DAMAGE = 1800;
@@ -23,7 +25,7 @@ public class WallNutBowling extends MiniGame {
     private final int stageNumber;
     private final Queue<BowlingNutType> conveyorBelt;
     private final List<RollingNut> activeRollingNuts;
-    private final Random random;
+    private transient final Random random;
     private final double redLineCoordinateX;
     private final int conveyorSpawnCooldownTicks;
     private int currentCooldownTimer;
@@ -58,6 +60,22 @@ public class WallNutBowling extends MiniGame {
         activeRollingNuts.clear();
         for (int i = 0; i < 3; i++) {
             conveyorBelt.offer(createRandomNutType());
+        }
+        createStageZombies();
+    }
+
+    private void createStageZombies() {
+        getActiveZombies().clear();
+        ZombieRepository repository = ZombieRepository.getInstance();
+        int count = 4 + stageNumber * 3;
+        for (int i = 0; i < count; i++) {
+            String type = "default";
+            if (stageNumber >= 2 && i % 3 == 0) type = "conehead";
+            if (stageNumber >= 3 && i % 5 == 0) type = "buckethead";
+            ZombieData data = repository.findByDisplayName(type);
+            if (data != null) {
+                addActiveZombie(new Zombie(data, 7 + random.nextInt(3), 1 + random.nextInt(ROWS)));
+            }
         }
     }
 

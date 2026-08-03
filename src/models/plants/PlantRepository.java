@@ -1,12 +1,14 @@
 package models.plants;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import enums.PlantCategory;
 import models.zombies.ZombieRepository;
+import utils.AssetPaths;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -22,45 +24,24 @@ public class PlantRepository {
 
     public static PlantRepository getInstance() {
         if (instance == null) {
-            instance = new PlantRepository("assets/Plants.json");
+            instance = new PlantRepository("src/assets/Plants.json");
         }
         return instance;
     }
 
     private List<PlantData> loadPlants(String jsonPath) {
-        List<PlantData> result = new ArrayList<>();
         String json = readJsonFile(jsonPath);
-        if (json.isEmpty()) {
-            return result;
-        }
-
-        List<String> objects = extractTopLevelObjects(json);
-        for (String object : objects) {
-            PlantData plantData = createPlantData(object);
-            if (plantData != null) {
-                result.add(plantData);
-            }
-        }
-        return result;
+        if (json.isEmpty()) return new ArrayList<>();
+        List<PlantData> result = new Gson().fromJson(json, new TypeToken<ArrayList<PlantData>>(){}.getType());
+        return result == null ? new ArrayList<>() : result;
     }
 
     private String readJsonFile(String jsonPath) {
-        List<String> possiblePaths = new ArrayList<>();
-        possiblePaths.add(normalizePath(jsonPath));
-        possiblePaths.add("src/assets/Plants.json");
-        possiblePaths.add("src/assets/Data/Plants.json");
-        possiblePaths.add("assets/Plants.json");
-
-        for (String path : possiblePaths) {
-            try {
-                Path filePath = Path.of(path);
-                if (Files.exists(filePath)) {
-                    return Files.readString(filePath);
-                }
-            } catch (IOException ignored) {
-            }
+        try {
+            return AssetPaths.readString(normalizePath(jsonPath));
+        } catch (IOException ignored) {
+            return "";
         }
-        return "";
     }
 
     private String normalizePath(String jsonPath) {

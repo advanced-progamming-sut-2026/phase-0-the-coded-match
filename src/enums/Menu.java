@@ -14,6 +14,7 @@ public enum Menu {
     GREEN_HOUSE("greenhouse"),
     TRAVEL_LOG("travel-log"),
     LEADERBOARD("leaderboard"),
+    BONUS_GAME("bonus game"),
     COIN_WALLET("coin-wallet"),
     GEM_WALLET("gem-wallet"),
     SHOP("shop"),

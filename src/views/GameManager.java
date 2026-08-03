@@ -1,5 +1,6 @@
 package views;
 
+import controllers.BonusGameController;
 import controllers.GameManagerController;
 import controllers.ZombieController;
 import enums.Commands;
@@ -9,15 +10,21 @@ public class GameManager {
 
     public static void check(String input) {
         GameManagerController instance = GameManagerController.getInstance();
-        if (input.matches(Commands.ADVANCE_TIME.getPattern())) {
+        if (BonusGameController.isActive() && input.matches("^\\s*next\\s+zombie\\s*$")) {
+            System.out.println(BonusGameController.spawnNextZombie());
+        } else if (BonusGameController.isActive() && input.matches("^\\s*show\\s+score\\s*$")) {
+            System.out.println("score: " + BonusGameController.getGame().getTotalMioPoints());
+        } else if (BonusGameController.isActive() && input.matches("^\\s*end\\s+game\\s*$")) {
+            System.out.println(BonusGameController.endGame());
+        } else if (input.matches(Commands.ADVANCE_TIME.getPattern())) {
             instance.advanceTime(input, message);
             System.out.println(message[0]);
         } else if (input.matches(Commands.COLLECT_SUN.getPattern())) {
             instance.collectSun(input);
         } else if (input.matches(Commands.SUN_AMOUNT.getPattern())) {
-            System.out.println(instance.showSunsAmount());
+            System.out.println("sun amount = " + instance.showSunsAmount());
         } else if (input.matches(Commands.CHEAT_ADD_SUNS.getPattern())) {
-            instance.cheatAddSuns(input);
+            System.out.println(instance.cheatAddSuns(input));
         } else if (input.matches(Commands.PLANT_PLANT.getPattern())) {
             instance.plantPlant(input);
         } else if (input.matches(Commands.CHEAT_REMOVE_COOLDOWN.getPattern())) {
@@ -40,6 +47,11 @@ public class GameManager {
             ZombieController.cheatSpawnZombies(input);
         } else if(input.matches(Commands.RELEASE_THE_NUKE.getPattern())){
             instance.cheatReleaseTheNuke();
+        } else if (input.matches("^\\s*start\\s+zombie\\s+waves\\s*$")) {
+            if (instance.getCurrentLevel() != null && instance.getCurrentLevel().getZombieWave() != null) {
+                if (instance.getCurrentLevel().getZombieWave().getCurrentWave() >= 0) System.out.println("zombie waves already started");
+                else { instance.getCurrentLevel().getZombieWave().update(); System.out.println("zombie waves started"); }
+            } else System.out.println("no active level");
         } else {
             System.out.println("invalid command");
         }

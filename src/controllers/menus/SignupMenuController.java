@@ -8,6 +8,7 @@ import enums.Gender;
 import enums.SecurityQuestions;
 import models.App;
 import models.User;
+import utils.AssetPaths;
 import views.menus.SignupMenu;
 
 import java.io.*;
@@ -31,7 +32,7 @@ public class SignupMenuController{
 
         String username = matcher.group("username");
         String password = matcher.group("password");
-        String passwordConfirm = matcher.group("password_confirm");
+        String passwordConfirm = matcher.group("passwordConfirm");
         String nickname = matcher.group("nickname");
         String email = matcher.group("email");
         String genderSt = matcher.group("gender");
@@ -46,8 +47,8 @@ public class SignupMenuController{
             message[0] = "Error: nickname is too short";
         } else if (!validateEmail(email)) {
             message[0] = "Error: email pattern in not valid";
-        } else if (!(genderSt.equalsIgnoreCase("male") && genderSt.equalsIgnoreCase("female"))) {
-            message[0] = "Error: gender is not valid";
+        } else if (!(genderSt.equalsIgnoreCase("male")) && !(genderSt.equalsIgnoreCase("female"))) {
+            message[0] = "Error: gender is not valid " + genderSt;
         } else {
             SignupMenu.registered = true;
             Gender gender = whichGender(genderSt);
@@ -89,6 +90,7 @@ public class SignupMenuController{
     }
 
     public static String[] showQuestions(String input, String[] message) {
+        message[0] = "";
         for (SecurityQuestions securityQuestion : SecurityQuestions.values()) {
             message[0] += securityQuestion.getNum() + ": " + securityQuestion.getText() + "\n";
         }
@@ -102,13 +104,18 @@ public class SignupMenuController{
             message[0] = "pick a question!";
             return message;
         }
-        int questionNum = Integer.parseInt(matcher.group("question_number"));
+        int questionNum;
+        try { questionNum = Integer.parseInt(matcher.group("questionNumber").trim()); } catch (NumberFormatException e) { message[0] = "invalid question"; return message; }
         String answer = matcher.group("answer");
-        String confirmAnswer = matcher.group("answer_confirm");
+        String confirmAnswer = matcher.group("answerConfirm");
         SecurityQuestions question = getQuestionByNumber(questionNum);
-        if (answer.equals(confirmAnswer)) {
+        if (question == null) {
+            message[0] = "invalid question";
+        } else if (answer.equals(confirmAnswer)) {
             App.getUsers().get(App.getUsers().size() - 1).addQuestion(question, answer);
             SignupMenu.questionPicked = true;
+            saveToJson();
+            App.setCurrentMenu(enums.Menu.LOGIN_MENU);
             message[0] = "question picked successfully";
         } else {
             message[0] = "not confirmed";
@@ -145,20 +152,8 @@ public class SignupMenuController{
 
     public static void saveToJson() {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        File file = new File("assets/Users.json");
         ArrayList<User> users = App.getUsers();
-
-        if (file.exists() && file.length() > 0) {
-            try (FileReader reader = new FileReader(file)) {
-                Type userListType = new TypeToken<ArrayList<User>>(){}.getType();
-                ArrayList<User> existingUsers = gson.fromJson(reader, userListType);
-
-            } catch (IOException e) {
-                System.out.println("Error reading users: " + e.getMessage());
-            }
-        }
-
-        try (FileWriter writer = new FileWriter("assets/Users.json")){
+        try (Writer writer = AssetPaths.writer("Users.json")) {
             gson.toJson(users, writer);
         } catch (IOException e) {
             System.out.println("Error saving users: " + e.getMessage());
@@ -167,7 +162,7 @@ public class SignupMenuController{
 
     public static void loadFromJson() {
         Gson gson = new Gson();
-        try (FileReader reader = new FileReader("assets/Users.json")){
+        try (Reader reader = AssetPaths.reader("Users.json")) {
             Type userListType = new TypeToken<ArrayList<User>>(){}.getType();
             ArrayList<User> loadedUsers = gson.fromJson(reader, userListType);
             App.setUsers(loadedUsers != null ? loadedUsers : new ArrayList<>());

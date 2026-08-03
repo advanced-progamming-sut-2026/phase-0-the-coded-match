@@ -16,14 +16,14 @@ public class Sun implements Update {
     protected boolean isFalling;
     protected boolean hasFallen;
 
-    public Sun(int x, int y, int value, int timeToReachGround, boolean isFalling, SunType type) { //TODO: if plant is producing: 0, false
+    public Sun(int x, int y, int value, int timeToReachGround, boolean isFalling, SunType type) { //if plant is producing: 0, false
 
         this.x = x;
         this.y = y;
         this.value = value;
         this.timeToReachGround = timeToReachGround;
         this.isFalling = isFalling;
-        this.hasFallen = isFalling;
+        this.hasFallen = !isFalling;
         this.type = type;
     }
 
@@ -35,6 +35,7 @@ public class Sun implements Update {
             return;
         } else if (type == SunType.RADIOACTIVE) {
             this.type = SunType.NORMAL;
+            this.value = SunType.NORMAL.getValue();
         }
         currentLevel.setCollectedSunsAmount(currentLevel.getCollectedSunsAmount() + value);
         QuestController.notifySunCollected(value);
@@ -43,19 +44,13 @@ public class Sun implements Update {
 
     public void explode() {
         for (Zombie zombie : GameManagerController.getInstance().getCurrentLevel().getActiveZombies()) {
-            if ((zombie.getX() - this.x <= 2) && (zombie.getY() - this.y <= 2)) {
-                zombie.setCurrentHp(zombie.getCurrentHp() - 150);
-                if (zombie.isDead()) {
-                    //TODO: call the method that should be called after a zombie dies
-                }
+            if (Math.abs(zombie.getX() - x) <= 2 && Math.abs(zombie.getY() - y) <= 2) {
+                zombie.takeDamage(150, null);
             }
         }
         for (Plant plant : GameManagerController.getInstance().getCurrentLevel().getActivePlants()) {
-            if ((plant.getX() - this.x <= 1) && (plant.getY() - this.y <= 1)) {
-                plant.setCurrentHp(plant.getCurrentHp() - 80);
-                if (plant.isDead()) {
-                    //TODO: call the method that should be called after a plant dies
-                }
+            if (Math.abs(plant.getX() - x) <= 1 && Math.abs(plant.getY() - y) <= 1) {
+                plant.takeDamage(80);
             }
         }
     }
@@ -64,8 +59,10 @@ public class Sun implements Update {
     public void update() {
         if (isFalling) {
             timeToReachGround -= 1;
-            if (timeToReachGround == 0) {
+            if (timeToReachGround <= 0) {
                 isFalling = false;
+                hasFallen = true;
+                if (type == SunType.RADIOACTIVE) { type = SunType.NORMAL; value = SunType.NORMAL.getValue(); }
             }
         }
     }

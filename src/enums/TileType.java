@@ -8,7 +8,8 @@ public enum TileType {
     SLIDE_DOWN(false, 0),
     WATER(true, 0),
     LOW_TIDE(true, 0),
-    NECROMANCY(true, 0);
+    NECROMANCY(true, 0),
+    CRATER(false, 0);
 
     private final boolean canPlant;
     private final int maxHp;

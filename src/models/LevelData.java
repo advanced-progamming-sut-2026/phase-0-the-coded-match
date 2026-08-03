@@ -13,19 +13,14 @@ public class LevelData {
     private int levelNumber;
     private LevelType levelType;
     private boolean isUnlocked;
-    private boolean isDay;
-    private int plantSelectionLimit;
     private int waveCount;
     private int baseWaveCost;
     private Season type;
-    private List<String> allowedZombies;
     private List<String> availablePlants;
-    private List<String> conveyorPlants;
     private List<String> lockedPlants;
     private List<String> protectedPlants;
     private List<WavePatternData> wavePatterns; //i changed it from List to WavePatternData cause each level has multiple waves but starts from one pattern!!
-    private List<SpecialLevelStrategy> specialRules;
-    private GameMap map; //DOUBLE CHECK WITH JSON
+    private GameMap map;
 
     public String getId() {
         return id;
@@ -43,20 +38,12 @@ public class LevelData {
         return levelType;
     }
 
-    public int getPlantSelectionLimit() {
-        return plantSelectionLimit;
-    }
-
     public int getWaveCount() {
         return waveCount;
     }
 
     public int getBaseWaveCost() {
         return baseWaveCost;
-    }
-
-    public List<String> getAllowedZombies() {
-        return allowedZombies;
     }
 
     public List<String> getAvailablePlants() {
@@ -67,16 +54,8 @@ public class LevelData {
         return map;
     }
 
-    public List<String> getConveyorPlants() {
-        return conveyorPlants;
-    }
-
     public List<String> getLockedPlants() {
         return lockedPlants;
-    }
-
-    public List<SpecialLevelStrategy> getSpecialRules() {
-        return specialRules;
     }
 
     public List<WavePatternData> getWavePatterns() {
@@ -103,8 +82,4 @@ public class LevelData {
     public void setUnlocked(boolean unlocked) { this.isUnlocked = unlocked;}
 
     public void setMap(GameMap gameMap) { this.map = gameMap;}
-
-    public boolean isDay() {
-        return isDay;
-    }
 }

@@ -39,7 +39,7 @@ public class ZombieController {
             return;
         }
 
-        String type = matcher.group("zombie_type");
+        String type = matcher.group("zombieType");
         float x = Integer.parseInt(matcher.group("x"));
         int y = Integer.parseInt(matcher.group("y"));
 

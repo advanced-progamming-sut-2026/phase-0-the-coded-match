@@ -57,10 +57,7 @@ public class Projectile {
                 && barrel.getY() == (int) Math.round(yCoordinate)
                 && Math.abs(barrel.getX() - xCoordinate) < 0.5;
     }
-    public void destroy() {
-        isDestroyed = true;
-        GameManagerController.getInstance().getCurrentLevel().getActiveProjectiles().remove(this);
-    }
+    public void destroy() { isDestroyed = true; }
 
     public double getxCoordinate() {
         return xCoordinate;

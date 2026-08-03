@@ -1,10 +1,15 @@
 package controllers;
 
+import controllers.menus.SignupMenuController;
 import enums.Commands;
 import enums.LevelType;
+import enums.Menu;
 import models.App;
 import models.GameMapRelated.GameMap;
 import models.Level;
+import models.LevelData;
+import models.MiniGameRelated.Beghouled;
+import models.MiniGameRelated.MiniGame;
 import models.MiniGameRelated.VaseBreaker;
 import models.Sun;
 import models.Projectile;
@@ -13,10 +18,12 @@ import models.plants.Plant;
 import models.plants.PlantData;
 import models.plants.PlantRepository;
 import models.seasons.Season;
+import models.specialLevels.LockedPlantsLevel;
 import models.zombies.*;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -74,12 +81,17 @@ public class GameManagerController {
             updatePlants(message);
             updateBarrels();
             updateZombies();
-            updateWaves();
-            updateSkySuns(message);
+            if (!(currentLevel instanceof MiniGame)) {
+                updateWaves(message);
+                updateSkySuns(message);
+            }
             updateSuns(message);
             updateTiles();
             updateProjectiles();
             updateSeason();
+            if (currentLevel instanceof Beghouled beghouled) {
+                beghouled.updateMinigameTick();
+            }
         }
         if (currentLevel.getSpecialLevel() != null) {
             currentLevel.getSpecialLevel().update(currentLevel);
@@ -118,6 +130,9 @@ public class GameManagerController {
                     tile.removePlant();
                 }
                 iterator.remove();
+                if (currentLevel instanceof Beghouled beghouled) {
+                    beghouled.onPlantDestroyed(plant);
+                }
                 currentLevel.setRemovedPlantsCount(currentLevel.getRemovedPlantsCount() + 1);
                 if (currentLevel.getSpecialLevel() != null) {
                     currentLevel.getSpecialLevel().plantLost(currentLevel, plant);
@@ -127,6 +142,8 @@ public class GameManagerController {
     }
 
     private void updateZombies() {
+        int killedThisTick = 0;
+        int damageThisTick = 0;
         Iterator<Zombie> iterator = currentLevel.getActiveZombies().iterator();
         while (iterator.hasNext()) {
             Zombie zombie = iterator.next();
@@ -136,18 +153,38 @@ public class GameManagerController {
             }
             if (zombie.isDead()) {
                 iterator.remove();
-                handleZombieDrop();
-                QuestController.notifyZombieKilled(zombie);
+                killedThisTick++;
+                damageThisTick += zombie.getLastDamageTaken();
+                handleZombieDrop(zombie);
+                if (!(currentLevel instanceof MiniGame)) {
+                    QuestController.notifyZombieKilled(zombie);
+                    if (currentLevel.getCurrentSeason() != null) {
+                        QuestController.notifyZombieKilled(currentLevel.getCurrentSeason());
+                    }
+                }
             }
+        }
+        if (killedThisTick > 0 && BonusGameController.isActive()) {
+            String result = BonusGameController.recordKills(killedThisTick, damageThisTick,
+                    !BonusGameController.getGame().hasRemainingZombies() && currentLevel.getActiveZombies().isEmpty(),
+                    currentLevel.getCurrentTick());
+            if (!result.isEmpty()) System.out.println(result);
         }
     }
 
-    private void updateWaves() {
+    private void updateWaves(String[] message) {
         if (currentLevel instanceof VaseBreaker) {
             return;
         }
         if (currentLevel.getZombieWave() != null) {
             currentLevel.getZombieWave().update();
+            if (currentLevel.getZombieWave().isLastWave()) {
+                append(message, "The final wave has come.");
+                currentLevel.getZombieWave().setLastWave(false);
+            } else if (currentLevel.getZombieWave().isNewWaveStarted()){
+                append(message, "Wave " + (currentLevel.getZombieWave().getCurrentWave() + 1) + " started.");
+                currentLevel.getZombieWave().setNewWaveStarted(false);
+            }
         }
     }
 
@@ -237,20 +274,15 @@ public class GameManagerController {
         return currentLevel.getCollectedSunsAmount();
     }
 
-    public void cheatAddSuns(String input) {
+    public String cheatAddSuns(String input) {
         Matcher matcher = Pattern.compile(Commands.CHEAT_ADD_SUNS.getPattern()).matcher(input);
         if (!matcher.matches()) {
-            System.out.println("invalid command");
-            return;
+            return "invalid command";
         }
         int count = Integer.parseInt(matcher.group("count"));
         currentLevel.setCollectedSunsAmount(currentLevel.getCollectedSunsAmount() + count);
-        System.out.println("you have " + currentLevel.getCollectedSunsAmount() + " suns now");
+        return "you have " + currentLevel.getCollectedSunsAmount() + " suns now";
     }
-
-    public String[] startWave() {
-        return new String[] {"wave system is not ready yet"};
-    }// do we need this method?
 
     public void cheatReleaseTheNuke() {
         ZombieWaveManager.releaseTheNuke();
@@ -279,24 +311,26 @@ public class GameManagerController {
         }
         PlantData data = PlantRepository.getInstance().findByName(type);
         Plant plant = new Plant(data, x, y, 1);
+        if (currentLevel.getSpecialLevel() instanceof LockedPlantsLevel && ((LockedPlantsLevel) currentLevel.getSpecialLevel()).isPlantLocked(plant.getData().getName())) { System.out.println("Plant is locked"); return; }
         currentLevel.getActivePlants().add(plant);
+        if (currentLevel.getCurrentSeason() != null) {
+            currentLevel.getCurrentSeason().PlantPlaced(currentLevel, plant, x, y);
+        }
         currentLevel.getGameMap().getTile(plant.getX(), plant.getY()).setPlant(plant);
         currentLevel.setCollectedSunsAmount(currentLevel.getCollectedSunsAmount() - data.getSunCost());
         if (!cooldownRemoved) {
             plantCooldowns.put(data.getName().toLowerCase(), secondsToTicks(data.getRecharge()));
         }
-        if (isBoostedPlant(plant)) {
-            plant.activatePlantFood();
-        }
+        if (isBoostedPlant(plant)) plant.activatePlantFood();
+        if (App.getCurrentUser().getGreenHouse().stored_boosts.remove(data.getName().toLowerCase()) != null) plant.activatePlantFood();
         QuestController.onPlantPlaced(plant);
         System.out.println("Plant " + data.getDisplayName() + " planted at (" + x + ", " + y + ")");
     }
 
     private String getPlantingError(String type, int x, int y) {
         PlantData data = PlantRepository.getInstance().findByName(type);
-        if (data == null) {
-            return "plant type does not exist";
-        }
+        if (data == null) return "plant type does not exist";
+        if (!currentLevel.getChosenPlants().isEmpty() && currentLevel.getChosenPlants().stream().noneMatch(name -> name.equalsIgnoreCase(type))) return "plant was not selected";
         Tile tile = currentLevel.getGameMap().getTile(x, y);
         if (tile == null) {
             return "location is out of map";
@@ -409,7 +443,9 @@ public class GameManagerController {
     public StringBuilder showPlantsStatus() {
         StringBuilder builder = new StringBuilder();
         PlantRepository repository = PlantRepository.getInstance();
-        for (PlantData data : repository.getAllPlants()) {
+        for (String plantName : currentLevel.getChosenPlants()) {
+            PlantData data = repository.findByName(plantName);
+            if (data == null) continue;
             int cooldown = plantCooldowns.getOrDefault(data.getName().toLowerCase(), 0);
             builder.append(data.getDisplayName()).append(" | cost: ").append(data.getSunCost());
             if (cooldownRemoved || cooldown == 0) {
@@ -451,17 +487,15 @@ public class GameManagerController {
         return builder;
     }
 
-    public void ifAZombieWasKilled() {
-        handleZombieDrop();
-    }
-
     public void gameOver() {
-//        this.currentLevel = null;
-        currentLevel.getActiveZombies().clear();
-        currentLevel.getActivePlants().clear();
-        currentLevel.getActiveProjectiles().clear();
-        currentLevel.getActiveSuns().clear();
+        if (BonusGameController.isActive()) {
+            System.out.println(BonusGameController.endGame());
+            return;
+        }
+        this.currentLevel = null;
+        App.setCurrentMenu(Menu.GAME_MENU);
         App.getCurrentUser().setVictroy(false);
+        SignupMenuController.saveToJson();
     }
 
     public String gameWon(){
@@ -470,6 +504,25 @@ public class GameManagerController {
         }
         QuestController.notifyPlantsDestroyed(currentLevel.getRemovedPlantsCount());
         App.getCurrentUser().setVictroy(true);
+        App.getCurrentUser().addGamesPlayed();
+        App.getCurrentUser().addChapters();
+        App.getCurrentUser().recordLevelVictory(currentLevel.getCurrentSeason(), currentLevel.getData(), 0);
+        if (currentLevel.getCurrentSeason() != null) {
+            LevelData next = App.getLevelByNumber(currentLevel.getLevelNumber() + 1, currentLevel.getCurrentSeason());
+            if (next != null) next.setUnlocked(true);
+            else {
+                int nextSeasonId = currentLevel.getCurrentSeason().getData().getId() + 1;
+                for (Season season : App.getAllSeasons()) {
+                    if (season.getData().getId() == nextSeasonId) {
+                        season.setUnlocked(true);
+                        if (!season.getLevels().isEmpty()) season.getLevels().get(0).setUnlocked(true);
+                        break;
+                    }
+                }
+            }
+        }
+        App.setCurrentMenu(Menu.GAME_MENU);
+        SignupMenuController.saveToJson();
         QuestController.onLevelCompleted(true);
         return "Dear humanz, zis is not done yet; we will come back to eat your brainz, humanz.";
     }
@@ -501,28 +554,12 @@ public class GameManagerController {
                 tile.takeDamage(projectile.getDamage());
                 projectile.destroy();
             }
-            for (Barrel barrel : currentLevel.getBarrels()) {
+            List<Barrel> barrels = currentLevel.getBarrels();
+            for (Barrel barrel : barrels) {
                 if (projectile.checkBarrelCollision(barrel)) {
                     barrel.onProjectileHit(projectile);
                 }
             }
-        }
-    }
-
-    private void handleProjectileCollisions() {
-        updateProjectiles();
-    }
-
-    private void cleanUpDestroyedProjectiles() {
-        if (currentLevel == null || currentLevel.getActiveProjectiles() == null) {
-            return;
-        }
-        currentLevel.getActiveProjectiles().removeIf(Projectile::isDestroyed);
-    }
-
-    public void spawnProjectile(models.Projectile projectile) {
-        if (currentLevel != null && projectile != null) {
-            currentLevel.getActiveProjectiles().add(projectile);
         }
     }
 
@@ -543,11 +580,30 @@ public class GameManagerController {
         return plant.isBoosted();
     }
 
-    private void handleZombieDrop() {
-        if (Math.random() < 0.05 && currentLevel.getPlantFoodCount() < MAX_PLANT_FOOD) {
+    private void handleZombieDrop(Zombie zombie) {
+        if (zombie.isGlowing() && currentLevel.getPlantFoodCount() < MAX_PLANT_FOOD) {
             currentLevel.setPlantFoodCount(currentLevel.getPlantFoodCount() + 1);
-            System.out.println("The glowing zombie dropeed a plant food; you have "
+            System.out.println("The glowing zombie dropped a plant food; you have "
                     + currentLevel.getPlantFoodCount() + " plant foods now.");
+        }
+        if (Math.random() >= 0.10 || App.getCurrentUser() == null) {
+            return;
+        }
+        int drop = (int) (Math.random() * 3);
+        if (drop == 0) {
+            App.getCurrentUser().addCoins(50);
+            System.out.println("A zombie dropped 50 coins; you have " + App.getCurrentUser().getCoinsCount() + " coins now.");
+        } else if (drop == 1) {
+            App.getCurrentUser().addGems(1);
+            System.out.println("A zombie dropped 1 diamond; you have " + App.getCurrentUser().getGemsCount() + " diamonds now.");
+        } else {
+            int unlocked = App.getCurrentUser().getGreenHouse().unlockPots(1);
+            if (unlocked > 0) {
+                System.out.println("A zombie dropped a pot; you have " + App.getCurrentUser().getGreenHouse().getPotsCount() + " pots now.");
+            } else {
+                App.getCurrentUser().addCoins(50);
+                System.out.println("The greenhouse is full; the pot was converted to 50 coins.");
+            }
         }
     }
 
@@ -582,17 +638,23 @@ public class GameManagerController {
     }
 
     public void plantVasebreakerSeed(VaseBreaker level, String plantName, int x, int y) {
-
+        PlantData data = PlantRepository.getInstance().findByName(plantName);
+        Tile tile = level.getGameMap().getTile(x, y);
+        if (data == null) {
+            System.out.println("plant type does not exist");
+            return;
+        }
+        if (tile == null || tile.getPlant() != null || level.hasUnbrokenVaseAt(x, y)) {
+            System.out.println("cannot plant on this tile");
+            return;
+        }
         if (!level.consumeSeedPacket(plantName)) {
             System.out.println("You do not have a " + plantName + " seed packet!");
             return;
         }
-
-        level.consumeSeedPacket(plantName);
-        PlantData data = PlantRepository.getInstance().findByName(plantName);
         Plant plant = new Plant(data, x, y, 1);
         level.getActivePlants().add(plant);
-        level.getGameMap().getTile(x, y).setPlant(plant);
+        tile.setPlant(plant);
         System.out.println("Planted " + plantName + " at (" + x + ", " + y + ")");
     }
 }

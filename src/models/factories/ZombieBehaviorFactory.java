@@ -4,6 +4,7 @@ import models.zombies.strategies.*;
 
 public class ZombieBehaviorFactory {
     public static ZombieBehavior getBehavior(String behaviorName) {
+        if (behaviorName == null) return new NormalBehavior();
         switch (behaviorName.toLowerCase()) {
             case "normal" :
                 return new NormalBehavior();
@@ -27,10 +28,10 @@ public class ZombieBehaviorFactory {
                 return new SnorkelBehavior();
             case "king" :
                 return new KingBehavior();
-            case "SunProducer" :
+            case "sunproducer" :
                 return new SunProducerBehavior();
             default:
-                return null;
+                return new NormalBehavior();
         }
     }
 }
