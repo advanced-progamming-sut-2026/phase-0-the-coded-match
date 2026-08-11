@@ -1,14 +1,14 @@
-package controllers;
+package PvZ2.APproject.controllers;
 
-import enums.PlantTag;
-import enums.SunType;
-import enums.TileType;
-import models.Level;
-import models.Sun;
-import models.GameMapRelated.Tile;
-import models.plants.Plant;
-import models.plants.PlantData;
-import models.plants.PlantRepository;
+import PvZ2.APproject.enums.PlantTag;
+import PvZ2.APproject.enums.SunType;
+import PvZ2.APproject.enums.TileType;
+import PvZ2.APproject.models.Level;
+import PvZ2.APproject.models.Sun;
+import PvZ2.APproject.models.GameMapRelated.Tile;
+import PvZ2.APproject.models.plants.Plant;
+import PvZ2.APproject.models.plants.PlantData;
+import PvZ2.APproject.models.plants.PlantRepository;
 
 import java.util.ArrayList;
 import java.util.Iterator;

@@ -1,6 +1,4 @@
-package models;
-
-import models.plants.Plant;
+package PvZ2.APproject.models;
 
 public class SeedPacket {
     private int row;

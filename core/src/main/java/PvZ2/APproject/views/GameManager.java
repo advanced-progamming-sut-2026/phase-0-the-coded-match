@@ -1,9 +1,9 @@
-package views;
+package PvZ2.APproject.views;
 
-import controllers.BonusGameController;
-import controllers.GameManagerController;
-import controllers.ZombieController;
-import enums.Commands;
+import PvZ2.APproject.controllers.BonusGameController;
+import PvZ2.APproject.controllers.GameManagerController;
+import PvZ2.APproject.controllers.ZombieController;
+import PvZ2.APproject.enums.Commands;
 
 public class GameManager {
     public static String[] message = new String[1];

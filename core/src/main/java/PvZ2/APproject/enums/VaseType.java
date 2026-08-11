@@ -1,6 +1,4 @@
-package enums;
-
-import static enums.VaseContent.*;
+package PvZ2.APproject.enums;
 
 public enum VaseType {
     BASIC_VASE,

@@ -1,6 +1,6 @@
-package models.plants.abilities;
+package PvZ2.APproject.models.plants.abilities;
 
-import models.plants.Plant;
+import PvZ2.APproject.models.plants.Plant;
 
 public class ReinforceAbility implements PlantAbilityHandler {
     @Override

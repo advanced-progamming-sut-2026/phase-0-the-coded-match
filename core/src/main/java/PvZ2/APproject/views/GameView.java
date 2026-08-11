@@ -1,4 +1,4 @@
-package views;
+package PvZ2.APproject.views;
 
 public class GameView {
     public void showMap() {

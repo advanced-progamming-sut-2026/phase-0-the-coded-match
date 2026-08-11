@@ -1,6 +1,6 @@
-package views;
+package PvZ2.APproject.views;
 
-import controllers.BonusGameController;
+import PvZ2.APproject.controllers.BonusGameController;
 
 public class BonusGameView {
     public static void check(String input) {

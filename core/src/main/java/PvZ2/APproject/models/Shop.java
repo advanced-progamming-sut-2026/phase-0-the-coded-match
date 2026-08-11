@@ -1,10 +1,6 @@
-package models;
+package PvZ2.APproject.models;
 
-import controllers.ShopController;
-import models.plants.Plant;
-import models.plants.PlantData;
-
-import java.time.LocalDate;
+import PvZ2.APproject.models.plants.PlantData;
 
 public class Shop {
     private boolean dailyItemSoldOut = false;

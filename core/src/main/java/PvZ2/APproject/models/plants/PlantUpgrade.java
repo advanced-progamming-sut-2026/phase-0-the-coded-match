@@ -1,4 +1,4 @@
-package models.plants;
+package PvZ2.APproject.models.plants;
 
 public class PlantUpgrade {
 

@@ -1,6 +1,6 @@
-package models.plants;
+package PvZ2.APproject.models.plants;
 
-import enums.PlantCategory;
+import PvZ2.APproject.enums.PlantCategory;
 
 import java.util.List;
 

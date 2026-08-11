@@ -1,10 +1,10 @@
-package controllers;
+package PvZ2.APproject.controllers;
 
-import models.Level;
-import models.seasons.Season;
-import models.seasons.SeasonData;
-import models.seasons.SeasonFactory;
-import models.seasons.SeasonRepository;
+import PvZ2.APproject.models.Level;
+import PvZ2.APproject.models.seasons.Season;
+import PvZ2.APproject.models.seasons.SeasonData;
+import PvZ2.APproject.models.seasons.SeasonFactory;
+import PvZ2.APproject.models.seasons.SeasonRepository;
 
 import java.util.ArrayList;
 import java.util.List;

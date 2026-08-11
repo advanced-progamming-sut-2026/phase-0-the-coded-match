@@ -1,13 +1,13 @@
-package models.zombies.strategies;
+package PvZ2.APproject.models.zombies.strategies;
 
-import controllers.GameManagerController;
-import enums.ZombieState;
-import models.GameMapRelated.GameMap;
-import models.GameMapRelated.Tile;
-import models.Level;
-import models.Projectile;
-import models.plants.Plant;
-import models.zombies.Zombie;
+import PvZ2.APproject.controllers.GameManagerController;
+import PvZ2.APproject.enums.ZombieState;
+import PvZ2.APproject.models.GameMapRelated.GameMap;
+import PvZ2.APproject.models.GameMapRelated.Tile;
+import PvZ2.APproject.models.Level;
+import PvZ2.APproject.models.Projectile;
+import PvZ2.APproject.models.plants.Plant;
+import PvZ2.APproject.models.zombies.Zombie;
 
 public class TurquoiseBehavior implements ZombieBehavior {
     private boolean isCastingAbility = false;

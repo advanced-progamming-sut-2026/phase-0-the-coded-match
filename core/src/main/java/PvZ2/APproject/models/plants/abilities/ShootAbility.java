@@ -1,9 +1,10 @@
-package models.plants.abilities;
+package PvZ2.APproject.models.plants.abilities;
 
-import controllers.GameManagerController;
-import models.Level;
-import models.Projectile;
-import models.plants.Plant;
+import PvZ2.APproject.controllers.GameManagerController;
+import PvZ2.APproject.models.Level;
+import PvZ2.APproject.models.Projectile;
+import PvZ2.APproject.models.plants.Plant;
+import PvZ2.APproject.models.zombies.Zombie;
 
 public class ShootAbility implements PlantAbilityHandler {
     private static final double DEFAULT_PROJECTILE_SPEED = 0.5;
@@ -39,7 +40,7 @@ public class ShootAbility implements PlantAbilityHandler {
     }
 
     protected boolean hasZombieInLane(Level level, int lane, int plantX) {
-        for (models.zombies.Zombie zombie : level.getActiveZombies()) {
+        for (Zombie zombie : level.getActiveZombies()) {
             if (zombie.getY() == lane && zombie.getX() >= plantX && !zombie.isDead()) {
                 return true;
             }

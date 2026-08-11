@@ -1,12 +1,12 @@
-package models;
+package PvZ2.APproject.models;
 
-import enums.Gender;
-import enums.QuestRelated.QuestCategory;
-import enums.SecurityQuestions;
-import models.greenhouse.GreenHouse;
-import models.plants.PlantData;
-import models.plants.PlantRepository;
-import models.seasons.Season;
+import PvZ2.APproject.enums.Gender;
+import PvZ2.APproject.enums.QuestRelated.QuestCategory;
+import PvZ2.APproject.enums.SecurityQuestions;
+import PvZ2.APproject.models.greenhouse.GreenHouse;
+import PvZ2.APproject.models.plants.PlantData;
+import PvZ2.APproject.models.plants.PlantRepository;
+import PvZ2.APproject.models.seasons.Season;
 
 import java.util.ArrayList;
 import java.util.*;

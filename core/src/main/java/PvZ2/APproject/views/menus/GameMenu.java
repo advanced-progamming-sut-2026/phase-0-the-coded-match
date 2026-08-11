@@ -1,7 +1,7 @@
-package views.menus;
+package PvZ2.APproject.views.menus;
 
-import controllers.menus.GameMenuController;
-import enums.Commands;
+import PvZ2.APproject.controllers.menus.GameMenuController;
+import PvZ2.APproject.enums.Commands;
 
 public class GameMenu {
     public static String[] message = new String[1];

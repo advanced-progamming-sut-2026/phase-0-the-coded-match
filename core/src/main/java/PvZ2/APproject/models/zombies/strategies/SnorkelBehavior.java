@@ -1,13 +1,13 @@
-package models.zombies.strategies;
+package PvZ2.APproject.models.zombies.strategies;
 
-import controllers.GameManagerController;
-import enums.PlantCategory;
-import enums.TileType;
-import enums.ZombieState;
-import models.GameMapRelated.Tile;
-import models.Projectile;
-import models.plants.Plant;
-import models.zombies.Zombie;
+import PvZ2.APproject.controllers.GameManagerController;
+import PvZ2.APproject.enums.PlantCategory;
+import PvZ2.APproject.enums.TileType;
+import PvZ2.APproject.enums.ZombieState;
+import PvZ2.APproject.models.GameMapRelated.Tile;
+import PvZ2.APproject.models.Projectile;
+import PvZ2.APproject.models.plants.Plant;
+import PvZ2.APproject.models.zombies.Zombie;
 
 public class SnorkelBehavior implements ZombieBehavior {
     @Override

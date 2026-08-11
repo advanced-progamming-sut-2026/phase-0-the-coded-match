@@ -1,7 +1,7 @@
-package views.menus;
+package PvZ2.APproject.views.menus;
 
-import controllers.menus.ChoosePlantsMenuController;
-import enums.Commands;
+import PvZ2.APproject.controllers.menus.ChoosePlantsMenuController;
+import PvZ2.APproject.enums.Commands;
 
 public class ChoosePlantsMenu {
     public static void check(String input) {

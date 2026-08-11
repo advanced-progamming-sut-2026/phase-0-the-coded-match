@@ -1,21 +1,22 @@
-package controllers;
+package PvZ2.APproject.controllers;
 
-import enums.PlantCategory;
-import enums.PlantTag;
-import enums.QuestRelated.QuestData;
-import models.App;
-import models.Quest;
-import models.QuestsModel;
-import models.User;
-import models.plants.Plant;
-import models.plants.PlantData;
-import models.plants.PlantRepository;
-import models.seasons.Season;
-import models.zombies.Barrel;
-import models.zombies.Zombie;
+import PvZ2.APproject.enums.PlantCategory;
+import PvZ2.APproject.enums.PlantTag;
+import PvZ2.APproject.enums.QuestRelated.QuestData;
+import PvZ2.APproject.models.App;
+import PvZ2.APproject.models.Quest;
+import PvZ2.APproject.models.QuestsModel;
+import PvZ2.APproject.models.User;
+import PvZ2.APproject.models.plants.Plant;
+import PvZ2.APproject.models.plants.PlantData;
+import PvZ2.APproject.models.plants.PlantRepository;
+import PvZ2.APproject.models.seasons.Season;
+import PvZ2.APproject.models.zombies.Zombie;
 
 import java.time.LocalDate;
 import java.util.*;
+
+import static PvZ2.APproject.enums.QuestRelated.QuestCategory.DAILY;
 
 public class QuestController {
     public static QuestsModel questsModel = new QuestsModel();
@@ -81,12 +82,12 @@ public class QuestController {
         }
         List<Quest> refreshed = new ArrayList<>();
         for (Quest quest : questsModel.getAvailableQuests()) {
-            if (quest.getQuestData().getCategory() != enums.QuestRelated.QuestCategory.DAILY) {
+            if (quest.getQuestData().getCategory() != DAILY) {
                 refreshed.add(quest);
             }
         }
         for (QuestData questData : QuestData.values()) {
-            if (questData.getCategory() == enums.QuestRelated.QuestCategory.DAILY) {
+            if (questData.getCategory() == DAILY) {
                 refreshed.add(createQuest(questData));
             }
         }

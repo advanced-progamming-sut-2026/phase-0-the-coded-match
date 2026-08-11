@@ -1,6 +1,6 @@
-package views;
+package PvZ2.APproject.views;
 
-import controllers.menus.TravelLogController;
+import PvZ2.APproject.controllers.menus.TravelLogController;
 
 public class QuestView {
     public static void check(String input) {

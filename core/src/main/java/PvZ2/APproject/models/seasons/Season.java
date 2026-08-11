@@ -1,13 +1,12 @@
-package models.seasons;
+package PvZ2.APproject.models.seasons;
 import java.util.ArrayList;
 import java.util.List;
-import enums.SeasonType;
-import models.*;
-import models.GameMapRelated.Tile;
-import models.plants.Plant;
-import models.zombies.Zombie;
-import models.zombies.ZombieData;
-import models.zombies.ZombieRepository;
+import PvZ2.APproject.enums.SeasonType;
+import PvZ2.APproject.models.*;
+import PvZ2.APproject.models.GameMapRelated.Tile;
+import PvZ2.APproject.models.plants.Plant;
+import PvZ2.APproject.models.zombies.ZombieData;
+import PvZ2.APproject.models.zombies.ZombieRepository;
 
 public abstract class Season {
 

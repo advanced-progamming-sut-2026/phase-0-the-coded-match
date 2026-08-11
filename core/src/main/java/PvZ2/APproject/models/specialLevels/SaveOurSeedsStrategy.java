@@ -1,10 +1,10 @@
-package models.specialLevels;
+package PvZ2.APproject.models.specialLevels;
 
-import controllers.GameManagerController;
-import models.GameMapRelated.Tile;
-import models.Level;
-import models.plants.Plant;
-import models.plants.PlantRepository;
+import PvZ2.APproject.controllers.GameManagerController;
+import PvZ2.APproject.models.GameMapRelated.Tile;
+import PvZ2.APproject.models.Level;
+import PvZ2.APproject.models.plants.Plant;
+import PvZ2.APproject.models.plants.PlantRepository;
 
 import java.util.ArrayList;
 import java.util.List;

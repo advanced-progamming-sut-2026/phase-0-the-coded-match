@@ -1,15 +1,13 @@
-package controllers.menus;
+package PvZ2.APproject.controllers.menus;
 
-import controllers.GameManagerController;
-import controllers.SeasonController;
-import enums.Commands;
-import enums.Menu;
-import models.App;
-import models.Level;
-import models.LevelData;
-import models.MiniGameRelated.VaseBreaker;
-import models.seasons.Season;
-import views.AppView;
+import PvZ2.APproject.controllers.GameManagerController;
+import PvZ2.APproject.enums.Commands;
+import PvZ2.APproject.enums.Menu;
+import PvZ2.APproject.models.App;
+import PvZ2.APproject.models.Level;
+import PvZ2.APproject.models.LevelData;
+import PvZ2.APproject.models.seasons.Season;
+import PvZ2.APproject.views.AppView;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

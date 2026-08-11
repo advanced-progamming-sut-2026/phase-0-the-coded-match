@@ -1,15 +1,16 @@
-package models.MiniGameRelated;
+package PvZ2.APproject.models.MiniGameRelated;
 
-import controllers.MiniGameController;
-import enums.Commands;
-import enums.LevelType;
-import models.GameMapRelated.GameMap;
-import models.LevelData;
-import models.plants.Plant;
-import models.plants.PlantRepository;
-import models.zombies.Zombie;
-import models.zombies.ZombieData;
-import models.zombies.ZombieRepository;
+import PvZ2.APproject.controllers.MiniGameController;
+import PvZ2.APproject.enums.Commands;
+import PvZ2.APproject.enums.LevelType;
+import PvZ2.APproject.models.GameMapRelated.GameMap;
+import PvZ2.APproject.models.GameMapRelated.Tile;
+import PvZ2.APproject.models.LevelData;
+import PvZ2.APproject.models.plants.Plant;
+import PvZ2.APproject.models.plants.PlantRepository;
+import PvZ2.APproject.models.zombies.Zombie;
+import PvZ2.APproject.models.zombies.ZombieData;
+import PvZ2.APproject.models.zombies.ZombieRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,7 +67,7 @@ public final class IZombie extends MiniGame {
                 setUpStage3(plants);
                 break;
         }
-        for (models.GameMapRelated.Tile[] row : getGameMap().getGrid()) for (models.GameMapRelated.Tile tile : row) if (tile.getPlant() != null) addActivePlants(tile.getPlant());
+        for (Tile[] row : getGameMap().getGrid()) for (Tile tile : row) if (tile.getPlant() != null) addActivePlants(tile.getPlant());
     }
 
     public void setUpStage1(PlantRepository plants) {

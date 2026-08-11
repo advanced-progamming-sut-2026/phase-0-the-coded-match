@@ -1,6 +1,4 @@
-package models;
-
-import models.plants.Plant;
+package PvZ2.APproject.models;
 
 public class DroppedSeedPacket extends SeedPacket{
     private final int x;

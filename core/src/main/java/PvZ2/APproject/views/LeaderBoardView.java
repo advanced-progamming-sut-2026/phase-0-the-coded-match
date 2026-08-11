@@ -1,7 +1,7 @@
-package views;
+package PvZ2.APproject.views;
 
-import controllers.LeaderBoardController;
-import enums.Commands;
+import PvZ2.APproject.controllers.LeaderBoardController;
+import PvZ2.APproject.enums.Commands;
 
 public class LeaderBoardView {
     public static StringBuilder stringBuilder = new StringBuilder();

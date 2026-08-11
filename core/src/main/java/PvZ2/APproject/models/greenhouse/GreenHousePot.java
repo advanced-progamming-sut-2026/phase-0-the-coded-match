@@ -1,4 +1,4 @@
-package models.greenhouse;
+package PvZ2.APproject.models.greenhouse;
 
 public class GreenHousePot {
     public int x;

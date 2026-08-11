@@ -1,12 +1,12 @@
-package models.zombies.strategies;
+package PvZ2.APproject.models.zombies.strategies;
 
-import controllers.GameManagerController;
-import enums.ZombieState;
-import models.Projectile;
-import models.plants.Plant;
-import models.zombies.Zombie;
-import models.zombies.ZombieData;
-import models.zombies.ZombieRepository;
+import PvZ2.APproject.controllers.GameManagerController;
+import PvZ2.APproject.enums.ZombieState;
+import PvZ2.APproject.models.Projectile;
+import PvZ2.APproject.models.plants.Plant;
+import PvZ2.APproject.models.zombies.Zombie;
+import PvZ2.APproject.models.zombies.ZombieData;
+import PvZ2.APproject.models.zombies.ZombieRepository;
 
 public class GiantBehavior implements ZombieBehavior {
     @Override

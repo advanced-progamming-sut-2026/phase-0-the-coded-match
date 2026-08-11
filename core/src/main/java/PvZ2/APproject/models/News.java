@@ -1,6 +1,4 @@
-package models;
-
-import java.util.List;
+package PvZ2.APproject.models;
 
 public class News {
     private boolean isUnread;

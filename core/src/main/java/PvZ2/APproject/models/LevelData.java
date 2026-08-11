@@ -1,9 +1,8 @@
-package models;
+package PvZ2.APproject.models;
 
-import enums.LevelType;
-import models.GameMapRelated.GameMap;
-import models.seasons.Season;
-import models.specialLevels.SpecialLevelStrategy;
+import PvZ2.APproject.enums.LevelType;
+import PvZ2.APproject.models.GameMapRelated.GameMap;
+import PvZ2.APproject.models.seasons.Season;
 
 import java.util.List;
 

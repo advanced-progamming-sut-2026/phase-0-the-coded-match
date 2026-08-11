@@ -1,18 +1,17 @@
-package models;
+package PvZ2.APproject.models;
 
-import controllers.GameManagerController;
-import controllers.QuestController;
-import controllers.SeasonController;
-import enums.Menu;
-import enums.Phases;
-import models.GameMapRelated.Lawnmower;
-import models.plants.Plant;
-import models.plants.PlantData;
-import models.plants.PlantRepository;
-import models.seasons.Season;
-import models.zombies.Zombie;
-import models.zombies.ZombieData;
-import models.zombies.ZombieRepository;
+import PvZ2.APproject.controllers.GameManagerController;
+import PvZ2.APproject.controllers.QuestController;
+import PvZ2.APproject.controllers.SeasonController;
+import PvZ2.APproject.enums.Menu;
+import PvZ2.APproject.enums.Phases;
+import PvZ2.APproject.models.GameMapRelated.Lawnmower;
+import PvZ2.APproject.models.plants.PlantData;
+import PvZ2.APproject.models.plants.PlantRepository;
+import PvZ2.APproject.models.seasons.Season;
+import PvZ2.APproject.models.zombies.Zombie;
+import PvZ2.APproject.models.zombies.ZombieData;
+import PvZ2.APproject.models.zombies.ZombieRepository;
 
 import java.io.Reader;
 import java.io.Writer;
@@ -20,7 +19,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import utils.AssetPaths;
+import PvZ2.APproject.utils.AssetPaths;
 
 public class App {
     private static User currentUser;

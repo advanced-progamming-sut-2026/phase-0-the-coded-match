@@ -1,8 +1,4 @@
-package models;
-
-import models.zombies.ZombieSpawnData;
-
-import java.util.List;
+package PvZ2.APproject.models;
 
 public class WavePatternData {
     private int waveNumber;

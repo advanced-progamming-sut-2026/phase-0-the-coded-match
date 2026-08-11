@@ -1,4 +1,4 @@
-package enums.ShopRelated;
+package PvZ2.APproject.enums.ShopRelated;
 
 public enum PaymentType{
     COIN("coins"),

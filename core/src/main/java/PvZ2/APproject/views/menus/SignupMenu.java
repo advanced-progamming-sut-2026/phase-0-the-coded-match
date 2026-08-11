@@ -1,7 +1,7 @@
-package views.menus;
+package PvZ2.APproject.views.menus;
 
-import controllers.menus.SignupMenuController;
-import enums.Commands;
+import PvZ2.APproject.controllers.menus.SignupMenuController;
+import PvZ2.APproject.enums.Commands;
 
 import java.util.Scanner;
 

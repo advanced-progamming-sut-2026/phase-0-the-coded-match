@@ -1,15 +1,15 @@
-package controllers.menus;
+package PvZ2.APproject.controllers.menus;
 
+import PvZ2.APproject.enums.Commands;
+import PvZ2.APproject.enums.Gender;
+import PvZ2.APproject.enums.SecurityQuestions;
+import PvZ2.APproject.models.App;
+import PvZ2.APproject.models.User;
+import PvZ2.APproject.utils.AssetPaths;
+import PvZ2.APproject.views.menus.SignupMenu;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import enums.Commands;
-import enums.Gender;
-import enums.SecurityQuestions;
-import models.App;
-import models.User;
-import utils.AssetPaths;
-import views.menus.SignupMenu;
 
 import java.io.*;
 import java.lang.reflect.Type;
@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static PvZ2.APproject.enums.Menu.LOGIN_MENU;
 
 public class SignupMenuController{
 
@@ -115,7 +117,7 @@ public class SignupMenuController{
             App.getUsers().get(App.getUsers().size() - 1).addQuestion(question, answer);
             SignupMenu.questionPicked = true;
             saveToJson();
-            App.setCurrentMenu(enums.Menu.LOGIN_MENU);
+            App.setCurrentMenu(LOGIN_MENU);
             message[0] = "question picked successfully";
         } else {
             message[0] = "not confirmed";

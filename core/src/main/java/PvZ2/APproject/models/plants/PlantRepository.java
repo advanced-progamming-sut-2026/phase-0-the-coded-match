@@ -1,11 +1,9 @@
-package models.plants;
+package PvZ2.APproject.models.plants;
 
+import PvZ2.APproject.enums.PlantCategory;
+import PvZ2.APproject.utils.AssetPaths;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
-import enums.PlantCategory;
-import models.zombies.ZombieRepository;
-import utils.AssetPaths;
 
 import java.io.IOException;
 import java.lang.reflect.Field;

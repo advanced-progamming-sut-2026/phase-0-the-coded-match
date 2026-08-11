@@ -1,6 +1,6 @@
-package models.factories;
+package PvZ2.APproject.models.factories;
 
-import models.zombies.strategies.*;
+import PvZ2.APproject.models.zombies.strategies.*;
 
 public class ZombieBehaviorFactory {
     public static ZombieBehavior getBehavior(String behaviorName) {

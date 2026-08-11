@@ -1,8 +1,6 @@
-package models.GameMapRelated;
+package PvZ2.APproject.models.GameMapRelated;
 
-import enums.PlantTag;
-import enums.TileType;
-import models.plants.Plant;
+import PvZ2.APproject.enums.TileType;
 
 import java.util.ArrayList;
 import java.util.List;

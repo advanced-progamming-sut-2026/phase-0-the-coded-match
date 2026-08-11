@@ -1,10 +1,10 @@
-package models.zombies.strategies;
+package PvZ2.APproject.models.zombies.strategies;
 
-import controllers.GameManagerController;
-import enums.ArmorType;
-import models.Projectile;
-import models.plants.Plant;
-import models.zombies.Zombie;
+import PvZ2.APproject.controllers.GameManagerController;
+import PvZ2.APproject.enums.ArmorType;
+import PvZ2.APproject.models.Projectile;
+import PvZ2.APproject.models.plants.Plant;
+import PvZ2.APproject.models.zombies.Zombie;
 
 import java.util.ArrayList;
 import java.util.Collections;

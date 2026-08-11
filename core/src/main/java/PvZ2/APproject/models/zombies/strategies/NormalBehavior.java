@@ -1,17 +1,16 @@
-package models.zombies.strategies;
+package PvZ2.APproject.models.zombies.strategies;
 
-import controllers.GameManagerController;
-import enums.PlantCategory;
-import enums.PlantTag;
-import enums.TileType;
-import enums.ZombieState;
-import models.GameMapRelated.GameMap;
-import models.GameMapRelated.Tile;
-import models.Level;
-import models.Projectile;
-import models.Sun;
-import models.plants.Plant;
-import models.zombies.Zombie;
+import PvZ2.APproject.controllers.GameManagerController;
+import PvZ2.APproject.enums.PlantCategory;
+import PvZ2.APproject.enums.PlantTag;
+import PvZ2.APproject.enums.TileType;
+import PvZ2.APproject.enums.ZombieState;
+import PvZ2.APproject.models.GameMapRelated.GameMap;
+import PvZ2.APproject.models.GameMapRelated.Tile;
+import PvZ2.APproject.models.Projectile;
+import PvZ2.APproject.models.Sun;
+import PvZ2.APproject.models.plants.Plant;
+import PvZ2.APproject.models.zombies.Zombie;
 
 import java.util.ArrayList;
 import java.util.Collections;

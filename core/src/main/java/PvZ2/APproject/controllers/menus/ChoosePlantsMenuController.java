@@ -1,9 +1,13 @@
-package controllers.menus;
+package PvZ2.APproject.controllers.menus;
 
-import controllers.GameManagerController;
-import enums.Menu;
-import models.*;
-import models.plants.*;
+import PvZ2.APproject.controllers.GameManagerController;
+import PvZ2.APproject.enums.Menu;
+import PvZ2.APproject.models.App;
+import PvZ2.APproject.models.Level;
+import PvZ2.APproject.models.LevelData;
+import PvZ2.APproject.models.User;
+import PvZ2.APproject.models.plants.PlantData;
+import PvZ2.APproject.models.plants.PlantRepository;
 
 public class ChoosePlantsMenuController {
 

@@ -1,12 +1,12 @@
-package controllers.menus;
+package PvZ2.APproject.controllers.menus;
 
-import controllers.QuestController;
-import enums.Commands;
-import enums.Menu;
-import enums.Phases;
-import enums.SecurityQuestions;
-import models.App;
-import models.User;
+import PvZ2.APproject.controllers.QuestController;
+import PvZ2.APproject.enums.Commands;
+import PvZ2.APproject.enums.Menu;
+import PvZ2.APproject.enums.Phases;
+import PvZ2.APproject.enums.SecurityQuestions;
+import PvZ2.APproject.models.App;
+import PvZ2.APproject.models.User;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

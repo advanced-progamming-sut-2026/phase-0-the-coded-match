@@ -1,14 +1,12 @@
-package views;
+package PvZ2.APproject.views;
 
-import controllers.LeaderBoardController;
-import controllers.menus.LoginMenuController;
-import controllers.menus.MenuController;
-import controllers.menus.SignupMenuController;
-import enums.Commands;
-import enums.Menu;
-import models.App;
-import models.greenhouse.GreenHouse;
-import views.menus.*;
+import PvZ2.APproject.controllers.menus.LoginMenuController;
+import PvZ2.APproject.controllers.menus.MenuController;
+import PvZ2.APproject.controllers.menus.SignupMenuController;
+import PvZ2.APproject.enums.Commands;
+import PvZ2.APproject.enums.Menu;
+import PvZ2.APproject.models.App;
+import PvZ2.APproject.views.menus.*;
 
 import java.util.Scanner;
 

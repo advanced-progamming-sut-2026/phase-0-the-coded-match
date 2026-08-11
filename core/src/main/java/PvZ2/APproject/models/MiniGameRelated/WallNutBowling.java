@@ -1,13 +1,13 @@
-package models.MiniGameRelated;
+package PvZ2.APproject.models.MiniGameRelated;
 
-import enums.BowlingNutType;
-import enums.LevelType;
-import models.GameMapRelated.GameMap;
-import models.LevelData;
-import models.RollingNut;
-import models.zombies.Zombie;
-import models.zombies.ZombieData;
-import models.zombies.ZombieRepository;
+import PvZ2.APproject.enums.BowlingNutType;
+import PvZ2.APproject.enums.LevelType;
+import PvZ2.APproject.models.GameMapRelated.GameMap;
+import PvZ2.APproject.models.LevelData;
+import PvZ2.APproject.models.RollingNut;
+import PvZ2.APproject.models.zombies.Zombie;
+import PvZ2.APproject.models.zombies.ZombieData;
+import PvZ2.APproject.models.zombies.ZombieRepository;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;

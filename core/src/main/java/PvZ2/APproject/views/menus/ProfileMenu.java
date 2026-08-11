@@ -1,7 +1,7 @@
-package views.menus;
+package PvZ2.APproject.views.menus;
 
-import controllers.menus.ProfileMenuController;
-import enums.Commands;
+import PvZ2.APproject.controllers.menus.ProfileMenuController;
+import PvZ2.APproject.enums.Commands;
 
 public class ProfileMenu {
     public static String[] message = new String[1];

@@ -1,8 +1,8 @@
-package controllers;
+package PvZ2.APproject.controllers;
 
-import enums.Commands;
-import models.App;
-import models.User;
+import PvZ2.APproject.enums.Commands;
+import PvZ2.APproject.models.App;
+import PvZ2.APproject.models.User;
 
 import java.util.ArrayList;
 import java.util.Comparator;

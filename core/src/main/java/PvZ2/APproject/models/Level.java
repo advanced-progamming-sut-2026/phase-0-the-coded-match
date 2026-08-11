@@ -1,15 +1,15 @@
-package models;
+package PvZ2.APproject.models;
 
-import controllers.ZombieWaveManager;
-import enums.LevelType;
-import models.GameMapRelated.GameMap;
-import models.GameMapRelated.SkySunProducer;
-import models.GameMapRelated.Tile;
-import models.plants.Plant;
-import models.seasons.Season;
-import models.specialLevels.*;
-import models.zombies.Barrel;
-import models.zombies.Zombie;
+import PvZ2.APproject.controllers.ZombieWaveManager;
+import PvZ2.APproject.enums.LevelType;
+import PvZ2.APproject.models.GameMapRelated.GameMap;
+import PvZ2.APproject.models.GameMapRelated.SkySunProducer;
+import PvZ2.APproject.models.GameMapRelated.Tile;
+import PvZ2.APproject.models.plants.Plant;
+import PvZ2.APproject.models.seasons.Season;
+import PvZ2.APproject.models.specialLevels.*;
+import PvZ2.APproject.models.zombies.Barrel;
+import PvZ2.APproject.models.zombies.Zombie;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +30,7 @@ public class Level {
     private Season currentSeason;
     private double currentTick;
     private ZombieWaveManager zombieWave;
-    private List<Projectile> activeProjectiles; 
+    private List<Projectile> activeProjectiles;
     private int plantFoodCount;
     private SkySunProducer skySunProducer;
     private List<Barrel> barrels;

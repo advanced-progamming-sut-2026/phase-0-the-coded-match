@@ -1,10 +1,11 @@
-package controllers;
+package PvZ2.APproject.controllers;
 
-import enums.Commands;
-import models.Level;
-import models.App;
-import models.MiniGameRelated.*;
-import views.MiniGameView;
+import PvZ2.APproject.controllers.menus.SignupMenuController;
+import PvZ2.APproject.enums.Commands;
+import PvZ2.APproject.models.Level;
+import PvZ2.APproject.models.App;
+import PvZ2.APproject.models.MiniGameRelated.*;
+import PvZ2.APproject.views.MiniGameView;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -75,7 +76,7 @@ public class MiniGameController {
         if (won) {
             if (App.getCurrentUser() != null) {
                 App.getCurrentUser().addMinigamesWon();
-                controllers.menus.SignupMenuController.saveToJson();
+                SignupMenuController.saveToJson();
             }
             MiniGameView.miniGameWon();
         } else {

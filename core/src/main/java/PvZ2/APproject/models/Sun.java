@@ -1,10 +1,10 @@
-package models;
+package PvZ2.APproject.models;
 
-import controllers.GameManagerController;
-import controllers.QuestController;
-import enums.SunType;
-import models.plants.Plant;
-import models.zombies.Zombie;
+import PvZ2.APproject.controllers.GameManagerController;
+import PvZ2.APproject.controllers.QuestController;
+import PvZ2.APproject.enums.SunType;
+import PvZ2.APproject.models.plants.Plant;
+import PvZ2.APproject.models.zombies.Zombie;
 
 public class Sun implements Update {
 

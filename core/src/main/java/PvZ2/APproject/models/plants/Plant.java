@@ -1,9 +1,9 @@
-package models.plants;
+package PvZ2.APproject.models.plants;
 
-import enums.PlantTag;
-import models.Update;
-import models.plants.abilities.PlantAbilityFactory;
-import models.plants.abilities.PlantAbilityHandler;
+import PvZ2.APproject.enums.PlantTag;
+import PvZ2.APproject.models.Update;
+import PvZ2.APproject.models.plants.abilities.PlantAbilityFactory;
+import PvZ2.APproject.models.plants.abilities.PlantAbilityHandler;
 
 import java.util.ArrayList;
 import java.util.List;

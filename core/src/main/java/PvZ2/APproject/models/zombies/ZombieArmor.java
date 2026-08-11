@@ -1,4 +1,4 @@
-package models.zombies;
+package PvZ2.APproject.models.zombies;
 
 public class ZombieArmor {
 

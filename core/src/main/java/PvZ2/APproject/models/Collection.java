@@ -1,7 +1,7 @@
-package models;
+package PvZ2.APproject.models;
 
-import models.MiniGameRelated.MiniGame;
-import models.plants.Plant;
+import PvZ2.APproject.models.MiniGameRelated.MiniGame;
+import PvZ2.APproject.models.plants.Plant;
 
 import java.util.ArrayList;
 import java.util.List;

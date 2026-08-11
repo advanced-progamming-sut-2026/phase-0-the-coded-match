@@ -1,7 +1,7 @@
-package models.MiniGameRelated;
+package PvZ2.APproject.models.MiniGameRelated;
 
-import models.Level;
-import models.LevelData;
+import PvZ2.APproject.models.Level;
+import PvZ2.APproject.models.LevelData;
 
 public abstract class MiniGame extends Level {
     public boolean isGameOver;

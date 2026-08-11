@@ -1,6 +1,6 @@
-package controllers;
+package PvZ2.APproject.controllers;
 
-import models.App;
+import PvZ2.APproject.models.App;
 
 public class GreenHouseController {
     public static void plantSeed(int x, int y) {

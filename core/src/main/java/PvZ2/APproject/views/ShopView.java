@@ -1,7 +1,7 @@
-package views;
+package PvZ2.APproject.views;
 
-import controllers.ShopController;
-import enums.Commands;
+import PvZ2.APproject.controllers.ShopController;
+import PvZ2.APproject.enums.Commands;
 
 public class ShopView {
     public static StringBuilder stringBuilder = new StringBuilder();

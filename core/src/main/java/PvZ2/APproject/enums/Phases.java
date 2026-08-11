@@ -1,4 +1,4 @@
-package enums;
+package PvZ2.APproject.enums;
 
 public enum Phases {
     RESETTING_PASSWORD,

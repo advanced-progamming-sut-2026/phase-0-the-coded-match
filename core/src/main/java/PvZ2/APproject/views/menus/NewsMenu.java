@@ -1,7 +1,7 @@
-package views.menus;
+package PvZ2.APproject.views.menus;
 
-import controllers.menus.NewsMenuController;
-import enums.Commands;
+import PvZ2.APproject.controllers.menus.NewsMenuController;
+import PvZ2.APproject.enums.Commands;
 
 public class NewsMenu {
     public static void check(String input) {

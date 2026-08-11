@@ -1,9 +1,9 @@
-package models.specialLevels;
+package PvZ2.APproject.models.specialLevels;
 
-import controllers.GameManagerController;
-import models.Level;
-import models.plants.Plant;
-import models.zombies.Zombie;
+import PvZ2.APproject.controllers.GameManagerController;
+import PvZ2.APproject.models.Level;
+import PvZ2.APproject.models.plants.Plant;
+import PvZ2.APproject.models.zombies.Zombie;
 
 import java.util.Random;
 

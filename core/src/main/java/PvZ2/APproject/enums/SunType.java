@@ -1,7 +1,4 @@
-package enums;
-
-import controllers.GameManagerController;
-import models.zombies.Zombie;
+package PvZ2.APproject.enums;
 
 public enum SunType {
     NORMAL("Normal" ,80, 25),

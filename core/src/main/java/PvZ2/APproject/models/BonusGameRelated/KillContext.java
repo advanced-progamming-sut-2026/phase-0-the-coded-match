@@ -1,4 +1,4 @@
-package models.BonusGameRelated;
+package PvZ2.APproject.models.BonusGameRelated;
 
 public class KillContext {
     public int zombiesKilledByOneShot;

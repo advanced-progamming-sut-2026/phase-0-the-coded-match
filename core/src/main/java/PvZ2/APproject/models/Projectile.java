@@ -1,10 +1,8 @@
-package models;
+package PvZ2.APproject.models;
 
-import controllers.GameManagerController;
-import enums.PlantCategory;
-import models.plants.Plant;
-import models.zombies.Barrel;
-import models.zombies.Zombie;
+import PvZ2.APproject.models.plants.Plant;
+import PvZ2.APproject.models.zombies.Barrel;
+import PvZ2.APproject.models.zombies.Zombie;
 
 public class Projectile {
     private double xCoordinate;

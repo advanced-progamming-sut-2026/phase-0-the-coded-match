@@ -1,7 +1,7 @@
-package models.zombies;
+package PvZ2.APproject.models.zombies;
 
-import enums.SeasonType;
-import enums.ZombieState;
+import PvZ2.APproject.enums.SeasonType;
+import PvZ2.APproject.enums.ZombieState;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package models.seasons;
+package PvZ2.APproject.models.seasons;
 
 public class SeasonFactory {
     public static Season createSeason(SeasonData data) {

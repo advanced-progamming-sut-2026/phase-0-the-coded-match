@@ -1,4 +1,4 @@
-package models.GameMapRelated;
+package PvZ2.APproject.models.GameMapRelated;
 
 public class Lawnmower {
     private int row;

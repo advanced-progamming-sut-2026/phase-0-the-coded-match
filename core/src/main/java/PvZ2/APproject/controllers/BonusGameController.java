@@ -1,16 +1,16 @@
-package controllers;
+package PvZ2.APproject.controllers;
 
-import controllers.menus.SignupMenuController;
-import enums.Menu;
-import models.App;
-import models.Level;
-import models.LevelData;
-import models.BonusGameRelated.BonusGame;
-import models.BonusGameRelated.KillContext;
-import models.seasons.Season;
-import models.zombies.Zombie;
-import models.zombies.ZombieData;
-import models.zombies.ZombieRepository;
+import PvZ2.APproject.controllers.menus.SignupMenuController;
+import PvZ2.APproject.enums.Menu;
+import PvZ2.APproject.models.App;
+import PvZ2.APproject.models.Level;
+import PvZ2.APproject.models.LevelData;
+import PvZ2.APproject.models.BonusGameRelated.BonusGame;
+import PvZ2.APproject.models.BonusGameRelated.KillContext;
+import PvZ2.APproject.models.seasons.Season;
+import PvZ2.APproject.models.zombies.Zombie;
+import PvZ2.APproject.models.zombies.ZombieData;
+import PvZ2.APproject.models.zombies.ZombieRepository;
 
 public class BonusGameController {
     private static BonusGame game;

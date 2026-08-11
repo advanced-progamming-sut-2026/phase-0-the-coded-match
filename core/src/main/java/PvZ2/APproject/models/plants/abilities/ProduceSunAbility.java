@@ -1,10 +1,10 @@
-package models.plants.abilities;
+package PvZ2.APproject.models.plants.abilities;
 
-import controllers.GameManagerController;
-import enums.SunType;
-import models.Level;
-import models.Sun;
-import models.plants.Plant;
+import PvZ2.APproject.controllers.GameManagerController;
+import PvZ2.APproject.enums.SunType;
+import PvZ2.APproject.models.Level;
+import PvZ2.APproject.models.Sun;
+import PvZ2.APproject.models.plants.Plant;
 
 public class ProduceSunAbility implements PlantAbilityHandler {
     private final boolean instant;

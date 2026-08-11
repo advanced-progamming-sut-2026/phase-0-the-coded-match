@@ -1,7 +1,7 @@
-package models.seasons;
+package PvZ2.APproject.models.seasons;
 
-import enums.SeasonType;
-import models.LevelData;
+import PvZ2.APproject.enums.SeasonType;
+import PvZ2.APproject.models.LevelData;
 
 import java.util.List;
 

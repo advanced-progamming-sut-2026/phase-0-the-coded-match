@@ -1,12 +1,12 @@
-package models;
+package PvZ2.APproject.models;
 
-import enums.QuestRelated.Priority;
-import enums.QuestRelated.QuestCategory;
-import enums.QuestRelated.QuestData;
-import enums.QuestRelated.QuestObjective;
-import enums.QuestRelated.RewardType;
-import models.plants.PlantData;
-import models.seasons.Season;
+import PvZ2.APproject.enums.QuestRelated.Priority;
+import PvZ2.APproject.enums.QuestRelated.QuestCategory;
+import PvZ2.APproject.enums.QuestRelated.QuestData;
+import PvZ2.APproject.enums.QuestRelated.QuestObjective;
+import PvZ2.APproject.enums.QuestRelated.RewardType;
+import PvZ2.APproject.models.plants.PlantData;
+import PvZ2.APproject.models.seasons.Season;
 
 public class Quest implements Comparable<Quest> {
     private QuestData questData;

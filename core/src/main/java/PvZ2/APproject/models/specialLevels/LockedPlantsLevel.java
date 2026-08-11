@@ -1,9 +1,7 @@
-package models.specialLevels;
+package PvZ2.APproject.models.specialLevels;
 
-import controllers.GameManagerController;
-import models.Level;
-import models.SeedPacket;
-import models.plants.Plant;
+import PvZ2.APproject.models.Level;
+import PvZ2.APproject.models.plants.Plant;
 
 import java.util.ArrayList;
 import java.util.List;

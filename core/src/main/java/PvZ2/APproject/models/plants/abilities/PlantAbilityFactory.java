@@ -1,6 +1,6 @@
-package models.plants.abilities;
+package PvZ2.APproject.models.plants.abilities;
 
-import enums.PlantAbility;
+import PvZ2.APproject.enums.PlantAbility;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,11 +1,11 @@
-package models.GameMapRelated;
+package PvZ2.APproject.models.GameMapRelated;
 
-import controllers.GameManagerController;
-import enums.SunType;
-import models.App;
-import models.Level;
-import models.Sun;
-import models.Update;
+import PvZ2.APproject.controllers.GameManagerController;
+import PvZ2.APproject.enums.SunType;
+import PvZ2.APproject.models.App;
+import PvZ2.APproject.models.Level;
+import PvZ2.APproject.models.Sun;
+import PvZ2.APproject.models.Update;
 
 import java.util.Random;
 

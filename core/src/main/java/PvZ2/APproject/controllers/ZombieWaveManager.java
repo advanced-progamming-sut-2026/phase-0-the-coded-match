@@ -1,12 +1,12 @@
-package controllers;
+package PvZ2.APproject.controllers;
 
-import models.App;
-import models.Level;
-import models.Update;
-import models.WavePatternData;
-import models.zombies.Barrel;
-import models.zombies.Zombie;
-import models.zombies.ZombieData;
+import PvZ2.APproject.models.App;
+import PvZ2.APproject.models.Level;
+import PvZ2.APproject.models.Update;
+import PvZ2.APproject.models.WavePatternData;
+import PvZ2.APproject.models.zombies.Barrel;
+import PvZ2.APproject.models.zombies.Zombie;
+import PvZ2.APproject.models.zombies.ZombieData;
 
 import java.util.ArrayList;
 import java.util.List;

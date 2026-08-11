@@ -1,7 +1,7 @@
-package models.specialLevels;
+package PvZ2.APproject.models.specialLevels;
 
-import models.Level;
-import models.plants.Plant;
+import PvZ2.APproject.models.Level;
+import PvZ2.APproject.models.plants.Plant;
 
 public class NightOpsStrategy implements SpecialLevelStrategy {
     @Override

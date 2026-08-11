@@ -1,8 +1,8 @@
-package controllers.menus;
+package PvZ2.APproject.controllers.menus;
 
-import models.App;
-import models.News;
-import models.User;
+import PvZ2.APproject.models.App;
+import PvZ2.APproject.models.News;
+import PvZ2.APproject.models.User;
 
 public class NewsMenuController{
 

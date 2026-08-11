@@ -1,4 +1,4 @@
-package enums;
+package PvZ2.APproject.enums;
 
 public enum Commands {
     ENTER_MENU("^\\s*menu\\s+enter\\s+(?<menuName>.*)\\s*$"),

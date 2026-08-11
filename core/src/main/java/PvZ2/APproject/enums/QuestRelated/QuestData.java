@@ -1,11 +1,10 @@
-package enums.QuestRelated;
+package PvZ2.APproject.enums.QuestRelated;
 
-import static enums.QuestRelated.Priority.*;
-import static enums.QuestRelated.QuestCategory.DAILY;
-import static enums.QuestRelated.QuestCategory.MAIN;
-import static enums.QuestRelated.QuestCategory.CHALLENGE;
-import static enums.QuestRelated.QuestObjective.*;
-import static enums.QuestRelated.RewardType.*;
+
+import static PvZ2.APproject.enums.QuestRelated.Priority.*;
+import static PvZ2.APproject.enums.QuestRelated.QuestCategory.*;
+import static PvZ2.APproject.enums.QuestRelated.QuestObjective.*;
+import static PvZ2.APproject.enums.QuestRelated.RewardType.*;
 
 public enum QuestData {
     DAILY_SUN_COLLECTOR("Daily Sun Collector", DAILY,

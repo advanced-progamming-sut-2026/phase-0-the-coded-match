@@ -1,7 +1,7 @@
-package views;
+package PvZ2.APproject.views;
 
-import controllers.menus.TravelLogController;
-import enums.Commands;
+import PvZ2.APproject.controllers.menus.TravelLogController;
+import PvZ2.APproject.enums.Commands;
 
 public class TravelLogView {
     public static void check(String input) {

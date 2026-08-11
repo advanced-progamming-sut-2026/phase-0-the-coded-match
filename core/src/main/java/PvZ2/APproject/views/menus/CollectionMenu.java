@@ -1,7 +1,7 @@
-package views.menus;
+package PvZ2.APproject.views.menus;
 
-import controllers.menus.CollectionMenuController;
-import enums.Commands;
+import PvZ2.APproject.controllers.menus.CollectionMenuController;
+import PvZ2.APproject.enums.Commands;
 
 public class CollectionMenu {
     public static void check(String input) {

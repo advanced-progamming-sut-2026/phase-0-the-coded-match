@@ -1,16 +1,16 @@
-package models.MiniGameRelated;
+package PvZ2.APproject.models.MiniGameRelated;
 
-import enums.LevelType;
-import enums.VaseType;
-import models.DroppedSeedPacket;
-import models.GameMapRelated.GameMap;
-import models.GameMapRelated.Tile;
-import models.LevelData;
-import models.plants.PlantData;
-import models.plants.PlantRepository;
-import models.zombies.Zombie;
-import models.zombies.ZombieData;
-import models.zombies.ZombieRepository;
+import PvZ2.APproject.enums.LevelType;
+import PvZ2.APproject.enums.VaseType;
+import PvZ2.APproject.models.DroppedSeedPacket;
+import PvZ2.APproject.models.GameMapRelated.GameMap;
+import PvZ2.APproject.models.GameMapRelated.Tile;
+import PvZ2.APproject.models.LevelData;
+import PvZ2.APproject.models.plants.PlantData;
+import PvZ2.APproject.models.plants.PlantRepository;
+import PvZ2.APproject.models.zombies.Zombie;
+import PvZ2.APproject.models.zombies.ZombieData;
+import PvZ2.APproject.models.zombies.ZombieRepository;
 
 import java.util.ArrayList;
 import java.util.Collections;

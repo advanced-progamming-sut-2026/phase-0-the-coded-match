@@ -1,11 +1,10 @@
-package models.seasons;
+package PvZ2.APproject.models.seasons;
 
-import enums.TileType;
-import models.GameMapRelated.Tile;
-import models.Level;
-import models.Projectile;
-import models.plants.Plant;
-import models.zombies.Zombie;
+import PvZ2.APproject.enums.TileType;
+import PvZ2.APproject.models.GameMapRelated.Tile;
+import PvZ2.APproject.models.Level;
+import PvZ2.APproject.models.plants.Plant;
+import PvZ2.APproject.models.zombies.Zombie;
 
 import java.util.Random;
 

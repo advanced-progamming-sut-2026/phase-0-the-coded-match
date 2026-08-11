@@ -1,9 +1,9 @@
-package models.zombies;
+package PvZ2.APproject.models.zombies;
 
-import controllers.GameManagerController;
-import models.Projectile;
-import models.Update;
-import models.plants.Plant;
+import PvZ2.APproject.controllers.GameManagerController;
+import PvZ2.APproject.models.Projectile;
+import PvZ2.APproject.models.Update;
+import PvZ2.APproject.models.plants.Plant;
 
 public class Barrel implements Update {
     private double x;

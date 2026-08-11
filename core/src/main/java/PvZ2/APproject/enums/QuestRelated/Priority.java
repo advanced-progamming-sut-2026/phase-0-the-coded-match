@@ -1,4 +1,4 @@
-package enums.QuestRelated;
+package PvZ2.APproject.enums.QuestRelated;
 
 public enum Priority{
     CRITICAL(1),

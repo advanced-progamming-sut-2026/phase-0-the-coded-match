@@ -1,9 +1,9 @@
-package models.plants.abilities;
+package PvZ2.APproject.models.plants.abilities;
 
-import controllers.GameManagerController;
-import models.Level;
-import models.plants.Plant;
-import models.zombies.Zombie;
+import PvZ2.APproject.controllers.GameManagerController;
+import PvZ2.APproject.models.Level;
+import PvZ2.APproject.models.plants.Plant;
+import PvZ2.APproject.models.zombies.Zombie;
 
 public class ExplodeAbility implements PlantAbilityHandler {
     private final int damageMultiplier;

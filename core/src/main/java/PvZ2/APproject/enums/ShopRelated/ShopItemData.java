@@ -1,6 +1,6 @@
-package enums.ShopRelated;
+package PvZ2.APproject.enums.ShopRelated;
 
-import static enums.ShopRelated.PaymentType.*;
+import static PvZ2.APproject.enums.ShopRelated.PaymentType.*;
 
 public enum ShopItemData {
     POT(1, "Pot", 2000, COIN, 1),

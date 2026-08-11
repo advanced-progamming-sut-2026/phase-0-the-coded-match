@@ -1,6 +1,6 @@
-package models.zombies;
+package PvZ2.APproject.models.zombies;
 
-import enums.ArmorType;
+import PvZ2.APproject.enums.ArmorType;
 
 public class ZombieArmorData {
     private ArmorType type;

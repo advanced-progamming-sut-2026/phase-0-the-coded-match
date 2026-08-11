@@ -1,12 +1,12 @@
-package models.zombies;
+package PvZ2.APproject.models.zombies;
 
-import controllers.GameManagerController;
-import controllers.QuestController;
-import enums.*;
-import models.*;
-import models.factories.ZombieBehaviorFactory;
-import models.plants.Plant;
-import models.zombies.strategies.ZombieBehavior;
+import PvZ2.APproject.controllers.GameManagerController;
+import PvZ2.APproject.controllers.QuestController;
+import PvZ2.APproject.enums.*;
+import PvZ2.APproject.models.*;
+import PvZ2.APproject.models.factories.ZombieBehaviorFactory;
+import PvZ2.APproject.models.plants.Plant;
+import PvZ2.APproject.models.zombies.strategies.ZombieBehavior;
 
 import java.util.ArrayList;
 import java.util.List;

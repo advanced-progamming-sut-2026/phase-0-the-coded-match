@@ -1,7 +1,7 @@
-package models;
+package PvZ2.APproject.models;
 
-import enums.BowlingNutType;
-import models.zombies.Zombie;
+import PvZ2.APproject.enums.BowlingNutType;
+import PvZ2.APproject.models.zombies.Zombie;
 
 public class RollingNut {
     private static final double MIN_Y = 1.0;

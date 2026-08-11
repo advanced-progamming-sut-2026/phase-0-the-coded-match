@@ -1,10 +1,9 @@
-package views;
+package PvZ2.APproject.views;
 
-import controllers.GameManagerController;
-import controllers.MiniGameController;
-import enums.Commands;
-import models.App;
-import models.MiniGameRelated.*;
+import PvZ2.APproject.controllers.GameManagerController;
+import PvZ2.APproject.controllers.MiniGameController;
+import PvZ2.APproject.enums.Commands;
+import PvZ2.APproject.models.MiniGameRelated.*;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

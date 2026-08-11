@@ -1,4 +1,4 @@
-package models.BonusGameRelated;
+package PvZ2.APproject.models.BonusGameRelated;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -6,8 +6,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-import models.zombies.ZombieData;
-import models.zombies.ZombieRepository;
+import PvZ2.APproject.models.zombies.ZombieData;
+import PvZ2.APproject.models.zombies.ZombieRepository;
 
 public class BonusGame {
     private int totalMioPoints;

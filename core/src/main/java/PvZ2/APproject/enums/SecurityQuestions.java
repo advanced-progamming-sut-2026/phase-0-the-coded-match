@@ -1,4 +1,4 @@
-package enums;
+package PvZ2.APproject.enums;
 
 public enum SecurityQuestions {
     QUESTION1(1 ,"What is your favorite color?"),
