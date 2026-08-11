@@ -162,3 +162,8 @@ Thumbs.db
 ## You could also add that configuration to the text in nativeimage.gradle .
 ## You should delete or comment out the next line if you have configuration in a different resource-config.json .
 **/resource-config.json
+
+## PvZ2 assets - keep local, don't commit
+/assets/IMAGES/768/
+/assets/ATLASES/
+/assets/Resources.json
