@@ -1,0 +1,2685 @@
+[
+  {
+    "id": "sunflower",
+    "name": "Sunflower",
+    "displayName": "Sunflower",
+    "category": "SUN_PRODUCER",
+    "tags": [
+      "DAY"
+    ],
+    "sunCost": 50,
+    "baseHp": 300,
+    "damage": 0,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 24.0,
+    "recharge": 5.0,
+    "behaviorType": "SUN_PRODUCER",
+    "abilities": [
+      "PRODUCE_SUN"
+    ],
+    "plantFoodAbilities": [
+      "INSTANT_SUN"
+    ],
+    "baseAbility": "Produces 50 sun every 24 seconds.",
+    "plantFoodEffect": "Instantly produces 150 sun.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Prod. Time -2s"
+      },
+      {
+        "level": 3,
+        "description": "HP +150"
+      },
+      {
+        "level": 4,
+        "description": "Double Sun Chance"
+      }
+    ],
+    "description": "Produces 50 sun every 24 seconds."
+  },
+  {
+    "id": "twin_sunflower",
+    "name": "Twin Sunflower",
+    "displayName": "Twin Sunflower",
+    "category": "SUN_PRODUCER",
+    "tags": [
+      "DAY"
+    ],
+    "sunCost": 125,
+    "baseHp": 300,
+    "damage": 0,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 24.0,
+    "recharge": 15.0,
+    "behaviorType": "SUN_PRODUCER",
+    "abilities": [
+      "PRODUCE_SUN"
+    ],
+    "plantFoodAbilities": [
+      "INSTANT_SUN"
+    ],
+    "baseAbility": "Produces 100 sun each production cycle.",
+    "plantFoodEffect": "Instantly produces 250 sun.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Prod. Time -2s"
+      },
+      {
+        "level": 3,
+        "description": "HP +150"
+      },
+      {
+        "level": 4,
+        "description": "Cost -25"
+      }
+    ],
+    "description": "Produces 100 sun each production cycle."
+  },
+  {
+    "id": "sun_shroom",
+    "name": "Sun-shroom",
+    "displayName": "Sun-shroom",
+    "category": "SUN_PRODUCER",
+    "tags": [
+      "SHROOM",
+      "WRAMP_UP",
+      "NIGHT"
+    ],
+    "sunCost": 25,
+    "baseHp": 300,
+    "damage": 0,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 24.0,
+    "recharge": 5.0,
+    "behaviorType": "SUN_PRODUCER",
+    "abilities": [
+      "PRODUCE_SUN"
+    ],
+    "plantFoodAbilities": [
+      "INSTANT_SUN"
+    ],
+    "baseAbility": "Grows through three stages and produces 25, 50, then 75 sun. Stage 2: 24s; Stage 3: 72s.",
+    "plantFoodEffect": "Immediately reaches its final growth stage and produces 225 sun.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Grow Time -5s"
+      },
+      {
+        "level": 3,
+        "description": "HP +150"
+      },
+      {
+        "level": 4,
+        "description": "Double Sun Chance"
+      }
+    ],
+    "description": "Grows through three stages and produces 25, 50, then 75 sun. Stage 2: 24s; Stage 3: 72s."
+  },
+  {
+    "id": "primal_sunflower",
+    "name": "Primal Sunflower",
+    "displayName": "Primal Sunflower",
+    "category": "SUN_PRODUCER",
+    "tags": [],
+    "sunCost": 75,
+    "baseHp": 300,
+    "damage": 0,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 24.0,
+    "recharge": 5.0,
+    "behaviorType": "SUN_PRODUCER",
+    "abilities": [
+      "PRODUCE_SUN"
+    ],
+    "plantFoodAbilities": [
+      "INSTANT_SUN"
+    ],
+    "baseAbility": "Produces a large 75-sun orb from the start.",
+    "plantFoodEffect": "Instantly produces 225 sun.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Prod. Time -2s"
+      },
+      {
+        "level": 3,
+        "description": "HP +150"
+      },
+      {
+        "level": 4,
+        "description": "Cost -25"
+      }
+    ],
+    "description": "Produces a large 75-sun orb from the start."
+  },
+  {
+    "id": "gold_bloom",
+    "name": "Gold Bloom",
+    "displayName": "Gold Bloom",
+    "category": "SUN_PRODUCER",
+    "tags": [],
+    "sunCost": 0,
+    "baseHp": 0,
+    "damage": 0,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 0.0,
+    "recharge": 75.0,
+    "behaviorType": "SUN_PRODUCER",
+    "abilities": [
+      "PRODUCE_SUN"
+    ],
+    "plantFoodAbilities": [],
+    "baseAbility": "Instantly produces 375 sun once, then disappears.",
+    "plantFoodEffect": "None; this is an instant-use plant.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Cooldown -5s"
+      },
+      {
+        "level": 3,
+        "description": "Sun +50"
+      },
+      {
+        "level": 4,
+        "description": "Cost -25"
+      }
+    ],
+    "description": "Instantly produces 375 sun once, then disappears."
+  },
+  {
+    "id": "peashooter",
+    "name": "Peashooter",
+    "displayName": "Peashooter",
+    "category": "SHOOTER",
+    "tags": [
+      "PEA"
+    ],
+    "sunCost": 100,
+    "baseHp": 300,
+    "damage": 20,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 1.5,
+    "recharge": 5.0,
+    "behaviorType": "SHOOTER",
+    "abilities": [
+      "SHOOT_FORWARD"
+    ],
+    "plantFoodAbilities": [
+      "RAPID_SHOOT"
+    ],
+    "baseAbility": "Fires a pea straight ahead.",
+    "plantFoodEffect": "Rapidly fires peas for several seconds.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Dmg +10"
+      },
+      {
+        "level": 3,
+        "description": "HP +150"
+      },
+      {
+        "level": 4,
+        "description": "Cost -25"
+      }
+    ],
+    "description": "Fires a pea straight ahead."
+  },
+  {
+    "id": "repeater",
+    "name": "Repeater",
+    "displayName": "Repeater",
+    "category": "SHOOTER",
+    "tags": [
+      "PEA"
+    ],
+    "sunCost": 200,
+    "baseHp": 300,
+    "damage": 20,
+    "projectileCount": 2,
+    "projectileSpeed": 0.5,
+    "actionInterval": 1.5,
+    "recharge": 5.0,
+    "behaviorType": "SHOOTER",
+    "abilities": [
+      "DOUBLE_SHOT"
+    ],
+    "plantFoodAbilities": [
+      "RAPID_SHOOT"
+    ],
+    "baseAbility": "Fires two peas in quick succession.",
+    "plantFoodEffect": "Fires a heavy barrage and one giant pea dealing 20x damage.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Dmg +10"
+      },
+      {
+        "level": 3,
+        "description": "HP +200"
+      },
+      {
+        "level": 4,
+        "description": "Cost -25"
+      }
+    ],
+    "description": "Fires two peas in quick succession."
+  },
+  {
+    "id": "threepeater",
+    "name": "Threepeater",
+    "displayName": "Threepeater",
+    "category": "SHOOTER",
+    "tags": [
+      "PEA"
+    ],
+    "sunCost": 300,
+    "baseHp": 300,
+    "damage": 20,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 1.5,
+    "recharge": 5.0,
+    "behaviorType": "SHOOTER",
+    "abilities": [
+      "TRIPLE_LANE_SHOT"
+    ],
+    "plantFoodAbilities": [
+      "RAPID_SHOOT"
+    ],
+    "baseAbility": "Fires peas simultaneously across three adjacent lanes.",
+    "plantFoodEffect": "Fires a fan-shaped barrage across all lanes.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Cost -25"
+      },
+      {
+        "level": 3,
+        "description": "Dmg +10"
+      },
+      {
+        "level": 4,
+        "description": "HP +200"
+      }
+    ],
+    "description": "Fires peas simultaneously across three adjacent lanes."
+  },
+  {
+    "id": "snow_pea",
+    "name": "Snow Pea",
+    "displayName": "Snow Pea",
+    "category": "SHOOTER",
+    "tags": [
+      "ICE",
+      "PEA"
+    ],
+    "sunCost": 150,
+    "baseHp": 300,
+    "damage": 20,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 1.5,
+    "recharge": 5.0,
+    "behaviorType": "SHOOTER",
+    "abilities": [
+      "SHOOT_FORWARD",
+      "CHILL"
+    ],
+    "plantFoodAbilities": [
+      "RAPID_SHOOT"
+    ],
+    "baseAbility": "Fires chilling peas that slow zombies.",
+    "plantFoodEffect": "Freezes the lane and fires an icy barrage.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Dmg +10"
+      },
+      {
+        "level": 3,
+        "description": "Chill Time +2s"
+      },
+      {
+        "level": 4,
+        "description": "Cost -25"
+      }
+    ],
+    "description": "Fires chilling peas that slow zombies."
+  },
+  {
+    "id": "rotobaga",
+    "name": "Rotobaga",
+    "displayName": "Rotobaga",
+    "category": "SHOOTER",
+    "tags": [],
+    "sunCost": 150,
+    "baseHp": 300,
+    "damage": 10,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 1.5,
+    "recharge": 5.0,
+    "behaviorType": "SHOOTER",
+    "abilities": [
+      "SHOOT_FORWARD"
+    ],
+    "plantFoodAbilities": [
+      "RAPID_SHOOT"
+    ],
+    "baseAbility": "Fires diagonally in four directions.",
+    "plantFoodEffect": "Fires a barrage in all four diagonal directions.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Dmg +10"
+      },
+      {
+        "level": 3,
+        "description": "HP +150"
+      },
+      {
+        "level": 4,
+        "description": "Cost -25"
+      }
+    ],
+    "description": "Fires diagonally in four directions."
+  },
+  {
+    "id": "pea_pod",
+    "name": "Pea Pod",
+    "displayName": "Pea Pod",
+    "category": "SHOOTER",
+    "tags": [
+      "PEA",
+      "STACK"
+    ],
+    "sunCost": 125,
+    "baseHp": 300,
+    "damage": 20,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 1.5,
+    "recharge": 5.0,
+    "behaviorType": "SHOOTER",
+    "abilities": [
+      "SHOOT_FORWARD"
+    ],
+    "plantFoodAbilities": [
+      "RAPID_SHOOT"
+    ],
+    "baseAbility": "Fires one pea per stacked head, up to five heads.",
+    "plantFoodEffect": "Fires one giant pea per head, each dealing 20x damage.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Dmg +10"
+      },
+      {
+        "level": 3,
+        "description": "HP +200"
+      },
+      {
+        "level": 4,
+        "description": "Cost -25"
+      }
+    ],
+    "description": "Fires one pea per stacked head, up to five heads."
+  },
+  {
+    "id": "split_pea",
+    "name": "Split Pea",
+    "displayName": "Split Pea",
+    "category": "SHOOTER",
+    "tags": [
+      "PEA"
+    ],
+    "sunCost": 125,
+    "baseHp": 300,
+    "damage": 20,
+    "projectileCount": 2,
+    "projectileSpeed": 0.5,
+    "actionInterval": 1.5,
+    "recharge": 5.0,
+    "behaviorType": "SHOOTER",
+    "abilities": [
+      "DOUBLE_SHOT"
+    ],
+    "plantFoodAbilities": [
+      "RAPID_SHOOT"
+    ],
+    "baseAbility": "Fires one pea forward and two backward.",
+    "plantFoodEffect": "Fires simultaneous barrages forward and backward.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Dmg +10"
+      },
+      {
+        "level": 3,
+        "description": "HP +200"
+      },
+      {
+        "level": 4,
+        "description": "Cost -25"
+      }
+    ],
+    "description": "Fires one pea forward and two backward."
+  },
+  {
+    "id": "citron",
+    "name": "Citron",
+    "displayName": "Citron",
+    "category": "SHOOTER",
+    "tags": [
+      "CHARGE"
+    ],
+    "sunCost": 350,
+    "baseHp": 300,
+    "damage": 800,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 9.0,
+    "recharge": 5.0,
+    "behaviorType": "SHOOTER",
+    "abilities": [
+      "SHOOT_FORWARD"
+    ],
+    "plantFoodAbilities": [
+      "RAPID_SHOOT"
+    ],
+    "baseAbility": "Charges and fires a heavy shot straight ahead.",
+    "plantFoodEffect": "Fires a plasma ball that clears the entire lane.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Charge Time -1s"
+      },
+      {
+        "level": 3,
+        "description": "Dmg +150"
+      },
+      {
+        "level": 4,
+        "description": "Cost -50"
+      }
+    ],
+    "description": "Charges and fires a heavy shot straight ahead."
+  },
+  {
+    "id": "caulipower",
+    "name": "Caulipower",
+    "displayName": "Caulipower",
+    "category": "HOMING",
+    "tags": [
+      "MAGIC",
+      "CHARGE"
+    ],
+    "sunCost": 250,
+    "baseHp": 300,
+    "damage": 0,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 12.0,
+    "recharge": 15.0,
+    "behaviorType": "HOMING",
+    "abilities": [
+      "HOMING_ATTACK"
+    ],
+    "plantFoodAbilities": [
+      "POWER_HOMING"
+    ],
+    "baseAbility": "Launches magical shots at random targets, ignores obstacles, and hypnotizes zombies.",
+    "plantFoodEffect": "Hypnotizes several random zombies in the garden.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Cooldown -2s"
+      },
+      {
+        "level": 3,
+        "description": "HP +150"
+      },
+      {
+        "level": 4,
+        "description": "Cost -50"
+      }
+    ],
+    "description": "Launches magical shots at random targets, ignores obstacles, and hypnotizes zombies."
+  },
+  {
+    "id": "electric_blueberry",
+    "name": "Electric Blueberry",
+    "displayName": "Electric Blueberry",
+    "category": "HOMING",
+    "tags": [
+      "CHARGE"
+    ],
+    "sunCost": 150,
+    "baseHp": 300,
+    "damage": 5000,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 12.0,
+    "recharge": 15.0,
+    "behaviorType": "HOMING",
+    "abilities": [
+      "HOMING_ATTACK"
+    ],
+    "plantFoodAbilities": [
+      "POWER_HOMING"
+    ],
+    "baseAbility": "Calls lightning on a random zombie and instantly defeats it.",
+    "plantFoodEffect": "Instantly defeats three random zombies.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Cooldown -2s"
+      },
+      {
+        "level": 3,
+        "description": "Target Priority Up"
+      },
+      {
+        "level": 4,
+        "description": "Cost -25"
+      }
+    ],
+    "description": "Calls lightning on a random zombie and instantly defeats it."
+  },
+  {
+    "id": "bowling_bulb",
+    "name": "Bowling Bulb",
+    "displayName": "Bowling Bulb",
+    "category": "SHOOTER",
+    "tags": [
+      "CHARGE"
+    ],
+    "sunCost": 200,
+    "baseHp": 300,
+    "damage": 40,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 2.0,
+    "recharge": 5.0,
+    "behaviorType": "SHOOTER",
+    "abilities": [
+      "SHOOT_FORWARD"
+    ],
+    "plantFoodAbilities": [
+      "RAPID_SHOOT"
+    ],
+    "baseAbility": "Fires three bulb types that ricochet between lanes. Cyan: 2s; Blue: 5s; Orange: 10s.",
+    "plantFoodEffect": "Fires three large explosive bulbs that ricochet.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Regen -1s"
+      },
+      {
+        "level": 3,
+        "description": "Dmg +15"
+      },
+      {
+        "level": 4,
+        "description": "Cost -25"
+      }
+    ],
+    "description": "Fires three bulb types that ricochet between lanes. Cyan: 2s; Blue: 5s; Orange: 10s."
+  },
+  {
+    "id": "cactus",
+    "name": "Cactus",
+    "displayName": "Cactus",
+    "category": "STRIKE_TROUGH",
+    "tags": [],
+    "sunCost": 175,
+    "baseHp": 300,
+    "damage": 30,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 1.5,
+    "recharge": 5.0,
+    "behaviorType": "STRIKE_TROUGH",
+    "abilities": [
+      "PIERCE_SHOT"
+    ],
+    "plantFoodAbilities": [
+      "RAPID_SHOOT"
+    ],
+    "baseAbility": "Fires a piercing spike through up to three zombies.",
+    "plantFoodEffect": "Fires high-damage electric spikes with unlimited piercing.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Pierce +1"
+      },
+      {
+        "level": 3,
+        "description": "Dmg +10"
+      },
+      {
+        "level": 4,
+        "description": "Cost -25"
+      }
+    ],
+    "description": "Fires a piercing spike through up to three zombies."
+  },
+  {
+    "id": "fire_peashooter",
+    "name": "Fire Peashooter",
+    "displayName": "Fire Peashooter",
+    "category": "SHOOTER",
+    "tags": [
+      "FIRE",
+      "PEA"
+    ],
+    "sunCost": 175,
+    "baseHp": 300,
+    "damage": 40,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 1.5,
+    "recharge": 5.0,
+    "behaviorType": "SHOOTER",
+    "abilities": [
+      "SHOOT_FORWARD",
+      "FIRE"
+    ],
+    "plantFoodAbilities": [
+      "RAPID_SHOOT"
+    ],
+    "baseAbility": "Fires flaming peas that deal double damage and melt ice.",
+    "plantFoodEffect": "Fires a flaming barrage across the lane.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Dmg +10"
+      },
+      {
+        "level": 3,
+        "description": "HP +200"
+      },
+      {
+        "level": 4,
+        "description": "Cost -25"
+      }
+    ],
+    "description": "Fires flaming peas that deal double damage and melt ice."
+  },
+  {
+    "id": "starfruit",
+    "name": "Starfruit",
+    "displayName": "Starfruit",
+    "category": "SHOOTER",
+    "tags": [],
+    "sunCost": 150,
+    "baseHp": 300,
+    "damage": 20,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 1.5,
+    "recharge": 5.0,
+    "behaviorType": "SHOOTER",
+    "abilities": [
+      "SHOOT_FORWARD"
+    ],
+    "plantFoodAbilities": [
+      "RAPID_SHOOT"
+    ],
+    "baseAbility": "Fires stars in five directions, including backward.",
+    "plantFoodEffect": "Fires a star barrage in every direction.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Atk Speed +10%"
+      },
+      {
+        "level": 3,
+        "description": "Dmg +10"
+      },
+      {
+        "level": 4,
+        "description": "Cost -25"
+      }
+    ],
+    "description": "Fires stars in five directions, including backward."
+  },
+  {
+    "id": "goo_peashooter",
+    "name": "Goo Peashooter",
+    "displayName": "Goo Peashooter",
+    "category": "SHOOTER",
+    "tags": [
+      "POISON"
+    ],
+    "sunCost": 125,
+    "baseHp": 300,
+    "damage": 20,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 1.5,
+    "recharge": 5.0,
+    "behaviorType": "SHOOTER",
+    "abilities": [
+      "SHOOT_FORWARD",
+      "POISON"
+    ],
+    "plantFoodAbilities": [
+      "RAPID_SHOOT"
+    ],
+    "baseAbility": "Fires toxic peas that ignore armor and deal damage over time.",
+    "plantFoodEffect": "Fires a toxic barrage that immediately poisons zombies.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Dmg/Tick +5"
+      },
+      {
+        "level": 3,
+        "description": "HP +150"
+      },
+      {
+        "level": 4,
+        "description": "Cost -25"
+      }
+    ],
+    "description": "Fires toxic peas that ignore armor and deal damage over time."
+  },
+  {
+    "id": "mega_gatling_pea",
+    "name": "Mega Gatling Pea",
+    "displayName": "Mega Gatling Pea",
+    "category": "SHOOTER",
+    "tags": [
+      "PEA"
+    ],
+    "sunCost": 400,
+    "baseHp": 300,
+    "damage": 20,
+    "projectileCount": 4,
+    "projectileSpeed": 0.5,
+    "actionInterval": 1.5,
+    "recharge": 5.0,
+    "behaviorType": "SHOOTER",
+    "abilities": [
+      "QUAD_SHOT"
+    ],
+    "plantFoodAbilities": [
+      "RAPID_SHOOT"
+    ],
+    "baseAbility": "Rapidly fires four peas in succession.",
+    "plantFoodEffect": "Fires a massive sustained barrage plus four giant peas.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Dmg +10"
+      },
+      {
+        "level": 3,
+        "description": "Plant Food Chance +5%"
+      },
+      {
+        "level": 4,
+        "description": "Cost -50"
+      }
+    ],
+    "description": "Rapidly fires four peas in succession."
+  },
+  {
+    "id": "sea_shroom",
+    "name": "Sea-shroom",
+    "displayName": "Sea-shroom",
+    "category": "SHOOTER",
+    "tags": [
+      "SHROOM",
+      "WATER"
+    ],
+    "sunCost": 0,
+    "baseHp": 300,
+    "damage": 20,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 1.5,
+    "recharge": 15.0,
+    "behaviorType": "SHOOTER",
+    "abilities": [
+      "SHOOT_FORWARD"
+    ],
+    "plantFoodAbilities": [
+      "RAPID_SHOOT"
+    ],
+    "baseAbility": "Fires short-range spores and expires after 60 seconds.",
+    "plantFoodEffect": "Fires a barrage and resets the lifetime of every Sea-shroom.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Range +1 Tile"
+      },
+      {
+        "level": 3,
+        "description": "Dmg +5"
+      },
+      {
+        "level": 4,
+        "description": "Lifespan +10s"
+      }
+    ],
+    "description": "Fires short-range spores and expires after 60 seconds."
+  },
+  {
+    "id": "puff_shroom",
+    "name": "Puff-shroom",
+    "displayName": "Puff-shroom",
+    "category": "SHOOTER",
+    "tags": [
+      "SHROOM"
+    ],
+    "sunCost": 0,
+    "baseHp": 300,
+    "damage": 20,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 1.5,
+    "recharge": 5.0,
+    "behaviorType": "SHOOTER",
+    "abilities": [
+      "SHOOT_FORWARD"
+    ],
+    "plantFoodAbilities": [
+      "RAPID_SHOOT"
+    ],
+    "baseAbility": "Fires short-range spores and expires after 60 seconds.",
+    "plantFoodEffect": "Fires a barrage and resets the lifetime of every Puff-shroom.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Lifespan +10s"
+      },
+      {
+        "level": 3,
+        "description": "Dmg +10"
+      },
+      {
+        "level": 4,
+        "description": "Range +1 Tile"
+      }
+    ],
+    "description": "Fires short-range spores and expires after 60 seconds."
+  },
+  {
+    "id": "fume_shroom",
+    "name": "Fume-shroom",
+    "displayName": "Fume-shroom",
+    "category": "STRIKE_TROUGH",
+    "tags": [
+      "SHROOM"
+    ],
+    "sunCost": 125,
+    "baseHp": 300,
+    "damage": 20,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 1.5,
+    "recharge": 5.0,
+    "behaviorType": "STRIKE_TROUGH",
+    "abilities": [
+      "PIERCE_SHOT"
+    ],
+    "plantFoodAbilities": [
+      "RAPID_SHOOT"
+    ],
+    "baseAbility": "Fires penetrating fumes at medium range.",
+    "plantFoodEffect": "Releases a huge cloud of fumes that pushes zombies backward.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Range +1 Tile"
+      },
+      {
+        "level": 3,
+        "description": "Dmg +10"
+      },
+      {
+        "level": 4,
+        "description": "Cost -25"
+      }
+    ],
+    "description": "Fires penetrating fumes at medium range."
+  },
+  {
+    "id": "cabbage_pult",
+    "name": "Cabbage-pult",
+    "displayName": "Cabbage-pult",
+    "category": "LOBBER",
+    "tags": [],
+    "sunCost": 100,
+    "baseHp": 300,
+    "damage": 40,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 2.9,
+    "recharge": 5.0,
+    "behaviorType": "LOBBER",
+    "abilities": [
+      "LOB"
+    ],
+    "plantFoodAbilities": [
+      "RAPID_LOB"
+    ],
+    "baseAbility": "Lobs cabbages over obstacles.",
+    "plantFoodEffect": "Lobs cabbages at several random zombies.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Dmg +10"
+      },
+      {
+        "level": 3,
+        "description": "Atk Speed +15%"
+      },
+      {
+        "level": 4,
+        "description": "HP +150"
+      }
+    ],
+    "description": "Lobs cabbages over obstacles."
+  },
+  {
+    "id": "kernel_pult",
+    "name": "Kernel-pult",
+    "displayName": "Kernel-pult",
+    "category": "LOBBER",
+    "tags": [],
+    "sunCost": 100,
+    "baseHp": 300,
+    "damage": 20,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 2.9,
+    "recharge": 5.0,
+    "behaviorType": "LOBBER",
+    "abilities": [
+      "LOB"
+    ],
+    "plantFoodAbilities": [
+      "RAPID_LOB"
+    ],
+    "baseAbility": "Lobs either low-damage kernels or butter that temporarily stuns zombies.",
+    "plantFoodEffect": "Drops butter on every zombie on the lawn.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Butter +5%"
+      },
+      {
+        "level": 3,
+        "description": "Dmg +10"
+      },
+      {
+        "level": 4,
+        "description": "HP +150"
+      }
+    ],
+    "description": "Lobs either low-damage kernels or butter that temporarily stuns zombies."
+  },
+  {
+    "id": "melon_pult",
+    "name": "Melon-pult",
+    "displayName": "Melon-pult",
+    "category": "LOBBER",
+    "tags": [
+      "AOE"
+    ],
+    "sunCost": 325,
+    "baseHp": 300,
+    "damage": 80,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 2.9,
+    "recharge": 5.0,
+    "behaviorType": "LOBBER",
+    "abilities": [
+      "LOB",
+      "AOE"
+    ],
+    "plantFoodAbilities": [
+      "RAPID_LOB"
+    ],
+    "baseAbility": "Lobs heavy melons that deal splash damage.",
+    "plantFoodEffect": "Lobs giant melons at random zombies.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Cost -25"
+      },
+      {
+        "level": 3,
+        "description": "AoE Dmg +15"
+      },
+      {
+        "level": 4,
+        "description": "Dmg +30"
+      }
+    ],
+    "description": "Lobs heavy melons that deal splash damage."
+  },
+  {
+    "id": "winter_melon",
+    "name": "Winter Melon",
+    "displayName": "Winter Melon",
+    "category": "LOBBER",
+    "tags": [
+      "ICE",
+      "AOE"
+    ],
+    "sunCost": 500,
+    "baseHp": 300,
+    "damage": 80,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 2.9,
+    "recharge": 5.0,
+    "behaviorType": "LOBBER",
+    "abilities": [
+      "LOB",
+      "CHILL",
+      "AOE"
+    ],
+    "plantFoodAbilities": [
+      "RAPID_LOB"
+    ],
+    "baseAbility": "Lobs icy melons that deal splash damage and slow zombies.",
+    "plantFoodEffect": "Lobs giant frozen melons at random zombies.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Cost -50"
+      },
+      {
+        "level": 3,
+        "description": "AoE Dmg +15"
+      },
+      {
+        "level": 4,
+        "description": "Cost -25"
+      }
+    ],
+    "description": "Lobs icy melons that deal splash damage and slow zombies."
+  },
+  {
+    "id": "pepper_pult",
+    "name": "Pepper-pult",
+    "displayName": "Pepper-pult",
+    "category": "LOBBER",
+    "tags": [
+      "FIRE",
+      "AOE"
+    ],
+    "sunCost": 200,
+    "baseHp": 300,
+    "damage": 50,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 2.9,
+    "recharge": 5.0,
+    "behaviorType": "LOBBER",
+    "abilities": [
+      "LOB",
+      "FIRE",
+      "AOE"
+    ],
+    "plantFoodAbilities": [
+      "RAPID_LOB"
+    ],
+    "baseAbility": "Lobs peppers that deal splash damage and warm nearby tiles.",
+    "plantFoodEffect": "Lobs large peppers at three random zombies.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Dmg +15"
+      },
+      {
+        "level": 3,
+        "description": "Warmth Radius +1"
+      },
+      {
+        "level": 4,
+        "description": "Cost -25"
+      }
+    ],
+    "description": "Lobs peppers that deal splash damage and warm nearby tiles."
+  },
+  {
+    "id": "potato_mine",
+    "name": "Potato Mine",
+    "displayName": "Potato Mine",
+    "category": "EXPLOSIVE",
+    "tags": [
+      "TRAP",
+      "CHARGE"
+    ],
+    "sunCost": 25,
+    "baseHp": 300,
+    "damage": 1800,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 0.0,
+    "recharge": 25.0,
+    "behaviorType": "EXPLOSIVE",
+    "abilities": [
+      "EXPLODE"
+    ],
+    "plantFoodAbilities": [
+      "POWER_EXPLODE"
+    ],
+    "baseAbility": "Arms after 15 seconds and explodes on contact.",
+    "plantFoodEffect": "Arms instantly and creates two additional mines.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Arm Time -3s"
+      },
+      {
+        "level": 3,
+        "description": "Cooldown -5s"
+      },
+      {
+        "level": 4,
+        "description": "Dmg +600"
+      }
+    ],
+    "description": "Arms after 15 seconds and explodes on contact."
+  },
+  {
+    "id": "primal_potato_mine",
+    "name": "Primal Potato Mine",
+    "displayName": "Primal Potato Mine",
+    "category": "EXPLOSIVE",
+    "tags": [
+      "TRAP",
+      "CHARGE"
+    ],
+    "sunCost": 50,
+    "baseHp": 300,
+    "damage": 2400,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 0.0,
+    "recharge": 5.0,
+    "behaviorType": "EXPLOSIVE",
+    "abilities": [
+      "EXPLODE"
+    ],
+    "plantFoodAbilities": [
+      "POWER_EXPLODE"
+    ],
+    "baseAbility": "Arms after 5 seconds and explodes in a 3x3 area.",
+    "plantFoodEffect": "Arms instantly and launches two mines to other tiles.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Arm Time -1s"
+      },
+      {
+        "level": 3,
+        "description": "Cooldown -3s"
+      },
+      {
+        "level": 4,
+        "description": "Dmg +400"
+      }
+    ],
+    "description": "Arms after 5 seconds and explodes in a 3x3 area."
+  },
+  {
+    "id": "cherry_bomb",
+    "name": "Cherry Bomb",
+    "displayName": "Cherry Bomb",
+    "category": "EXPLOSIVE",
+    "tags": [],
+    "sunCost": 150,
+    "baseHp": 0,
+    "damage": 1800,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 0.0,
+    "recharge": 35.0,
+    "behaviorType": "EXPLOSIVE",
+    "abilities": [
+      "EXPLODE"
+    ],
+    "plantFoodAbilities": [],
+    "baseAbility": "Explodes immediately in a 3x3 area.",
+    "plantFoodEffect": "None; this is an instant-use plant.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Cooldown -5s"
+      },
+      {
+        "level": 3,
+        "description": "Dmg +600"
+      },
+      {
+        "level": 4,
+        "description": "Cost -25"
+      }
+    ],
+    "description": "Explodes immediately in a 3x3 area."
+  },
+  {
+    "id": "squash",
+    "name": "Squash",
+    "displayName": "Squash",
+    "category": "EXPLOSIVE",
+    "tags": [
+      "TRAP"
+    ],
+    "sunCost": 50,
+    "baseHp": 300,
+    "damage": 1800,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 0.0,
+    "recharge": 20.0,
+    "behaviorType": "EXPLOSIVE",
+    "abilities": [
+      "EXPLODE"
+    ],
+    "plantFoodAbilities": [
+      "POWER_EXPLODE"
+    ],
+    "baseAbility": "Crushes the first adjacent zombie.",
+    "plantFoodEffect": "Crushes two random ground zombies.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Cooldown -3s"
+      },
+      {
+        "level": 3,
+        "description": "Dmg +600"
+      },
+      {
+        "level": 4,
+        "description": "Can crush 2x"
+      }
+    ],
+    "description": "Crushes the first adjacent zombie."
+  },
+  {
+    "id": "grapeshot",
+    "name": "Grapeshot",
+    "displayName": "Grapeshot",
+    "category": "EXPLOSIVE",
+    "tags": [],
+    "sunCost": 150,
+    "baseHp": 0,
+    "damage": 1800,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 0.0,
+    "recharge": 35.0,
+    "behaviorType": "EXPLOSIVE",
+    "abilities": [
+      "EXPLODE"
+    ],
+    "plantFoodAbilities": [],
+    "baseAbility": "Explodes in a 3x3 area and launches bouncing grapes that disappear after 5 seconds.",
+    "plantFoodEffect": "None; this is an instant-use plant.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Dmg +600"
+      },
+      {
+        "level": 3,
+        "description": "Bounces +1"
+      },
+      {
+        "level": 4,
+        "description": "Cost -25"
+      }
+    ],
+    "description": "Explodes in a 3x3 area and launches bouncing grapes that disappear after 5 seconds."
+  },
+  {
+    "id": "jalapeno",
+    "name": "Jalapeno",
+    "displayName": "Jalapeno",
+    "category": "EXPLOSIVE",
+    "tags": [
+      "FIRE"
+    ],
+    "sunCost": 125,
+    "baseHp": 0,
+    "damage": 1800,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 0.0,
+    "recharge": 35.0,
+    "behaviorType": "EXPLOSIVE",
+    "abilities": [
+      "EXPLODE",
+      "FIRE"
+    ],
+    "plantFoodAbilities": [],
+    "baseAbility": "Burns every zombie in its lane instantly and melts ice.",
+    "plantFoodEffect": "None; this is an instant-use plant.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Cooldown -5s"
+      },
+      {
+        "level": 3,
+        "description": "Dmg +600"
+      },
+      {
+        "level": 4,
+        "description": "Cost -25"
+      }
+    ],
+    "description": "Burns every zombie in its lane instantly and melts ice."
+  },
+  {
+    "id": "doom_shroom",
+    "name": "Doom-shroom",
+    "displayName": "Doom-shroom",
+    "category": "EXPLOSIVE",
+    "tags": [
+      "SHROOM"
+    ],
+    "sunCost": 125,
+    "baseHp": 0,
+    "damage": 1800,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 0.0,
+    "recharge": 15.0,
+    "behaviorType": "EXPLOSIVE",
+    "abilities": [
+      "EXPLODE"
+    ],
+    "plantFoodAbilities": [],
+    "baseAbility": "Causes a massive garden-wide explosion and leaves an unplantable crater.",
+    "plantFoodEffect": "None; this is an instant-use plant.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Cooldown -5s"
+      },
+      {
+        "level": 3,
+        "description": "Dmg +800"
+      },
+      {
+        "level": 4,
+        "description": "Cost -50"
+      }
+    ],
+    "description": "Causes a massive garden-wide explosion and leaves an unplantable crater."
+  },
+  {
+    "id": "tangle_kelp",
+    "name": "Tangle Kelp",
+    "displayName": "Tangle Kelp",
+    "category": "EXPLOSIVE",
+    "tags": [
+      "TRAP",
+      "WATER"
+    ],
+    "sunCost": 25,
+    "baseHp": 300,
+    "damage": 0,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 0.0,
+    "recharge": 15.0,
+    "behaviorType": "EXPLOSIVE",
+    "abilities": [
+      "EXPLODE"
+    ],
+    "plantFoodAbilities": [
+      "POWER_EXPLODE"
+    ],
+    "baseAbility": "Pulls the first aquatic zombie underwater and defeats it.",
+    "plantFoodEffect": "Pulls several random aquatic zombies underwater.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Cooldown -5s"
+      },
+      {
+        "level": 3,
+        "description": "Targets +1"
+      },
+      {
+        "level": 4,
+        "description": "Cost -25"
+      }
+    ],
+    "description": "Pulls the first aquatic zombie underwater and defeats it."
+  },
+  {
+    "id": "iceberg_lettuce",
+    "name": "Iceberg Lettuce",
+    "displayName": "Iceberg Lettuce",
+    "category": "EXPLOSIVE",
+    "tags": [
+      "TRAP",
+      "ICE"
+    ],
+    "sunCost": 0,
+    "baseHp": 300,
+    "damage": 0,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 0.0,
+    "recharge": 20.0,
+    "behaviorType": "EXPLOSIVE",
+    "abilities": [
+      "EXPLODE",
+      "CHILL"
+    ],
+    "plantFoodAbilities": [
+      "POWER_EXPLODE"
+    ],
+    "baseAbility": "Freezes the first zombie that steps on it.",
+    "plantFoodEffect": "Freezes every visible zombie.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Cooldown -2s"
+      },
+      {
+        "level": 3,
+        "description": "Freeze Time +2s"
+      },
+      {
+        "level": 4,
+        "description": "Cost -0"
+      }
+    ],
+    "description": "Freezes the first zombie that steps on it."
+  },
+  {
+    "id": "bonk_choy",
+    "name": "Bonk Choy",
+    "displayName": "Bonk Choy",
+    "category": "MELEE",
+    "tags": [],
+    "sunCost": 150,
+    "baseHp": 300,
+    "damage": 15,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 0.25,
+    "recharge": 5.0,
+    "behaviorType": "MELEE",
+    "abilities": [
+      "MELEE_ATTACK"
+    ],
+    "plantFoodAbilities": [
+      "POWER_MELEE"
+    ],
+    "baseAbility": "Punches tiles directly in front and behind.",
+    "plantFoodEffect": "Rapidly punches every tile in a 3x3 area.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Dmg +5"
+      },
+      {
+        "level": 3,
+        "description": "Atk Speed +10%"
+      },
+      {
+        "level": 4,
+        "description": "HP +200"
+      }
+    ],
+    "description": "Punches tiles directly in front and behind."
+  },
+  {
+    "id": "phat_beet",
+    "name": "Phat Beet",
+    "displayName": "Phat Beet",
+    "category": "MELEE",
+    "tags": [
+      "AOE"
+    ],
+    "sunCost": 150,
+    "baseHp": 300,
+    "damage": 15,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 2.0,
+    "recharge": 5.0,
+    "behaviorType": "MELEE",
+    "abilities": [
+      "MELEE_ATTACK",
+      "AOE"
+    ],
+    "plantFoodAbilities": [
+      "POWER_MELEE"
+    ],
+    "baseAbility": "Deals sound damage in a 3x3 area.",
+    "plantFoodEffect": "Deals a very powerful sound attack to all nearby zombies.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Dmg +10"
+      },
+      {
+        "level": 3,
+        "description": "Atk Speed +10%"
+      },
+      {
+        "level": 4,
+        "description": "HP +200"
+      }
+    ],
+    "description": "Deals sound damage in a 3x3 area."
+  },
+  {
+    "id": "chomper",
+    "name": "Chomper",
+    "displayName": "Chomper",
+    "category": "MELEE",
+    "tags": [],
+    "sunCost": 150,
+    "baseHp": 300,
+    "damage": 0,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 40.0,
+    "recharge": 5.0,
+    "behaviorType": "MELEE",
+    "abilities": [
+      "MELEE_ATTACK"
+    ],
+    "plantFoodAbilities": [
+      "POWER_MELEE"
+    ],
+    "baseAbility": "Swallows one zombie instantly, then digests for 40 seconds.",
+    "plantFoodEffect": "Swallows three zombies simultaneously from long range.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Digest -2s"
+      },
+      {
+        "level": 3,
+        "description": "HP +200"
+      },
+      {
+        "level": 4,
+        "description": "Digest -3s"
+      }
+    ],
+    "description": "Swallows one zombie instantly, then digests for 40 seconds."
+  },
+  {
+    "id": "wasabi_whip",
+    "name": "Wasabi Whip",
+    "displayName": "Wasabi Whip",
+    "category": "MELEE",
+    "tags": [
+      "FIRE"
+    ],
+    "sunCost": 150,
+    "baseHp": 300,
+    "damage": 40,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 2.0,
+    "recharge": 5.0,
+    "behaviorType": "MELEE",
+    "abilities": [
+      "MELEE_ATTACK",
+      "FIRE"
+    ],
+    "plantFoodAbilities": [
+      "POWER_MELEE"
+    ],
+    "baseAbility": "Whips tiles in front and behind and warms nearby tiles.",
+    "plantFoodEffect": "Spins its whip through a 3x3 area.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Dmg +10"
+      },
+      {
+        "level": 3,
+        "description": "Range +1 Tile"
+      },
+      {
+        "level": 4,
+        "description": "HP +200"
+      }
+    ],
+    "description": "Whips tiles in front and behind and warms nearby tiles."
+  },
+  {
+    "id": "kiwibeast",
+    "name": "Kiwibeast",
+    "displayName": "Kiwibeast",
+    "category": "MELEE",
+    "tags": [
+      "AOE",
+      "WRAMP_UP"
+    ],
+    "sunCost": 175,
+    "baseHp": 300,
+    "damage": 15,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 2.0,
+    "recharge": 5.0,
+    "behaviorType": "MELEE",
+    "abilities": [
+      "MELEE_ATTACK",
+      "AOE"
+    ],
+    "plantFoodAbilities": [
+      "POWER_MELEE"
+    ],
+    "baseAbility": "Emits area sound waves; grows larger and stronger over time. Stage 2: 24s; Stage 3: 72s.",
+    "plantFoodEffect": "Jumps and slams the ground for area damage.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "HP +200"
+      },
+      {
+        "level": 3,
+        "description": "Dmg +15"
+      },
+      {
+        "level": 4,
+        "description": "Max Size +1"
+      }
+    ],
+    "description": "Emits area sound waves; grows larger and stronger over time. Stage 2: 24s; Stage 3: 72s."
+  },
+  {
+    "id": "wall_nut",
+    "name": "Wall-nut",
+    "displayName": "Wall-nut",
+    "category": "WALL_NUT",
+    "tags": [],
+    "sunCost": 50,
+    "baseHp": 4000,
+    "damage": 0,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 0.0,
+    "recharge": 20.0,
+    "behaviorType": "WALL_NUT",
+    "abilities": [],
+    "plantFoodAbilities": [
+      "REINFORCE"
+    ],
+    "baseAbility": "A durable defensive barrier that blocks zombies.",
+    "plantFoodEffect": "Gains permanent armor worth 4000 HP.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "HP +1000"
+      },
+      {
+        "level": 3,
+        "description": "Cooldown -5s"
+      },
+      {
+        "level": 4,
+        "description": "HP +1500"
+      }
+    ],
+    "description": "A durable defensive barrier that blocks zombies."
+  },
+  {
+    "id": "tall_nut",
+    "name": "Tall-nut",
+    "displayName": "Tall-nut",
+    "category": "WALL_NUT",
+    "tags": [],
+    "sunCost": 125,
+    "baseHp": 8000,
+    "damage": 0,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 0.0,
+    "recharge": 20.0,
+    "behaviorType": "WALL_NUT",
+    "abilities": [],
+    "plantFoodAbilities": [
+      "REINFORCE"
+    ],
+    "baseAbility": "A tall barrier that prevents jumping zombies from passing.",
+    "plantFoodEffect": "Gains permanent armor worth 8000 HP.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "HP +2000"
+      },
+      {
+        "level": 3,
+        "description": "Cooldown -5s"
+      },
+      {
+        "level": 4,
+        "description": "HP +3000"
+      }
+    ],
+    "description": "A tall barrier that prevents jumping zombies from passing."
+  },
+  {
+    "id": "endurian",
+    "name": "Endurian",
+    "displayName": "Endurian",
+    "category": "WALL_NUT",
+    "tags": [],
+    "sunCost": 100,
+    "baseHp": 3000,
+    "damage": 20,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 0.0,
+    "recharge": 15.0,
+    "behaviorType": "WALL_NUT",
+    "abilities": [],
+    "plantFoodAbilities": [
+      "REINFORCE"
+    ],
+    "baseAbility": "A defensive barrier that reflects damage to attackers.",
+    "plantFoodEffect": "Gains metal armor and increased reflected damage.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Reflect Dmg +5"
+      },
+      {
+        "level": 3,
+        "description": "HP +1000"
+      },
+      {
+        "level": 4,
+        "description": "Cost -25"
+      }
+    ],
+    "description": "A defensive barrier that reflects damage to attackers."
+  },
+  {
+    "id": "garlic",
+    "name": "Garlic",
+    "displayName": "Garlic",
+    "category": "WALL_NUT",
+    "tags": [
+      "MOVE_ZOMBIES"
+    ],
+    "sunCost": 50,
+    "baseHp": 300,
+    "damage": 0,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 0.0,
+    "recharge": 20.0,
+    "behaviorType": "WALL_NUT",
+    "abilities": [],
+    "plantFoodAbilities": [
+      "REINFORCE"
+    ],
+    "baseAbility": "When bitten, forces the zombie into an adjacent lane.",
+    "plantFoodEffect": "Forces every zombie in the lane into other lanes.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "HP +150"
+      },
+      {
+        "level": 3,
+        "description": "Cooldown -3s"
+      },
+      {
+        "level": 4,
+        "description": "HP +250"
+      }
+    ],
+    "description": "When bitten, forces the zombie into an adjacent lane."
+  },
+  {
+    "id": "sweet_potato",
+    "name": "Sweet Potato",
+    "displayName": "Sweet Potato",
+    "category": "WALL_NUT",
+    "tags": [
+      "MOVE_ZOMBIES"
+    ],
+    "sunCost": 150,
+    "baseHp": 3000,
+    "damage": 0,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 0.0,
+    "recharge": 20.0,
+    "behaviorType": "WALL_NUT",
+    "abilities": [],
+    "plantFoodAbilities": [
+      "REINFORCE"
+    ],
+    "baseAbility": "Attracts zombies from adjacent lanes into its own lane.",
+    "plantFoodEffect": "Attracts every nearby zombie and fully restores its HP.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "HP +1000"
+      },
+      {
+        "level": 3,
+        "description": "Cooldown -5s"
+      },
+      {
+        "level": 4,
+        "description": "HP +1500"
+      }
+    ],
+    "description": "Attracts zombies from adjacent lanes into its own lane."
+  },
+  {
+    "id": "explode_o_nut",
+    "name": "Explode-o-nut",
+    "displayName": "Explode-o-nut",
+    "category": "WALL_NUT",
+    "tags": [
+      "EXPLOSIVE"
+    ],
+    "sunCost": 50,
+    "baseHp": 4000,
+    "damage": 1800,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 0.0,
+    "recharge": 20.0,
+    "behaviorType": "WALL_NUT",
+    "abilities": [],
+    "plantFoodAbilities": [
+      "REINFORCE"
+    ],
+    "baseAbility": "A defensive barrier that explodes when destroyed.",
+    "plantFoodEffect": "Gains metal armor that also explodes when destroyed.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "HP +1000"
+      },
+      {
+        "level": 3,
+        "description": "Explode Dmg +200"
+      },
+      {
+        "level": 4,
+        "description": "Cost -25"
+      }
+    ],
+    "description": "A defensive barrier that explodes when destroyed."
+  },
+  {
+    "id": "pumpkin",
+    "name": "Pumpkin",
+    "displayName": "Pumpkin",
+    "category": "WALL_NUT",
+    "tags": [
+      "STACK"
+    ],
+    "sunCost": 150,
+    "baseHp": 4000,
+    "damage": 0,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 0.0,
+    "recharge": 20.0,
+    "behaviorType": "WALL_NUT",
+    "abilities": [],
+    "plantFoodAbilities": [
+      "REINFORCE"
+    ],
+    "baseAbility": "Can be planted over another plant to protect it.",
+    "plantFoodEffect": "Gains powerful metal armor.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "HP +1000"
+      },
+      {
+        "level": 3,
+        "description": "Cooldown -5s"
+      },
+      {
+        "level": 4,
+        "description": "HP +1500"
+      }
+    ],
+    "description": "Can be planted over another plant to protect it."
+  },
+  {
+    "id": "sun_bean",
+    "name": "Sun Bean",
+    "displayName": "Sun Bean",
+    "category": "WALL_NUT",
+    "tags": [
+      "SUN"
+    ],
+    "sunCost": 50,
+    "baseHp": 1000,
+    "damage": 0,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 0.0,
+    "recharge": 20.0,
+    "behaviorType": "WALL_NUT",
+    "abilities": [],
+    "plantFoodAbilities": [
+      "REINFORCE"
+    ],
+    "baseAbility": "Acts as a barrier and produces 5 sun whenever it is hit.",
+    "plantFoodEffect": "Gains powerful metal armor.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Sun Drop +5"
+      },
+      {
+        "level": 3,
+        "description": "HP +150"
+      },
+      {
+        "level": 4,
+        "description": "Cost -25"
+      }
+    ],
+    "description": "Acts as a barrier and produces 5 sun whenever it is hit."
+  },
+  {
+    "id": "torchwood",
+    "name": "Torchwood",
+    "displayName": "Torchwood",
+    "category": "MODIFIER",
+    "tags": [
+      "FIRE"
+    ],
+    "sunCost": 175,
+    "baseHp": 300,
+    "damage": 0,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 0.0,
+    "recharge": 5.0,
+    "behaviorType": "MODIFIER",
+    "abilities": [
+      "FIRE"
+    ],
+    "plantFoodAbilities": [
+      "MINT_BOOST"
+    ],
+    "baseAbility": "Turns passing peas into fire peas with double damage and ice-melting effects.",
+    "plantFoodEffect": "Creates blue fire that triples pea damage.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "HP +300"
+      },
+      {
+        "level": 3,
+        "description": "AoE on Death"
+      },
+      {
+        "level": 4,
+        "description": "Cost -25"
+      }
+    ],
+    "description": "Turns passing peas into fire peas with double damage and ice-melting effects."
+  },
+  {
+    "id": "magnet_shroom",
+    "name": "Magnet-shroom",
+    "displayName": "Magnet-shroom",
+    "category": "HOMING",
+    "tags": [
+      "SHROOM",
+      "MAGIC"
+    ],
+    "sunCost": 100,
+    "baseHp": 300,
+    "damage": 0,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 10.0,
+    "recharge": 15.0,
+    "behaviorType": "HOMING",
+    "abilities": [
+      "HOMING_ATTACK"
+    ],
+    "plantFoodAbilities": [
+      "POWER_HOMING"
+    ],
+    "baseAbility": "Removes metal equipment such as buckets and helmets from zombies.",
+    "plantFoodEffect": "Pulls several metal objects at once and digests them.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Range +1 Tile"
+      },
+      {
+        "level": 3,
+        "description": "Cooldown -5s"
+      },
+      {
+        "level": 4,
+        "description": "HP +200"
+      }
+    ],
+    "description": "Removes metal equipment such as buckets and helmets from zombies."
+  },
+  {
+    "id": "hypno_shroom",
+    "name": "Hypno-shroom",
+    "displayName": "Hypno-shroom",
+    "category": "MODIFIER",
+    "tags": [
+      "SHROOM",
+      "MAGIC"
+    ],
+    "sunCost": 125,
+    "baseHp": 300,
+    "damage": 0,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 0.0,
+    "recharge": 20.0,
+    "behaviorType": "MODIFIER",
+    "abilities": [],
+    "plantFoodAbilities": [
+      "MINT_BOOST"
+    ],
+    "baseAbility": "When eaten, hypnotizes the attacking zombie to fight for the player.",
+    "plantFoodEffect": "Transforms the eating zombie into an allied Gargantuar.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Cost -25"
+      },
+      {
+        "level": 3,
+        "description": "Zombie HP Buff"
+      },
+      {
+        "level": 4,
+        "description": "Zombie Dmg Buff"
+      }
+    ],
+    "description": "When eaten, hypnotizes the attacking zombie to fight for the player."
+  },
+  {
+    "id": "cat_tail",
+    "name": "Cat-tail",
+    "displayName": "Cat-tail",
+    "category": "HOMING",
+    "tags": [],
+    "sunCost": 175,
+    "baseHp": 300,
+    "damage": 15,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 1.5,
+    "recharge": 20.0,
+    "behaviorType": "HOMING",
+    "abilities": [
+      "HOMING_ATTACK"
+    ],
+    "plantFoodAbilities": [
+      "POWER_HOMING"
+    ],
+    "baseAbility": "Fires homing projectiles at the nearest zombie.",
+    "plantFoodEffect": "Fires a rapid homing barrage.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Dmg +10"
+      },
+      {
+        "level": 3,
+        "description": "HP +200"
+      },
+      {
+        "level": 4,
+        "description": "Cost -25"
+      }
+    ],
+    "description": "Fires homing projectiles at the nearest zombie."
+  },
+  {
+    "id": "imitater",
+    "name": "Imitater",
+    "displayName": "Imitater",
+    "category": "MODIFIER",
+    "tags": [],
+    "sunCost": 0,
+    "baseHp": 0,
+    "damage": 0,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 0.0,
+    "recharge": 0.0,
+    "behaviorType": "MODIFIER",
+    "abilities": [],
+    "plantFoodAbilities": [],
+    "baseAbility": "Copies another plant, allowing two cards of the same plant.",
+    "plantFoodEffect": "None; uses the copied plant effect.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Cooldown -2s"
+      },
+      {
+        "level": 3,
+        "description": "Cost -25"
+      },
+      {
+        "level": 4,
+        "description": "plant food on enterance"
+      }
+    ],
+    "description": "Copies another plant, allowing two cards of the same plant."
+  },
+  {
+    "id": "ice_shroom",
+    "name": "Ice-shroom",
+    "displayName": "Ice-shroom",
+    "category": "EXPLOSIVE",
+    "tags": [
+      "SHROOM",
+      "ICE"
+    ],
+    "sunCost": 75,
+    "baseHp": 0,
+    "damage": 0,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 0.0,
+    "recharge": 50.0,
+    "behaviorType": "EXPLOSIVE",
+    "abilities": [
+      "EXPLODE",
+      "CHILL"
+    ],
+    "plantFoodAbilities": [],
+    "baseAbility": "Temporarily freezes every zombie on the map.",
+    "plantFoodEffect": "None; this is an instant-use plant.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Freeze Time +2s"
+      },
+      {
+        "level": 3,
+        "description": "Cooldown -5s"
+      },
+      {
+        "level": 4,
+        "description": "Dmg +50"
+      }
+    ],
+    "description": "Temporarily freezes every zombie on the map."
+  },
+  {
+    "id": "lily_pad",
+    "name": "Lily Pad",
+    "displayName": "Lily Pad",
+    "category": "MODIFIER",
+    "tags": [
+      "WATER",
+      "STACK"
+    ],
+    "sunCost": 25,
+    "baseHp": 300,
+    "damage": 0,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 0.0,
+    "recharge": 5.0,
+    "behaviorType": "MODIFIER",
+    "abilities": [],
+    "plantFoodAbilities": [
+      "MINT_BOOST"
+    ],
+    "baseAbility": "Provides a platform for planting non-aquatic plants on water.",
+    "plantFoodEffect": "Creates copies of itself on empty water tiles.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Cost -25"
+      },
+      {
+        "level": 3,
+        "description": "HP +200"
+      },
+      {
+        "level": 4,
+        "description": "Cooldown -2s"
+      }
+    ],
+    "description": "Provides a platform for planting non-aquatic plants on water."
+  },
+  {
+    "id": "hot_potato",
+    "name": "Hot Potato",
+    "displayName": "Hot Potato",
+    "category": "EXPLOSIVE",
+    "tags": [
+      "FIRE"
+    ],
+    "sunCost": 0,
+    "baseHp": 0,
+    "damage": 0,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 0.0,
+    "recharge": 5.0,
+    "behaviorType": "EXPLOSIVE",
+    "abilities": [
+      "EXPLODE",
+      "FIRE"
+    ],
+    "plantFoodAbilities": [],
+    "baseAbility": "Instantly melts ice on its tile.",
+    "plantFoodEffect": "None; this is an instant-use plant.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Cooldown -2s"
+      },
+      {
+        "level": 3,
+        "description": "Melt Area 3x3"
+      },
+      {
+        "level": 4,
+        "description": "Explode on Finish"
+      }
+    ],
+    "description": "Instantly melts ice on its tile."
+  },
+  {
+    "id": "grave_buster",
+    "name": "Grave Buster",
+    "displayName": "Grave Buster",
+    "category": "EXPLOSIVE",
+    "tags": [],
+    "sunCost": 0,
+    "baseHp": 0,
+    "damage": 0,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 0.0,
+    "recharge": 10.0,
+    "behaviorType": "EXPLOSIVE",
+    "abilities": [
+      "EXPLODE"
+    ],
+    "plantFoodAbilities": [],
+    "baseAbility": "Removes graves.",
+    "plantFoodEffect": "None; this is an instant-use plant.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Eat Time -1s"
+      },
+      {
+        "level": 3,
+        "description": "Cooldown -2s"
+      },
+      {
+        "level": 4,
+        "description": "Explode on Finish"
+      }
+    ],
+    "description": "Removes graves."
+  },
+  {
+    "id": "enlighten_mint",
+    "name": "Enlighten-mint",
+    "displayName": "Enlighten-mint",
+    "category": "SUN_PRODUCER",
+    "tags": [],
+    "sunCost": 0,
+    "baseHp": 0,
+    "damage": 0,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 0.0,
+    "recharge": 85.0,
+    "behaviorType": "SUN_PRODUCER",
+    "abilities": [
+      "MINT_BOOST"
+    ],
+    "plantFoodAbilities": [],
+    "baseAbility": "Temporarily activates Plant Food on every plant in its family.",
+    "plantFoodEffect": "None; this is an instant-use plant.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Duration +1s"
+      },
+      {
+        "level": 3,
+        "description": "Cooldown -5s"
+      },
+      {
+        "level": 4,
+        "description": "reset family cooldowns"
+      }
+    ],
+    "description": "Temporarily activates Plant Food on every plant in its family."
+  },
+  {
+    "id": "appease_mint",
+    "name": "Appease-mint",
+    "displayName": "Appease-mint",
+    "category": "SHOOTER",
+    "tags": [],
+    "sunCost": 0,
+    "baseHp": 0,
+    "damage": 0,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 0.0,
+    "recharge": 85.0,
+    "behaviorType": "SHOOTER",
+    "abilities": [
+      "MINT_BOOST"
+    ],
+    "plantFoodAbilities": [],
+    "baseAbility": "Temporarily activates Plant Food on every plant in its family.",
+    "plantFoodEffect": "None; this is an instant-use plant.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Duration +1s"
+      },
+      {
+        "level": 3,
+        "description": "Cooldown -5s"
+      },
+      {
+        "level": 4,
+        "description": "reset family cooldowns"
+      }
+    ],
+    "description": "Temporarily activates Plant Food on every plant in its family."
+  },
+  {
+    "id": "arma_mint",
+    "name": "Arma-mint",
+    "displayName": "Arma-mint",
+    "category": "LOBBER",
+    "tags": [],
+    "sunCost": 0,
+    "baseHp": 0,
+    "damage": 0,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 0.0,
+    "recharge": 85.0,
+    "behaviorType": "LOBBER",
+    "abilities": [
+      "MINT_BOOST"
+    ],
+    "plantFoodAbilities": [],
+    "baseAbility": "Temporarily activates Plant Food on every plant in its family.",
+    "plantFoodEffect": "None; this is an instant-use plant.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Duration +1s"
+      },
+      {
+        "level": 3,
+        "description": "Cooldown -5s"
+      },
+      {
+        "level": 4,
+        "description": "reset family cooldowns"
+      }
+    ],
+    "description": "Temporarily activates Plant Food on every plant in its family."
+  },
+  {
+    "id": "bombard_mint",
+    "name": "Bombard-mint",
+    "displayName": "Bombard-mint",
+    "category": "EXPLOSIVE",
+    "tags": [],
+    "sunCost": 0,
+    "baseHp": 0,
+    "damage": 0,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 0.0,
+    "recharge": 85.0,
+    "behaviorType": "EXPLOSIVE",
+    "abilities": [
+      "MINT_BOOST"
+    ],
+    "plantFoodAbilities": [],
+    "baseAbility": "Temporarily activates Plant Food on every plant in its family.",
+    "plantFoodEffect": "None; this is an instant-use plant.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Duration +1s"
+      },
+      {
+        "level": 3,
+        "description": "Cooldown -5s"
+      },
+      {
+        "level": 4,
+        "description": "reset family cooldowns"
+      }
+    ],
+    "description": "Temporarily activates Plant Food on every plant in its family."
+  },
+  {
+    "id": "enforce_mint",
+    "name": "Enforce-mint",
+    "displayName": "Enforce-mint",
+    "category": "MELEE",
+    "tags": [],
+    "sunCost": 0,
+    "baseHp": 0,
+    "damage": 0,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 0.0,
+    "recharge": 85.0,
+    "behaviorType": "MELEE",
+    "abilities": [
+      "MINT_BOOST"
+    ],
+    "plantFoodAbilities": [],
+    "baseAbility": "Temporarily activates Plant Food on every plant in its family.",
+    "plantFoodEffect": "None; this is an instant-use plant.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Duration +1s"
+      },
+      {
+        "level": 3,
+        "description": "Cooldown -5s"
+      },
+      {
+        "level": 4,
+        "description": "reset family cooldowns"
+      }
+    ],
+    "description": "Temporarily activates Plant Food on every plant in its family."
+  },
+  {
+    "id": "reinforce_mint",
+    "name": "Reinforce-mint",
+    "displayName": "Reinforce-mint",
+    "category": "WALL_NUT",
+    "tags": [],
+    "sunCost": 0,
+    "baseHp": 0,
+    "damage": 0,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 0.0,
+    "recharge": 85.0,
+    "behaviorType": "WALL_NUT",
+    "abilities": [
+      "MINT_BOOST"
+    ],
+    "plantFoodAbilities": [],
+    "baseAbility": "Temporarily activates Plant Food on every plant in its family.",
+    "plantFoodEffect": "None; this is an instant-use plant.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Duration +1s"
+      },
+      {
+        "level": 3,
+        "description": "Cooldown -5s"
+      },
+      {
+        "level": 4,
+        "description": "reset family cooldowns"
+      }
+    ],
+    "description": "Temporarily activates Plant Food on every plant in its family."
+  },
+  {
+    "id": "enchant_mint",
+    "name": "Enchant-mint",
+    "displayName": "Enchant-mint",
+    "category": "MODIFIER",
+    "tags": [],
+    "sunCost": 0,
+    "baseHp": 0,
+    "damage": 0,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 0.0,
+    "recharge": 85.0,
+    "behaviorType": "MODIFIER",
+    "abilities": [
+      "MINT_BOOST"
+    ],
+    "plantFoodAbilities": [],
+    "baseAbility": "Temporarily activates Plant Food on every plant in its family.",
+    "plantFoodEffect": "None; this is an instant-use plant.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Duration +1s"
+      },
+      {
+        "level": 3,
+        "description": "Cooldown -5s"
+      },
+      {
+        "level": 4,
+        "description": "reset family cooldowns"
+      }
+    ],
+    "description": "Temporarily activates Plant Food on every plant in its family."
+  },
+  {
+    "id": "pierce_mint",
+    "name": "Pierce-mint",
+    "displayName": "Pierce-mint",
+    "category": "STRIKE_TROUGH",
+    "tags": [],
+    "sunCost": 0,
+    "baseHp": 0,
+    "damage": 0,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 0.0,
+    "recharge": 85.0,
+    "behaviorType": "STRIKE_TROUGH",
+    "abilities": [
+      "MINT_BOOST"
+    ],
+    "plantFoodAbilities": [],
+    "baseAbility": "Temporarily activates Plant Food on every plant in its family.",
+    "plantFoodEffect": "None; this is an instant-use plant.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Duration +1s"
+      },
+      {
+        "level": 3,
+        "description": "Cooldown -5s"
+      },
+      {
+        "level": 4,
+        "description": "reset family cooldowns"
+      }
+    ],
+    "description": "Temporarily activates Plant Food on every plant in its family."
+  },
+  {
+    "id": "cattail_mint",
+    "name": "catTail-mint",
+    "displayName": "catTail-mint",
+    "category": "HOMING",
+    "tags": [],
+    "sunCost": 0,
+    "baseHp": 0,
+    "damage": 0,
+    "projectileCount": 1,
+    "projectileSpeed": 0.5,
+    "actionInterval": 0.0,
+    "recharge": 85.0,
+    "behaviorType": "HOMING",
+    "abilities": [
+      "MINT_BOOST"
+    ],
+    "plantFoodAbilities": [],
+    "baseAbility": "Temporarily activates Plant Food on every plant in its family.",
+    "plantFoodEffect": "None; this is an instant-use plant.",
+    "upgrades": [
+      {
+        "level": 2,
+        "description": "Duration +1s"
+      },
+      {
+        "level": 3,
+        "description": "Cooldown -5s"
+      },
+      {
+        "level": 4,
+        "description": "reset family cooldowns"
+      }
+    ],
+    "description": "Temporarily activates Plant Food on every plant in its family."
+  }
+]

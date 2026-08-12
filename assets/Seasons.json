@@ -1,0 +1,416 @@
+[
+  {
+    "id": 1,
+    "name": "AncientEgypt",
+    "displayName": "Ancient Egypt",
+    "seasonType": "ANCIENT_EGYPT",
+    "isUnlocked": true,
+    "unlockedPlants": [
+      "Peashooter",
+      "Sunflower",
+      "Wall-nut"
+    ],
+    "levels": [
+      {
+        "id": "egypt_level_1",
+        "name": "Egypt Level 1",
+        "levelNumber": 1,
+        "levelType": "NORMAL",
+        "waveCount": 5,
+        "baseWaveCost": 1000,
+        "availablePlants": [
+          "Peashooter",
+          "Sunflower",
+          "Wall-nut"
+        ],
+        "lockedPlants": [],
+        "protectedPlants": [],
+        "wavePatterns": [
+          {
+            "waveNumber": 1,
+            "startTick": 0,
+            "waveCost": 1000
+          }
+        ],
+        "map": {
+          "rows": 5,
+          "columns": 9,
+          "defaultPathDirection": "RIGHT_TO_LEFT",
+          "tiles": []
+        }
+      },
+      {
+        "id": "egypt_level_2",
+        "name": "SAVE_OUR_SEEDS",
+        "levelNumber": 2,
+        "levelType": "SPECIAL",
+        "waveCount": 5,
+        "baseWaveCost": 1000,
+        "availablePlants": [],
+        "lockedPlants": [],
+        "protectedPlants": [],
+        "wavePatterns": [
+          {
+            "waveNumber": 1,
+            "startTick": 0,
+            "waveCost": 1000
+          }
+        ],
+        "map": {
+          "rows": 5,
+          "columns": 9,
+          "defaultPathDirection": "RIGHT_TO_LEFT",
+          "tiles": []
+        }
+      },
+      {
+        "id": "egypt_level_3",
+        "name": "LOCKED_PLANTS_LEVEL",
+        "levelNumber": 3,
+        "levelType": "SPECIAL",
+        "waveCount": 4,
+        "baseWaveCost": 1000,
+        "availablePlants": [
+          "Peashooter",
+          "Sunflower",
+          "Wall-nut"
+        ],
+        "lockedPlants": [
+          "Sunflower"
+        ],
+        "protectedPlants": [],
+        "wavePatterns": [],
+        "map": {
+          "rows": 5,
+          "columns": 9,
+          "zombieStartColumn": 9,
+          "homeColumn": 0,
+          "defaultPathDirection": "RIGHT_TO_LEFT",
+          "tiles": []
+        }
+      },
+      {
+        "id": "egypt_level_4",
+        "name": "Egypt Level 4 (Boss Fight)",
+        "levelNumber": 4,
+        "levelType": "BOSS",
+        "waveCount": 1,
+        "baseWaveCost": 100,
+        "availablePlants": [],
+        "lockedPlants": [],
+        "protectedPlants": [],
+        "wavePatterns": [],
+        "map": {
+          "rows": 5,
+          "columns": 9,
+          "defaultPathDirection": "RIGHT_TO_LEFT",
+          "tiles": []
+        }
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "FrostbiteCaves",
+    "displayName": "Frostbite Caves",
+    "seasonType": "FROSTBITE_CAVES",
+    "isUnlocked": false,
+    "unlockedPlants": [
+      "FirePeashooter",
+      "Repeater"
+    ],
+    "levels": [
+      {
+        "id": "caves_level_1",
+        "name": "Caves Level 1",
+        "levelNumber": 1,
+        "levelType": "NORMAL",
+        "waveCount": 5,
+        "baseWaveCost": 1000,
+        "availablePlants": [
+          "Peashooter",
+          "Sunflower",
+          "FirePeashooter"
+        ],
+        "lockedPlants": [],
+        "protectedPlants": [],
+        "wavePatterns": [],
+        "map": {
+          "rows": 5,
+          "columns": 9,
+          "defaultPathDirection": "RIGHT_TO_LEFT",
+          "tiles": []
+        }
+      },
+      {
+        "id": "caves_level_2",
+        "name": "Caves Level 2",
+        "levelNumber": 2,
+        "levelType": "NORMAL",
+        "waveCount": 4,
+        "baseWaveCost": 1000,
+        "availablePlants": [
+          "Peashooter",
+          "Sunflower",
+          "FirePeashooter"
+        ],
+        "lockedPlants": [],
+        "protectedPlants": [],
+        "wavePatterns": [],
+        "map": {
+          "rows": 5,
+          "columns": 9,
+          "defaultPathDirection": "RIGHT_TO_LEFT",
+          "tiles": []
+        }
+      },
+      {
+        "id": "caves_level_3",
+        "name": "NIGHT_OPS",
+        "levelNumber": 3,
+        "levelType": "SPECIAL",
+        "waveCount": 5,
+        "baseWaveCost": 1000,
+        "availablePlants": [
+          "Peashooter",
+          "Sunflower",
+          "FirePeashooter"
+        ],
+        "lockedPlants": [],
+        "protectedPlants": [],
+        "wavePatterns": [],
+        "map": {
+          "rows": 5,
+          "columns": 9,
+          "zombieStartColumn": 9,
+          "homeColumn": 0,
+          "defaultPathDirection": "RIGHT_TO_LEFT",
+          "tiles": []
+        }
+      },
+      {
+        "id": "caves_level_4",
+        "name": "Caves Level 4 (Boss Fight)",
+        "levelNumber": 4,
+        "levelType": "BOSS",
+        "waveCount": 1,
+        "baseWaveCost": 1000,
+        "availablePlants": [
+          "Peashooter",
+          "Sunflower",
+          "FirePeashooter"
+        ],
+        "lockedPlants": [],
+        "protectedPlants": [],
+        "wavePatterns": [],
+        "map": {
+          "rows": 5,
+          "columns": 9,
+          "defaultPathDirection": "RIGHT_TO_LEFT",
+          "tiles": []
+        }
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "BigWaveBeach",
+    "displayName": "Big Wave Beach",
+    "seasonType": "BIG_WAVE_BEACH",
+    "isUnlocked": false,
+    "unlockedPlants": [
+      "LilyPad",
+      "TangleKelp"
+    ],
+    "levels": [
+      {
+        "id": "beach_level_1",
+        "name": "Beach Level 1",
+        "levelNumber": 1,
+        "levelType": "NORMAL",
+        "waveCount": 5,
+        "baseWaveCost": 1000,
+        "availablePlants": [
+          "Peashooter",
+          "Sunflower",
+          "LilyPad"
+        ],
+        "lockedPlants": [],
+        "protectedPlants": [],
+        "wavePatterns": [],
+        "map": {
+          "rows": 5,
+          "columns": 9,
+          "defaultPathDirection": "RIGHT_TO_LEFT",
+          "tiles": []
+        }
+      },
+      {
+        "id": "beach_level_2",
+        "name": "Beach Level 2",
+        "levelNumber": 2,
+        "levelType": "NORMAL",
+        "waveCount": 4,
+        "baseWaveCost": 1000,
+        "availablePlants": [
+          "Peashooter",
+          "Sunflower",
+          "LilyPad"
+        ],
+        "lockedPlants": [],
+        "protectedPlants": [],
+        "wavePatterns": [],
+        "map": {
+          "rows": 5,
+          "columns": 9,
+          "defaultPathDirection": "RIGHT_TO_LEFT",
+          "tiles": []
+        }
+      },
+      {
+        "id": "beach_level_3",
+        "name": "DEAD_LINE",
+        "levelNumber": 3,
+        "levelType": "SPECIAL",
+        "waveCount": 4,
+        "baseWaveCost": 1000,
+        "availablePlants": [
+          "Peashooter",
+          "Sunflower",
+          "LilyPad"
+        ],
+        "lockedPlants": [],
+        "protectedPlants": [],
+        "wavePatterns": [],
+        "map": {
+          "rows": 5,
+          "columns": 9,
+          "defaultPathDirection": "RIGHT_TO_LEFT",
+          "tiles": []
+        }
+      },
+      {
+        "id": "beach_level_4",
+        "name": "Beach Level 4 (Boss Fight)",
+        "levelNumber": 4,
+        "levelType": "BOSS",
+        "waveCount": 1,
+        "baseWaveCost": 150,
+        "availablePlants": [
+          "Peashooter",
+          "Sunflower",
+          "LilyPad"
+        ],
+        "lockedPlants": [],
+        "protectedPlants": [],
+        "wavePatterns": [],
+        "map": {
+          "rows": 5,
+          "columns": 9,
+          "defaultPathDirection": "RIGHT_TO_LEFT",
+          "tiles": []
+        }
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "name": "DarkAges",
+    "displayName": "Dark Ages",
+    "seasonType": "DARK_AGES",
+    "isUnlocked": false,
+    "unlockedPlants": [
+      "Sunshroom",
+      "Puffshroom"
+    ],
+    "levels": [
+      {
+        "id": "dark_level_1",
+        "name": "Dark Ages Level 1",
+        "levelNumber": 1,
+        "levelType": "NORMAL",
+        "waveCount": 5,
+        "baseWaveCost": 1000,
+        "availablePlants": [
+          "Puffshroom",
+          "Sunshroom",
+          "Peashooter"
+        ],
+        "lockedPlants": [],
+        "protectedPlants": [],
+        "wavePatterns": [],
+        "map": {
+          "rows": 5,
+          "columns": 9,
+          "defaultPathDirection": "RIGHT_TO_LEFT",
+          "tiles": []
+        }
+      },
+      {
+        "id": "dark_level_2",
+        "name": "LOVE_YOUR_PLANTS",
+        "levelNumber": 2,
+        "levelType": "SPECIAL",
+        "waveCount": 4,
+        "baseWaveCost": 1000,
+        "availablePlants": [
+          "Puffshroom",
+          "Sunshroom",
+          "Peashooter"
+        ],
+        "lockedPlants": [],
+        "protectedPlants": [],
+        "wavePatterns": [],
+        "map": {
+          "rows": 5,
+          "columns": 9,
+          "defaultPathDirection": "RIGHT_TO_LEFT",
+          "tiles": []
+        }
+      },
+      {
+        "id": "dark_level_3",
+        "name": "Dark Ages Level 3",
+        "levelNumber": 3,
+        "levelType": "NORMAL",
+        "waveCount": 4,
+        "baseWaveCost": 1000,
+        "availablePlants": [
+          "Peashooter",
+          "Wall-nut"
+        ],
+        "lockedPlants": [],
+        "protectedPlants": [],
+        "wavePatterns": [],
+        "map": {
+          "rows": 5,
+          "columns": 9,
+          "defaultPathDirection": "RIGHT_TO_LEFT",
+          "tiles": []
+        }
+      },
+      {
+        "id": "dark_level_4",
+        "name": "Dark Ages Level 4 (Boss Fight)",
+        "levelNumber": 4,
+        "levelType": "BOSS",
+        "waveCount": 1,
+        "baseWaveCost": 1000,
+        "availablePlants": [
+          "Puffshroom",
+          "Sunshroom",
+          "Peashooter"
+        ],
+        "lockedPlants": [],
+        "protectedPlants": [],
+        "wavePatterns": [],
+        "map": {
+          "rows": 5,
+          "columns": 9,
+          "defaultPathDirection": "RIGHT_TO_LEFT",
+          "tiles": []
+        }
+      }
+    ]
+  }
+]

@@ -1,0 +1,103 @@
+package PvZ2.APproject.models.plants;
+
+import PvZ2.APproject.enums.PlantCategory;
+
+import java.util.List;
+
+public class PlantData {
+    private String id;
+    private String name;
+    private String displayName;
+    private PlantCategory category;
+    private List<String> tags;
+    private int sunCost;
+    private int baseHp;
+    private int damage;
+    private double actionInterval;
+    private double recharge;
+    private String behaviorType;
+    private List<String> abilities;
+    private List<String> plantFoodAbilities;
+    private int projectileCount;
+    private double projectileSpeed;
+    private String baseAbility;
+    private String plantFoodEffect;
+    private List<PlantUpgradeData> upgrades;
+    private String description;
+
+    public String getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public PlantCategory getCategory() {
+        return category;
+    }
+
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public int getSunCost() {
+        return sunCost;
+    }
+
+    public int getBaseHp() {
+        return baseHp;
+    }
+
+    public int getDamage() {
+        return damage;
+    }
+
+    public double getActionInterval() {
+        return actionInterval;
+    }
+
+    public double getRecharge() {
+        return recharge;
+    }
+
+    public String getBehaviorType() {
+        return behaviorType;
+    }
+
+    public List<String> getAbilities() {
+        return abilities;
+    }
+
+    public List<String> getPlantFoodAbilities() {
+        return plantFoodAbilities;
+    }
+
+    public int getProjectileCount() {
+        return projectileCount;
+    }
+
+    public double getProjectileSpeed() {
+        return projectileSpeed;
+    }
+
+    public String getBaseAbility() {
+        return baseAbility;
+    }
+
+    public String getPlantFoodEffect() {
+        return plantFoodEffect;
+    }
+
+    public List<PlantUpgradeData> getUpgrades() {
+        return upgrades;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+}
