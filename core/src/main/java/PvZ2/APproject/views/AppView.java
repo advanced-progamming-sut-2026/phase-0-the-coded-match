@@ -17,7 +17,7 @@ public class AppView {
     public static void run() {
         SignupMenuController.loadFromJson();
         App.initialize();
-        LoginMenuController.loadPlayer();
+        App.loadLoggedInUser();
         Scanner scanner = new Scanner(System.in);
         while (scanner.hasNextLine() && isRunning) {
             String input = scanner.nextLine().trim();

@@ -19,7 +19,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-import PvZ2.APproject.utils.AssetPaths;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 
 public class App {
     private static User currentUser;
@@ -32,8 +33,6 @@ public class App {
     private static List<Lawnmower> allLawnMowers = new ArrayList<>();
 
     public static void initialize() {
-        PlantRepository.getInstance();
-        allZombies = ZombieRepository.getInstance().getAllZombies();
         allSeasons = new ArrayList<>(SeasonController.getInstance().getActiveSeasons());
         for (User user : users) user.ensureDefaults();
     }
@@ -139,9 +138,9 @@ public class App {
     }
 
     public static void saveLoggedInUser(String username) {
-        try (Writer writer = AssetPaths.writer("loggedInUser.txt")) {
-            writer.write(username == null ? "" : username);
-        } catch (IOException e) {
+        try {
+            Gdx.files.local("loggedInUser.txt").writeString(username, false);
+        } catch (Exception e) {
             System.err.println("Could not save user: " + e.getMessage());
         }
     }
@@ -149,18 +148,28 @@ public class App {
     public static void clearLoggedInUser() { saveLoggedInUser(""); }
 
     public static void loadLoggedInUser() {
-        try (Reader reader = AssetPaths.reader("loggedInUser.txt"); Scanner scanner = new Scanner(reader)) {
-            if (scanner.hasNext()) {
-                String username =  scanner.next();
+        FileHandle file = Gdx.files.local("loggedInUser.txt");
+
+        if (!file.exists()) {
+            setCurrentUser(null);
+            return;
+        }
+
+        try {
+            String username = file.readString().trim();
+
+            if (!username.isEmpty()) {
                 User user = getUserByUsername(username);
-                if (user != null && user.isStayLoggedIn()) {
+                if (user != null) {
                     setCurrentUser(user);
                     setCurrentMenu(Menu.MAIN_MENU);
                     return;
                 }
-                clearLoggedInUser();
             }
-        } catch (IOException e) {
+
+            setCurrentUser(null);
+        } catch (Exception e) {
+            System.err.println("Could not read file: " + e.getMessage());
             setCurrentUser(null);
         }
     }

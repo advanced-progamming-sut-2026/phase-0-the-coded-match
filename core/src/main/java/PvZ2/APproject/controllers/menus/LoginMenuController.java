@@ -34,7 +34,8 @@ public class LoginMenuController{
         }
         App.setCurrentUser(target);
         target.setStayLoggedIn(stayLoggedIn);
-        if (stayLoggedIn) App.saveLoggedInUser(username); else App.clearLoggedInUser();
+        if (stayLoggedIn) App.saveLoggedInUser(username);
+        else App.clearLoggedInUser();
         App.setCurrentMenu(Menu.MAIN_MENU);
         QuestController.generateAllQuests();
         QuestController.refreshDailyQuests();
@@ -91,17 +92,5 @@ public class LoginMenuController{
         App.setCurrentPhase(Phases.NORMAL_GAMEPLAY);
         SignupMenuController.saveToJson();
         return "Password reset successfully";
-    }
-
-    public static void saveLoggedInUserData() {
-
-    }
-
-    public static void loadPlayer() {
-
-    }
-
-    public static void clearPlayer() {
-
     }
 }

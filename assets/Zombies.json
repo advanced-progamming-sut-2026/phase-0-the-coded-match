@@ -25,11 +25,13 @@
     "eatDPS": 100,
     "speed": 0.185,
     "waveCost": 200,
-    "armors": {
-      "type": "CONE",
-      "hp": 370,
-      "metallic": false
-    },
+    "armors": [
+      {
+        "type": "CONE",
+        "hp": 370,
+        "metallic": false
+      }
+    ],
     "behaviorType": "Normal",
     "state": "WALKING",
     "cost": 100

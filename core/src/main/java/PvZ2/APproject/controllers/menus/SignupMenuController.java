@@ -5,8 +5,9 @@ import PvZ2.APproject.enums.Gender;
 import PvZ2.APproject.enums.SecurityQuestions;
 import PvZ2.APproject.models.App;
 import PvZ2.APproject.models.User;
-import PvZ2.APproject.utils.AssetPaths;
 import PvZ2.APproject.views.menus.SignupMenu;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
@@ -17,7 +18,6 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -155,7 +155,8 @@ public class SignupMenuController{
     public static void saveToJson() {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         ArrayList<User> users = App.getUsers();
-        try (Writer writer = AssetPaths.writer("Users.json")) {
+
+        try (Writer writer = Gdx.files.local("Users.json").writer(false)) {
             gson.toJson(users, writer);
         } catch (IOException e) {
             System.out.println("Error saving users: " + e.getMessage());
@@ -164,12 +165,17 @@ public class SignupMenuController{
 
     public static void loadFromJson() {
         Gson gson = new Gson();
-        try (Reader reader = AssetPaths.reader("Users.json")) {
+        FileHandle file = Gdx.files.local("Users.json");
+
+        if (!file.exists()) {
+            App.setUsers(new ArrayList<>());
+            return;
+        }
+
+        try (Reader reader = file.reader()) {
             Type userListType = new TypeToken<ArrayList<User>>(){}.getType();
             ArrayList<User> loadedUsers = gson.fromJson(reader, userListType);
             App.setUsers(loadedUsers != null ? loadedUsers : new ArrayList<>());
-        } catch (FileNotFoundException e) {
-            App.setUsers(new ArrayList<>());
         } catch (IOException e) {
             System.out.println("Error loading users: " + e.getMessage());
             App.setUsers(new ArrayList<>());

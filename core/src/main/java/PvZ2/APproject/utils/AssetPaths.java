@@ -11,7 +11,7 @@ import java.nio.file.Path;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-public final class AssetPaths {
+public final class AssetPaths { //TODO: seems like this class is not necessary
     private AssetPaths() {
     }
 

@@ -169,7 +169,7 @@ public class GreenHouse {
         }
     }
 
-    public static GreenHouse loadFromFile() {
+    public static GreenHouse loadFromFile() { //TODO: if not needed, remove!
         try (Reader reader = AssetPaths.reader(FILE_PATH)) {
             GreenhouseDataDTO data = gson.fromJson(reader, GreenhouseDataDTO.class);
 

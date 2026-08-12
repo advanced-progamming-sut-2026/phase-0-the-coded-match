@@ -80,7 +80,7 @@ public class User {
     public void ensureDefaults() {
         if (questions == null) questions = new HashMap<>();
         if (collection == null) collection = new Collection();
-        if (collection.getAvailablePlantsIds().isEmpty()) for (String name : List.of("Peashooter", "Sunflower", "Wall-nut")) { PlantData p = PlantRepository.getInstance().findByName(name); if (p != null) collection.unlockPlant(p.getId()); }
+        collection.ensure();
         if (greenHouse == null) greenHouse = new GreenHouse();
         if (shop == null) shop = new Shop();
         if (unlockedLevels == null) unlockedLevels = new ArrayList<>();
