@@ -5,7 +5,7 @@ import PvZ2.APproject.enums.Gender;
 import PvZ2.APproject.enums.SecurityQuestions;
 import PvZ2.APproject.models.App;
 import PvZ2.APproject.models.User;
-import PvZ2.APproject.views.menus.SignupMenu;
+import PvZ2.APproject.views.screens.SignupScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.google.gson.Gson;
@@ -18,69 +18,56 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static PvZ2.APproject.enums.Menu.LOGIN_MENU;
 
 public class SignupMenuController{
 
-    public static String[] register(String input, String[] message) {
-        Pattern pattern = Pattern.compile(Commands.REGISTER.getPattern());
-        Matcher matcher = pattern.matcher(input);
-        if (!matcher.matches()) {
-            return null;
-        }
-
-        String username = matcher.group("username");
-        String password = matcher.group("password");
-        String passwordConfirm = matcher.group("passwordConfirm");
-        String nickname = matcher.group("nickname");
-        String email = matcher.group("email");
-        String genderSt = matcher.group("gender");
+    public String register(String username, String password, String passwordConfirm, String nickname, String email,
+                           String genderSt) {
 
         if (validateUsername(username)) {
-            message[0] = "Error: username already exists.";
+            return "Error: username already exists.";
         } else if (!validatePassword(password)) {
-            message[0] = "Error: password is not strong enough.";
+            return "Error: password is not strong enough.";
         } else if (!passwordIsConfirmed(password, passwordConfirm)) {
-            message[0] = "Error: password not confirmed.";
+            return "Error: password not confirmed.";
         } else if (!validateNickname(nickname)) {
-            message[0] = "Error: nickname is too short";
+            return "Error: nickname is too short";
         } else if (!validateEmail(email)) {
-            message[0] = "Error: email pattern in not valid";
-        } else if (!(genderSt.equalsIgnoreCase("male")) && !(genderSt.equalsIgnoreCase("female"))) {
-            message[0] = "Error: gender is not valid " + genderSt;
+            return "Error: email pattern in not valid";
+        } else if (!(genderSt.equalsIgnoreCase("male")) &&
+            !(genderSt.equalsIgnoreCase("female"))) {
+            return "Error: gender is not valid";
         } else {
-            SignupMenu.registered = true;
+            SignupScreen.registered = true;
             Gender gender = whichGender(genderSt);
             String hashedPassword = hashPassword(password);
             User user = new User(username, hashedPassword, nickname, email, gender);
             App.addUser(user);
             saveToJson();
-            message[0] = "Registered successfully";
+            return "Registered successfully";
         }
-        return message;
     }
 
     public static boolean validateUsername(String username) {
-        return App.doesUsernameExist(username);
+        return username == null || App.doesUsernameExists(username);
     }
 
     public static boolean validatePassword(String password) {
-        return password.matches(Commands.PASSWORD.getPattern());
+        return password == null || password.matches(Commands.PASSWORD.getPattern());
     }
 
     public static boolean passwordIsConfirmed(String password, String passwordConfirm) {
-        return password.equals(passwordConfirm);
+        return passwordConfirm == null || password.equals(passwordConfirm);
     }
 
     public static boolean validateNickname(String nickname) {
-        return nickname.matches(Commands.NICKNAME.getPattern());
+        return nickname == null || nickname.matches(Commands.NICKNAME.getPattern());
     }
 
     public static boolean validateEmail(String email) {
-        return email.matches(Commands.EMAIL.getPattern());
+        return email == null || email.matches(Commands.EMAIL.getPattern());
     }
 
     public static Gender whichGender(String gender) {
@@ -91,41 +78,30 @@ public class SignupMenuController{
         }
     }
 
-    public static String[] showQuestions(String input, String[] message) {
-        message[0] = "";
+    public String showQuestions() {
+        String message = "";
         for (SecurityQuestions securityQuestion : SecurityQuestions.values()) {
-            message[0] += securityQuestion.getNum() + ": " + securityQuestion.getText() + "\n";
+            message += securityQuestion.getNum() + ": " + securityQuestion.getText() + "\n";
         }
         return message;
     }
 
-    public static String[] pickQuestion(String input, String[] message) {
-        Pattern pattern = Pattern.compile(Commands.PICK_QUESTION.getPattern());
-        Matcher matcher = pattern.matcher(input);
-        if (!matcher.matches()) {
-            message[0] = "pick a question!";
-            return message;
-        }
-        int questionNum;
-        try { questionNum = Integer.parseInt(matcher.group("questionNumber").trim()); } catch (NumberFormatException e) { message[0] = "invalid question"; return message; }
-        String answer = matcher.group("answer");
-        String confirmAnswer = matcher.group("answerConfirm");
+    public String pickQuestion(int questionNum ,String answer, String answerConfirm) {
         SecurityQuestions question = getQuestionByNumber(questionNum);
         if (question == null) {
-            message[0] = "invalid question";
-        } else if (answer.equals(confirmAnswer)) {
+            return "invalid question";
+        } else if (answer.equals(answerConfirm)) {
             App.getUsers().get(App.getUsers().size() - 1).addQuestion(question, answer);
-            SignupMenu.questionPicked = true;
+            SignupScreen.questionPicked = true;
             saveToJson();
             App.setCurrentMenu(LOGIN_MENU);
-            message[0] = "question picked successfully";
+             return  "question picked successfully";
         } else {
-            message[0] = "not confirmed";
+            return  "not confirmed";
         }
-        return message;
     }
 
-    public static SecurityQuestions getQuestionByNumber(int num) {
+    public SecurityQuestions getQuestionByNumber(int num) {
         for (SecurityQuestions question : SecurityQuestions.values()) {
             if (question.getNum() == num) {
                 return question;

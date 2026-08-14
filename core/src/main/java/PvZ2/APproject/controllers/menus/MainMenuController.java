@@ -9,7 +9,7 @@ public class MainMenuController {
         if (App.getCurrentUser() != null) {
             App.getCurrentUser().setStayLoggedIn(false);
         }
-        LoginMenuController.clearPlayer();
+        App.clearLoggedInUser();
         App.setCurrentUser(null);
         App.setCurrentMenu(Menu.SIGNUP_MENU);
         System.out.println("logged out successfully");

@@ -1,6 +1,5 @@
 package PvZ2.APproject.views;
 
-import PvZ2.APproject.controllers.menus.LoginMenuController;
 import PvZ2.APproject.controllers.menus.MenuController;
 import PvZ2.APproject.controllers.menus.SignupMenuController;
 import PvZ2.APproject.enums.Commands;

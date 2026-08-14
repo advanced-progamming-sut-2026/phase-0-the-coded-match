@@ -107,10 +107,10 @@ public class GameMenuController{
         message[0] = amount + currency + " added successfully";
         return message;
     }
-    public static void exitGame() {
-        LoginMenuController.saveLoggedInUserData();
-        AppView.isRunning = false;
-    }
+//    public static void exitGame() {
+//        App.saveLoggedInUser();
+//        AppView.isRunning = false;
+//    }
 
 
 }

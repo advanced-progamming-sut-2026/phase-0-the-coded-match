@@ -14,7 +14,7 @@ public class PlantRepository {
     private final List<PlantData> plants;
 
     public PlantRepository() {
-        this.plants = loadPlants("assets/Plants.json");
+        this.plants = loadPlants("Plants.json");
     }
 
     public static PlantRepository getInstance() {
