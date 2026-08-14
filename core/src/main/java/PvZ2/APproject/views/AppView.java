@@ -33,7 +33,7 @@ public class AppView {
             } else if (currentMenu == Menu.SIGNUP_MENU) {
                 SignupMenu.check(input, scanner);
             } else if (currentMenu == Menu.LOGIN_MENU) {
-                LoginMenu.check(input);
+//                LoginMenu.check(input);
             } else if (currentMenu == Menu.MAIN_MENU) {
                 MainMenu.check(input);
             } else if (currentMenu == Menu.GAME_MENU) {

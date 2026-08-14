@@ -1,0 +1,695 @@
+[
+  {
+    "username": "tester",
+    "password": "7546df0d5385f6a05d11c5a0388a5736466f31d5ab210fe486f377bd648459a5",
+    "nickname": "player1",
+    "email": "test@gmail.com",
+    "gender": "male",
+    "questions": {},
+    "gamesPlayedCount": 0,
+    "coinsCount": 0,
+    "gemsCount": 0,
+    "levelsCount": 0,
+    "meowPoints": 0,
+    "isVictroy": false,
+    "lastSeasonId": 0,
+    "difficultyLevel": 3,
+    "minigamesWonCount": 0,
+    "highestPointAchieved": 0,
+    "stayLoggedIn": false,
+    "collection": {
+      "availableZombiesIds": [],
+      "availablePlantsIds": [
+        "peashooter",
+        "sunflower",
+        "wall_nut"
+      ]
+    },
+    "greenHouse": {
+      "greenhouse_currency": {},
+      "stored_boosts": {},
+      "grid": [
+        [
+          {
+            "x": 1,
+            "y": 1,
+            "is_locked": false,
+            "status": "EMPTY",
+            "growth_duration_hours": 0
+          },
+          {
+            "x": 2,
+            "y": 1,
+            "is_locked": false,
+            "status": "EMPTY",
+            "growth_duration_hours": 0
+          },
+          {
+            "x": 3,
+            "y": 1,
+            "is_locked": false,
+            "status": "EMPTY",
+            "growth_duration_hours": 0
+          },
+          {
+            "x": 4,
+            "y": 1,
+            "is_locked": false,
+            "status": "EMPTY",
+            "growth_duration_hours": 0
+          },
+          {
+            "x": 5,
+            "y": 1,
+            "is_locked": false,
+            "status": "EMPTY",
+            "growth_duration_hours": 0
+          }
+        ],
+        [
+          {
+            "x": 1,
+            "y": 2,
+            "is_locked": true,
+            "status": "LOCKED",
+            "growth_duration_hours": 0
+          },
+          {
+            "x": 2,
+            "y": 2,
+            "is_locked": true,
+            "status": "LOCKED",
+            "growth_duration_hours": 0
+          },
+          {
+            "x": 3,
+            "y": 2,
+            "is_locked": true,
+            "status": "LOCKED",
+            "growth_duration_hours": 0
+          },
+          {
+            "x": 4,
+            "y": 2,
+            "is_locked": true,
+            "status": "LOCKED",
+            "growth_duration_hours": 0
+          },
+          {
+            "x": 5,
+            "y": 2,
+            "is_locked": true,
+            "status": "LOCKED",
+            "growth_duration_hours": 0
+          }
+        ],
+        [
+          {
+            "x": 1,
+            "y": 3,
+            "is_locked": true,
+            "status": "LOCKED",
+            "growth_duration_hours": 0
+          },
+          {
+            "x": 2,
+            "y": 3,
+            "is_locked": true,
+            "status": "LOCKED",
+            "growth_duration_hours": 0
+          },
+          {
+            "x": 3,
+            "y": 3,
+            "is_locked": true,
+            "status": "LOCKED",
+            "growth_duration_hours": 0
+          },
+          {
+            "x": 4,
+            "y": 3,
+            "is_locked": true,
+            "status": "LOCKED",
+            "growth_duration_hours": 0
+          },
+          {
+            "x": 5,
+            "y": 3,
+            "is_locked": true,
+            "status": "LOCKED",
+            "growth_duration_hours": 0
+          }
+        ],
+        [
+          {
+            "x": 1,
+            "y": 4,
+            "is_locked": true,
+            "status": "LOCKED",
+            "growth_duration_hours": 0
+          },
+          {
+            "x": 2,
+            "y": 4,
+            "is_locked": true,
+            "status": "LOCKED",
+            "growth_duration_hours": 0
+          },
+          {
+            "x": 3,
+            "y": 4,
+            "is_locked": true,
+            "status": "LOCKED",
+            "growth_duration_hours": 0
+          },
+          {
+            "x": 4,
+            "y": 4,
+            "is_locked": true,
+            "status": "LOCKED",
+            "growth_duration_hours": 0
+          },
+          {
+            "x": 5,
+            "y": 4,
+            "is_locked": true,
+            "status": "LOCKED",
+            "growth_duration_hours": 0
+          }
+        ]
+      ]
+    },
+    "shop": {
+      "dailyItemSoldOut": false
+    },
+    "seedPackets": {},
+    "questsModel": {
+      "availableQuests": [
+        {
+          "questData": "DEFENSE_MASTER",
+          "questName": "Defense Master",
+          "priority": "CRITICAL",
+          "objective": "GREEN",
+          "reward": "GEM",
+          "rewardAmount": 200,
+          "isCompleted": false,
+          "category": "CHALLENGE",
+          "missionDescription": "Finish a level with exactly zero sun",
+          "currentValue": 0,
+          "targetValue": [
+            1
+          ]
+        },
+        {
+          "questData": "BLOOMING_IN_LIMITS",
+          "questName": "Blooming in Limits",
+          "priority": "HIGH",
+          "objective": "ORANGE",
+          "reward": "GEM",
+          "rewardAmount": 100,
+          "isCompleted": false,
+          "category": "DAILY",
+          "missionDescription": "Win a level without using plants from family_type",
+          "currentValue": 0,
+          "targetValue": [
+            1
+          ],
+          "targetPlantId": "sunflower"
+        },
+        {
+          "questData": "CHAPTER_HUNTER",
+          "questName": "Chapter Hunter",
+          "priority": "HIGH",
+          "objective": "ORANGE",
+          "reward": "SEED_PACKET",
+          "rewardAmount": 10,
+          "isCompleted": false,
+          "category": "MAIN",
+          "missionDescription": "Defeat 50 zombies from the chapter season",
+          "currentValue": 0,
+          "targetValue": [
+            50
+          ],
+          "rewardPlantId": "sunflower",
+          "targetSeasonName": "Ancient Egypt"
+        },
+        {
+          "questData": "CLOUDY_DAY",
+          "questName": "Cloudy Day",
+          "priority": "HIGH",
+          "objective": "BLUE",
+          "reward": "GEM",
+          "rewardAmount": 10,
+          "isCompleted": false,
+          "category": "DAILY",
+          "missionDescription": "Win a level using only 3 sun-producing plants",
+          "currentValue": 0,
+          "targetValue": [
+            3
+          ]
+        },
+        {
+          "questData": "DEFENSELESS_CROSS",
+          "questName": "Defenseless Cross",
+          "priority": "HIGH",
+          "objective": "ORANGE",
+          "reward": "GEM",
+          "rewardAmount": 25,
+          "isCompleted": false,
+          "category": "DAILY",
+          "missionDescription": "Win a level without planting in row n or column n",
+          "currentValue": 0,
+          "targetValue": [
+            4
+          ]
+        },
+        {
+          "questData": "DEFENSELESS_ROW",
+          "questName": "Defenseless Row",
+          "priority": "HIGH",
+          "objective": "ORANGE",
+          "reward": "GEM",
+          "rewardAmount": 20,
+          "isCompleted": false,
+          "category": "DAILY",
+          "missionDescription": "Win a level without planting in row n",
+          "currentValue": 0,
+          "targetValue": [
+            5
+          ]
+        },
+        {
+          "questData": "ECONOMIC_HERBIVORE",
+          "questName": "Economic Herbivore",
+          "priority": "HIGH",
+          "objective": "ORANGE",
+          "reward": "SEED_PACKET",
+          "rewardAmount": -1,
+          "isCompleted": false,
+          "category": "MAIN",
+          "missionDescription": "Win a level without losing more than n plants",
+          "currentValue": 0,
+          "targetValue": [
+            0
+          ],
+          "rewardPlantId": "sunflower"
+        },
+        {
+          "questData": "NIGHT_OR_MORNING",
+          "questName": "Night or Morning",
+          "priority": "HIGH",
+          "objective": "ORANGE",
+          "reward": "GEM",
+          "rewardAmount": 20,
+          "isCompleted": false,
+          "category": "CHALLENGE",
+          "missionDescription": "Complete a day level using only night plants and mushrooms",
+          "currentValue": 0,
+          "targetValue": [
+            1
+          ]
+        },
+        {
+          "questData": "ONE_COLUMN_LESS",
+          "questName": "One Column Less",
+          "priority": "HIGH",
+          "objective": "ORANGE",
+          "reward": "GEM",
+          "rewardAmount": 10,
+          "isCompleted": false,
+          "category": "DAILY",
+          "missionDescription": "Win a level without planting in column n",
+          "currentValue": 0,
+          "targetValue": [
+            1
+          ]
+        },
+        {
+          "questData": "ONLY_CACTUS",
+          "questName": "Only Cactus",
+          "priority": "HIGH",
+          "objective": "ORANGE",
+          "reward": "GEM",
+          "rewardAmount": 20,
+          "isCompleted": false,
+          "category": "DAILY",
+          "missionDescription": "Kill 10 zombies only with cactus",
+          "currentValue": 0,
+          "targetValue": [
+            10
+          ],
+          "targetPlantId": "cactus"
+        },
+        {
+          "questData": "PRO_PLANT_PLAYER",
+          "questName": "Pro Plant Player",
+          "priority": "HIGH",
+          "objective": "ORANGE",
+          "reward": "UNLOCKABLE",
+          "rewardAmount": -1,
+          "isCompleted": false,
+          "category": "DAILY",
+          "missionDescription": "Kill 10 zombies only with Plant",
+          "currentValue": 0,
+          "targetValue": [
+            10
+          ],
+          "targetPlantId": "peashooter"
+        },
+        {
+          "questData": "SYMMETRY",
+          "questName": "Symmetry",
+          "priority": "HIGH",
+          "objective": "ORANGE",
+          "reward": "COIN",
+          "rewardAmount": 500,
+          "isCompleted": false,
+          "category": "DAILY",
+          "missionDescription": "Win a level with a symmetrical garden",
+          "currentValue": 0,
+          "targetValue": [
+            1
+          ]
+        },
+        {
+          "questData": "ALMOST_VICTORIOUS",
+          "questName": "Almost Victorious",
+          "priority": "MEDIUM",
+          "objective": "BLUE",
+          "reward": "COIN",
+          "rewardAmount": 300,
+          "isCompleted": false,
+          "category": "DAILY",
+          "missionDescription": "Kill 10 zombies in the first column of a row without a lawnmower",
+          "currentValue": 0,
+          "targetValue": [
+            10
+          ]
+        },
+        {
+          "questData": "DAILY_SUN_COLLECTOR",
+          "questName": "Daily Sun Collector",
+          "priority": "MEDIUM",
+          "objective": "BLUE",
+          "reward": "COIN",
+          "rewardAmount": -1,
+          "isCompleted": false,
+          "category": "DAILY",
+          "missionDescription": "Collect sun_amount units of sun in a single day",
+          "currentValue": 0,
+          "targetValue": [
+            3000
+          ]
+        },
+        {
+          "questData": "FAMILY_SLAUGHTER",
+          "questName": "Family Slaughter",
+          "priority": "MEDIUM",
+          "objective": "BLUE",
+          "reward": "COIN",
+          "rewardAmount": 1000,
+          "isCompleted": false,
+          "category": "DAILY",
+          "missionDescription": "Use only plants of family_type to kill zombies in a level",
+          "currentValue": 0,
+          "targetValue": [
+            1
+          ],
+          "targetPlantId": "sunflower"
+        },
+        {
+          "questData": "MOWING_TIME",
+          "questName": "Mowing Time",
+          "priority": "MEDIUM",
+          "objective": "ORANGE",
+          "reward": "GEM",
+          "rewardAmount": -1,
+          "isCompleted": false,
+          "category": "CHALLENGE",
+          "missionDescription": "Kill at least n zombies using lawnmowers",
+          "currentValue": 0,
+          "targetValue": [
+            30
+          ]
+        },
+        {
+          "questData": "NO_OCD",
+          "questName": "No OCD",
+          "priority": "MEDIUM",
+          "objective": "BLUE",
+          "reward": "COIN",
+          "rewardAmount": 800,
+          "isCompleted": false,
+          "category": "DAILY",
+          "missionDescription": "Win a level with no mirrored plant pairs except the middle row",
+          "currentValue": 0,
+          "targetValue": [
+            1
+          ]
+        },
+        {
+          "questData": "SPEED_EXECUTION",
+          "questName": "Speed Execution",
+          "priority": "MEDIUM",
+          "objective": "BLUE",
+          "reward": "COIN",
+          "rewardAmount": 500,
+          "isCompleted": false,
+          "category": "MAIN",
+          "missionDescription": "Kill 10 zombies in less than 30 seconds from the start of the first wave",
+          "currentValue": 0,
+          "targetValue": [
+            10
+          ]
+        },
+        {
+          "questData": "WIN_STREAK",
+          "questName": "Win Streak",
+          "priority": "MEDIUM",
+          "objective": "ORANGE",
+          "reward": "COIN",
+          "rewardAmount": 5000,
+          "isCompleted": false,
+          "category": "DAILY",
+          "missionDescription": "Win 5 levels in a row on the highest difficulty",
+          "currentValue": 0,
+          "targetValue": [
+            5
+          ]
+        },
+        {
+          "questData": "PROFESSIONAL_DEMOLISHER",
+          "questName": "Professional Demolisher",
+          "priority": "LOW",
+          "objective": "BLACK",
+          "reward": "COIN",
+          "rewardAmount": 100,
+          "isCompleted": false,
+          "category": "DAILY",
+          "missionDescription": "Use 3 explosive plants in a single level",
+          "currentValue": 0,
+          "targetValue": [
+            3
+          ]
+        }
+      ]
+    },
+    "plantFoodBoughtCount": 0,
+    "lastDailyQuestRefreshDate": "2026-08-02",
+    "questWinStreak": 0,
+    "completedDailyQuestsTotal": 0,
+    "completedNonDailyQuestsTotal": 0
+  },
+  {
+    "username": "testuser26",
+    "password": "a52bd8668ea58cf9ccaa4c70099f311e64ee7af3988b00d93315dc1494267000",
+    "nickname": "TestUser",
+    "email": "testuser26@example.com",
+    "gender": "male",
+    "questions": {},
+    "gamesPlayedCount": 0,
+    "coinsCount": 0,
+    "gemsCount": 0,
+    "levelsCount": 0,
+    "meowPoints": 0,
+    "isVictroy": false,
+    "lastSeasonId": 0,
+    "difficultyLevel": 3,
+    "minigamesWonCount": 0,
+    "highestPointAchieved": 0,
+    "stayLoggedIn": false,
+    "collection": {
+      "availableZombiesIds": [],
+      "availablePlantsIds": [
+        "peashooter",
+        "sunflower",
+        "wall_nut"
+      ]
+    },
+    "greenHouse": {
+      "greenhouse_currency": {},
+      "stored_boosts": {},
+      "grid": [
+        [
+          {
+            "x": 1,
+            "y": 1,
+            "is_locked": false,
+            "status": "EMPTY",
+            "growth_duration_hours": 0
+          },
+          {
+            "x": 2,
+            "y": 1,
+            "is_locked": false,
+            "status": "EMPTY",
+            "growth_duration_hours": 0
+          },
+          {
+            "x": 3,
+            "y": 1,
+            "is_locked": false,
+            "status": "EMPTY",
+            "growth_duration_hours": 0
+          },
+          {
+            "x": 4,
+            "y": 1,
+            "is_locked": false,
+            "status": "EMPTY",
+            "growth_duration_hours": 0
+          },
+          {
+            "x": 5,
+            "y": 1,
+            "is_locked": false,
+            "status": "EMPTY",
+            "growth_duration_hours": 0
+          }
+        ],
+        [
+          {
+            "x": 1,
+            "y": 2,
+            "is_locked": true,
+            "status": "LOCKED",
+            "growth_duration_hours": 0
+          },
+          {
+            "x": 2,
+            "y": 2,
+            "is_locked": true,
+            "status": "LOCKED",
+            "growth_duration_hours": 0
+          },
+          {
+            "x": 3,
+            "y": 2,
+            "is_locked": true,
+            "status": "LOCKED",
+            "growth_duration_hours": 0
+          },
+          {
+            "x": 4,
+            "y": 2,
+            "is_locked": true,
+            "status": "LOCKED",
+            "growth_duration_hours": 0
+          },
+          {
+            "x": 5,
+            "y": 2,
+            "is_locked": true,
+            "status": "LOCKED",
+            "growth_duration_hours": 0
+          }
+        ],
+        [
+          {
+            "x": 1,
+            "y": 3,
+            "is_locked": true,
+            "status": "LOCKED",
+            "growth_duration_hours": 0
+          },
+          {
+            "x": 2,
+            "y": 3,
+            "is_locked": true,
+            "status": "LOCKED",
+            "growth_duration_hours": 0
+          },
+          {
+            "x": 3,
+            "y": 3,
+            "is_locked": true,
+            "status": "LOCKED",
+            "growth_duration_hours": 0
+          },
+          {
+            "x": 4,
+            "y": 3,
+            "is_locked": true,
+            "status": "LOCKED",
+            "growth_duration_hours": 0
+          },
+          {
+            "x": 5,
+            "y": 3,
+            "is_locked": true,
+            "status": "LOCKED",
+            "growth_duration_hours": 0
+          }
+        ],
+        [
+          {
+            "x": 1,
+            "y": 4,
+            "is_locked": true,
+            "status": "LOCKED",
+            "growth_duration_hours": 0
+          },
+          {
+            "x": 2,
+            "y": 4,
+            "is_locked": true,
+            "status": "LOCKED",
+            "growth_duration_hours": 0
+          },
+          {
+            "x": 3,
+            "y": 4,
+            "is_locked": true,
+            "status": "LOCKED",
+            "growth_duration_hours": 0
+          },
+          {
+            "x": 4,
+            "y": 4,
+            "is_locked": true,
+            "status": "LOCKED",
+            "growth_duration_hours": 0
+          },
+          {
+            "x": 5,
+            "y": 4,
+            "is_locked": true,
+            "status": "LOCKED",
+            "growth_duration_hours": 0
+          }
+        ]
+      ]
+    },
+    "shop": {
+      "dailyItemSoldOut": false
+    },
+    "seedPackets": {},
+    "questsModel": {
+      "availableQuests": []
+    },
+    "plantFoodBoughtCount": 0,
+    "questWinStreak": 0,
+    "completedDailyQuestsTotal": 0,
+    "completedNonDailyQuestsTotal": 0
+  }
+]

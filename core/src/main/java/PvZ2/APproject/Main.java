@@ -2,6 +2,7 @@ package PvZ2.APproject;
 
 import PvZ2.APproject.enums.Menu;
 import PvZ2.APproject.models.App;
+import PvZ2.APproject.views.screens.LoginScreen;
 import PvZ2.APproject.views.screens.SignupScreen;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
@@ -20,14 +21,14 @@ public class Main extends Game {
 
     @Override
     public void create() {
-        FileHandle assetsFolder = Gdx.files.internal("");
+        FileHandle assetsFolder = Gdx.files.internal("pvz-assets");
         textures = new TextureBank("768", assetsFolder);
         player = new PamPlayer(textures, assetsFolder);
 
         if (App.getCurrentMenu() == Menu.MAIN_MENU) {
 //            setScreen(new );//TODO: new MainScreen
         }
-        setScreen(new SignupScreen(this));
+        setScreen(new LoginScreen(this));
     }
 
     public TextureBank getTextures() {
