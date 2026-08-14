@@ -1,31 +1,53 @@
 package PvZ2.APproject;
 
+import PvZ2.APproject.enums.Menu;
+import PvZ2.APproject.models.App;
+import PvZ2.APproject.views.screens.SignupScreen;
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.ScreenUtils;
+import pvz.libpvz.pam.PamPlayer;
+import pvz.libpvz.textures.TextureBank;
 
-public class Main extends ApplicationAdapter {
-    private SpriteBatch batch;
-    private Texture image;
+public class Main extends Game {
+    private TextureBank textures;
+    private PamPlayer player;
 
     @Override
     public void create() {
-        batch = new SpriteBatch();
-        image = new Texture("libgdx.png");
+        FileHandle assetsFolder = Gdx.files.internal("");
+        textures = new TextureBank("768", assetsFolder);
+        player = new PamPlayer(textures, assetsFolder);
+
+        if (App.getCurrentMenu() == Menu.MAIN_MENU) {
+//            setScreen(new );//TODO: new MainScreen
+        }
+        setScreen(new SignupScreen(this));
+    }
+
+    public TextureBank getTextures() {
+        return textures;
+    }
+
+    public PamPlayer getPlayer() {
+        return player;
+    }
+
+    public Main getMain() {
+        return this;
     }
 
     @Override
     public void render() {
-        ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
-        batch.begin();
-        batch.draw(image, 140, 210);
-        batch.end();
+        super.render();
     }
 
     @Override
     public void dispose() {
-        batch.dispose();
-        image.dispose();
     }
 }

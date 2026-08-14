@@ -11,17 +11,28 @@ public class SignupMenu {
     public static boolean questionPicked;
 
     public static void check(String input, Scanner scanner) {
-        if (input.matches(Commands.REGISTER.getPattern())) {
-            registered = false;
-            SignupMenuController.register(input, message);
-            System.out.println(message[0]);
-            if (registered) {
-                SignupMenuController.showQuestions("", message);
-                System.out.println(message[0]);
-            }
-        } else if (input.matches(Commands.PICK_QUESTION.getPattern())) {
-            SignupMenuController.pickQuestion(input, message);
-            System.out.println(message[0]);
-        } else System.out.println("invalid command");
+//        if (input.matches(Commands.REGISTER.getPattern())) {
+//            registered = false;
+//            SignupMenuController.register(input, message);
+//            System.out.println(message[0]);
+//
+//            if (registered) {
+//                input = scanner.nextLine();
+//                SignupMenuController.showQuestions(input, message);
+//                System.out.println(message[0]);
+//
+//                while (!questionPicked) {
+//                    input = scanner.nextLine();
+//                    if (!input.matches(Commands.PICK_QUESTION.getPattern())) {
+//                        System.out.println("pick a question");
+//                    } else {
+//                        SignupMenuController.pickQuestion(input, message);
+//                        System.out.println(message[0]);
+//                    }
+//                }
+//            }
+//        } else {
+//            System.out.println("invalid command");
+//        }
     }
 }

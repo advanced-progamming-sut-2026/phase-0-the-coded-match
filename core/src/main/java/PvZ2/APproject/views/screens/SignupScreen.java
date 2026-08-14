@@ -1,0 +1,173 @@
+package PvZ2.APproject.views.screens;
+
+import PvZ2.APproject.Main;
+import PvZ2.APproject.controllers.menus.SignupMenuController;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import pvz.skin.BorderedTable;
+
+
+public class SignupScreen extends BaseScreen {
+    private final Main game;
+    private SignupMenuController controller;
+    private BorderedTable wrapper;
+    private Label messageNotif;
+    public static boolean registered;
+    public static boolean questionPicked;
+
+    public SignupScreen(Main game) {
+        this.game = game;
+        this.controller = new SignupMenuController();
+    }
+
+    @Override
+    public void show() {
+        super.show();
+
+        background = textures.region("IMAGE_TITLEBACKGROUNDS_BACKDROP_D");
+        backgroundImage = new Image(new TextureRegionDrawable(background));
+        backgroundImage.setFillParent(true);
+        stage.addActor(backgroundImage);
+
+        wrapper = new BorderedTable();
+
+        TextField usernameField = new TextField("", skin, "default");
+        usernameField.setMessageText("Username");
+        TextField passwordField = new TextField("", skin, "default");
+        passwordField.setMessageText("Password");
+        TextField passwordConfirmField = new TextField("", skin, "default");
+        passwordConfirmField.setMessageText("Confirm Password");
+        TextField nicknameField = new TextField("", skin, "default");
+        nicknameField.setMessageText("Nickname");
+        TextField emailField = new TextField("", skin, "default");
+        emailField.setMessageText("Email");
+        TextField genderField = new TextField("", skin, "default");
+        genderField.setMessageText("Gender");
+
+        TextButton register = new TextButton("Register", skin, "default");
+
+        wrapper.add(usernameField).width(200).height(50).row();
+        wrapper.add(passwordField).width(200).height(50).row();
+        wrapper.add(passwordConfirmField).width(200).height(50).row();
+        wrapper.add(nicknameField).width(200).height(50).row();
+        wrapper.add(emailField).width(200).height(50).row();
+        wrapper.add(genderField).width(200).height(50).row();
+
+        wrapper.add(register);
+
+        wrapper.pack();
+        wrapper.setPosition(
+            (VIRTUAL_WIDTH - wrapper.getWidth()) / 2f,
+            (VIRTUAL_HEIGHT - wrapper.getHeight()) / 2f
+        );
+        stage.addActor(wrapper);
+
+
+        messageNotif = new Label("", skin, "promo_ribbon");
+        messageNotif.setVisible(false);
+        messageNotif.setPosition(265, 50);
+        stage.addActor(messageNotif);
+
+        registered = false;
+        questionPicked = false;
+
+        register.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                String username = usernameField.getText();
+                String password = passwordField.getText();
+                String passwordConfirm = passwordConfirmField.getText();
+                String nickname = nicknameField.getText();
+                String email = emailField.getText();
+                String gender = genderField.getText();
+                String message = controller.register(username, password, passwordConfirm, nickname, email, gender);
+                showMessage(message);
+
+                if (registered) {
+                    wrapper.clearChildren();
+                    String securityQuestions = controller.showQuestions();
+
+                    Label.LabelStyle style = new Label.LabelStyle(
+                        skin.get("default", Label.LabelStyle.class)
+                    );
+
+                    style.fontColor = Color.GREEN;
+
+                    Label questions = new Label(securityQuestions, style);
+
+                    TextField questionNumField = new TextField("", skin, "default");
+                    questionNumField.setMessageText("Choose a security question");
+                    TextField answerField = new TextField("", skin, "default");
+                    answerField.setMessageText("Answer the security question");
+                    TextField answerConfirmField = new TextField("", skin, "default");
+                    answerConfirmField.setMessageText("Confirm answer");
+
+                    TextButton confirm = new TextButton("Confirm", skin, "default");
+
+                    wrapper.add(questions).width(200).height(50).row();
+                    wrapper.add(questionNumField).width(200).height(50).row();
+                    wrapper.add(answerField).width(200).height(50).row();
+                    wrapper.add(answerConfirmField).width(200).height(50).row();
+
+                    wrapper.add(confirm);
+
+                    confirm.addListener(new ClickListener() {
+                        @Override
+                        public void clicked(InputEvent event, float x, float y) {
+                            try {
+                                int questionNum = Integer.parseInt(questionNumField.getText());
+                                String message = controller.pickQuestion(questionNum, answerField.getText(),
+                                    answerConfirmField.getText());
+                                showMessage(message);
+                            } catch (NumberFormatException e) {
+                                showMessage("Invalid question number");
+                            }
+                        }
+                    });
+
+                    if (questionPicked) {
+//                game.setScreen(new ); //TODO: new LoginScreen
+                    }
+                }
+            }
+
+
+        });
+
+
+    }
+
+    public void showMessage(String message) {
+        messageNotif.clearActions();
+
+        messageNotif.setText(message);
+        messageNotif.setVisible(true);
+        messageNotif.pack();
+        messageNotif.getColor().a = 1f;
+
+        messageNotif.addAction(
+            Actions.sequence(
+                Actions.delay(2f),
+                Actions.fadeOut(0.5f),
+                Actions.hide()
+            )
+        );
+    }
+
+    @Override
+    public void render(float delta) {
+        super.render(delta);
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+    }
+}

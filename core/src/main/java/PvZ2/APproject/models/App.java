@@ -92,10 +92,6 @@ public class App {
         return false;
     }
 
-    public static boolean doesUsernameExist(String username) {
-        return doesUsernameExists(username);
-    }
-
     public static User getUserByUsername(String username) {
         if (username != null) for (User user : users) if (username.equalsIgnoreCase(user.getUsername())) return user;
         return null;
