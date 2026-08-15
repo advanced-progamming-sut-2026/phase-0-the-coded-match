@@ -110,6 +110,10 @@ public class SignupMenuController{
         return null;
     }
 
+    public void exit() {
+        Gdx.app.exit();
+    }
+
     public static String hashPassword(String password) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");

@@ -2,13 +2,12 @@ package PvZ2.APproject.views.screens;
 
 import PvZ2.APproject.Main;
 import PvZ2.APproject.controllers.menus.SignupMenuController;
+import PvZ2.APproject.models.App;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import pvz.skin.BorderedTable;
@@ -69,6 +68,23 @@ public class SignupScreen extends BaseScreen {
         );
         stage.addActor(wrapper);
 
+        ImageButton exitButton = new ImageButton(skin, "generic_close_circle");
+        exitButton.setPosition(10, 700);
+
+        stage.addActor(exitButton);
+
+        //for testing, don't delete
+//        TextButton enterProfile = new TextButton("profile", skin, "default");
+//        enterProfile.setPosition(30, 700);
+//
+//        stage.addActor(enterProfile);
+//
+//        enterProfile.addListener(new ClickListener() {
+//            @Override
+//            public void clicked(InputEvent event, float x, float y) {
+//                game.setScreen(new ProfileScreen(game));
+//            }
+//        });
 
         messageNotif = new Label("", skin, "promo_ribbon");
         messageNotif.setVisible(false);
@@ -141,7 +157,12 @@ public class SignupScreen extends BaseScreen {
 
         });
 
-
+        exitButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                controller.exit();
+            }
+        });
     }
 
     public void showMessage(String message) {

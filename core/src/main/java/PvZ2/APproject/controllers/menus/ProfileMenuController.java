@@ -1,5 +1,6 @@
 package PvZ2.APproject.controllers.menus;
 
+import PvZ2.APproject.Main;
 import PvZ2.APproject.enums.Commands;
 import PvZ2.APproject.models.App;
 import PvZ2.APproject.models.User;
@@ -9,104 +10,80 @@ import java.util.regex.Pattern;
 
 public class ProfileMenuController {
 
-    public static String changeUsername(String input) {
-        Matcher matcher = getMatcher(Commands.PROFILE_CHANGE_USERNAME, input);
-        if (!matcher.matches()) {
-            return "invalid command";
-        }
+    public String changeUsername(String username) {
         User user = App.getCurrentUser();
-        String username = matcher.group("username");
-        if (user == null) {
-            return "no user is logged in";
-        } else if (user.getUsername().equals(username)) {
-            return "new username is the same as current username";
+
+        if (user.getUsername().equals(username)) {
+            return "Error: New username is the same as current username.";
         } else if (App.doesUsernameExists(username)) {
-            return "username already exists";
+            return "Error: Username already exists.";
         } else {
             user.setUsername(username);
-            return "username changed successfully";
+            return "Username changed successfully!";
         }
     }
 
-    public static String changeNickname(String input) {
-        Matcher matcher = getMatcher(Commands.PROFILE_CHANGE_NICKNAME, input);
-        if (!matcher.matches()) {
-            return "invalid command";
-        }
+    public String changeNickname(String nickname) {
         User user = App.getCurrentUser();
-        String nickname = matcher.group("nickname");
-        if (user == null) {
-            return "no user is logged in";
-        } else if (user.getNickname().equals(nickname)) {
-            return "new nickname is the same as current nickname";
+
+        if (user.getNickname().equals(nickname)) {
+            return "Error: New nickname is the same as current nickname.";
         } else if (!SignupMenuController.validateNickname(nickname)) {
-            return "invalid nickname";
+            return "Error: Invalid nickname.";
         } else {
             user.setNickname(nickname);
-            return "nickname changed successfully";
+            return "Nickname changed successfully!";
         }
     }
 
-    public static String changeEmail(String input) {
-        Matcher matcher = getMatcher(Commands.PROFILE_CHANGE_EMAIL, input);
-        if (!matcher.matches()) {
-            return "invalid command";
-        }
+    public String changeEmail(String email) {
         User user = App.getCurrentUser();
-        String email = matcher.group("email");
-        if (user == null) {
-            return "no user is logged in";
-        } else if (user.getEmail().equals(email)) {
-            return "new email is the same as current email";
+
+        if (user.getEmail().equals(email)) {
+            return "Error: New email is the same as current email.";
         } else if (!SignupMenuController.validateEmail(email)) {
-            return "invalid email";
+            return "Error: Invalid email.";
         } else {
             user.setEmail(email);
-            return "email changed successfully";
+            return "Email changed successfully!";
         }
     }
 
-    public static String changePassword(String input) {
-        Matcher matcher = getMatcher(Commands.PROFILE_CHANGE_PASSWORD, input);
-        if (!matcher.matches()) {
-            return "invalid command";
-        }
+    public String changePassword(String oldPassword, String newPassword) {
         User user = App.getCurrentUser();
-        String newPassword = matcher.group("newPassword");
-        String oldPassword = matcher.group("oldPassword");
+
         String hashedNewPassword = SignupMenuController.hashPassword(newPassword);
         String hashedOldPassword = SignupMenuController.hashPassword(oldPassword);
-        if (user == null) {
-            return "no user is logged in";
-        } else if (!user.getPassword().equals(hashedOldPassword)) {
-            return "old password is incorrect";
+
+        if (!user.getPassword().equals(hashedOldPassword)) {
+            return "Error: Current password is incorrect.";
         } else if (user.getPassword().equals(hashedNewPassword)) {
-            return "new password is the same as current password";
+            return "Error: New password is the same as current password.";
         } else if (!SignupMenuController.validatePassword(newPassword)) {
-            return "password is not strong enough";
+            return "Error: Password is not strong enough.";
         } else {
             user.setPassword(hashedNewPassword);
-            return "password changed successfully";
+            return "Password changed successfully!";
         }
     }
 
-    public static StringBuilder showProfileInfo(String input) {
-        StringBuilder result = new StringBuilder();
-        User user = App.getCurrentUser();
-        if (user == null) {
-            return result.append("no user is logged in\n");
-        }
-        result.append("username: ").append(user.getUsername()).append("\n");
-        result.append("nickname: ").append(user.getNickname()).append("\n");
-        result.append("games played: ").append(user.getGamesPlayedCount()).append("\n");
-        result.append("coins: ").append(user.getCoinsCount()).append("\n");
-        result.append("gems: ").append(user.getGemsCount()).append("\n");
-        result.append("passed chapters: ").append(user.getLevelsCount()).append("\n");
-        result.append("highest meow points: ").append(user.getMeowPoints()).append("\n");
-        return result;
+    public void exit(Main game) {
+//        game.setScreen(new ); //TODO: new MainScreen
     }
 
-    private static Matcher getMatcher(Commands command, String input) {
-        return Pattern.compile(command.getPattern()).matcher(input);
-    }
+//    public static StringBuilder showProfileInfo(String input) {
+//        StringBuilder result = new StringBuilder();
+//        User user = App.getCurrentUser();
+//        if (user == null) {
+//            return result.append("no user is logged in\n");
+//        }
+//        result.append("username: ").append(user.getUsername()).append("\n");
+//        result.append("nickname: ").append(user.getNickname()).append("\n");
+//        result.append("games played: ").append(user.getGamesPlayedCount()).append("\n");
+//        result.append("coins: ").append(user.getCoinsCount()).append("\n");
+//        result.append("gems: ").append(user.getGemsCount()).append("\n");
+//        result.append("passed chapters: ").append(user.getLevelsCount()).append("\n");
+//        result.append("highest meow points: ").append(user.getMeowPoints()).append("\n");
+//        return result;
+//    }
 }
