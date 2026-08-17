@@ -250,11 +250,6 @@ public class Plant implements Update {
         return y;
     }
 
-    public void setPosition(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-
     public int getLevel() {
         return level;
     }
