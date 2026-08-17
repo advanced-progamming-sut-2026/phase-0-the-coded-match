@@ -1,5 +1,6 @@
 package PvZ2.APproject;
 
+import PvZ2.APproject.controllers.menus.SignupMenuController;
 import PvZ2.APproject.enums.Menu;
 import PvZ2.APproject.models.App;
 import PvZ2.APproject.views.screens.SignupScreen;
@@ -20,6 +21,10 @@ public class Main extends Game {
 
     @Override
     public void create() {
+        SignupMenuController.loadFromJson();
+        App.initialize();
+        App.loadLoggedInUser();
+
         FileHandle assetsFolder = Gdx.files.internal("");
         textures = new TextureBank("768", assetsFolder);
         player = new PamPlayer(textures, assetsFolder);
