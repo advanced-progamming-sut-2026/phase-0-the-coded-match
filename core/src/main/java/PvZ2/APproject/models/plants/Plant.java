@@ -27,6 +27,10 @@ public class Plant implements Update {
     private boolean sunCollected = true;
     private int freezeLevel = 0;
     private int iceHP = 0;
+    private boolean disabled;
+    private int coverHp;
+    private int stackCount = 1;
+    private boolean protectedFromZombies;
 
     public Plant(PlantData data, int x, int y, int level) {
         this.data = data;
@@ -44,6 +48,9 @@ public class Plant implements Update {
 
     @Override
     public void update() {
+        if (disabled) {
+            return;
+        }
         if (cooldownRemaining > 0) {
             cooldownRemaining--;
         }
@@ -103,7 +110,18 @@ public class Plant implements Update {
     }
 
     public void takeDamage(int damage) {
-        currentHp = Math.max(0, currentHp - damage);
+        int remaining = Math.max(0, damage);
+        if (coverHp > 0) {
+            coverHp -= remaining;
+            if (coverHp > 0) {
+                return;
+            }
+            remaining = -coverHp;
+            coverHp = 0;
+            disabled = false;
+            protectedFromZombies = false;
+        }
+        currentHp = Math.max(0, currentHp - remaining);
     }
 
     public boolean isDead() {
@@ -159,6 +177,47 @@ public class Plant implements Update {
         return result;
     }
 
+    public void setPosition(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
+    }
+
+    public int getStackCount() {
+        return stackCount;
+    }
+
+    public void incrementStackCount() {
+        stackCount = Math.min(5, stackCount + 1);
+    }
+
+    public void decrementStackCount() {
+        stackCount = Math.max(1, stackCount - 1);
+    }
+
+    public boolean isProtectedFromZombies() {
+        return protectedFromZombies;
+    }
+
+    public void setProtectedFromZombies(boolean protectedFromZombies) {
+        this.protectedFromZombies = protectedFromZombies;
+    }
+
+    public int getCoverHp() {
+        return coverHp;
+    }
+
+    public void setCoverHp(int coverHp) {
+        this.coverHp = Math.max(0, coverHp);
+    }
+
     public void setCurrentHp(int currentHp) {
         this.currentHp = currentHp;
     }
@@ -189,11 +248,6 @@ public class Plant implements Update {
 
     public int getY() {
         return y;
-    }
-
-    public void setPosition(int x, int y) {
-        this.x = x;
-        this.y = y;
     }
 
     public int getLevel() {

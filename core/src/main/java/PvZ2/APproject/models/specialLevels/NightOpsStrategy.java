@@ -6,7 +6,7 @@ import PvZ2.APproject.models.plants.Plant;
 public class NightOpsStrategy implements SpecialLevelStrategy {
     @Override
     public void levelStart(Level level) {
-        level.setSkySunProducer(null);// maybe will add a boolean enabler later
+        level.setSkySunProducer(null);
     }
 
     @Override

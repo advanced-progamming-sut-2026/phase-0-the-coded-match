@@ -45,6 +45,8 @@ public class GameManager {
             System.out.println(ZombieController.showZombiesInfo().toString());
         } else if (input.matches(Commands.CHEAT_SPAWN_ZOMBIE.getPattern())) {
             ZombieController.cheatSpawnZombies(input);
+//        } else if (input.matches(Commands.START_ZOMBIE_WAVES.getPattern())) {
+//            System.out.println(instance.startWave()[0]);
         } else if(input.matches(Commands.RELEASE_THE_NUKE.getPattern())){
             instance.cheatReleaseTheNuke();
         } else if (input.matches("^\\s*start\\s+zombie\\s+waves\\s*$")) {

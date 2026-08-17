@@ -26,7 +26,7 @@ public class ShootAbility implements PlantAbilityHandler {
         if (level == null || !hasZombieInLane(level, plant.getY(), plant.getX())) {
             return;
         }
-        int count = Math.max(projectileCount, plant.getData().getProjectileCount());
+        int count = Math.max(projectileCount, plant.getData().getProjectileCount()) * Math.max(1, plant.getStackCount());
         for (int i = 0; i < count; i++) {
             level.getActiveProjectiles().add(createProjectile(plant, plant.getY(), i));
         }

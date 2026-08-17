@@ -57,53 +57,51 @@ public class ShopController {
         return sb;
     }
 
-    public static String buyItem(String input) {
+    public static String buyItem(ShopItemData item, String plantSelected) {
         Shop shop = App.getCurrentUser().getShop();
-        Pattern pattern = Pattern.compile(Commands.SHOP_BUY.getPattern());
-        Matcher matcher = pattern.matcher(input);
-        if (!matcher.matches()) {
-            return "invalid command";
-        }
-        int id = Integer.parseInt(matcher.group("itemId"));
-        ShopItemData item = getItemById(id);
-        int count = Integer.parseInt(matcher.group("count"));
-        if (count < 1) return "invalid count";
-
-        if (item == null) {
-            return "invalid item id";
-        }
-
+//        Pattern pattern = Pattern.compile(Commands.SHOP_BUY.getPattern());
+//        Matcher matcher = pattern.matcher(input);
+//        if (!matcher.matches()) {
+//            return "invalid command";
+//        }
+//        int id = Integer.parseInt(matcher.group("itemId"));
+//        ShopItemData item = getItemById(id);
+//        int count = Integer.parseInt(matcher.group("count"));
+//        if (count < 1) return "invalid count";
+//
+//        if (item == null) {
+//            return "invalid item id";
+//        }
         PlantData plantChosen = null;
-        if (item == ShopItemData.SEED_PACKET_DAILY && shop.isDailyItemSoldOut())
-            return "daily item has been sold out, come back tomorrow";
+        if (item == ShopItemData.SEED_PACKET_DAILY && shop.isDailyItemSoldOut()) return "ERROR: daily item has been sold out, come back tomorrow";
 
         if (item == ShopItemData.SEED_PACKET_BY_CHANCE) plantChosen = shop.getRandomSeedPack();
         else if (item == ShopItemData.SEED_PACKET_DAILY) plantChosen = shop.getRandomSpecialSeedPack();
         else if (item == ShopItemData.SEED_PACKET_BY_CHOICE) {
-            String plantChosenSt = matcher.group(3);
-            plantChosen = PlantRepository.getInstance().findByName(plantChosenSt);
+            plantChosen = PlantRepository.getInstance().findByName(plantSelected);
             if (plantChosen == null || !App.getCurrentUser().getCollection().getAvailablePlantsIds().contains(plantChosen.getId())) {
-                return "invalid plant name";
+                return "ERROR: you don't have access to plant";
             }
         }
 
-        if (item == ShopItemData.POT && App.getCurrentUser().getGreenHouse().getPotsCount() + count > 20) return "greenhouse is full";
-        if (item == ShopItemData.PLANT_FOOD && App.getCurrentUser().getPlantFoodBoughtCount() + count > 3) return "plant food count is maximum";
-        int price = item.getPrice() * count;
+        if (item == ShopItemData.POT && App.getCurrentUser().getGreenHouse().getPotsCount() + 1 > 20) return "ERROR: greenhouse is full";
+        if (item == ShopItemData.PLANT_FOOD && App.getCurrentUser().getPlantFoodBoughtCount() + 1 > 3) return "ERROR: plant food count is at maximum capacity";
+        int price = item.getPrice() * 1;
         if (item.getPaymentType() == PaymentType.COIN) {
             if (price > App.getCurrentUser().getCoinsCount()) {
-                return "not enough coins to buy this item";
+                return "ERROR: not enough coins to buy this item";
             } else {
                 App.getCurrentUser().setCoinsCount(App.getCurrentUser().getCoinsCount() - price);
             }
         } else {
             if (price > App.getCurrentUser().getGemsCount()) {
-                return "not enough gems to buy this item";
+                return "ERROR: not enough gems to buy this item";
             } else {
                 App.getCurrentUser().setGemsCount(App.getCurrentUser().getGemsCount() - price);
             }
         }
-        return addItemToProfile(item, plantChosen, count);
+//        return addItemToProfile(item, plantChosen, 1);
+        return plantChosen.getName();
     }
 
     public static PlantData getRandomPlant(){
@@ -122,20 +120,21 @@ public class ShopController {
         return null;
     }
 
-    public static String addItemToProfile(ShopItemData item, PlantData plant, int count) {
+    public static String addItemToProfile(ShopItemData item, String plantChosen, int count) {
+        PlantData plant = PlantRepository.getInstance().findByName(plantChosen);
         Shop shop = App.getCurrentUser().getShop();
         switch (item) {
             case POT -> {
                 GreenHouse greenHouse = App.getCurrentUser().getGreenHouse();
                 if (greenHouse.getPotsCount() + count > 20) {
-                    return "greenhouse is full";
+                    return "ERROR: greenhouse is full";
                 }
                 int unlocked = greenHouse.unlockPots(count);
-                return unlocked + " pot(s) bought successfully";
+                return unlocked + " pot bought successfully";
             }
             case PLANT_FOOD -> {
                 if (App.getCurrentUser().getPlantFoodBoughtCount() + count > 3) {
-                    return "plant food count is maximum";
+                    return "ERROR: plant food count is maximum";
                 }
                 App.getCurrentUser().setPlantFoodBoughtCount(App.getCurrentUser().getPlantFoodBoughtCount() +
                         (count * item.getUnitBought()));

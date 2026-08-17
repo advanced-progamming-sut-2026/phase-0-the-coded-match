@@ -10,32 +10,25 @@ public class AllStarBehavior implements ZombieBehavior {
     @Override
     public void updateZombie(Zombie zombie, Plant targetPlant) {
         Zombie targetZombie = GameManagerController.getInstance().getCurrentLevel().getAdjacentZombie(zombie);
-        if (targetZombie != null && zombie.getCurrentState() == ZombieState.RUNNING) {
-            if (targetZombie.getCurrentState() == ZombieState.HYPNOTIZED) {
-                destroyZombie(targetZombie);
-            }
+        if (zombie.getCurrentState() == ZombieState.RUNNING && targetZombie != null
+                && targetZombie.getCurrentState() == ZombieState.HYPNOTIZED) {
+            targetZombie.setCurrentHp(0);
         }
-//        else if (targetPlant != null && zombie.isWasRunning()) {
-//            zombie.setWasRunning(false);
-//            if (targetPlant.hasThisTag()) {//TODO: plant is hypnotized
-//                zombie.destroyPlant(targetPlant);
-//            }
-//        }
-        else if (zombie.getCurrentState() == ZombieState.EATING) {
-            zombie.attack(targetPlant);
-            if(targetPlant.isDead()) {
+        if (zombie.getCurrentState() == ZombieState.EATING) {
+            if (zombie.isWasRunning()) {
+                zombie.destroyPlant(targetPlant);
+                zombie.setWasRunning(false);
+            } else {
+                zombie.attack(targetPlant);
+            }
+            if (targetPlant == null || targetPlant.isDead()) {
                 zombie.setCurrentState(ZombieState.WALKING);
             }
         } else if (zombie.getCurrentState() == ZombieState.RUNNING) {
             zombie.run();
-        } else if (zombie.getCurrentState() == ZombieState.WALKING) {
+        } else {
             zombie.walk();
         }
-    }
-
-    public void destroyZombie(Zombie zombie) {
-        zombie.setCurrentHp(0);
-        GameManagerController.getInstance().getCurrentLevel().getActiveZombies().remove(zombie);
     }
 
     @Override

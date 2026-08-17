@@ -20,7 +20,7 @@ public class ProduceSunAbility implements PlantAbilityHandler {
             return;
         }
         int value = instant ? Math.max(150, plant.getData().getSunCost() * 2) : getProducedSunValue(plant);
-        Sun sun = new Sun(plant.getX(), plant.getY(), value, 0, false, SunType.NORMAL);
+        Sun sun = new Sun(plant.getX(), plant.getY(), value, 0, false, SunType.NORMAL); /*plant*/
         level.getActiveSuns().add(sun);
         plant.setProducedSun(true);
         plant.setSunCollected(false);

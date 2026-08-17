@@ -13,16 +13,16 @@ import java.util.regex.Pattern;
 
 public class LoginMenuController{
 
-    public static String login(String input) {
-        Pattern pattern = Pattern.compile(Commands.LOGIN.getPattern());
-        Matcher matcher = pattern.matcher(input);
-        if (!matcher.matches()) {
-            return "invalid command";
-        }
-
-        String username = matcher.group("username");
-        String password = matcher.group("password");
-        boolean stayLoggedIn = matcher.group("stay") != null;
+    public static String login(String username, String password, boolean stayLoggedIn) {
+//        Pattern pattern = Pattern.compile(Commands.LOGIN.getPattern());
+//        Matcher matcher = pattern.matcher(input);
+//        if (!matcher.matches()) {
+//            return "invalid command";
+//        }
+//
+//        String username = matcher.group("username");
+//        String password = matcher.group("password");
+//        boolean stayLoggedIn = matcher.group("stay") != null;
 
         User target = App.getUserByUsername(username);
         if(target == null){
@@ -42,10 +42,10 @@ public class LoginMenuController{
         return "Logged in successfully";
     }
 
-    public static String forgotPassword(String input) {
-        Matcher matcher = Pattern.compile(Commands.FORGET_PASSWORD.getPattern()).matcher(input);
-        if (!matcher.matches()) return "invalid command";
-        String username = matcher.group("username"), email = matcher.group("email");
+    public static String forgotPassword(String username, String email) {
+//        Matcher matcher = Pattern.compile(Commands.FORGET_PASSWORD.getPattern()).matcher(input);
+//        if (!matcher.matches()) return "invalid command";
+//        String username = matcher.group("username"), email = matcher.group("email");
         User target = App.getUserByUsername(username);
         if(target == null){
             return "User does not exist";

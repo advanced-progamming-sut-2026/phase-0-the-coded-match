@@ -12,28 +12,26 @@ import PvZ2.APproject.models.zombies.Zombie;
 public class SnorkelBehavior implements ZombieBehavior {
     @Override
     public void updateZombie(Zombie zombie, Plant targetPlant) {
-        Tile currentTile = GameManagerController.getInstance().getCurrentLevel().getGameMap().getTile((int)zombie.getX()
-                , zombie.getY());
-
-        if (currentTile.getType() == TileType.WATER && zombie.getCurrentState() != ZombieState.EATING) {
-            zombie.setSubmerged(true);
-        } else if (zombie.getCurrentState() == ZombieState.EATING) {
-            zombie.attack(targetPlant);
+        Tile tile = GameManagerController.getInstance().getCurrentLevel().getGameMap()
+                .getTile((int) Math.round(zombie.getX()), zombie.getY());
+        boolean inWater = tile != null && tile.getType() == TileType.WATER;
+        if (zombie.getCurrentState() == ZombieState.EATING) {
             zombie.setSubmerged(false);
-        } else if (zombie.getCurrentState() == ZombieState.WALKING) {
+            zombie.attack(targetPlant);
+            if (targetPlant == null || targetPlant.isDead()) {
+                zombie.setCurrentState(ZombieState.WALKING);
+            }
+        } else {
+            zombie.setSubmerged(inWater);
             zombie.walk();
         }
     }
 
     @Override
     public void onProjectileHit(Zombie zombie, Projectile projectile) {
-        if (zombie.isSubmerged()) {
-            if (projectile.getCreatorPlantCategory().getData().getCategory() == PlantCategory.LOBBER) {
-                zombie.takeDamage(projectile.getDamage(), projectile.getCreatorPlantCategory());
-                projectile.destroy();
-            }
-        } else {
-            zombie.takeDamage(projectile.getDamage(), projectile.getCreatorPlantCategory());
+        Plant creator = projectile.getCreatorPlantCategory();
+        if (!zombie.isSubmerged() || creator != null && creator.getData().getCategory() == PlantCategory.LOBBER) {
+            zombie.takeDamage(projectile.getDamage(), creator);
         }
     }
 }
