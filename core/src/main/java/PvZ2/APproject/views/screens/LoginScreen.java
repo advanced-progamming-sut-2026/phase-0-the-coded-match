@@ -41,7 +41,7 @@ public class LoginScreen extends BaseScreen {
         wrapper.add(usernameField).width(200).height(50).row();
         wrapper.add(passwordField).width(200).height(50).row();
         wrapper.add(loginBtn).width(150).height(40).padTop(10).row();
-        wrapper.add(forgotPassBtn).width(150).height(30).padTop(5).row();
+        wrapper.add(forgotPassBtn).width(200).height(30).padTop(5).row();
         wrapper.add(stayLoggedInCheckBox).padBottom(10).row();
         wrapper.pack();
         wrapper.setPosition(
@@ -80,6 +80,7 @@ public class LoginScreen extends BaseScreen {
     }
 
     private void openForgotPasswordModal() {
+        wrapper.setVisible(false);
         Dialog dialog = new Dialog("Forgot Password", skin);
 
         Label instructionLabel = new Label("Enter your credentials:", skin);
@@ -104,6 +105,8 @@ public class LoginScreen extends BaseScreen {
 
                     if (response.equals("User does not exist") || response.equals("Incorrect email")) {
                         showMessage(response);
+                        content.clearChildren();
+                        dialog.clearChildren();
                     } else {
                         step[0] = 2;
                         content.clearChildren();
@@ -172,6 +175,7 @@ public class LoginScreen extends BaseScreen {
                 Actions.hide()
             )
         );
+        wrapper.setVisible(true);
     }
 }
 

@@ -37,6 +37,7 @@ public class User {
     private GreenHouse greenHouse;
     private Shop shop;
     private transient ArrayList<Level> unlockedLevels = new ArrayList<>();
+    private transient ArrayList<Level> unlockedSeasons = new ArrayList<>();
     private NewsManager personalNews;
     private Map<String, Integer> seedPackets = new HashMap<>();
     private QuestsModel questsModel;

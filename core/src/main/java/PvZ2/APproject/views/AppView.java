@@ -37,9 +37,9 @@ public class AppView {
             } else if (currentMenu == Menu.MAIN_MENU) {
                 MainMenu.check(input);
             } else if (currentMenu == Menu.GAME_MENU) {
-                GameMenu.check(input);
+//                GameMenu.check(input);
             } else if (currentMenu == Menu.SETTINGS_MENU) {
-                SettingsMenu.check(input);
+//                SettingsMenu.check(input);
             } else if (currentMenu == Menu.NEWS_MENU) {
                 NewsMenu.check(input);
             } else if (currentMenu == Menu.PROFILE_MENU) {

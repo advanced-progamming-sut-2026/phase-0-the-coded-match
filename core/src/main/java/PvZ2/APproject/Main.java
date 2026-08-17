@@ -2,8 +2,7 @@ package PvZ2.APproject;
 
 import PvZ2.APproject.enums.Menu;
 import PvZ2.APproject.models.App;
-import PvZ2.APproject.views.screens.LoginScreen;
-import PvZ2.APproject.views.screens.SignupScreen;
+import PvZ2.APproject.views.screens.*;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;

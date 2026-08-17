@@ -14,54 +14,33 @@ import java.util.regex.Pattern;
 
 public class GameMenuController{
 
-    public static String[] enterSeason(String input, String[] message) {
-        Pattern pattern = Pattern.compile(Commands.ENTER_SEASON.getPattern());
-        Matcher matcher = pattern.matcher(input);
-
-        if (!matcher.matches()) {
-            message[0] = "Invalid command";
-            return message;
-        }
-
-        String seasonName = matcher.group("season");
-        Season season = App.getSeason(seasonName);
+    public static void enterSeason(String input) {
+        Season season = App.getSeason(input);
 
         if (season == null) {
-            message[0] = "season does not exist";
+          System.out.println("debug szn does not exist");
         } else if (season.isUnlocked()) {
             App.getCurrentUser().setLastSeason(season);
-            message[0] = "entered " + seasonName + " successfully";
         } else {
-            message[0] = seasonName + " is locked";
+            System.out.println(input+" is locked");
         }
-        return message;
     }
 
-    public static String[] enterLevel(String input, String[] message) {
-        Pattern pattern = Pattern.compile(Commands.ENTER_LEVEL.getPattern());
-        Matcher matcher = pattern.matcher(input);
+    public static void enterLevel(int levelNumber) {
 
-        if (!matcher.matches()) {
-            message[0] = "Invalid command";
-            return message;
-        }
-
-        int levelNum = Integer.parseInt(matcher.group("level"));
-        LevelData level = App.getLevelByNumber(levelNum, App.getCurrentUser().getLastSeason());
+        LevelData level = App.getLevelByNumber(levelNumber, App.getCurrentUser().getLastSeason());
 
         if (level == null) {
-            message[0] = "level does not exist";
+           System.out.println("oops no level");
         } else if (level.isUnlocked()) {
             App.getCurrentUser().setLastLevel(level);
             Level currentLevel = new Level(level);
             currentLevel.setCurrentSeason(App.getCurrentUser().getLastSeason());
             GameManagerController.getInstance().setCurrentLevel(currentLevel);
             App.setCurrentMenu(Menu.CHOOSEPLANTS_MENU);
-            message[0] = "entered level " + levelNum + " successfully";
         } else {
-            message[0] = "level" + levelNum + " is locked";
+            System.out.println("level" + levelNumber + " is locked"); ;
         }
-        return message;
     }
 
     public static String[] enter(String input, String[] message) {
