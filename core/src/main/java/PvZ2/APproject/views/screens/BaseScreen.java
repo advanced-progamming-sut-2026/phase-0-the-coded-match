@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import pvz.libpvz.pam.PamPlayer;
 import pvz.libpvz.textures.TextureBank;
 import pvz.skin.PvzSkin;
 
@@ -21,6 +22,7 @@ public abstract class BaseScreen implements Screen {
     protected Viewport viewport;
     protected Stage stage;
     protected TextureBank textures;
+    protected PamPlayer player;
     protected TextureRegion background;
     protected Image backgroundImage;
     protected static final float VIRTUAL_WIDTH = 1024;
@@ -34,6 +36,7 @@ public abstract class BaseScreen implements Screen {
         stage = new Stage(viewport);
         Gdx.input.setInputProcessor(stage);
         textures = ((Main) Gdx.app.getApplicationListener()).getTextures();
+        player = ((Main) Gdx.app.getApplicationListener()).getPlayer();
     }
 
     @Override

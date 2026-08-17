@@ -74,7 +74,8 @@ public class ShopController {
         }
 
         PlantData plantChosen = null;
-        if (item == ShopItemData.SEED_PACKET_DAILY && shop.isDailyItemSoldOut()) return "daily item has been sold out, come back tomorrow";
+        if (item == ShopItemData.SEED_PACKET_DAILY && shop.isDailyItemSoldOut())
+            return "daily item has been sold out, come back tomorrow";
 
         if (item == ShopItemData.SEED_PACKET_BY_CHANCE) plantChosen = shop.getRandomSeedPack();
         else if (item == ShopItemData.SEED_PACKET_DAILY) plantChosen = shop.getRandomSpecialSeedPack();

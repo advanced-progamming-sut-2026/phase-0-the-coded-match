@@ -104,7 +104,7 @@ public class ChoosePlantsMenuController {
         if (!hasPlantBeenChosen(plantName)) return "Plant has not been chosen";
         if (current.getGemsCount() < 2) return "Not enough gems";
         current.setGemsCount(current.getGemsCount() - 2);
-        current.getGreenHouse().stored_boosts.put(plantName.toLowerCase(), true);
+        current.getGreenHouse().storedBoosts.put(plantName.toLowerCase(), true);
         return "Plant boosted successfully";
     }
 

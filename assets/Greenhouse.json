@@ -9,24 +9,15 @@
     { "x": 2, "y": 1, "is_locked": false, "status": "EMPTY", "plant_type": null, "planted_timestamp": null, "growth_duration_hours": 0 },
     { "x": 3, "y": 1, "is_locked": false, "status": "EMPTY", "plant_type": null, "planted_timestamp": null, "growth_duration_hours": 0 },
     { "x": 4, "y": 1, "is_locked": false, "status": "EMPTY", "plant_type": null, "planted_timestamp": null, "growth_duration_hours": 0 },
-    { "x": 5, "y": 1, "is_locked": false, "status": "EMPTY", "plant_type": null, "planted_timestamp": null, "growth_duration_hours": 0 },
 
     { "x": 1, "y": 2, "is_locked": true, "status": "LOCKED", "plant_type": null, "planted_timestamp": null, "growth_duration_hours": 0 },
     { "x": 2, "y": 2, "is_locked": true, "status": "LOCKED", "plant_type": null, "planted_timestamp": null, "growth_duration_hours": 0 },
     { "x": 3, "y": 2, "is_locked": true, "status": "LOCKED", "plant_type": null, "planted_timestamp": null, "growth_duration_hours": 0 },
     { "x": 4, "y": 2, "is_locked": true, "status": "LOCKED", "plant_type": null, "planted_timestamp": null, "growth_duration_hours": 0 },
-    { "x": 5, "y": 2, "is_locked": true, "status": "LOCKED", "plant_type": null, "planted_timestamp": null, "growth_duration_hours": 0 },
 
     { "x": 1, "y": 3, "is_locked": true, "status": "LOCKED", "plant_type": null, "planted_timestamp": null, "growth_duration_hours": 0 },
     { "x": 2, "y": 3, "is_locked": true, "status": "LOCKED", "plant_type": null, "planted_timestamp": null, "growth_duration_hours": 0 },
     { "x": 3, "y": 3, "is_locked": true, "status": "LOCKED", "plant_type": null, "planted_timestamp": null, "growth_duration_hours": 0 },
-    { "x": 4, "y": 3, "is_locked": true, "status": "LOCKED", "plant_type": null, "planted_timestamp": null, "growth_duration_hours": 0 },
-    { "x": 5, "y": 3, "is_locked": true, "status": "LOCKED", "plant_type": null, "planted_timestamp": null, "growth_duration_hours": 0 },
-
-    { "x": 1, "y": 4, "is_locked": true, "status": "LOCKED", "plant_type": null, "planted_timestamp": null, "growth_duration_hours": 0 },
-    { "x": 2, "y": 4, "is_locked": true, "status": "LOCKED", "plant_type": null, "planted_timestamp": null, "growth_duration_hours": 0 },
-    { "x": 3, "y": 4, "is_locked": true, "status": "LOCKED", "plant_type": null, "planted_timestamp": null, "growth_duration_hours": 0 },
-    { "x": 4, "y": 4, "is_locked": true, "status": "LOCKED", "plant_type": null, "planted_timestamp": null, "growth_duration_hours": 0 },
-    { "x": 5, "y": 4, "is_locked": true, "status": "LOCKED", "plant_type": null, "planted_timestamp": null, "growth_duration_hours": 0 }
+    { "x": 4, "y": 3, "is_locked": true, "status": "LOCKED", "plant_type": null, "planted_timestamp": null, "growth_duration_hours": 0 }
   ]
 }

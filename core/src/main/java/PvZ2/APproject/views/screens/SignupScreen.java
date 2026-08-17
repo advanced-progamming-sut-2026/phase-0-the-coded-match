@@ -2,9 +2,7 @@ package PvZ2.APproject.views.screens;
 
 import PvZ2.APproject.Main;
 import PvZ2.APproject.controllers.menus.SignupMenuController;
-import PvZ2.APproject.models.App;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -85,6 +83,17 @@ public class SignupScreen extends BaseScreen {
 //                game.setScreen(new ProfileScreen(game));
 //            }
 //        });
+        TextButton greenhouse = new TextButton("greenhouse", skin, "default");
+        greenhouse.setPosition(1000, 700);
+
+        stage.addActor(greenhouse);
+
+        greenhouse.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new GreenHouseScreen(game));
+            }
+        });
 
         messageNotif = new Label("", skin, "promo_ribbon");
         messageNotif.setVisible(false);

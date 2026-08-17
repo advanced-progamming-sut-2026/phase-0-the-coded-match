@@ -40,7 +40,7 @@
     "description": "Produces 50 sun every 24 seconds."
   },
   {
-    "id": "twin_sunflower",
+    "id": "sunflower_twin",
     "name": "Twin Sunflower",
     "displayName": "Twin Sunflower",
     "category": "SUN_PRODUCER",
@@ -80,7 +80,7 @@
     "description": "Produces 100 sun each production cycle."
   },
   {
-    "id": "sun_shroom",
+    "id": "sunshroom",
     "name": "Sun-shroom",
     "displayName": "Sun-shroom",
     "category": "SUN_PRODUCER",
@@ -160,7 +160,7 @@
     "description": "Produces a large 75-sun orb from the start."
   },
   {
-    "id": "gold_bloom",
+    "id": "goldbloom",
     "name": "Gold Bloom",
     "displayName": "Gold Bloom",
     "category": "SUN_PRODUCER",
@@ -316,7 +316,7 @@
     "description": "Fires peas simultaneously across three adjacent lanes."
   },
   {
-    "id": "snow_pea",
+    "id": "snowpea",
     "name": "Snow Pea",
     "displayName": "Snow Pea",
     "category": "SHOOTER",
@@ -358,7 +358,7 @@
     "description": "Fires chilling peas that slow zombies."
   },
   {
-    "id": "rotobaga",
+    "id": "rotorutabaga",
     "name": "Rotobaga",
     "displayName": "Rotobaga",
     "category": "SHOOTER",
@@ -396,7 +396,7 @@
     "description": "Fires diagonally in four directions."
   },
   {
-    "id": "pea_pod",
+    "id": "peapod",
     "name": "Pea Pod",
     "displayName": "Pea Pod",
     "category": "SHOOTER",
@@ -437,7 +437,7 @@
     "description": "Fires one pea per stacked head, up to five heads."
   },
   {
-    "id": "split_pea",
+    "id": "splitpea",
     "name": "Split Pea",
     "displayName": "Split Pea",
     "category": "SHOOTER",
@@ -558,7 +558,7 @@
     "description": "Launches magical shots at random targets, ignores obstacles, and hypnotizes zombies."
   },
   {
-    "id": "electric_blueberry",
+    "id": "electricblueberry",
     "name": "Electric Blueberry",
     "displayName": "Electric Blueberry",
     "category": "HOMING",
@@ -598,7 +598,7 @@
     "description": "Calls lightning on a random zombie and instantly defeats it."
   },
   {
-    "id": "bowling_bulb",
+    "id": "bowlingbulb",
     "name": "Bowling Bulb",
     "displayName": "Bowling Bulb",
     "category": "SHOOTER",
@@ -676,7 +676,7 @@
     "description": "Fires a piercing spike through up to three zombies."
   },
   {
-    "id": "fire_peashooter",
+    "id": "firepeashooter",
     "name": "Fire Peashooter",
     "displayName": "Fire Peashooter",
     "category": "SHOOTER",
@@ -756,7 +756,7 @@
     "description": "Fires stars in five directions, including backward."
   },
   {
-    "id": "goo_peashooter",
+    "id": "goopeashooter",
     "name": "Goo Peashooter",
     "displayName": "Goo Peashooter",
     "category": "SHOOTER",
@@ -797,7 +797,7 @@
     "description": "Fires toxic peas that ignore armor and deal damage over time."
   },
   {
-    "id": "mega_gatling_pea",
+    "id": "megagatling",
     "name": "Mega Gatling Pea",
     "displayName": "Mega Gatling Pea",
     "category": "SHOOTER",
@@ -837,7 +837,7 @@
     "description": "Rapidly fires four peas in succession."
   },
   {
-    "id": "sea_shroom",
+    "id": "seashroom",
     "name": "Sea-shroom",
     "displayName": "Sea-shroom",
     "category": "SHOOTER",
@@ -878,7 +878,7 @@
     "description": "Fires short-range spores and expires after 60 seconds."
   },
   {
-    "id": "puff_shroom",
+    "id": "puffshroom",
     "name": "Puff-shroom",
     "displayName": "Puff-shroom",
     "category": "SHOOTER",
@@ -918,7 +918,7 @@
     "description": "Fires short-range spores and expires after 60 seconds."
   },
   {
-    "id": "fume_shroom",
+    "id": "fumeshroom",
     "name": "Fume-shroom",
     "displayName": "Fume-shroom",
     "category": "STRIKE_TROUGH",
@@ -958,7 +958,7 @@
     "description": "Fires penetrating fumes at medium range."
   },
   {
-    "id": "cabbage_pult",
+    "id": "cabbagepult",
     "name": "Cabbage-pult",
     "displayName": "Cabbage-pult",
     "category": "LOBBER",
@@ -996,7 +996,7 @@
     "description": "Lobs cabbages over obstacles."
   },
   {
-    "id": "kernel_pult",
+    "id": "kernalpult",
     "name": "Kernel-pult",
     "displayName": "Kernel-pult",
     "category": "LOBBER",
@@ -1034,7 +1034,7 @@
     "description": "Lobs either low-damage kernels or butter that temporarily stuns zombies."
   },
   {
-    "id": "melon_pult",
+    "id": "melonpult",
     "name": "Melon-pult",
     "displayName": "Melon-pult",
     "category": "LOBBER",
@@ -1075,7 +1075,7 @@
     "description": "Lobs heavy melons that deal splash damage."
   },
   {
-    "id": "winter_melon",
+    "id": "wintermelon",
     "name": "Winter Melon",
     "displayName": "Winter Melon",
     "category": "LOBBER",
@@ -1118,7 +1118,7 @@
     "description": "Lobs icy melons that deal splash damage and slow zombies."
   },
   {
-    "id": "pepper_pult",
+    "id": "pepperpult",
     "name": "Pepper-pult",
     "displayName": "Pepper-pult",
     "category": "LOBBER",
@@ -1161,7 +1161,7 @@
     "description": "Lobs peppers that deal splash damage and warm nearby tiles."
   },
   {
-    "id": "potato_mine",
+    "id": "potatomine",
     "name": "Potato Mine",
     "displayName": "Potato Mine",
     "category": "EXPLOSIVE",
@@ -1202,7 +1202,7 @@
     "description": "Arms after 15 seconds and explodes on contact."
   },
   {
-    "id": "primal_potato_mine",
+    "id": "primal_potatomine",
     "name": "Primal Potato Mine",
     "displayName": "Primal Potato Mine",
     "category": "EXPLOSIVE",
@@ -1243,7 +1243,7 @@
     "description": "Arms after 5 seconds and explodes in a 3x3 area."
   },
   {
-    "id": "cherry_bomb",
+    "id": "cherrybomb",
     "name": "Cherry Bomb",
     "displayName": "Cherry Bomb",
     "category": "EXPLOSIVE",
@@ -1394,7 +1394,7 @@
     "description": "Burns every zombie in its lane instantly and melts ice."
   },
   {
-    "id": "doom_shroom",
+    "id": "doomshroom",
     "name": "Doom-shroom",
     "displayName": "Doom-shroom",
     "category": "EXPLOSIVE",
@@ -1432,7 +1432,7 @@
     "description": "Causes a massive garden-wide explosion and leaves an unplantable crater."
   },
   {
-    "id": "tangle_kelp",
+    "id": "tanglekelp",
     "name": "Tangle Kelp",
     "displayName": "Tangle Kelp",
     "category": "EXPLOSIVE",
@@ -1473,7 +1473,7 @@
     "description": "Pulls the first aquatic zombie underwater and defeats it."
   },
   {
-    "id": "iceberg_lettuce",
+    "id": "iceburg",
     "name": "Iceberg Lettuce",
     "displayName": "Iceberg Lettuce",
     "category": "EXPLOSIVE",
@@ -1515,7 +1515,7 @@
     "description": "Freezes the first zombie that steps on it."
   },
   {
-    "id": "bonk_choy",
+    "id": "bonkchoy",
     "name": "Bonk Choy",
     "displayName": "Bonk Choy",
     "category": "MELEE",
@@ -1553,7 +1553,7 @@
     "description": "Punches tiles directly in front and behind."
   },
   {
-    "id": "phat_beet",
+    "id": "phatbeets",
     "name": "Phat Beet",
     "displayName": "Phat Beet",
     "category": "MELEE",
@@ -1632,7 +1632,7 @@
     "description": "Swallows one zombie instantly, then digests for 40 seconds."
   },
   {
-    "id": "wasabi_whip",
+    "id": "wasabiwhip",
     "name": "Wasabi Whip",
     "displayName": "Wasabi Whip",
     "category": "MELEE",
@@ -1715,7 +1715,7 @@
     "description": "Emits area sound waves; grows larger and stronger over time. Stage 2: 24s; Stage 3: 72s."
   },
   {
-    "id": "wall_nut",
+    "id": "wallnut",
     "name": "Wall-nut",
     "displayName": "Wall-nut",
     "category": "WALL_NUT",
@@ -1751,7 +1751,7 @@
     "description": "A durable defensive barrier that blocks zombies."
   },
   {
-    "id": "tall_nut",
+    "id": "tallnut",
     "name": "Tall-nut",
     "displayName": "Tall-nut",
     "category": "WALL_NUT",
@@ -1861,7 +1861,7 @@
     "description": "When bitten, forces the zombie into an adjacent lane."
   },
   {
-    "id": "sweet_potato",
+    "id": "sweetpotato",
     "name": "Sweet Potato",
     "displayName": "Sweet Potato",
     "category": "WALL_NUT",
@@ -1899,7 +1899,7 @@
     "description": "Attracts zombies from adjacent lanes into its own lane."
   },
   {
-    "id": "explode_o_nut",
+    "id": "explodeonut",
     "name": "Explode-o-nut",
     "displayName": "Explode-o-nut",
     "category": "WALL_NUT",
@@ -1975,7 +1975,7 @@
     "description": "Can be planted over another plant to protect it."
   },
   {
-    "id": "sun_bean",
+    "id": "sunbean",
     "name": "Sun Bean",
     "displayName": "Sun Bean",
     "category": "WALL_NUT",
@@ -2053,7 +2053,7 @@
     "description": "Turns passing peas into fire peas with double damage and ice-melting effects."
   },
   {
-    "id": "magnet_shroom",
+    "id": "magnetshroom",
     "name": "Magnet-shroom",
     "displayName": "Magnet-shroom",
     "category": "HOMING",
@@ -2094,7 +2094,7 @@
     "description": "Removes metal equipment such as buckets and helmets from zombies."
   },
   {
-    "id": "hypno_shroom",
+    "id": "hypnoshroom",
     "name": "Hypno-shroom",
     "displayName": "Hypno-shroom",
     "category": "MODIFIER",
@@ -2205,7 +2205,7 @@
     "description": "Copies another plant, allowing two cards of the same plant."
   },
   {
-    "id": "ice_shroom",
+    "id": "iceshroom",
     "name": "Ice-shroom",
     "displayName": "Ice-shroom",
     "category": "EXPLOSIVE",
@@ -2245,7 +2245,7 @@
     "description": "Temporarily freezes every zombie on the map."
   },
   {
-    "id": "lily_pad",
+    "id": "lilypad",
     "name": "Lily Pad",
     "displayName": "Lily Pad",
     "category": "MODIFIER",
@@ -2284,7 +2284,7 @@
     "description": "Provides a platform for planting non-aquatic plants on water."
   },
   {
-    "id": "hot_potato",
+    "id": "hotpotato",
     "name": "Hot Potato",
     "displayName": "Hot Potato",
     "category": "EXPLOSIVE",
@@ -2323,7 +2323,7 @@
     "description": "Instantly melts ice on its tile."
   },
   {
-    "id": "grave_buster",
+    "id": "gravebuster",
     "name": "Grave Buster",
     "displayName": "Grave Buster",
     "category": "EXPLOSIVE",
@@ -2359,7 +2359,7 @@
     "description": "Removes graves."
   },
   {
-    "id": "enlighten_mint",
+    "id": "enlightenmint",
     "name": "Enlighten-mint",
     "displayName": "Enlighten-mint",
     "category": "SUN_PRODUCER",
@@ -2395,7 +2395,7 @@
     "description": "Temporarily activates Plant Food on every plant in its family."
   },
   {
-    "id": "appease_mint",
+    "id": "appeasemint",
     "name": "Appease-mint",
     "displayName": "Appease-mint",
     "category": "SHOOTER",
@@ -2431,7 +2431,7 @@
     "description": "Temporarily activates Plant Food on every plant in its family."
   },
   {
-    "id": "arma_mint",
+    "id": "armamint",
     "name": "Arma-mint",
     "displayName": "Arma-mint",
     "category": "LOBBER",
@@ -2467,7 +2467,7 @@
     "description": "Temporarily activates Plant Food on every plant in its family."
   },
   {
-    "id": "bombard_mint",
+    "id": "bombardmint",
     "name": "Bombard-mint",
     "displayName": "Bombard-mint",
     "category": "EXPLOSIVE",
@@ -2503,7 +2503,7 @@
     "description": "Temporarily activates Plant Food on every plant in its family."
   },
   {
-    "id": "enforce_mint",
+    "id": "enforcemint",
     "name": "Enforce-mint",
     "displayName": "Enforce-mint",
     "category": "MELEE",
@@ -2539,7 +2539,7 @@
     "description": "Temporarily activates Plant Food on every plant in its family."
   },
   {
-    "id": "reinforce_mint",
+    "id": "reinforcemint",
     "name": "Reinforce-mint",
     "displayName": "Reinforce-mint",
     "category": "WALL_NUT",
@@ -2575,7 +2575,7 @@
     "description": "Temporarily activates Plant Food on every plant in its family."
   },
   {
-    "id": "enchant_mint",
+    "id": "enchantmint",
     "name": "Enchant-mint",
     "displayName": "Enchant-mint",
     "category": "MODIFIER",
@@ -2611,7 +2611,7 @@
     "description": "Temporarily activates Plant Food on every plant in its family."
   },
   {
-    "id": "pierce_mint",
+    "id": "piercemint",
     "name": "Pierce-mint",
     "displayName": "Pierce-mint",
     "category": "STRIKE_TROUGH",
@@ -2647,7 +2647,7 @@
     "description": "Temporarily activates Plant Food on every plant in its family."
   },
   {
-    "id": "cattail_mint",
+    "id": "cattailmint",
     "name": "catTail-mint",
     "displayName": "catTail-mint",
     "category": "HOMING",

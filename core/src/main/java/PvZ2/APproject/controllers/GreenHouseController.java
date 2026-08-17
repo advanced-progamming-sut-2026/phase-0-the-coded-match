@@ -1,21 +1,22 @@
 package PvZ2.APproject.controllers;
 
+import PvZ2.APproject.Main;
 import PvZ2.APproject.models.App;
 
 public class GreenHouseController {
-    public static void plantSeed(int x, int y) {
+    public void plantSeed(int x, int y) {
         App.getCurrentUser().getGreenHouse().plantPot(x, y, App.getCurrentUser().getCollection().getAvailablePlantsIds());
     }
 
-    public static void collectPlant(int x, int y) {
-        App.getCurrentUser().getGreenHouse().collect(x, y);
+    public String collectPlant(int x, int y) {
+        return App.getCurrentUser().getGreenHouse().collect(x, y);
     }
 
-    public static void unlockPot(int count) {
-        App.getCurrentUser().getGreenHouse().unlockPots(count);
-    }
-
-    public static void growPlant(int x, int y) {
+    public void growPlant(int x, int y) {
         App.getCurrentUser().getGreenHouse().grow(x, y);
+    }
+
+    public void exit(Main game) {
+//        game.setScreen(new ); //todo: new GameScreen
     }
 }

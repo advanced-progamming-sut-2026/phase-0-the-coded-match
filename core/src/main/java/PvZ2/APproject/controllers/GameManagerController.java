@@ -311,7 +311,11 @@ public class GameManagerController {
         }
         PlantData data = PlantRepository.getInstance().findByName(type);
         Plant plant = new Plant(data, x, y, 1);
-        if (currentLevel.getSpecialLevel() instanceof LockedPlantsLevel && ((LockedPlantsLevel) currentLevel.getSpecialLevel()).isPlantLocked(plant.getData().getName())) { System.out.println("Plant is locked"); return; }
+        if (currentLevel.getSpecialLevel() instanceof LockedPlantsLevel &&
+            ((LockedPlantsLevel) currentLevel.getSpecialLevel()).isPlantLocked(plant.getData().getName())) {
+            System.out.println("Plant is locked");
+            return;
+        }
         currentLevel.getActivePlants().add(plant);
         if (currentLevel.getCurrentSeason() != null) {
             currentLevel.getCurrentSeason().PlantPlaced(currentLevel, plant, x, y);
@@ -322,7 +326,8 @@ public class GameManagerController {
             plantCooldowns.put(data.getName().toLowerCase(), secondsToTicks(data.getRecharge()));
         }
         if (isBoostedPlant(plant)) plant.activatePlantFood();
-        if (App.getCurrentUser().getGreenHouse().stored_boosts.remove(data.getName().toLowerCase()) != null) plant.activatePlantFood();
+        if (App.getCurrentUser().getGreenHouse().storedBoosts.remove(data.getName().toLowerCase()) != null)
+            plant.activatePlantFood();
         QuestController.onPlantPlaced(plant);
         System.out.println("Plant " + data.getDisplayName() + " planted at (" + x + ", " + y + ")");
     }
@@ -330,7 +335,9 @@ public class GameManagerController {
     private String getPlantingError(String type, int x, int y) {
         PlantData data = PlantRepository.getInstance().findByName(type);
         if (data == null) return "plant type does not exist";
-        if (!currentLevel.getChosenPlants().isEmpty() && currentLevel.getChosenPlants().stream().noneMatch(name -> name.equalsIgnoreCase(type))) return "plant was not selected";
+        if (!currentLevel.getChosenPlants().isEmpty() &&
+            currentLevel.getChosenPlants().stream().noneMatch(name -> name.equalsIgnoreCase(type)))
+            return "plant was not selected";
         Tile tile = currentLevel.getGameMap().getTile(x, y);
         if (tile == null) {
             return "location is out of map";
