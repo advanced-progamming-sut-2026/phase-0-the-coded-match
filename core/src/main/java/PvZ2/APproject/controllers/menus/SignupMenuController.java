@@ -95,9 +95,9 @@ public class SignupMenuController{
             SignupScreen.questionPicked = true;
             saveToJson();
             App.setCurrentMenu(LOGIN_MENU);
-             return  "question picked successfully";
+             return "question picked successfully";
         } else {
-            return  "not confirmed";
+            return "not confirmed";
         }
     }
 

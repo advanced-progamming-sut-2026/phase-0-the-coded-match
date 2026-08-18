@@ -33,7 +33,7 @@ public class Main extends Game {
         if (App.getCurrentMenu() == Menu.MAIN_MENU) {
 //            setScreen(new );//TODO: new MainScreen
         }
-        setScreen(new LoginScreen(this));
+        setScreen(new SignupScreen(this));
     }
 
     public TextureBank getTextures() {

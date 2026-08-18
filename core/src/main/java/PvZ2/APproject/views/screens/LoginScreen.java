@@ -67,6 +67,7 @@ public class LoginScreen extends BaseScreen {
                 if (response.equals("Logged in successfully")) {
                     // Navigate to Main Menu after a short delay
                     // game.setScreen(new MainMenuScreen(game));
+                    game.setScreen(new GameMenuScreen(game));
                 }
             }
         });
@@ -75,6 +76,18 @@ public class LoginScreen extends BaseScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 openForgotPasswordModal();
+            }
+        });
+
+        ImageButton exitButton = new ImageButton(skin, "generic_close_circle");
+        exitButton.setPosition(10, 700);
+
+        stage.addActor(exitButton);
+
+        exitButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                LoginMenuController.exit(game);
             }
         });
     }

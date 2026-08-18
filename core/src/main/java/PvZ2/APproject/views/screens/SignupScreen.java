@@ -83,17 +83,17 @@ public class SignupScreen extends BaseScreen {
 //                game.setScreen(new ProfileScreen(game));
 //            }
 //        });
-        TextButton greenhouse = new TextButton("greenhouse", skin, "default");
-        greenhouse.setPosition(1000, 700);
-
-        stage.addActor(greenhouse);
-
-        greenhouse.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(new GreenHouseScreen(game));
-            }
-        });
+//        TextButton greenhouse = new TextButton("greenhouse", skin, "default");
+//        greenhouse.setPosition(200, 700);
+//
+//        stage.addActor(greenhouse);
+//
+//        greenhouse.addListener(new ClickListener() {
+//            @Override
+//            public void clicked(InputEvent event, float x, float y) {
+//                game.setScreen(new GreenHouseScreen(game));
+//            }
+//        });
 
         messageNotif = new Label("", skin, "promo_ribbon");
         messageNotif.setVisible(false);
@@ -154,12 +154,14 @@ public class SignupScreen extends BaseScreen {
                             } catch (NumberFormatException e) {
                                 showMessage("Invalid question number");
                             }
+
+                            if (questionPicked) {
+                                game.setScreen(new LoginScreen(game));
+                            }
                         }
                     });
 
-                    if (questionPicked) {
-//                game.setScreen(new ); //TODO: new LoginScreen
-                    }
+
                 }
             }
 

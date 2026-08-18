@@ -1,5 +1,6 @@
 package PvZ2.APproject.controllers.menus;
 
+import PvZ2.APproject.Main;
 import PvZ2.APproject.controllers.QuestController;
 import PvZ2.APproject.enums.Commands;
 import PvZ2.APproject.enums.Menu;
@@ -7,6 +8,7 @@ import PvZ2.APproject.enums.Phases;
 import PvZ2.APproject.enums.SecurityQuestions;
 import PvZ2.APproject.models.App;
 import PvZ2.APproject.models.User;
+import PvZ2.APproject.views.screens.SignupScreen;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -92,5 +94,9 @@ public class LoginMenuController{
         App.setCurrentPhase(Phases.NORMAL_GAMEPLAY);
         SignupMenuController.saveToJson();
         return "Password reset successfully";
+    }
+
+    public static void exit(Main game) {
+        game.setScreen(new SignupScreen(game));
     }
 }
