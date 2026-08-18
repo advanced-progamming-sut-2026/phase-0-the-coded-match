@@ -25,4 +25,8 @@ public class ZombieArmorData {
     public boolean isMetallic() {
         return metallic;
     }
+
+    public String getPath(){
+        return path;
+    }
 }
