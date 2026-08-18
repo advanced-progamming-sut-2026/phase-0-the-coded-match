@@ -29,7 +29,6 @@ public class ZombieView extends Actor {
         if(!zombie.getArmors().isEmpty() && zombie.getArmors() != null){
             hasArmor = true;
         }
-
     }
 
     @Override

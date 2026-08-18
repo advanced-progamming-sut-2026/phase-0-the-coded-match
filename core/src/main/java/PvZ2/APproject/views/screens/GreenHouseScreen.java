@@ -70,12 +70,12 @@ public class GreenHouseScreen extends BaseScreen {
                 PotActor potActor = new PotActor(pot, potTexture, lockTexture, player, skin, controller);
                 potActor.setPosition(startX, startY);
 
-              potActor.addListener(new ClickListener() {
-                  @Override
-                  public void clicked(InputEvent event, float x, float y) {
-                      handlePotClick(potActor);
-                  }
-              });
+                potActor.addListener(new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        handlePotClick(potActor);
+                    }
+                });
 
                 stage.addActor(potActor);
 

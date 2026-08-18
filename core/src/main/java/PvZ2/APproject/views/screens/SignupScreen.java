@@ -94,6 +94,15 @@ public class SignupScreen extends BaseScreen {
 //                game.setScreen(new GreenHouseScreen(game));
 //            }
 //        });
+//        TextButton showMap = new TextButton("gameMap", skin, "purple");
+//        showMap.setPosition(300, 700);
+//        stage.addActor(showMap);
+//        showMap.addListener(new ClickListener() {
+//            @Override
+//            public void clicked(InputEvent event, float x, float y) {
+//                game.setScreen(new PlayScreen(game));
+//            }
+//        });
 
         messageNotif = new Label("", skin, "promo_ribbon");
         messageNotif.setVisible(false);
