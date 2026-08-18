@@ -2,6 +2,7 @@
   {
     "id": "ZombieDefault",
     "displayName": "Default",
+    "path": "ZOMBIE_DARK_BASIC",
     "seasons": ["ANCIENT_EGYPT",
       "FROSTBITE_CAVES",
       "BIG_WAVE_BEACH",
@@ -17,6 +18,7 @@
   {
     "id": "ZombieArmor1",
     "displayName": "Conehead Zombie",
+    "path": "ZOMBIE_DARK_BASIC_BRICK",
     "seasons": ["ANCIENT_EGYPT",
       "FROSTBITE_CAVES",
       "BIG_WAVE_BEACH",
@@ -29,7 +31,8 @@
       {
         "type": "CONE",
         "hp": 370,
-        "metallic": false
+        "metallic": false,
+        "path": "zombie_armor_cone_norm"
       }
     ],
     "behaviorType": "Normal",
@@ -39,6 +42,7 @@
   {
     "id": "ZombieArmor2",
     "displayName": "Buckethead Zombie",
+    "path": "ZOMBUE_DARK_BASIC_BRICK",
     "seasons": ["ANCIENT_EGYPT",
       "FROSTBITE_CAVES",
       "BIG_WAVE_BEACH",
@@ -50,7 +54,8 @@
     "armors": {
       "type": "BUCKET",
       "hp": 1100,
-      "metallic": true
+      "metallic": true,
+      "path": "zombie_armor_bucket_norm"
     },
     "behaviorType": "Normal",
     "state": "WALKING",
@@ -59,6 +64,7 @@
   {
     "id": "ZombieDarkArmor3",
     "displayName": "Knight Zombie",
+    "path": "ZOMBIE_DARK_BASIC_BRICK",
     "seasons": ["ANCIENT_EGYPT",
       "FROSTBITE_CAVES",
       "BIG_WAVE_BEACH",
@@ -71,12 +77,14 @@
       {
         "type": "CROWN",
         "hp": 1600,
-        "metallic": true
+        "metallic": true,
+        "path": "_zombie_armor_crown_states"
       },
       {
         "type": "SHOULDER_ARMOR",
         "hp": 1600,
-        "metallic": true
+        "metallic": true,
+        "path": "zombie_shoulder_armor"
       }],
     "behaviorType": "Normal",
     "state": "WALKING",
@@ -85,6 +93,7 @@
   {
     "id": "ZombieArmor4",
     "displayName": "Brickhead Zombie",
+    "path": "ZOMBIE_EGYPT_BASIC",
     "seasons": ["ANCIENT_EGYPT",
       "FROSTBITE_CAVES",
       "BIG_WAVE_BEACH",
@@ -96,7 +105,8 @@
     "armors": {
       "type": "BRICK",
       "hp": 1100,
-      "metallic": true
+      "metallic": true,
+      "path": "zombie_armor_brick_norm"
     },
     "behaviorType": "Normal",
     "state": "WALKING",
@@ -105,6 +115,7 @@
   {
     "id": "ZombieGargantuar",
     "displayName": "Gargantuar",
+    "path": "DARK_GARGANTUAR",
     "seasons": ["ANCIENT_EGYPT",
       "FROSTBITE_CAVES",
       "BIG_WAVE_BEACH",
@@ -120,6 +131,7 @@
   {
     "id": "ZombieImp",
     "displayName": "Imp",
+    "path": "ZOMBIE_DARK_IMP_MONK",
     "seasons": ["ANCIENT_EGYPT",
       "FROSTBITE_CAVES",
       "BIG_WAVE_BEACH",
@@ -135,6 +147,7 @@
   {
     "id": "ZombieModernAllStar",
     "displayName": "AllStar",
+    "path": "ZOMBIE_MODERN_ALLSTAR",
     "seasons": ["ANCIENT_EGYPT",
       "FROSTBITE_CAVES",
       "BIG_WAVE_BEACH",
@@ -151,6 +164,7 @@
   {
     "id": "ZombieArcade",
     "displayName": "Arcade",
+    "path": "ZOMBIE_80S_ARCADE",
     "seasons": ["ANCIENT_EGYPT",
       "FROSTBITE_CAVES",
       "BIG_WAVE_BEACH",
@@ -164,6 +178,7 @@
   {
     "id": "ZombieLostCityJane",
     "displayName": "Parasol Zombie",
+    "path": "ZOMBIE_LOSTCITY_JANE",
     "seasons": ["ANCIENT_EGYPT",
       "FROSTBITE_CAVES",
       "BIG_WAVE_BEACH",
@@ -180,6 +195,7 @@
   {
     "id": "ZombieCrystalSkull",
     "displayName": "Turquoise Zombie",
+    "path": "ZOMBIE_LOSTCITY_CRYSTALSKULL",
     "seasons": ["ANCIENT_EGYPT",
       "FROSTBITE_CAVES",
       "BIG_WAVE_BEACH",
@@ -194,6 +210,7 @@
   {
     "id": "ZombieProspector",
     "displayName": "Prospector Zombie",
+    "path": "ZOMBIE_PROSPECTOR",
     "seasons": ["ANCIENT_EGYPT",
       "FROSTBITE_CAVES",
       "BIG_WAVE_BEACH",
@@ -208,6 +225,7 @@
   {
     "id": "ZombiePiano",
     "displayName": "Pianist Zombie",
+    "path": "ZOMBIE_PIANO",
     "seasons": ["ANCIENT_EGYPT",
       "FROSTBITE_CAVES",
       "BIG_WAVE_BEACH",
@@ -222,6 +240,7 @@
   {
     "id": "ZombieArmZombieNewspaper",
     "displayName": "Newspaper Zombie",
+    "path": "ZOMBIE_MODERN_NEWSPAPER",
     "seasons": ["ANCIENT_EGYPT",
       "FROSTBITE_CAVES",
       "BIG_WAVE_BEACH",
@@ -242,6 +261,7 @@
   {
     "id": "ZombieBarrelRoller",
     "displayName": "Barrel Roller Zombie",
+    "path": "ZOMBIE_PIRATE_BARREL_PUSHER",
     "seasons": ["ANCIENT_EGYPT",
       "FROSTBITE_CAVES",
       "BIG_WAVE_BEACH",
@@ -256,6 +276,7 @@
   {
     "id": "ZombieRa",
     "displayName": "Ra Zombie",
+    "path": "ZOMBIE_EGYPT_RA",
     "seasons": ["ANCIENT_EGYPT"],
     "HP": 190,
     "eatDPS": 100,
@@ -267,6 +288,7 @@
   {
     "id": "ZombieExplorer",
     "displayName": "Explorer Zombie",
+    "path": "ZOMBIE_EXPLORER",
     "seasons": ["ANCIENT_EGYPT"],
     "HP": 250,
     "eatDPS": 100,
@@ -278,6 +300,7 @@
   {
     "id": "ZombieTombRaiser",
     "displayName": "Tombraiser",
+    "path": "ZOMBIE_EGYPT_TOMBRAISER",
     "seasons": ["ANCIENT_EGYPT"],
     "HP": 380,
     "eatDPS": 100,
@@ -289,6 +312,7 @@
   {
     "id": "ZombieIceAgeDodo",
     "displayName": "Dodo Rider Zombie",
+    "path": "ZOMBIE_ICEAGE_DODORIDER",
     "seasons": ["FROSTBITE_CAVES"],
     "HP": 490,
     "eatDPS": 100,
@@ -300,6 +324,7 @@
   {
     "id": "ZombieIceAgeHunter",
     "displayName": "Hunter Zombie",
+    "path": "ZOMBIE_ICEAGE_HUNTER",
     "seasons": ["FROSTBITE_CAVES"],
     "HP": 700,
     "eatDPS": 100,
@@ -311,6 +336,7 @@
   {
     "id": "ZombieIceAgeTroglobite",
     "displayName": "Troglobite",
+    "path": "ZOMBIE_ICEAGE_TROGLOBITE",
     "seasons": ["FROSTBITE_CAVES"],
     "HP": 470,
     "eatDPS": 100,
@@ -320,6 +346,7 @@
   {
     "id": "ZombieBeachFisherman",
     "displayName": "Fisherman Zombie",
+    "path": "ZOMBIE_BEACH_FISHERMAN",
     "seasons": ["BIG_WAVE_BEACH"],
     "HP": 1000,
     "eatDPS": 100,
@@ -329,6 +356,7 @@
   {
     "id": "ZombieBeachSnorkel",
     "displayName": "Snorkel Zombie",
+    "path": "ZOMBIE_BEACH_SNORKELER",
     "seasons": ["BIG_WAVE_BEACH"],
     "HP": 350,
     "eatDPS": 100,
@@ -340,6 +368,7 @@
   {
     "id": "ZombieBeachOctopus",
     "displayName": "Octopus Zombie",
+    "path": "ZOMBIE_BEACH_OCTOPUS",
     "seasons": ["BIG_WAVE_BEACH"],
     "HP": 910,
     "eatDPS": 100,
@@ -351,6 +380,7 @@
   {
     "id": "ZombieDarkJuggler",
     "displayName": "Juggler",
+    "path": "ZOMBIE_DARK_JESTER",
     "seasons": ["DARK_AGES"],
     "HP": 420,
     "eatDPS": 100,
@@ -360,6 +390,7 @@
   {
     "id": "ZombieWizard",
     "displayName": "Wizard Zombie",
+    "path": "ZOMBIE_DARK_WIZARD",
     "seasons": ["DARK_AGES"],
     "HP": 490,
     "eatDPS": 100,
@@ -369,6 +400,7 @@
   {
     "id": "ZombieDarkKing",
     "displayName": "King",
+    "path": "ZOMBIE_DARK_KING",
     "seasons": ["DARK_AGES"],
     "HP": 1000,
     "eatDPS": 100,
@@ -380,6 +412,7 @@
   {
     "id": "ZombieDarkImpDragon",
     "displayName": "Imp Dragon",
+    "path": "ZOMBIE_DARK_IMP_DRAGON",
     "seasons": ["DARK_AGES"],
     "HP": 190,
     "eatDPS": 100,

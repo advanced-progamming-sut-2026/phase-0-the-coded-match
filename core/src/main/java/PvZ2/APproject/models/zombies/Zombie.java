@@ -168,9 +168,7 @@ public class Zombie implements Update {
         return currentHp <= 0;
     }
 
-    public ZombieData getData() {
-        return data;
-    }
+    public ZombieData getData() {return data;}
 
 
     public int getLastDamageTaken() {
@@ -326,4 +324,5 @@ public class Zombie implements Update {
     public void setGlowing(boolean glowing) {
         this.glowing = glowing;
     }
+
 }
