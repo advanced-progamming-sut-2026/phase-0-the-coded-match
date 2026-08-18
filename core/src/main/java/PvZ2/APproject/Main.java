@@ -3,15 +3,10 @@ package PvZ2.APproject;
 import PvZ2.APproject.controllers.menus.SignupMenuController;
 import PvZ2.APproject.enums.Menu;
 import PvZ2.APproject.models.App;
-import PvZ2.APproject.views.screens.*;
-import com.badlogic.gdx.ApplicationAdapter;
+import PvZ2.APproject.views.screens.SignupScreen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.utils.ScreenUtils;
 import pvz.libpvz.pam.PamPlayer;
 import pvz.libpvz.textures.TextureBank;
 
@@ -33,7 +28,9 @@ public class Main extends Game {
         if (App.getCurrentMenu() == Menu.MAIN_MENU) {
 //            setScreen(new );//TODO: new MainScreen
         }
-        setScreen(new LoginScreen(this));
+        setScreen(new SignupScreen(this));
+
+
     }
 
     public TextureBank getTextures() {

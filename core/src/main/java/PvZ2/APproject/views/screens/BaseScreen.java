@@ -64,7 +64,7 @@ public abstract class BaseScreen implements Screen {
 //                    GRID_START_X + (9 * CELL_WIDTH), GRID_START_Y + row * CELL_HEIGHT);
 //            }
 //            shapeRenderer.end();
-//        }    //TODO: fix this later for the settings requirement!!
+//        }    //TODO: fix this later for the settings requirement!! i think it should be in gamescreen not here
 
         stage.getBatch().setProjectionMatrix(stage.getCamera().combined);
 

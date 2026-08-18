@@ -6,6 +6,7 @@ public class ZombieArmorData {
     private ArmorType type;
     private int hp;
     private boolean metallic;
+    private String path;
 
     public ZombieArmorData(ArmorType type) {
         this.type = type;

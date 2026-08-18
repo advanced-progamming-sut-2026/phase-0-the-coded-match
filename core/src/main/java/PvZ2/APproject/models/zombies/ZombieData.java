@@ -20,6 +20,7 @@ public class ZombieData {
     private double runningSpeed;
     private boolean hasParasol;
     private int cost; //for IZombie minigame
+    private String path;
 
     public String getId() {
         return id;
@@ -75,5 +76,21 @@ public class ZombieData {
 
     public int getCost() {
         return cost;
+    }
+
+    public String getPath(){
+        return path;
+    }
+
+    public void setPath(String path){
+        this.path = path;
+    }
+
+    public void setHP(int hp){
+        this.HP = hp;
+    }
+
+    public void setSpeed(int speed){
+        this.runningSpeed = speed;
     }
 }
