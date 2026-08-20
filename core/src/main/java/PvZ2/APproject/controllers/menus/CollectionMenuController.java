@@ -26,7 +26,7 @@ public class CollectionMenuController {
             return result.append("no plants achieved\n");
         }
         for (PlantData plant : PlantRepository.getInstance().getAllPlants()) {
-            if (collection.getAvailablePlantsIds().contains(plant.getId())) {
+            if (isPlantUnlockedForUi(plant)) {
                 result.append(plant.getDisplayName()).append("\n");
             }
         }
@@ -52,7 +52,7 @@ public class CollectionMenuController {
             return result.append("no zombies seen\n");
         }
         for (ZombieData zombie : ZombieRepository.getInstance().getAllZombies()) {
-            if (collection.getAvailableZombiesIds().contains(zombie.getId())) {
+            if (isZombieSeenForUi(zombie)) {
                 result.append(zombie.getDisplayName()).append("\n");
             }
         }
@@ -76,8 +76,7 @@ public class CollectionMenuController {
         if (!matcher.matches()) {
             return new StringBuilder();
         }
-        String plantName = matcher.group("plantName");
-        PlantData plant = PlantRepository.getInstance().findByName(plantName);
+        PlantData plant = PlantRepository.getInstance().findByName(matcher.group("plantName"));
         if (plant == null) {
             return new StringBuilder("plant not found\n");
         }
@@ -101,8 +100,7 @@ public class CollectionMenuController {
         if (!matcher.matches()) {
             return new StringBuilder();
         }
-        String zombieName = matcher.group("zombieName");
-        ZombieData zombie = ZombieRepository.getInstance().findByDisplayName(zombieName);
+        ZombieData zombie = ZombieRepository.getInstance().findByDisplayName(matcher.group("zombieName"));
         if (zombie == null) {
             return new StringBuilder("zombie not found\n");
         }
@@ -122,33 +120,7 @@ public class CollectionMenuController {
         if (!matcher.matches()) {
             return;
         }
-        User user = App.getCurrentUser();
-        if (user == null) {
-            System.out.println("no user is logged in");
-            return;
-        }
-        Plant plant = findAvailablePlant(matcher.group("plantName"));
-        if (plant == null) {
-            System.out.println("plant is not purchased");
-            return;
-        }
-        PlantUpgradeData upgrade = findNextUpgrade(plant);
-        if (upgrade == null) {
-            System.out.println("plant is already at max level");
-            return;
-        }
-        if (user.getCoinsCount() < upgrade.getRequiredCoins()) {
-            System.out.println("not enough coins");
-            return;
-        }
-        if (user.getSeedPacketCount(plant.getData().getDisplayName()) < upgrade.getRequiredSeedPackets()) {
-            System.out.println("not enough seed packets");
-            return;
-        }
-        user.setCoinsCount(user.getCoinsCount() - upgrade.getRequiredCoins());
-        user.spendSeedPackets(plant.getData().getDisplayName(), upgrade.getRequiredSeedPackets());
-        plant.setLevel(upgrade.getLevel());
-        System.out.println("plant upgraded successfully");
+        System.out.println(upgradePlantByName(matcher.group("plantName")));
     }
 
     public static void purchasePlant(String input) {
@@ -156,28 +128,109 @@ public class CollectionMenuController {
         if (!matcher.matches()) {
             return;
         }
+        System.out.println(purchasePlantByName(matcher.group("plantName")));
+    }
+
+    public static String upgradePlantByName(String plantName) {
         User user = App.getCurrentUser();
         if (user == null) {
-            System.out.println("no user is logged in");
-            return;
+            return "no user is logged in";
         }
-        String plantName = matcher.group("plantName");
+        Plant plant = findAvailablePlant(plantName);
+        if (plant == null) {
+            return "plant is not purchased";
+        }
+        PlantUpgradeData upgrade = findNextUpgrade(plant);
+        if (upgrade == null) {
+            return "plant is already at max level";
+        }
+        if (user.getCoinsCount() < upgrade.getRequiredCoins()) {
+            return "not enough coins";
+        }
+        if (user.getSeedPacketCount(plant.getData().getDisplayName()) < upgrade.getRequiredSeedPackets()) {
+            return "not enough seed packets";
+        }
+        user.setCoinsCount(user.getCoinsCount() - upgrade.getRequiredCoins());
+        user.spendSeedPackets(plant.getData().getDisplayName(), upgrade.getRequiredSeedPackets());
+        plant.setLevel(upgrade.getLevel());
+        return "plant upgraded successfully";
+    }
+
+    public static String purchasePlantByName(String plantName) {
+        User user = App.getCurrentUser();
+        if (user == null) {
+            return "no user is logged in";
+        }
         PlantData plantData = PlantRepository.getInstance().findByName(plantName);
         if (plantData == null) {
-            System.out.println("plant not found");
-            return;
+            return "plant not found";
         }
         if (findAvailablePlant(plantName) != null) {
-            System.out.println("plant already purchased");
-            return;
+            return "plant already purchased";
         }
         if (user.getCoinsCount() < PLANT_PRICE) {
-            System.out.println("not enough coins");
-            return;
+            return "not enough coins";
         }
         user.setCoinsCount(user.getCoinsCount() - PLANT_PRICE);
         user.getCollection().addPlant(new Plant(plantData, 0, 0, 1));
-        System.out.println("plant purchased successfully");
+        return "plant purchased successfully";
+    }
+
+    public static boolean isPlantUnlockedForUi(PlantData plant) {
+        Collection collection = getCollection();
+        if (collection == null || plant == null) {
+            return false;
+        }
+        for (String id : collection.getAvailablePlantsIds()) {
+            if (id.equalsIgnoreCase(plant.getId())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isZombieSeenForUi(ZombieData zombie) {
+        Collection collection = getCollection();
+        if (collection == null || zombie == null) {
+            return false;
+        }
+        for (String id : collection.getAvailableZombiesIds()) {
+            if (id.equalsIgnoreCase(zombie.getId())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static Plant getAvailablePlantForUi(PlantData plantData) {
+        if (plantData == null) {
+            return null;
+        }
+        return findAvailablePlant(plantData.getDisplayName());
+    }
+
+    public static int getPlantLevelForUi(PlantData plantData) {
+        Plant plant = getAvailablePlantForUi(plantData);
+        return plant == null ? 0 : plant.getLevel();
+    }
+
+    public static PlantUpgradeData getNextUpgradeForUi(PlantData plantData) {
+        Plant plant = getAvailablePlantForUi(plantData);
+        return plant == null ? null : findNextUpgrade(plant);
+    }
+
+    public static boolean canUpgradeForUi(PlantData plantData) {
+        User user = App.getCurrentUser();
+        PlantUpgradeData next = getNextUpgradeForUi(plantData);
+        if (user == null || next == null || plantData == null) {
+            return false;
+        }
+        return user.getCoinsCount() >= next.getRequiredCoins()
+            && user.getSeedPacketCount(plantData.getDisplayName()) >= next.getRequiredSeedPackets();
+    }
+
+    public static int getPlantPrice() {
+        return PLANT_PRICE;
     }
 
     private static Collection getCollection() {
@@ -187,13 +240,13 @@ public class CollectionMenuController {
 
     private static Plant findAvailablePlant(String name) {
         Collection collection = getCollection();
-        if (collection == null) {
+        if (collection == null || name == null) {
             return null;
         }
         if (collection.getAvailablePlants() != null) {
             for (Plant plant : collection.getAvailablePlants()) {
                 if (plant.getData().getDisplayName().equalsIgnoreCase(name)
-                        || plant.getData().getId().equalsIgnoreCase(name)) {
+                    || plant.getData().getId().equalsIgnoreCase(name)) {
                     return plant;
                 }
             }
@@ -208,7 +261,7 @@ public class CollectionMenuController {
     }
 
     private static PlantUpgradeData findNextUpgrade(Plant plant) {
-        if (plant.getData().getUpgrades() == null) {
+        if (plant == null || plant.getData().getUpgrades() == null) {
             return null;
         }
         for (PlantUpgradeData upgrade : plant.getData().getUpgrades()) {

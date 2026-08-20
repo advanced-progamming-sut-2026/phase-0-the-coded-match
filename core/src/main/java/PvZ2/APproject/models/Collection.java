@@ -31,6 +31,7 @@ public class Collection {
 
      public void ensure() {
          if (availableZombiesIds == null) availableZombiesIds = new ArrayList<>();
+         if (availablePlantsIds == null) availablePlantsIds = new ArrayList<>();
          if (availablePlants == null) availablePlants = new ArrayList<>();
          if (unlockedMinigames == null) unlockedMinigames = new ArrayList<>();
          if (unlockedLevels == null) unlockedLevels = new ArrayList<>();
