@@ -3,9 +3,13 @@ package PvZ2.APproject.views;
 import PvZ2.APproject.Main;
 import PvZ2.APproject.models.GameMapRelated.GameMap;
 import PvZ2.APproject.models.GameMapRelated.Tile;
+import PvZ2.APproject.models.GameSettings;
 import PvZ2.APproject.models.Level;
 import PvZ2.APproject.views.actors.TileActor;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import pvz.libpvz.textures.TextureBank;
 
@@ -14,11 +18,13 @@ public class GameMapView extends Group {
     private Level currentLevel;
     private TextureBank textures;
     private TextureRegion background;
+    private ShapeRenderer shapeRenderer;
 
     public GameMapView(Main game, Level currentLevel, TextureBank textures) {
         this.game = game;
         this.currentLevel = currentLevel;
         this.textures = textures;
+        shapeRenderer = new ShapeRenderer();
 
         loadBackground();
         createTiles();
@@ -78,5 +84,39 @@ public class GameMapView extends Group {
 
     public TextureRegion getBackground() {
         return background;
+    }
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        super.draw(batch, parentAlpha);
+
+        if (GameSettings.getInstance().isShowGrid()) {
+            batch.end();
+
+            shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+            shapeRenderer.setColor(Color.RED);
+
+            int startX = 290;
+            int startY = 130;
+            int spacingX = 80;
+            int spacingY = 100;
+
+            GameMap gameMap = currentLevel.getGameMap();
+
+            for (int i = 1; i < gameMap.getRows(); i++) {
+                for (int j = 1; j < gameMap.getColumns(); j++) {
+                    shapeRenderer.rect(
+                        startX + (j - 1) * spacingX,
+                        startY + (i - 1) * spacingY,
+                        spacingX,
+                        spacingY
+                    );
+                }
+            }
+
+            shapeRenderer.end();
+            batch.begin();
+        }
     }
 }

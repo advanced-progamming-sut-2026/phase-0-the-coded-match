@@ -25,7 +25,8 @@ public final class FrostbiteCaves extends Season {
     public void LevelStarted(Level level) {
         for(Zombie zombie : level.getActiveZombies()){
             if(zombieShouldBeFrozen(zombie)){
-                zombie.setFrozen(true);
+                zombie.setFrozenInBlock(true);
+                zombie.setBlockIceHP(60);
             }
         }
     }

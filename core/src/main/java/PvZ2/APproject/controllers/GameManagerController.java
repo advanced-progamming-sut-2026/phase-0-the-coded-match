@@ -4,6 +4,7 @@ import PvZ2.APproject.controllers.menus.SignupMenuController;
 import PvZ2.APproject.enums.Commands;
 import PvZ2.APproject.enums.LevelType;
 import PvZ2.APproject.enums.Menu;
+import PvZ2.APproject.enums.PlantTag;
 import PvZ2.APproject.models.App;
 import PvZ2.APproject.models.GameMapRelated.GameMap;
 import PvZ2.APproject.models.Level;
@@ -548,6 +549,9 @@ public class GameManagerController {
             projectile.move();
             for (Zombie zombie : currentLevel.getActiveZombies().toArray(new Zombie[0])) {
                 if (projectile.checkZombieCollision(zombie)) {
+                    if(projectile.getCreatorPlantCategory().hasThisTag(PlantTag.ICE)){
+                        zombie.setChilled(true);
+                    }
                     zombie.getBehavior().onProjectileHit(zombie, projectile);
                     iterator.remove();
                     break;

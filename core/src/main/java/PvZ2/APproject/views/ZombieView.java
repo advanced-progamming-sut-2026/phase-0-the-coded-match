@@ -4,6 +4,7 @@ import PvZ2.APproject.Main;
 import PvZ2.APproject.enums.ZombieState;
 import PvZ2.APproject.models.zombies.Zombie;
 import PvZ2.APproject.models.zombies.ZombieArmor;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -19,6 +20,7 @@ public class ZombieView extends Actor {
     private String currentClip;
     private float stateTime = 0f;
     private Boolean hasArmor = false;
+    private final TextureRegion frozenTexture;
     Map<String, Boolean> armorVisibility = new HashMap<>();
 
     public ZombieView(Zombie zombie, Main game) {
@@ -29,6 +31,7 @@ public class ZombieView extends Actor {
         if(!zombie.getArmors().isEmpty() && zombie.getArmors() != null){
             hasArmor = true;
         }
+        frozenTexture = game.getTextures().region("");
     }
 
     @Override
@@ -47,17 +50,34 @@ public class ZombieView extends Actor {
             }
         }
 
-        setPosition((float) zombie.getX()*80, zombie.getY()*100); // this has to get multiplied by cell width and height
+        setPosition((float) zombie.getX()*80, zombie.getY()*100);
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha){
         super.draw(batch, parentAlpha);
+        if (zombie.getIsChilled()) {
+            batch.setColor(0.75f, 0.88f, 1f, 1f);
+        }else {
+            batch.setColor(Color.WHITE);
+        }
         String clipName = "walk";
         if (currentState == ZombieState.IDLE) {
             clipName = "idle";
         } else if (currentState == ZombieState.EATING) {
             clipName = "eat";
+        }
+
+        batch.setColor(Color.WHITE);
+
+        if (zombie.isFrozenInBlock()) {
+            batch.draw(
+                frozenTexture,
+                getX(),
+                getY(),
+                80f,
+                100f
+            );
         }
 
         game.getPlayer().draw(batch, currentClip, clipName, stateTime, getX(), getY(), true, armorVisibility);
