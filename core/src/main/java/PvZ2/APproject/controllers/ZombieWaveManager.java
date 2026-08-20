@@ -106,7 +106,8 @@ public class ZombieWaveManager implements Update {
         }
     }
 
-    @Override public void update() {
+    @Override
+    public void update(float delta) {
         if (!shouldNextWaveStart()) return;
         currentWave++;
         previousWaveZombies.clear();

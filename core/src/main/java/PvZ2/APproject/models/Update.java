@@ -2,5 +2,5 @@ package PvZ2.APproject.models;
 
 public interface Update {
 
-    void update();
+    void update(float delta);
 }

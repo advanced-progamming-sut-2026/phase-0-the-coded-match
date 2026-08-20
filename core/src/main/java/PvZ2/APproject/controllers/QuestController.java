@@ -284,7 +284,7 @@ public class QuestController {
     public static void notifyZombieKilled(Zombie zombie){
         int col = (int) zombie.getX();
         int row = zombie.getY();
-        if(col != 1 || App.lawnMowerUsed(row) != null){
+        if(col != 1 || GameManagerController.getInstance().getCurrentLevel().getGameMap().lawnMowerUsed(row) != null){
             return;
         }
         Quest almostVictorious = questsModel.getQuestByName("Almost Victorious");

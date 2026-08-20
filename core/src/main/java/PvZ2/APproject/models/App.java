@@ -170,47 +170,6 @@ public class App {
         }
     }
 
-    public static void initializeLawnMowers(int rows) { allLawnMowers.clear(); for (int row = 1; row <= rows; row++) allLawnMowers.add(new Lawnmower(row)); }
-
-    public static void handleLawnMower(Zombie zombie){
-        int row = zombie.getY();
-        Lawnmower mower = lawnMowerUsed(row);
-        if(mower == null){
-
-            System.out.println( "The zombie ate your brain; LOSER!!!");
-            GameManagerController.getInstance().gameOver();
-            return;
-        }
-        mower.setHasBeenUsed(true);
-
-        System.out.println("The lawn mower in the row " + row + " is triggered and killed these zombies:");
-        List<Zombie> killed = new ArrayList<>();
-        List<Zombie> activeZombies = GameManagerController.getInstance().getCurrentLevel().getActiveZombies();
-        for (Zombie zombieInRow : new ArrayList<>(activeZombies)) {
-            if (zombieInRow.getY() == row) {
-                killed.add(zombieInRow);
-                zombieInRow.setCurrentHp(0);
-            }
-        }
-        QuestController.notifyZombiesKilledByLawnmower(killed.size());
-
-        for (Zombie z : killed) System.out.println(z.getData().getDisplayName());
-
-    }
-
-    public static Lawnmower lawnMowerUsed(int row){
-        for(Lawnmower mower: allLawnMowers){
-            if (mower.getRow() != row){
-                continue;
-            }
-            if (mower.HasBeenUsed()){
-                return null;
-            }
-            return mower;
-        }
-        return null;
-    }
-
     public static List<PlantData> getLockedPlants() {
         List<PlantData> lockedPlants = new ArrayList<>();
         List<String> unlockedPlants = currentUser == null ? List.of() : currentUser.getCollection().getAvailablePlantsIds();

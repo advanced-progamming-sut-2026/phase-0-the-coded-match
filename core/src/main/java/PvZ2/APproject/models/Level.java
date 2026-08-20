@@ -66,7 +66,6 @@ public class Level {
         this.barrels = new ArrayList<>();
         this.removedPlantsCount = 0;
         this.levelDifficulty = user == null ? 3 : user.getDifficultyLevel();
-        App.initializeLawnMowers(gameMap.getRows());
         setUpSpecialLevel();
     }
 
