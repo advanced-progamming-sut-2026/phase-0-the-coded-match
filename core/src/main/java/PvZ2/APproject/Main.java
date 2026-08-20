@@ -31,7 +31,7 @@ public class Main extends Game {
         } else {
             setScreen(new SignupScreen(this));
         }
-        setScreen(new SignupScreen(this));
+        //setScreen(new SignupScreen(this));
     }
 
     public TextureBank getTextures() {

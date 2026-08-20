@@ -2,6 +2,7 @@ package PvZ2.APproject.views.screens;
 
 import PvZ2.APproject.Main;
 import PvZ2.APproject.controllers.menus.LoginMenuController;
+import PvZ2.APproject.views.menus.MainMenu;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -67,7 +68,7 @@ public class LoginScreen extends BaseScreen {
                 if (response.equals("Logged in successfully")) {
                     // Navigate to Main Menu after a short delay
                     // game.setScreen(new MainMenuScreen(game));
-                    game.setScreen(new GameMenuScreen(game));
+                    game.setScreen(new MainMenu(game));
                 }
             }
         });
