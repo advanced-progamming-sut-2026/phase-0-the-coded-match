@@ -2,24 +2,30 @@ package PvZ2.APproject.views.screens;
 
 import PvZ2.APproject.Main;
 import PvZ2.APproject.models.GameSettings;
+import PvZ2.APproject.models.App;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import pvz.libpvz.pam.PamPlayer;
 import pvz.libpvz.textures.TextureBank;
 import pvz.skin.PvzSkin;
-
-import javax.swing.*;
 
 public abstract class BaseScreen implements Screen {
     protected Skin skin;
@@ -44,10 +50,81 @@ public abstract class BaseScreen implements Screen {
         player = ((Main) Gdx.app.getApplicationListener()).getPlayer();
     }
 
+    protected void addBackground(String regionName) {
+        background = textures.region(regionName);
+        backgroundImage = new Image(new TextureRegionDrawable(background));
+        backgroundImage.setFillParent(true);
+        stage.addActor(backgroundImage);
+    }
+
+    protected void addMainBackground() {
+        addBackground("IMAGE_MAINMENU_BACKGROUND");
+    }
+
+    protected void addCurrencyBar() {
+        if (App.getCurrentUser() == null) {
+            return;
+        }
+
+        Table currencyTable = new Table(skin);
+        Image gemImage = new Image(textures.region("IMAGE_UI_HUD_INGAME_GEM"));
+        Image coinImage = new Image(textures.region("IMAGE_UI_HUD_INGAME_COIN"));
+        Label gemLabel = new Label(Integer.toString(App.getCurrentUser().getGemsCount()), skin, "default");
+        Label coinLabel = new Label(Integer.toString(App.getCurrentUser().getCoinsCount()), skin, "default");
+
+        currencyTable.add(coinImage).size(36, 36).padRight(4);
+        currencyTable.add(coinLabel).padRight(18);
+        currencyTable.add(gemImage).size(36, 36).padRight(4);
+        currencyTable.add(gemLabel);
+        currencyTable.pack();
+        currencyTable.setPosition(
+            VIRTUAL_WIDTH - currencyTable.getWidth() - 20,
+            VIRTUAL_HEIGHT - currencyTable.getHeight() - 18
+        );
+        stage.addActor(currencyTable);
+    }
+
+    protected ImageButton addBackButton(Runnable action) {
+        ImageButton backButton = new ImageButton(skin, "generic_close_circle");
+        backButton.setPosition(18, VIRTUAL_HEIGHT - 68);
+        backButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                action.run();
+            }
+        });
+        stage.addActor(backButton);
+        return backButton;
+    }
+
+    protected Label addMessageLabel() {
+        Label label = new Label("", skin, "promo_ribbon");
+        label.setVisible(false);
+        label.setPosition(260, 28);
+        stage.addActor(label);
+        return label;
+    }
+
+    protected void showMessage(Label label, String message) {
+        if (label == null) {
+            return;
+        }
+        label.clearActions();
+        label.setText(message == null ? "" : message);
+        label.pack();
+        label.setPosition((VIRTUAL_WIDTH - label.getWidth()) / 2f, 28);
+        label.setVisible(true);
+        label.getColor().a = 1f;
+        label.addAction(Actions.sequence(
+            Actions.delay(2f),
+            Actions.fadeOut(0.4f),
+            Actions.hide()
+        ));
+    }
+
     @Override
     public void render(float delta) {
         textures.update();
-
         ScreenUtils.clear(0, 0, 0, 1);
 
 //        if (GameSettings.getInstance().isShowGrid()) {
@@ -67,7 +144,6 @@ public abstract class BaseScreen implements Screen {
 //        }    //TODO: fix this later for the settings requirement!! i think it should be in gamescreen not here
 
         stage.getBatch().setProjectionMatrix(stage.getCamera().combined);
-
         stage.act(delta);
         stage.draw();
     }
@@ -86,17 +162,14 @@ public abstract class BaseScreen implements Screen {
 
     @Override
     public void pause() {
-
     }
 
     @Override
     public void resume() {
-
     }
 
     @Override
     public void hide() {
-
     }
 
     @Override

@@ -47,7 +47,7 @@ public class Plant implements Update {
     }
 
     @Override
-    public void update() {
+    public void update(float delta) {
         if (disabled) {
             return;
         }

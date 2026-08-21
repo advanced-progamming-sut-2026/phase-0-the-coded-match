@@ -128,7 +128,7 @@ public class Tile implements Update {
     }
 
     @Override
-    public void update() {
+    public void update(float delta) {
         startTakingDamage();
         stopTakingDamage();
     }

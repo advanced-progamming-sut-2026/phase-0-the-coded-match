@@ -11,12 +11,14 @@ import java.util.Random;
 
 public class SkySunProducer implements Update {
     private double timeSinceLastDrop;
+    private double elapsedTime;
     private transient Random random;
     private boolean producedASun;
     private Sun sun;
 
     public SkySunProducer() {
         this.timeSinceLastDrop = 0.0;
+        this.elapsedTime = 0.0;
         this.random = new Random();
         producedASun = false;
     }
@@ -47,8 +49,7 @@ public class SkySunProducer implements Update {
 
     public void calculateDropTime() {
         Level level = GameManagerController.getInstance().getCurrentLevel();
-        double seconds = level.getCurrentTick() / 10.0;
-        double time = Math.min(12, 6 + 0.05 * seconds) * 10;
+        double time = Math.min(12, 6 + 0.05 * elapsedTime);
         int dl = App.getCurrentUser() == null ? 3 : App.getCurrentUser().getDifficultyLevel();
         time *= dl / 3.0;
         if (level.isDay() && timeSinceLastDrop >= time) {
@@ -61,18 +62,18 @@ public class SkySunProducer implements Update {
         Level currentLevel = GameManagerController.getInstance().getCurrentLevel();
         if (random == null) random = new Random();
         int chance = random.nextInt(100);
-        int randomX = 1 + random.nextInt(currentLevel.getGameMap().getColumns());
-        int randomY = 1 + random.nextInt(currentLevel.getGameMap().getRows());
+        int randomX = random.nextInt(currentLevel.getGameMap().getColumns());
+        int randomY = random.nextInt(currentLevel.getGameMap().getRows());
 
         Sun droppedSun = null;
         if (chance < SunType.NORMAL.getDropChancePercentage()) {
-            droppedSun = new Sun(randomX, randomY, SunType.NORMAL.getValue(), 50,
+            droppedSun = new Sun(randomX, randomY, SunType.NORMAL.getValue(), 5f,
                     true, SunType.NORMAL);
         } else if (chance < SunType.NORMAL.getDropChancePercentage() + SunType.SPECIAL.getDropChancePercentage()) {
-            droppedSun = new Sun(randomX, randomY, SunType.SPECIAL.getValue(), 50,
+            droppedSun = new Sun(randomX, randomY, SunType.SPECIAL.getValue(), 5f,
                     true, SunType.SPECIAL);
         } else {
-            droppedSun = new Sun(randomX, randomY, SunType.RADIOACTIVE.getValue(), 50,
+            droppedSun = new Sun(randomX, randomY, SunType.RADIOACTIVE.getValue(), 5f,
                     true, SunType.RADIOACTIVE);
         }
         if (droppedSun != null) {
@@ -83,8 +84,9 @@ public class SkySunProducer implements Update {
     }
 
     @Override
-    public void update() {
-        timeSinceLastDrop++;
+    public void update(float delta) {
+        timeSinceLastDrop += delta;
+        elapsedTime += delta;
         calculateDropTime();
     }
 }

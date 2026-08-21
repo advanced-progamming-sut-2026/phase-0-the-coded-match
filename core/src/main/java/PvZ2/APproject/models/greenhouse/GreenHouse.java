@@ -145,60 +145,6 @@ public class GreenHouse {
 //        }
 //    }
 
-//    public static GreenHouse loadFromFile() { //TODO: if not needed, remove!
-//        try (Reader reader = AssetPaths.reader(FILE_PATH)) {
-//            GreenhouseDataDTO data = gson.fromJson(reader, GreenhouseDataDTO.class);
-//
-//            GreenHouse greenhouse = new GreenHouse();
-//            greenhouse.greenhouse_currency = data.greenhouse_currency;
-//            greenhouse.stored_boosts = data.stored_boosts;
-//
-//            for (GreenHousePot p : data.pots) {
-//                greenhouse.grid[p.y - 1][p.x - 1] = p;
-//            }
-//            return greenhouse;
-//        } catch (IOException e) {
-//            System.out.println("No existing save found. Creating new Greenhouse grid...");
-//            return createNewGreenhouse();
-//        }
-//    }
-
-//    public void saveToFile() {
-//        GreenhouseDataDTO data = new GreenhouseDataDTO();
-//        data.greenhouse_currency = this.greenhouse_currency;
-//        data.stored_boosts = this.stored_boosts;
-//
-//        for (int row = 0; row < 4; row++) {
-//            for (int col = 0; col < 5; col++) {
-//                data.pots.add(grid[row][col]);
-//            }
-//        }
-//
-//        try (Writer writer = AssetPaths.writer(FILE_PATH)) {
-//            gson.toJson(data, writer);
-//            System.out.println("Game saved to " + AssetPaths.resolve(FILE_PATH));
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    private static GreenHouse createNewGreenhouse() {
-//        GreenHouse gh = new GreenHouse();
-//        for (int y = 1; y <= 4; y++) {
-//            for (int x = 1; x <= 5; x++) {
-//                boolean locked = (y > 1);
-//                gh.grid[y - 1][x - 1] = new GreenHousePot(x, y, locked);
-//            }
-//        }
-//        return gh;
-//    }
-
-//    private static class GreenhouseDataDTO {
-//        Map<String, Integer> greenhouse_currency = new HashMap<>();
-//        Map<String, Boolean> stored_boosts = new HashMap<>();
-//        List<GreenHousePot> pots = new ArrayList<>();
-//    }
-
     public int getPotsCount(){
         int count = 0;
         for (GreenHousePot[] row : grid) {

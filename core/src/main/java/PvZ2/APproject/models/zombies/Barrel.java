@@ -44,7 +44,7 @@ public class Barrel implements Update {
     }
 
     @Override
-    public void update() {
+    public void update(float delta) {
         if (owner != null && !owner.isDead()) {
             roll();
         }

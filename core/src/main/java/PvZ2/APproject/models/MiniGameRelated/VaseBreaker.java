@@ -219,7 +219,7 @@ public final class VaseBreaker extends MiniGame {
         return groundSeeds;
     }
 
-    public void updateGroundSeeds(String[] message) {
+    public void updateGroundSeeds() {
         Iterator<DroppedSeedPacket> iterator = groundSeeds.iterator();
         while (iterator.hasNext()) {
             DroppedSeedPacket packet = iterator.next();

@@ -8,16 +8,15 @@ import PvZ2.APproject.models.zombies.Zombie;
 
 public class Sun implements Update {
 
-    protected int x;
-    protected int y;
+    protected float x;
+    protected float y;
     protected SunType type;
     protected int value;
-    protected int timeToReachGround;
+    protected float timeToReachGround;
     protected boolean isFalling;
     protected boolean hasFallen;
 
-    public Sun(int x, int y, int value, int timeToReachGround, boolean isFalling, SunType type) { //if plant is producing: 0, false
-
+    public Sun(float x, float y, int value, float timeToReachGround, boolean isFalling, SunType type) { //if plant is producing: 0, false
         this.x = x;
         this.y = y;
         this.value = value;
@@ -56,18 +55,21 @@ public class Sun implements Update {
     }
 
     @Override
-    public void update() {
+    public void update(float delta) {
         if (isFalling) {
-            timeToReachGround -= 1;
+            timeToReachGround -= delta;
             if (timeToReachGround <= 0) {
                 isFalling = false;
                 hasFallen = true;
-                if (type == SunType.RADIOACTIVE) { type = SunType.NORMAL; value = SunType.NORMAL.getValue(); }
+                if (type == SunType.RADIOACTIVE) {
+                    type = SunType.NORMAL;
+                    value = SunType.NORMAL.getValue();
+                }
             }
         }
     }
 
-    public int getX() {
+    public float getX() {
         return x;
     }
 
@@ -75,7 +77,7 @@ public class Sun implements Update {
         this.x = x;
     }
 
-    public int getY() {
+    public float getY() {
         return y;
     }
 
@@ -91,7 +93,7 @@ public class Sun implements Update {
         this.value = value;
     }
 
-    public int getTimeToReachGround() {
+    public float getTimeToReachGround() {
         return timeToReachGround;
     }
 

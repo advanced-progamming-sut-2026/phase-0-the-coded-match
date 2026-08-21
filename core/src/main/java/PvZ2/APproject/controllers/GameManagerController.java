@@ -54,40 +54,40 @@ public class GameManagerController {
         plantCooldowns.clear();
     }
 
-    public String[] advanceTime(String input, String[] message) {
-        message[0] = "";
-        Matcher matcher = Pattern.compile(Commands.ADVANCE_TIME.getPattern()).matcher(input);
-        if (!matcher.matches()) {
-            message[0] = "invalid command";
-            return message;
-        }
-        int count = Integer.parseInt(matcher.group("count"));
-        int dl = App.getCurrentUser().getDifficultyLevel();
-        double step = 1 * (dl / 3.0);
-        for (int i = 0; i < count; i++) {
-            currentLevel.setCurrentTick(currentLevel.getCurrentTick() + step);
-            updateObjects(message);
-        }
-        return message;
-    }
+//    public String[] advanceTime(String input, String[] message) {
+//        message[0] = "";
+//        Matcher matcher = Pattern.compile(Commands.ADVANCE_TIME.getPattern()).matcher(input);
+//        if (!matcher.matches()) {
+//            message[0] = "invalid command";
+//            return message;
+//        }
+//        int count = Integer.parseInt(matcher.group("count"));
+//        int dl = App.getCurrentUser().getDifficultyLevel();
+//        double step = 1 * (dl / 3.0);
+//        for (int i = 0; i < count; i++) {
+//            currentLevel.setCurrentTick(currentLevel.getCurrentTick() + step);
+//            updateObjects(message);
+//        }
+//        return message;
+//    }
 
-    public String[] updateObjects(String[] message) {
+    public void updateObjects(float delta) {
         if (currentLevel.getLevelType() == LevelType.I_ZOMBIE) {
             decreasePlantCooldowns();
-            updatePlants(message);
-            updateZombies();
+            updatePlants(delta);
+            updateZombies(delta);
             updateProjectiles();
         } else {
             decreasePlantCooldowns();
-            updatePlants(message);
-            updateBarrels();
-            updateZombies();
+            updatePlants(delta);
+            updateBarrels(delta);
+            updateZombies(delta);
             if (!(currentLevel instanceof MiniGame)) {
-                updateWaves(message);
-                updateSkySuns(message);
+                updateWaves(delta);
+                updateSkySuns(delta);
             }
-            updateSuns(message);
-            updateTiles();
+            updateSuns(delta);
+            updateTiles(delta);
             updateProjectiles();
             updateSeason();
             if (currentLevel instanceof Beghouled beghouled) {
@@ -98,9 +98,8 @@ public class GameManagerController {
             currentLevel.getSpecialLevel().update(currentLevel);
         }
         if (currentLevel instanceof VaseBreaker) {
-            ((VaseBreaker) currentLevel).updateGroundSeeds(message);
+            ((VaseBreaker) currentLevel).updateGroundSeeds();
         }
-        return message;
     }
 
     private void decreasePlantCooldowns() {
@@ -113,19 +112,19 @@ public class GameManagerController {
         }
     }
 
-    private void updatePlants(String[] message) {
+    private void updatePlants(float delta) {
         Iterator<Plant> iterator = currentLevel.getActivePlants().iterator();
         while (iterator.hasNext()) {
             Plant plant = iterator.next();
-            plant.update();
+            plant.update(delta);
             if (plant.isProducedSun()) {
-                append(message, "plant " + plant.getData().getDisplayName() + " produced a sun at ("
-                        + plant.getX() + ", " + plant.getY() + ")");
+//                append(message, "plant " + plant.getData().getDisplayName() + " produced a sun at ("
+//                        + plant.getX() + ", " + plant.getY() + ")");
                 plant.setProducedSun(false);
             }
             if (plant.isDead()) {
-                append(message, "Plant " + plant.getData().getDisplayName() + " at (" + plant.getX() + ", "
-                        + plant.getY() + ") is destroyed.");
+//                append(message, "Plant " + plant.getData().getDisplayName() + " at (" + plant.getX() + ", "
+//                        + plant.getY() + ") is destroyed.");
                 Tile tile = currentLevel.getGameMap().getTile(plant.getX(), plant.getY());
                 if (tile != null && tile.getPlant() == plant) {
                     tile.removePlant();
@@ -142,15 +141,15 @@ public class GameManagerController {
         }
     }
 
-    private void updateZombies() {
+    private void updateZombies(float delta) {
         int killedThisTick = 0;
         int damageThisTick = 0;
         Iterator<Zombie> iterator = currentLevel.getActiveZombies().iterator();
         while (iterator.hasNext()) {
             Zombie zombie = iterator.next();
-            zombie.update();
-            if (zombie.getX() <= 0) {
-                App.handleLawnMower(zombie);
+            zombie.update(delta);
+            if (zombie.getX() <= 0) { //todo: 0 -> 250(x from left side of the screen)
+                currentLevel.getGameMap().handleLawnMower(zombie);
             }
             if (zombie.isDead()) {
                 iterator.remove();
@@ -173,49 +172,49 @@ public class GameManagerController {
         }
     }
 
-    private void updateWaves(String[] message) {
+    private void updateWaves(float delta) {
         if (currentLevel instanceof VaseBreaker) {
             return;
         }
         if (currentLevel.getZombieWave() != null) {
-            currentLevel.getZombieWave().update();
+            currentLevel.getZombieWave().update(delta);
             if (currentLevel.getZombieWave().isLastWave()) {
-                append(message, "The final wave has come.");
+//                append(message, "The final wave has come.");
                 currentLevel.getZombieWave().setLastWave(false);
             } else if (currentLevel.getZombieWave().isNewWaveStarted()){
-                append(message, "Wave " + (currentLevel.getZombieWave().getCurrentWave() + 1) + " started.");
+//                append(message, "Wave " + (currentLevel.getZombieWave().getCurrentWave() + 1) + " started.");
                 currentLevel.getZombieWave().setNewWaveStarted(false);
             }
         }
     }
 
-    private void updateSkySuns(String[] message) {
+    private void updateSkySuns(float delta) {
         if (currentLevel instanceof VaseBreaker) {
             return;
         }
         if (currentLevel.getSkySunProducer() == null) {
             return;
         }
-        currentLevel.getSkySunProducer().update();
+        currentLevel.getSkySunProducer().update(delta);
         if (currentLevel.getSkySunProducer().isProducedASun()) {
             Sun sun = currentLevel.getSkySunProducer().getSun();
-            append(message, "New " + sun.getType().getName() + " sun is dropping at position (" + sun.getX()
-                    + ", " + sun.getY() + ")");
+//            append(message, "New " + sun.getType().getName() + " sun is dropping at position (" + sun.getX()
+//                    + ", " + sun.getY() + ")");
             currentLevel.getSkySunProducer().setProducedASun(false);
         }
     }
 
-    private void updateSuns(String[] message) {
+    private void updateSuns(float delta) {
         for (Sun sun : currentLevel.getActiveSuns()) {
             boolean wasFalling = sun.isFalling();
-            sun.update();
+            sun.update(delta);
             if (wasFalling && !sun.isFalling()) {
-                append(message, "Sun reached the ground at position (" + sun.getX() + ", " + sun.getY() + ")");
+//                append(message, "Sun reached the ground at position (" + sun.getX() + ", " + sun.getY() + ")");
             }
         }
     }
 
-    private void updateTiles() {
+    private void updateTiles(float delta) {
         GameMap map = currentLevel.getGameMap();
         if (map == null || map.getGrid() == null) {
             return;
@@ -223,14 +222,14 @@ public class GameManagerController {
         for (int i = 0; i < map.getRows(); i++) {
             for (int j = 0; j < map.getColumns(); j++) {
                 Tile tile = map.getGrid()[i][j];
-                tile.update();
+                tile.update(delta);
             }
         }
     }
 
-    private void updateBarrels() {
+    private void updateBarrels(float delta) {
         for (Barrel barrel : currentLevel.getBarrels()) {
-            barrel.update();
+            barrel.update(delta);
         }
     }
 
@@ -241,21 +240,9 @@ public class GameManagerController {
         }
     }
 
-    public void collectSun(String input) {
-        Matcher matcher = Pattern.compile(Commands.COLLECT_SUN.getPattern()).matcher(input);
-        if (!matcher.matches()) {
-            System.out.println("invalid command");
-            return;
-        }
-        int x = Integer.parseInt(matcher.group("x"));
-        int y = Integer.parseInt(matcher.group("y"));
-        Sun sun = findSun(x, y);
-        if (sun == null) {
-            System.out.println("no sun at this location");
-            return;
-        }
+    public void collectSun(Sun sun) {
         sun.collect();
-        Plant plant = findPlant(x, y);
+        Plant plant = findPlant((int) sun.getX(), (int) sun.getY());
         if (plant != null) {
             plant.setSunCollected(true);
         }

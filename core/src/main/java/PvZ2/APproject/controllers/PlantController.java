@@ -41,12 +41,12 @@ public class PlantController {
         }
     }
 
-    public void updatePlants() {
-        for (Plant plant : activePlants) {
-            plant.update();
-        }
-        removeDeadPlants();
-    }
+//    public void updatePlants() {
+//        for (Plant plant : activePlants) {
+//            plant.update();
+//        }
+//        removeDeadPlants();
+//    }
 
     public void showPlantsInfo() {
         for (Plant plant : activePlants) {
@@ -57,7 +57,7 @@ public class PlantController {
 
     public static void produceSun(Plant plant) {
         plant.setProducedSun(true);
-        Sun sun = new Sun(plant.getX(), plant.getY(), SunType.NORMAL.getValue(), 0, false, SunType.NORMAL);
+        Sun sun = new Sun(plant.getX(), plant.getY(), SunType.NORMAL.getValue(), 0f, false, SunType.NORMAL);
         Level level = GameManagerController.getInstance().getCurrentLevel();
         if (level != null) {
             level.getActiveSuns().add(sun);

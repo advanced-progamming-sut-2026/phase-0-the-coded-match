@@ -1,6 +1,9 @@
 package PvZ2.APproject.models.GameMapRelated;
 
+import PvZ2.APproject.controllers.GameManagerController;
+import PvZ2.APproject.controllers.QuestController;
 import PvZ2.APproject.enums.TileType;
+import PvZ2.APproject.models.zombies.Zombie;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +17,7 @@ public final class GameMap {
     private String defaultPathDirection;
     private List<Tile> tiles;
     private transient Tile[][] grid;
-    private ArrayList<Lawnmower> lawnmowers;
+    private List<Lawnmower> lawnmowers = new ArrayList<>();
 
     public GameMap(int rows, int columns) {
         this.rows = rows;
@@ -22,6 +25,7 @@ public final class GameMap {
         this.length = columns;
         this.width = rows;
         initializeGrid();
+        initializeLawnMowers(rows);
     }
 
     public void initializeGrid() {
@@ -44,6 +48,52 @@ public final class GameMap {
                 }
             }
         }
+    }
+
+    public void initializeLawnMowers(int rows) {
+        lawnmowers.clear();
+        for (int row = 1; row <= rows; row++) {
+            lawnmowers.add(new Lawnmower(row));
+        }
+    }
+
+    public void handleLawnMower(Zombie zombie){
+        int row = zombie.getY();
+        Lawnmower mower = lawnMowerUsed(row);
+        if(mower == null){
+//            System.out.println( "The zombie ate your brain; LOSER!!!");
+            GameManagerController.getInstance().gameOver();
+            return;
+        }
+
+        mower.setHasBeenUsed(true);
+//        System.out.println("The lawn mower in the row " + row + " is triggered and killed these zombies:");
+
+        List<Zombie> killed = new ArrayList<>();
+        List<Zombie> activeZombies = GameManagerController.getInstance().getCurrentLevel().getActiveZombies();
+        for (Zombie zombieInRow : new ArrayList<>(activeZombies)) {
+            if (zombieInRow.getY() == row) {
+                killed.add(zombieInRow);
+                zombieInRow.setCurrentHp(0);
+            }
+        }
+        QuestController.notifyZombiesKilledByLawnmower(killed.size());
+
+//        for (Zombie z : killed) System.out.println(z.getData().getDisplayName());
+
+    }
+
+    public Lawnmower lawnMowerUsed(int row){
+        for(Lawnmower mower: lawnmowers){
+            if (mower.getRow() != row){
+                continue;
+            }
+            if (mower.HasBeenUsed()){
+                return null;
+            }
+            return mower;
+        }
+        return null;
     }
 
     private String getPlantNameAt(int col, int row){
@@ -131,11 +181,11 @@ public final class GameMap {
         this.grid = grid;
     }
 
-    public ArrayList<Lawnmower> getLawnmowers() {
+    public List<Lawnmower> getLawnmowers() {
         return lawnmowers;
     }
 
-    public void setLawnmowers(ArrayList<Lawnmower> lawnmowers) {
+    public void setLawnmowers(List<Lawnmower> lawnmowers) {
         this.lawnmowers = lawnmowers;
     }
 
