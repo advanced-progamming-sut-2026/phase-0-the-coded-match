@@ -10,6 +10,7 @@ import PvZ2.APproject.models.zombies.strategies.ZombieBehavior;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Zombie implements Update {
     private ZombieData data;
