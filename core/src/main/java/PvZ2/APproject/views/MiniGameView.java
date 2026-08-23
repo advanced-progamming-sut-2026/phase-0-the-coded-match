@@ -19,7 +19,7 @@ public class MiniGameView {
             System.out.println(MiniGameController.enterMinigame(input));
             miniGame = MiniGameController.getMiniGame();
         } else if (input.matches(Commands.ADVANCE_TIME.getPattern())) {
-            //instance.advanceTime(input, message);
+//            instance.advanceTime(input, message);
             if (miniGame instanceof IZombie game) game.Update();
             else if (miniGame instanceof WallNutBowling game) game.tick();
             else if (miniGame instanceof Zombotany game) game.tick();

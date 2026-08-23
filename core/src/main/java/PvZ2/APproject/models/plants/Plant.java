@@ -1,6 +1,7 @@
 package PvZ2.APproject.models.plants;
 
 import PvZ2.APproject.enums.PlantTag;
+import PvZ2.APproject.enums.PlantState;
 import PvZ2.APproject.models.Update;
 import PvZ2.APproject.models.plants.abilities.PlantAbilityFactory;
 import PvZ2.APproject.models.plants.abilities.PlantAbilityHandler;
@@ -31,6 +32,7 @@ public class Plant implements Update {
     private int coverHp;
     private int stackCount = 1;
     private boolean protectedFromZombies;
+    private PlantState currentState = PlantState.IDLE;
 
     public Plant(PlantData data, int x, int y, int level) {
         this.data = data;
@@ -109,6 +111,14 @@ public class Plant implements Update {
         }
     }
 
+    public void setState(PlantState state) {
+        currentState = state;
+    }
+
+    public PlantState getCurrentState() {
+        return currentState;
+    }
+
     public void takeDamage(int damage) {
         int remaining = Math.max(0, damage);
         if (coverHp > 0) {
@@ -122,6 +132,7 @@ public class Plant implements Update {
             protectedFromZombies = false;
         }
         currentHp = Math.max(0, currentHp - remaining);
+        if (currentHp <= 0) currentState = PlantState.DEATH; else currentState = PlantState.HURT;
     }
 
     public boolean isDead() {

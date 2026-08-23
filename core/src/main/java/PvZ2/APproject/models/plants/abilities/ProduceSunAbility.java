@@ -5,6 +5,7 @@ import PvZ2.APproject.enums.SunType;
 import PvZ2.APproject.models.Level;
 import PvZ2.APproject.models.Sun;
 import PvZ2.APproject.models.plants.Plant;
+import PvZ2.APproject.enums.PlantState;
 
 public class ProduceSunAbility implements PlantAbilityHandler {
     private final boolean instant;
@@ -15,6 +16,7 @@ public class ProduceSunAbility implements PlantAbilityHandler {
 
     @Override
     public void execute(Plant plant) {
+        plant.setState(PlantState.PRODUCING);
         Level level = GameManagerController.getInstance().getCurrentLevel();
         if (level == null) {
             return;

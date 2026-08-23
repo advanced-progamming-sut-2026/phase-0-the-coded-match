@@ -87,7 +87,8 @@ public class GameManagerController {
 //        return message;
 //    }
 
-    public void updateObjects(float delta) {
+    public String updateObjects(float delta) {
+        String dropMessage = "";
         if (currentLevel.getLevelType() == LevelType.I_ZOMBIE) {
             decreasePlantCooldowns();
             updatePlants(delta);
@@ -97,7 +98,7 @@ public class GameManagerController {
             decreasePlantCooldowns();
             updatePlants(delta);
             updateBarrels(delta);
-            updateZombies(delta);
+            dropMessage = updateZombies(delta);
             if (!(currentLevel instanceof MiniGame)) {
                 updateWaves(delta);
                 updateSkySuns(delta);
@@ -116,6 +117,7 @@ public class GameManagerController {
         if (currentLevel instanceof VaseBreaker) {
             ((VaseBreaker) currentLevel).updateGroundSeeds();
         }
+        return dropMessage;
     }
 
     private void decreasePlantCooldowns() {
@@ -157,9 +159,10 @@ public class GameManagerController {
         }
     }
 
-    private void updateZombies(float delta) {
+    private String updateZombies(float delta) {
         int killedThisTick = 0;
         int damageThisTick = 0;
+        String dropMessage = "";
         Iterator<Zombie> iterator = currentLevel.getActiveZombies().iterator();
         while (iterator.hasNext()) {
             Zombie zombie = iterator.next();
@@ -171,7 +174,7 @@ public class GameManagerController {
                 iterator.remove();
                 killedThisTick++;
                 damageThisTick += zombie.getLastDamageTaken();
-                handleZombieDrop(zombie);
+                dropMessage = handleZombieDrop(zombie);
                 if (!(currentLevel instanceof MiniGame)) {
                     QuestController.notifyZombieKilled(zombie);
                     if (currentLevel.getCurrentSeason() != null) {
@@ -186,6 +189,7 @@ public class GameManagerController {
                     currentLevel.getCurrentTick());
             if (!result.isEmpty()) System.out.println(result);
         }
+        return dropMessage;
     }
 
     private void updateWaves(float delta) {
@@ -594,29 +598,30 @@ public class GameManagerController {
         return plant.isBoosted();
     }
 
-    private void handleZombieDrop(Zombie zombie) {
+    private String handleZombieDrop(Zombie zombie) {
         if (zombie.isGlowing() && currentLevel.getPlantFoodCount() < MAX_PLANT_FOOD) {
             currentLevel.setPlantFoodCount(currentLevel.getPlantFoodCount() + 1);
-            System.out.println("The glowing zombie dropped a plant food; you have "
-                    + currentLevel.getPlantFoodCount() + " plant foods now.");
+            return "The glowing zombie dropped a plant food; you have "
+                + currentLevel.getPlantFoodCount() + " plant foods now.";
         }
         if (Math.random() >= 0.10 || App.getCurrentUser() == null) {
-            return;
+            return "";
         }
         int drop = (int) (Math.random() * 3);
         if (drop == 0) {
             App.getCurrentUser().addCoins(50);
-            System.out.println("A zombie dropped 50 coins; you have " + App.getCurrentUser().getCoinsCount() + " coins now.");
+            return "A zombie dropped 50 coins; you have " + App.getCurrentUser().getCoinsCount() + " coins now.";
         } else if (drop == 1) {
             App.getCurrentUser().addGems(1);
-            System.out.println("A zombie dropped 1 diamond; you have " + App.getCurrentUser().getGemsCount() + " diamonds now.");
+            return "A zombie dropped 1 diamond; you have " + App.getCurrentUser().getGemsCount() + " diamonds now.";
         } else {
             int unlocked = App.getCurrentUser().getGreenHouse().unlockPots(1);
             if (unlocked > 0) {
-                System.out.println("A zombie dropped a pot; you have " + App.getCurrentUser().getGreenHouse().getPotsCount() + " pots now.");
+                return "A zombie dropped a pot; you have " +
+                    App.getCurrentUser().getGreenHouse().getPotsCount() + " pots now.";
             } else {
                 App.getCurrentUser().addCoins(50);
-                System.out.println("The greenhouse is full; the pot was converted to 50 coins.");
+                return "The greenhouse is full; the pot was converted to 50 coins.";
             }
         }
     }

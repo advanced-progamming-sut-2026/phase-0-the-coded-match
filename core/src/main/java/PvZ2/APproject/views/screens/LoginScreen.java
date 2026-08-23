@@ -67,8 +67,7 @@ public class LoginScreen extends BaseScreen {
 
                 if (response.equals("Logged in successfully")) {
                     // Navigate to Main Menu after a short delay
-                    // game.setScreen(new MainMenuScreen(game));
-                    game.setScreen(new MainMenu(game));
+                     game.setScreen(new MainMenu(game));
                 }
             }
         });

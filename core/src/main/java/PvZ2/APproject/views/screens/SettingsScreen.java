@@ -1,7 +1,10 @@
 package PvZ2.APproject.views.screens;
 
 import PvZ2.APproject.Main;
+import PvZ2.APproject.enums.Menu;
+import PvZ2.APproject.models.App;
 import PvZ2.APproject.models.GameSettings;
+import PvZ2.APproject.views.menus.MainMenu;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -24,6 +27,10 @@ public class SettingsScreen extends BaseScreen{
         backgroundImage = new Image(new TextureRegionDrawable(background));
         backgroundImage.setFillParent(true);
         stage.addActor(backgroundImage);
+        addBackButton(() -> {
+            App.setCurrentMenu(Menu.MAIN_MENU);
+            game.setScreen(new MainMenu(game));
+        });
 
         settingsTable = new Table();
         settingsTable.setFillParent(true);
@@ -42,7 +49,7 @@ public class SettingsScreen extends BaseScreen{
         SelectBox<Integer> difficultySelect = new SelectBox<>(skin);
         difficultySelect.setItems(1, 2, 3, 4, 5);
         difficultySelect.setSelected(settings.getGameDifficulty());
-        difficultyLabel.addListener(new ChangeListener() {
+        difficultySelect.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 settings.setGameDifficulty(difficultySelect.getSelected());

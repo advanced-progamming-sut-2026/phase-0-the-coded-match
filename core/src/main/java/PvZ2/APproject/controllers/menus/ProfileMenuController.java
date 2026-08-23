@@ -2,8 +2,10 @@ package PvZ2.APproject.controllers.menus;
 
 import PvZ2.APproject.Main;
 import PvZ2.APproject.enums.Commands;
+import PvZ2.APproject.enums.Menu;
 import PvZ2.APproject.models.App;
 import PvZ2.APproject.models.User;
+import PvZ2.APproject.views.menus.MainMenu;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -68,7 +70,8 @@ public class ProfileMenuController {
     }
 
     public void exit(Main game) {
-//        game.setScreen(new ); //TODO: new MainScreen
+        App.setCurrentMenu(Menu.MAIN_MENU);
+        game.setScreen(new MainMenu(game));
     }
 
 //    public static StringBuilder showProfileInfo(String input) {
