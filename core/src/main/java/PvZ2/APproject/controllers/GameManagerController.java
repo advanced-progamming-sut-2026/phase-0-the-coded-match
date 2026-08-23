@@ -48,6 +48,22 @@ public class GameManagerController {
         return currentLevel;
     }
 
+    public boolean isCooldownRemoved() {
+        return cooldownRemoved;
+    }
+
+    public void setCooldownRemoved(boolean cooldownRemoved) {
+        GameManagerController.cooldownRemoved = cooldownRemoved;
+    }
+
+    public Map<String, Integer> getPlantCooldowns() {
+        return plantCooldowns;
+    }
+
+    public void setPlantCooldowns(String plant, int time){
+        plantCooldowns.put(plant, time);
+    }
+
     public void setCurrentLevel(Level level) {
         currentLevel = level;
         cooldownRemoved = false;
@@ -278,129 +294,129 @@ public class GameManagerController {
         System.out.println("all zombies are dead");
     }
 
-    public void plantPlant(String input) {
-        Matcher matcher = Pattern.compile(Commands.PLANT_PLANT.getPattern()).matcher(input);
-        if (!matcher.matches()) {
-            System.out.println("invalid command");
-            return;
-        }
-        String type = matcher.group("type").trim();
-        int x = Integer.parseInt(matcher.group("x"));
-        int y = Integer.parseInt(matcher.group("y"));
-        String error = getPlantingError(type, x, y);
+//    public void plantPlant(String input) {
+//        Matcher matcher = Pattern.compile(Commands.PLANT_PLANT.getPattern()).matcher(input);
+//        if (!matcher.matches()) {
+//            System.out.println("invalid command");
+//            return;
+//        }
+//        String type = matcher.group("type").trim();
+//        int x = Integer.parseInt(matcher.group("x"));
+//        int y = Integer.parseInt(matcher.group("y"));
+//        String error = getPlantingError(type, x, y);
+//
+//        if (currentLevel instanceof VaseBreaker) {
+//            plantVasebreakerSeed((VaseBreaker) currentLevel, type, x, y);
+//            return;
+//        }
+//        if (error != null) {
+//            System.out.println(error);
+//            return;
+//        }
+//        PlantData data = PlantRepository.getInstance().findByName(type);
+//        Plant plant = new Plant(data, x, y, 1);
+//        if (currentLevel.getSpecialLevel() instanceof LockedPlantsLevel &&
+//            ((LockedPlantsLevel) currentLevel.getSpecialLevel()).isPlantLocked(plant.getData().getName())) {
+//            System.out.println("Plant is locked");
+//            return;
+//        }
+//        currentLevel.getActivePlants().add(plant);
+//        if (currentLevel.getCurrentSeason() != null) {
+//            currentLevel.getCurrentSeason().PlantPlaced(currentLevel, plant, x, y);
+//        }
+//        currentLevel.getGameMap().getTile(plant.getX(), plant.getY()).setPlant(plant);
+//        currentLevel.setCollectedSunsAmount(currentLevel.getCollectedSunsAmount() - data.getSunCost());
+//        if (!cooldownRemoved) {
+//            plantCooldowns.put(data.getName().toLowerCase(), secondsToTicks(data.getRecharge()));
+//        }
+//        if (isBoostedPlant(plant)) plant.activatePlantFood();
+//        if (App.getCurrentUser().getGreenHouse().storedBoosts.remove(data.getName().toLowerCase()) != null)
+//            plant.activatePlantFood();
+//        QuestController.onPlantPlaced(plant);
+//        System.out.println("Plant " + data.getDisplayName() + " planted at (" + x + ", " + y + ")");
+//    }
 
-        if (currentLevel instanceof VaseBreaker) {
-            plantVasebreakerSeed((VaseBreaker) currentLevel, type, x, y);
-            return;
-        }
-        if (error != null) {
-            System.out.println(error);
-            return;
-        }
-        PlantData data = PlantRepository.getInstance().findByName(type);
-        Plant plant = new Plant(data, x, y, 1);
-        if (currentLevel.getSpecialLevel() instanceof LockedPlantsLevel &&
-            ((LockedPlantsLevel) currentLevel.getSpecialLevel()).isPlantLocked(plant.getData().getName())) {
-            System.out.println("Plant is locked");
-            return;
-        }
-        currentLevel.getActivePlants().add(plant);
-        if (currentLevel.getCurrentSeason() != null) {
-            currentLevel.getCurrentSeason().PlantPlaced(currentLevel, plant, x, y);
-        }
-        currentLevel.getGameMap().getTile(plant.getX(), plant.getY()).setPlant(plant);
-        currentLevel.setCollectedSunsAmount(currentLevel.getCollectedSunsAmount() - data.getSunCost());
-        if (!cooldownRemoved) {
-            plantCooldowns.put(data.getName().toLowerCase(), secondsToTicks(data.getRecharge()));
-        }
-        if (isBoostedPlant(plant)) plant.activatePlantFood();
-        if (App.getCurrentUser().getGreenHouse().storedBoosts.remove(data.getName().toLowerCase()) != null)
-            plant.activatePlantFood();
-        QuestController.onPlantPlaced(plant);
-        System.out.println("Plant " + data.getDisplayName() + " planted at (" + x + ", " + y + ")");
-    }
-
-    private String getPlantingError(String type, int x, int y) {
-        PlantData data = PlantRepository.getInstance().findByName(type);
-        if (data == null) return "plant type does not exist";
-        if (!currentLevel.getChosenPlants().isEmpty() &&
-            currentLevel.getChosenPlants().stream().noneMatch(name -> name.equalsIgnoreCase(type)))
-            return "plant was not selected";
-        Tile tile = currentLevel.getGameMap().getTile(x, y);
-        if (tile == null) {
-            return "location is out of map";
-        }
-        Plant temp = new Plant(data, x, y, 1);
-        if (!PlantController.canPlaceOnTile(temp, tile)) {
-            return "cannot plant on this tile";
-        }
-        if (currentLevel.getCollectedSunsAmount() < data.getSunCost()) {
-            return "not enough suns";
-        }
-        if (!cooldownRemoved && plantCooldowns.getOrDefault(data.getName().toLowerCase(), 0) > 0) {
-            return "plant is on cooldown";
-        }
-        return null;
-    }
-
-    public void cheatRemoveCooldown() {
-        cooldownRemoved = true;
-        plantCooldowns.clear();
-        System.out.println("all plant cooldowns removed");
-    }
-
-    public void pluckPlant(String input) {
-        Matcher matcher = Pattern.compile(Commands.PLUCK_PLANT.getPattern()).matcher(input);
-        if (!matcher.matches()) {
-            System.out.println("invalid command");
-            return;
-        }
-        int x = Integer.parseInt(matcher.group("x"));
-        int y = Integer.parseInt(matcher.group("y"));
-        Plant plant = findPlant(x, y);
-        if (plant == null) {
-            System.out.println("there is no plant at this location");
-            return;
-        }
-        currentLevel.getActivePlants().remove(plant);
-        Tile tile = currentLevel.getGameMap().getTile(x, y);
-        if (tile != null) {
-            tile.removePlant();
-        }
-        System.out.println("Plant " + plant.getData().getDisplayName() + " at (" + x + ", " + y + ") removed");
-    }
-
-    public void feedPlant(String input) {
-        Matcher matcher = Pattern.compile(Commands.FEED_PLANT.getPattern()).matcher(input);
-        if (!matcher.matches()) {
-            System.out.println("invalid command");
-            return;
-        }
-        int x = Integer.parseInt(matcher.group("x"));
-        int y = Integer.parseInt(matcher.group("y"));
-        Plant plant = findPlant(x, y);
-        if (plant == null) {
-            System.out.println("there is no plant at this location");
-            return;
-        }
-        if (currentLevel.getPlantFoodCount() <= 0) {
-            System.out.println("you do not have plant food");
-            return;
-        }
-        currentLevel.setPlantFoodCount(currentLevel.getPlantFoodCount() - 1);
-        plant.activatePlantFood();
-        System.out.println("Plant " + plant.getData().getDisplayName() + " at (" + x + ", " + y + ") was fed; you have "
-                + currentLevel.getPlantFoodCount() + " plant foods now");
-    }
-
-    public void cheatAddPlantFood() {
-        if (currentLevel.getPlantFoodCount() >= MAX_PLANT_FOOD) {
-            System.out.println("plant food storage is full");
-            return;
-        }
-        currentLevel.setPlantFoodCount(currentLevel.getPlantFoodCount() + 1);
-        System.out.println("you have " + currentLevel.getPlantFoodCount() + " plant foods now");
-    }
+//    private String getPlantingError(String type, int x, int y) {
+//        PlantData data = PlantRepository.getInstance().findByName(type);
+//        if (data == null) return "plant type does not exist";
+//        if (!currentLevel.getChosenPlants().isEmpty() &&
+//            currentLevel.getChosenPlants().stream().noneMatch(name -> name.equalsIgnoreCase(type)))
+//            return "plant was not selected";
+//        Tile tile = currentLevel.getGameMap().getTile(x, y);
+//        if (tile == null) {
+//            return "location is out of map";
+//        }
+//        Plant temp = new Plant(data, x, y, 1);
+//        if (!PlantController.canPlaceOnTile(temp, tile)) {
+//            return "cannot plant on this tile";
+//        }
+//        if (currentLevel.getCollectedSunsAmount() < data.getSunCost()) {
+//            return "not enough suns";
+//        }
+//        if (!cooldownRemoved && plantCooldowns.getOrDefault(data.getName().toLowerCase(), 0) > 0) {
+//            return "plant is on cooldown";
+//        }
+//        return null;
+//    }
+//
+//    public void cheatRemoveCooldown() {
+//        cooldownRemoved = true;
+//        plantCooldowns.clear();
+//        System.out.println("all plant cooldowns removed");
+//    }
+//
+//    public void pluckPlant(String input) {
+//        Matcher matcher = Pattern.compile(Commands.PLUCK_PLANT.getPattern()).matcher(input);
+//        if (!matcher.matches()) {
+//            System.out.println("invalid command");
+//            return;
+//        }
+//        int x = Integer.parseInt(matcher.group("x"));
+//        int y = Integer.parseInt(matcher.group("y"));
+//        Plant plant = findPlant(x, y);
+//        if (plant == null) {
+//            System.out.println("there is no plant at this location");
+//            return;
+//        }
+//        currentLevel.getActivePlants().remove(plant);
+//        Tile tile = currentLevel.getGameMap().getTile(x, y);
+//        if (tile != null) {
+//            tile.removePlant();
+//        }
+//        System.out.println("Plant " + plant.getData().getDisplayName() + " at (" + x + ", " + y + ") removed");
+//    }
+//
+//    public void feedPlant(String input) {
+//        Matcher matcher = Pattern.compile(Commands.FEED_PLANT.getPattern()).matcher(input);
+//        if (!matcher.matches()) {
+//            System.out.println("invalid command");
+//            return;
+//        }
+//        int x = Integer.parseInt(matcher.group("x"));
+//        int y = Integer.parseInt(matcher.group("y"));
+//        Plant plant = findPlant(x, y);
+//        if (plant == null) {
+//            System.out.println("there is no plant at this location");
+//            return;
+//        }
+//        if (currentLevel.getPlantFoodCount() <= 0) {
+//            System.out.println("you do not have plant food");
+//            return;
+//        }
+//        currentLevel.setPlantFoodCount(currentLevel.getPlantFoodCount() - 1);
+//        plant.activatePlantFood();
+//        System.out.println("Plant " + plant.getData().getDisplayName() + " at (" + x + ", " + y + ") was fed; you have "
+//                + currentLevel.getPlantFoodCount() + " plant foods now");
+//    }
+//
+//    public void cheatAddPlantFood() {
+//        if (currentLevel.getPlantFoodCount() >= MAX_PLANT_FOOD) {
+//            System.out.println("plant food storage is full");
+//            return;
+//        }
+//        currentLevel.setPlantFoodCount(currentLevel.getPlantFoodCount() + 1);
+//        System.out.println("you have " + currentLevel.getPlantFoodCount() + " plant foods now");
+//    }
 
     public StringBuilder showMap() {
         StringBuilder builder = new StringBuilder();
@@ -570,11 +586,11 @@ public class GameManagerController {
         return null;
     }
 
-    private int secondsToTicks(double seconds) {
+    int secondsToTicks(double seconds) {
         return Math.max(1, (int) Math.ceil(seconds * TICKS_PER_SECOND));
     }
 
-    private boolean isBoostedPlant(Plant plant) {
+    boolean isBoostedPlant(Plant plant) {
         return plant.isBoosted();
     }
 

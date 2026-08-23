@@ -4,6 +4,7 @@ import PvZ2.APproject.Main;
 import PvZ2.APproject.enums.ZombieState;
 import PvZ2.APproject.models.zombies.Zombie;
 import PvZ2.APproject.models.zombies.ZombieArmor;
+import PvZ2.APproject.views.screens.PlayScreen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -20,7 +21,7 @@ public class ZombieView extends Actor {
     private String currentClip;
     private float stateTime = 0f;
     private Boolean hasArmor = false;
-    private final TextureRegion frozenTexture;
+    private final String frozenClip;
     Map<String, Boolean> armorVisibility = new HashMap<>();
 
     public ZombieView(Zombie zombie, Main game) {
@@ -31,7 +32,7 @@ public class ZombieView extends Actor {
         if(!zombie.getArmors().isEmpty() && zombie.getArmors() != null){
             hasArmor = true;
         }
-        frozenTexture = game.getTextures().region("");
+        frozenClip = "768/FULL/EFFECTS/FROSTBITE_ICE_BLOCK_ZOMBIE/FROSTBITE_ICE_BLOCK_ZOMBIE.PAM";
     }
 
     @Override
@@ -50,7 +51,7 @@ public class ZombieView extends Actor {
             }
         }
 
-        setPosition((float) zombie.getX()*80, zombie.getY()*100);
+        setPosition(PlayScreen.BOARD_X + (float) zombie.getX()*PlayScreen.TILE_WIDTH, PlayScreen.BOARD_Y+ zombie.getY()*PlayScreen.TILE_HEIGHT);
     }
 
     @Override
@@ -71,13 +72,14 @@ public class ZombieView extends Actor {
         batch.setColor(Color.WHITE);
 
         if (zombie.isFrozenInBlock()) {
-            batch.draw(
-                frozenTexture,
-                getX(),
-                getY(),
-                80f,
-                100f
-            );
+            game.getPlayer().draw(batch, frozenClip, "idle", stateTime, getX(), getY(), true);
+//            batch.draw(
+//                frozenTexture,
+//                getX(),
+//                getY(),
+//                80f,
+//                100f
+//            ); TODO: SEE IF IT WORKS IF IT DOESNT SWITCH TO AN ICE IMAGE NOT AN ANIMATION!!
         }
 
         game.getPlayer().draw(batch, currentClip, clipName, stateTime, getX(), getY(), true, armorVisibility);

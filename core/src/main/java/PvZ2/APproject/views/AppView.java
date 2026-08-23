@@ -59,7 +59,7 @@ public class AppView {
             } else if (currentMenu == Menu.BONUS_GAME) {
                 BonusGameView.check(input);
             } else if (currentMenu == Menu.SHOP) {
-                ShopView.check(input);
+//                ShopView.check(input);
             } else if (currentMenu == Menu.QUESTS) {
                 QuestView.check(input);
             } else if (currentMenu == Menu.MINIGAMES) {

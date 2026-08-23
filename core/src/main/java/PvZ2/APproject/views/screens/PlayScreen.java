@@ -2,32 +2,41 @@ package PvZ2.APproject.views.screens;
 
 import PvZ2.APproject.Main;
 import PvZ2.APproject.controllers.GameManagerController;
+import PvZ2.APproject.controllers.PlantController;
+import PvZ2.APproject.controllers.PlantSelectionController;
 import PvZ2.APproject.models.GameMapRelated.Lawnmower;
 import PvZ2.APproject.models.Level;
 import PvZ2.APproject.models.Sun;
+import PvZ2.APproject.models.plants.Plant;
+import PvZ2.APproject.models.plants.PlantData;
+import PvZ2.APproject.models.plants.PlantRepository;
+import PvZ2.APproject.models.zombies.Zombie;
 import PvZ2.APproject.views.GameMapView;
 import PvZ2.APproject.views.actors.LawnmowerActor;
 import PvZ2.APproject.views.ZombieView;
+import PvZ2.APproject.views.actors.PlantBox;
 import PvZ2.APproject.views.actors.SunActor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 public class PlayScreen extends BaseScreen {
     private final Main game;
     private Level currentLevel = GameManagerController.getInstance().getCurrentLevel();
     private GameMapView gameMapView;
-    private ZombieView zombieView;
-    public float TILE_WIDTH = 80;
-    public float TILE_HEIGHT = 100;
-    public float BOARD_X = 250;
-    public float BOARD_Y = 80;
+    private PlantSelectionController plantSelectionController;
+    public static float TILE_WIDTH = 80;
+    public static float TILE_HEIGHT = 100;
+    public static float BOARD_X = 250;
+    public static float BOARD_Y = 80;
     private float stateTime = 0f;
 
     private Map<Sun, SunActor> renderedSuns = new HashMap<>();
     private Map<Lawnmower, LawnmowerActor> renderedLawnmowers = new HashMap<>();
+    private Map<Zombie, ZombieView> renderedZombies = new HashMap<>();
 
     public PlayScreen(Main game) {
         this.game = game;
@@ -37,7 +46,10 @@ public class PlayScreen extends BaseScreen {
     public void show() {
         super.show();
 
+        createPlantBoxes();
+
         gameMapView = new GameMapView(game, currentLevel, textures);
+        plantSelectionController = new PlantSelectionController(currentLevel);
 //        gameMapView = new GameMapView(game, textures);
 
         backgroundImage = new Image(new TextureRegionDrawable(gameMapView.getBackground()));
@@ -53,8 +65,51 @@ public class PlayScreen extends BaseScreen {
 
         GameManagerController.getInstance().updateObjects(delta);
 
+        updateZombieActors();
         updateSunActors();
         updateLawnmowerActors();
+    }
+
+    public void createPlantBoxes(){
+        float x = 20;
+        float y = 500;
+        for(String plantName : currentLevel.getChosenPlants()){
+            PlantData plantData = PlantRepository.getInstance().findByName(plantName);
+            if(plantData == null){
+                continue;
+            }
+            PlantBox plantBox = new PlantBox(plantData, plantSelectionController, textures);
+            plantBox.setPosition(x, y);
+            plantBox.setSize(100, 120);
+
+            stage.addActor(plantBox);
+
+            y -= 130;
+        }
+    }
+
+    public void updateZombieActors(){
+        for(Zombie zombie : currentLevel.getActiveZombies()){
+            if(!renderedZombies.containsKey(zombie)){
+                ZombieView zombieView = new ZombieView(zombie, game);
+
+                renderedZombies.put(zombie, zombieView);
+
+                stage.addActor(zombieView);
+            }
+        }
+
+        Iterator<Map.Entry<Zombie, ZombieView>> iterator =
+            renderedZombies.entrySet().iterator();
+
+        while (iterator.hasNext()) {
+            Map.Entry<Zombie, ZombieView> entry = iterator.next();
+
+            if (!currentLevel.getActiveZombies().contains(entry.getKey())) {
+                entry.getValue().remove();
+                iterator.remove();
+            }
+        }
     }
 
     public void updateSunActors() {
