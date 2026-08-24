@@ -51,7 +51,7 @@ public class PlantController {
         return plant.hasThisTag(PlantTag.STACK) || currentPlant.hasThisTag(PlantTag.STACK);
     }
 
-    public String plantPlant(String type, int x, int y) {
+    public static String plantPlant(String type, int x, int y) {
 //        Matcher matcher = Pattern.compile(Commands.PLANT_PLANT.getPattern()).matcher(input);
 //        if (!matcher.matches()) {
 //            System.out.println("invalid command");
@@ -92,7 +92,7 @@ public class PlantController {
         return null;
     }
 
-    private String getPlantingError(String type, int x, int y) {
+    private static String getPlantingError(String type, int x, int y) {
         PlantData data = PlantRepository.getInstance().findByName(type);
         if (data == null) return "plant type does not exist";
         if (!currentLevel.getChosenPlants().isEmpty() &&

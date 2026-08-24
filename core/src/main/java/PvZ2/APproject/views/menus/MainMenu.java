@@ -6,10 +6,7 @@ import PvZ2.APproject.controllers.menus.NewsMenuController;
 import PvZ2.APproject.enums.Commands;
 import PvZ2.APproject.enums.Menu;
 import PvZ2.APproject.models.App;
-import PvZ2.APproject.views.screens.BaseScreen;
-import PvZ2.APproject.views.screens.ProfileScreen;
-import PvZ2.APproject.views.screens.SettingsScreen;
-import PvZ2.APproject.views.screens.SignupScreen;
+import PvZ2.APproject.views.screens.*;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -67,8 +64,8 @@ public class MainMenu extends BaseScreen {
         playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                App.setCurrentMenu(Menu.CHOOSEPLANTS_MENU);
-                game.setScreen(new ChoosePlantsMenu(game));
+                App.setCurrentMenu(Menu.GAME_MENU);
+                game.setScreen(new GameMenuScreen(game));
             }
         });
 

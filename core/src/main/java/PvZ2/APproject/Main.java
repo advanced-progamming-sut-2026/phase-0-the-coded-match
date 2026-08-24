@@ -22,7 +22,7 @@ public class Main extends Game {
         App.loadLoggedInUser();
 
 
-        FileHandle assetsFolder = Gdx.files.internal(".");
+        FileHandle assetsFolder = Gdx.files.internal("pvz-assets");
         textures = new TextureBank("768", assetsFolder);
         player = new PamPlayer(textures, assetsFolder);
 

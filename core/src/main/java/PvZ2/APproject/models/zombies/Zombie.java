@@ -10,7 +10,6 @@ import PvZ2.APproject.models.zombies.strategies.ZombieBehavior;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class Zombie implements Update {
     private ZombieData data;
@@ -73,12 +72,12 @@ public class Zombie implements Update {
     }
 
     @Override
-    public void update() {
+    public void update(float delta) {
        if(isFrozenInBlock){
            return;
        }
        if(isChilled){
-//           chilledTimer -= delta;
+           chilledTimer -= delta;
            if(chilledTimer <= 0){
                chilledTimer = 0;
                isChilled = false;
