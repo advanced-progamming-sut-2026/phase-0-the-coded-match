@@ -47,6 +47,7 @@ public class Level {
         this.gameMap = data.getMap();
         if (this.gameMap != null) {
             this.gameMap.initializeGrid();
+            this.gameMap.initializeLawnMowers(gameMap.getRows());
         } else {
             this.gameMap = new GameMap(5, 9);
         }

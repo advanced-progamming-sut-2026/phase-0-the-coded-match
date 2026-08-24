@@ -14,6 +14,7 @@ import PvZ2.APproject.views.screens.PlayScreen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -144,6 +145,23 @@ public class ChoosePlantsMenu extends BaseScreen {
                 }
             });
         }
+    }
+
+    protected void showMessage(Label label, String message) {
+        if (label == null) {
+            return;
+        }
+        label.clearActions();
+        label.setText(message == null ? "" : message);
+        label.pack();
+        label.setPosition((VIRTUAL_WIDTH - label.getWidth()) / 2f, 70);
+        label.setVisible(true);
+        label.getColor().a = 1f;
+        label.addAction(Actions.sequence(
+            Actions.delay(2f),
+            Actions.fadeOut(0.4f),
+            Actions.hide()
+        ));
     }
 
     private void rebuildGrid() {

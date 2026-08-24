@@ -51,7 +51,11 @@ public final class GameMap {
     }
 
     public void initializeLawnMowers(int rows) {
-        lawnmowers.clear();
+        if (lawnmowers == null) {
+            lawnmowers = new ArrayList<>();
+        } else {
+            lawnmowers.clear();
+        }
         for (int row = 1; row <= rows; row++) {
             lawnmowers.add(new Lawnmower(row));
         }

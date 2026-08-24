@@ -3,13 +3,17 @@ package PvZ2.APproject.views.screens;
 import PvZ2.APproject.Main;
 import PvZ2.APproject.controllers.ShopController;
 import PvZ2.APproject.controllers.menus.ChoosePlantsMenuController;
+import PvZ2.APproject.enums.Menu;
 import PvZ2.APproject.enums.ShopRelated.ShopItemData;
+import PvZ2.APproject.models.App;
 import PvZ2.APproject.models.plants.PlantData;
 import PvZ2.APproject.models.plants.PlantRepository;
+import PvZ2.APproject.views.menus.MainMenu;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.ray3k.tenpatch.TenPatchDrawable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,6 +73,11 @@ public class ShopScreen extends  BaseScreen{
 
         ScrollPane scrollPane = new ScrollPane(itemGrid, skin);
         containerTable.add(scrollPane);
+
+        addBackButton(() -> {
+            App.setCurrentMenu(Menu.GAME_MENU);
+            game.setScreen(new GameMenuScreen(game));
+        });
     }
 
     private void handleItemPurchase(ShopItemData item) {

@@ -31,7 +31,12 @@ public class QuestController {
     private static int sunProducerPlantsPlacedThisLevel;
     private static boolean cloudyDayRuleBroken;
 
-    private static void useCurrentUserQuests() { if (App.getCurrentUser() != null) questsModel = App.getCurrentUser().getQuestsModel(); }
+    private static void useCurrentUserQuests() {
+        if (App.getCurrentUser() != null) {
+            questsModel = App.getCurrentUser().getQuestsModel();
+            questsModel.setAvailableQuests(new ArrayList<>());
+        }
+    }
 
     public static void generateAllQuests() {
         useCurrentUserQuests();

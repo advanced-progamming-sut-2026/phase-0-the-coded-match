@@ -19,7 +19,7 @@ public class GreenHouse {
         for (int y = 1; y <= 3; y++) {
             for (int x = 1; x <= 4; x++) {
                 if (grid[y - 1][x - 1] == null) {
-                    grid[y - 1][x - 1] = new GreenHousePot(x, y, y == 2);
+                    grid[y - 1][x - 1] = new GreenHousePot(x, y, y == 1);
                 }
             }
         }

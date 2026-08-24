@@ -2,9 +2,11 @@ package PvZ2.APproject.views.screens;
 
 import PvZ2.APproject.Main;
 import PvZ2.APproject.controllers.GreenHouseController;
+import PvZ2.APproject.enums.Menu;
 import PvZ2.APproject.models.App;
 import PvZ2.APproject.models.greenhouse.GreenHousePot;
 import PvZ2.APproject.views.actors.PotActor;
+import PvZ2.APproject.views.menus.MainMenu;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -43,16 +45,9 @@ public class GreenHouseScreen extends BaseScreen {
         messageNotif.setPosition(265, 50);
         stage.addActor(messageNotif);
 
-        ImageButton exitButton = new ImageButton(skin, "generic_close_circle");
-        exitButton.setPosition(10, 700);
-
-        stage.addActor(exitButton);
-
-        exitButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                controller.exit(game);
-            }
+        addBackButton(() -> {
+            App.setCurrentMenu(Menu.GAME_MENU);
+            game.setScreen(new GameMenuScreen(game));
         });
     }
 
@@ -120,6 +115,7 @@ public class GreenHouseScreen extends BaseScreen {
             return;
         } else if (potActor.getPot().isReady()) {
             String message = controller.collectPlant(potActor.getPot().x, potActor.getPot().y);
+            updateCurrency();
             showMessage(message);
             potActor.updateState();
         }

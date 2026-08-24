@@ -5,6 +5,7 @@ import PvZ2.APproject.enums.ZombieState;
 import PvZ2.APproject.models.zombies.Zombie;
 import PvZ2.APproject.models.zombies.ZombieArmor;
 import PvZ2.APproject.views.screens.PlayScreen;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -28,11 +29,26 @@ public class ZombieView extends Actor {
         this.game = game;
         this.zombie = zombie;
         this.currentState = zombie.getCurrentState();
-        this.currentClip = "768/FULL/ZOMBIE/"+zombie.getData().getPath()+"/"+zombie.getData().getPath()+".PAM";
+        this.currentClip = getCurrentClip();
         if(!zombie.getArmors().isEmpty() && zombie.getArmors() != null){
             hasArmor = true;
         }
         frozenClip = "768/FULL/EFFECTS/FROSTBITE_ICE_BLOCK_ZOMBIE/FROSTBITE_ICE_BLOCK_ZOMBIE.PAM";
+    }
+
+    public String getCurrentClip() {
+        String zombiePath = zombie.getData().getPath();
+
+        String fullPath = "768/FULL/ZOMBIE/" + zombiePath + "/" + zombiePath + ".PAM";
+        String initialPath = "768/INITIAL/ZOMBIE/" + zombiePath + "/" + zombiePath + ".PAM";
+
+        if (Gdx.files.internal("IMAGES/" + fullPath).exists()) {
+            return fullPath;
+        } else if (Gdx.files.internal("IMAGES/" + initialPath).exists()){
+            return initialPath;
+        }
+
+        return null;
     }
 
     @Override

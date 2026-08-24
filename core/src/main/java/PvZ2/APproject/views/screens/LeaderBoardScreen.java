@@ -2,12 +2,16 @@ package PvZ2.APproject.views.screens;
 
 import PvZ2.APproject.Main;
 import PvZ2.APproject.controllers.LeaderBoardController;
+import PvZ2.APproject.enums.Menu;
 import PvZ2.APproject.models.App;
 import PvZ2.APproject.models.User;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
+import pvz.skin.BorderedTable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +19,7 @@ import java.util.List;
 public class LeaderBoardScreen extends BaseScreen {
     private Main game;
     private LeaderBoardController controller;
-    private Table leaderboardTable;
+    private BorderedTable leaderboardTable;
 
     public LeaderBoardScreen(Main game) {
         this.game = game;
@@ -34,22 +38,41 @@ public class LeaderBoardScreen extends BaseScreen {
         addCurrencyBar();
 
         Table mainTable = new Table(skin);
+        mainTable.setFillParent(true);
+        mainTable.center();
+        mainTable.padTop(20);
 
-        leaderboardTable = new Table();
+
+        Table titleTable = new Table(skin);
+
+        titleTable.setBackground(new TextureRegionDrawable(textures.region
+            ("IMAGE_UI_JOUST_LEADERBOARD_LEADERBOARD_SCROLL_BOTTOM")));
+
+        Label titleLabel = new Label("LEADERBOARD", skin, "big");
+        titleLabel.setAlignment(Align.center);
+        titleTable.add(titleLabel).center().expand().fill();
+        titleTable.setSize(400, 100);
+//        titleLabel.setPosition(VIRTUAL_WIDTH / 2f, VIRTUAL_HEIGHT - 100);
+        mainTable.add(titleTable).width(400).height(100).padBottom(20).row();
+
+        leaderboardTable = new BorderedTable();
+        leaderboardTable.top().left();
 
         ArrayList<User> users = App.getUsers();
-
         buildLeaderBoard(users);
 
         ScrollPane scrollPane = new ScrollPane(leaderboardTable, skin);
+        scrollPane.setScrollingDisabled(true, false);
 
         SelectBox<String> sort = new SelectBox<>(skin);
         sort.setItems("last level", "minigames", "daily quests", "non-daily quests", "score");
 
+        SelectBox<String> ascendOrDescend = new SelectBox<>(skin);
+        ascendOrDescend.setItems("ascending", "descending");
+
         mainTable.add(sort).width(250).row();
-        mainTable.add(scrollPane)
-            .width(500)
-            .height(500);
+        mainTable.add(ascendOrDescend).width(250).row();
+        mainTable.add(scrollPane).width(500).height(500).expand().fill();
 
         stage.addActor(mainTable);
 
@@ -58,30 +81,48 @@ public class LeaderBoardScreen extends BaseScreen {
             public void changed(ChangeEvent event, Actor actor) {
                 String sortType = sort.getSelected();
 
-                List<User> sorted = controller.getSortedUsers(sortType);
+                List<User> sorted = controller.getSortedUsers(sortType, ascendOrDescend.getSelected());
                 buildLeaderBoard(sorted);
             }
+        });
+
+        ascendOrDescend.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                String text = ascendOrDescend.getSelected();
+
+                List<User> sorted = controller.getSortedUsers(sort.getSelected(), text);
+                buildLeaderBoard(sorted);
+            }
+        });
+
+        addBackButton(() -> {
+            App.setCurrentMenu(Menu.GAME_MENU);
+            game.setScreen(new GameMenuScreen(game));
         });
     }
 
     public void buildLeaderBoard(List<User> users) {
+        leaderboardTable.clearChildren();
+
         for (int i = 0; i < users.size(); i++) {
             User user = users.get(i);
 
-            leaderboardTable.add(new Label(user.getUsername() + ":", skin, "default")).width(250);
+            leaderboardTable.add(new Label(user.getUsername() + ":", skin, "secondary")).width(250).row();
 
             leaderboardTable.add(new Label("Season" + (user.getLastSeason() == null ? 0 :
                 user.getLastSeason().getData().getId()) + " Level" + (user.getLastLevel() == null ? 0 :
-                user.getLastLevel().getLevelNumber()), skin, "default")).width(150);
+                user.getLastLevel().getLevelNumber()), skin, "secondary")).width(150);
 
-            leaderboardTable.add(new Label("Mini games won: " + user.getMinigamesWonCount(), skin, "default")).width(150);
+            leaderboardTable.add(new Label("Mini games won: " + user.getMinigamesWonCount(), skin, "secondary")).width(150).row();
 
-            leaderboardTable.add(new Label("Quests done: " + user.getCompletedQuestsCount(), skin, "default")).width(150);
+            leaderboardTable.add(new Label("Quests done: " + user.getCompletedQuestsCount(), skin, "secondary")).width(150).row();
             //todo: separate daily and normal
-            leaderboardTable.add(new Label("highest point: " + user.getHighestPointAchieved(), skin, "default")).width(150);
+            leaderboardTable.add(new Label("highest point: " + user.getHighestPointAchieved(), skin, "secondary")).width(150).row();
 
             leaderboardTable.row();
         }
+        leaderboardTable.pack();
     }
 
     @Override

@@ -38,6 +38,8 @@ public abstract class BaseScreen implements Screen {
     protected static final float VIRTUAL_HEIGHT = 768;
     protected GameSettings gameSettings;
     protected Table currencyTable;
+    protected Label coinLabel;
+    protected Label gemLabel;
 
     @Override
     public void show() {
@@ -79,8 +81,8 @@ public abstract class BaseScreen implements Screen {
 
         Image gemImage = new Image(textures.region("IMAGE_UI_HUD_INGAME_GEM"));
         Image coinImage = new Image(textures.region("IMAGE_UI_HUD_INGAME_COIN"));
-        Label gemLabel = new Label(Integer.toString(App.getCurrentUser().getGemsCount()), skin, "default");
-        Label coinLabel = new Label(Integer.toString(App.getCurrentUser().getCoinsCount()), skin, "default");
+        gemLabel = new Label(Integer.toString(App.getCurrentUser().getGemsCount()), skin, "default");
+        coinLabel = new Label(Integer.toString(App.getCurrentUser().getCoinsCount()), skin, "default");
 
         coinTable.add(coinImage).size(36, 36).padRight(4);
         coinTable.add(coinLabel).padRight(8);
@@ -184,6 +186,11 @@ public abstract class BaseScreen implements Screen {
             VIRTUAL_HEIGHT - currencyTable.getHeight() - 18
         );
         stage.addActor(currencyTable);
+    }
+
+    protected void updateCurrency() {
+        coinLabel.setText(Integer.toString(App.getCurrentUser().getCoinsCount()));
+        gemLabel.setText(Integer.toString(App.getCurrentUser().getGemsCount()));
     }
 
     protected ImageButton addBackButton(Runnable action) {

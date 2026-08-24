@@ -8,6 +8,7 @@ import PvZ2.APproject.models.LevelData;
 import PvZ2.APproject.models.seasons.SeasonData;
 import PvZ2.APproject.models.seasons.SeasonRepository;
 import PvZ2.APproject.views.menus.ChoosePlantsMenu;
+import PvZ2.APproject.views.menus.CollectionMenu;
 import PvZ2.APproject.views.menus.MainMenu;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -47,6 +48,59 @@ public class GameMenuScreen extends BaseScreen{
         containerTable.setFillParent(true);
         stage.addActor(containerTable);
         showChaptersList();
+
+        addBackButton(() -> {
+            App.setCurrentMenu(Menu.MAIN_MENU);
+            game.setScreen(new MainMenu(game));
+        });
+
+        Table screensTable = new Table(skin);
+
+        ImageButton collectionButton = new ImageButton(skin, "almanac");
+        ImageButton greenhouseButton = new ImageButton(skin, "hud_zg");
+        TextButton leaderboardButton = new TextButton("Leaderboard", skin, "brown");
+        TextButton shopButton = new TextButton("Shop", skin, "purple");
+
+        screensTable.add(collectionButton);
+        screensTable.add(greenhouseButton);
+        screensTable.add(leaderboardButton);
+        screensTable.add(shopButton);
+        screensTable.pack();
+        screensTable.setPosition(100, VIRTUAL_HEIGHT - 80);
+
+        stage.addActor(screensTable);
+
+        collectionButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new CollectionMenu(game));
+                App.setCurrentMenu(Menu.COLLECTION_MENU);
+            }
+        });
+
+        greenhouseButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new GreenHouseScreen(game));
+                App.setCurrentMenu(Menu.GREEN_HOUSE);
+            }
+        });
+
+        leaderboardButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new LeaderBoardScreen(game));
+                App.setCurrentMenu(Menu.LEADERBOARD);
+            }
+        });
+
+        shopButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new ShopScreen(game));
+                App.setCurrentMenu(Menu.SHOP);
+            }
+        });
     }
 
     private void showChaptersList(){
@@ -138,11 +192,6 @@ public class GameMenuScreen extends BaseScreen{
         scrollPane.setScrollingDisabled(false, true);
         scrollPane.setOverscroll(false, true);
         containerTable.add(scrollPane).width(VIRTUAL_WIDTH).height(VIRTUAL_HEIGHT);
-
-        addBackButton(() -> {
-            App.setCurrentMenu(Menu.MAIN_MENU);
-            game.setScreen(new MainMenu(game));
-        });
     }
 
     private void showListGrid(int seasonId){
@@ -243,6 +292,7 @@ public class GameMenuScreen extends BaseScreen{
                             GameMenuController.enterLevel(ld.getLevelNumber());
                             // enter choose plants menu;
                             game.setScreen(new ChoosePlantsMenu(game));
+                            App.setCurrentMenu(Menu.CHOOSEPLANTS_MENU);
                         }
                     });
                     card.add(enterBtn).width(160).height(50).padTop(10).row();

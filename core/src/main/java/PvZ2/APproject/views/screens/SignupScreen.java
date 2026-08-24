@@ -178,6 +178,7 @@ public class SignupScreen extends BaseScreen {
 
                             if (questionPicked) {
                                 game.setScreen(new LoginScreen(game));
+                                App.setCurrentMenu(Menu.LOGIN_MENU);
                             }
                         }
                     });

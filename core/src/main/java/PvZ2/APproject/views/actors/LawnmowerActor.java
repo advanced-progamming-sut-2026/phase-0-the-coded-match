@@ -23,7 +23,7 @@ public class LawnmowerActor extends Actor {
 
         loadAnimation();
 
-        setPosition(190, playScreen.BOARD_Y + (lawnmower.getRow() * playScreen.TILE_HEIGHT / 2));
+        setPosition(190, playScreen.BOARD_Y + (lawnmower.getRow() * playScreen.TILE_HEIGHT) - 30);
     }
 
     public void loadAnimation() {

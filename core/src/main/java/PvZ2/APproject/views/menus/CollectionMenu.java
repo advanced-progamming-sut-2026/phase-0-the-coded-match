@@ -12,6 +12,7 @@ import PvZ2.APproject.models.plants.PlantUpgradeData;
 import PvZ2.APproject.models.zombies.ZombieData;
 import PvZ2.APproject.models.zombies.ZombieRepository;
 import PvZ2.APproject.views.screens.BaseScreen;
+import PvZ2.APproject.views.screens.GameMenuScreen;
 import PvZ2.APproject.views.screens.PamActor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -75,8 +76,8 @@ public class CollectionMenu extends BaseScreen {
         addCurrencyBar();
         messageLabel = addMessageLabel();
         addBackButton(() -> {
-            App.setCurrentMenu(Menu.MAIN_MENU);
-            game.setScreen(new MainMenu(game));
+            App.setCurrentMenu(Menu.GAME_MENU);
+            game.setScreen(new GameMenuScreen(game));
         });
 
         Table root = new Table();

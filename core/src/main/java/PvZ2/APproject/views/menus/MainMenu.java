@@ -45,7 +45,7 @@ public class MainMenu extends BaseScreen {
         BorderedTable menu = new BorderedTable();
         TextButton playButton = new TextButton("PLAY", skin, "purple");
         TextButton settingsButton = new TextButton("SETTINGS", skin, "default");
-        TextButton collectionButton = new TextButton("COLLECTION", skin, "default");
+//        TextButton collectionButton = new TextButton("COLLECTION", skin, "default");
         int unread = NewsMenuController.getUnreadCount();
         TextButton newsButton = new TextButton(unread > 0 ? "NEWS  !  " + unread : "NEWS", skin, "default");
         TextButton profileButton = new TextButton("PROFILE", skin, "default");
@@ -53,7 +53,7 @@ public class MainMenu extends BaseScreen {
 
         menu.add(playButton).width(270).height(62).pad(9).row();
         menu.add(settingsButton).width(270).height(52).pad(7).row();
-        menu.add(collectionButton).width(270).height(52).pad(7).row();
+//        menu.add(collectionButton).width(270).height(52).pad(7).row();
         menu.add(newsButton).width(270).height(52).pad(7).row();
         menu.add(profileButton).width(270).height(52).pad(7).row();
         menu.add(logoutButton).width(270).height(48).pad(7);
@@ -77,13 +77,13 @@ public class MainMenu extends BaseScreen {
             }
         });
 
-        collectionButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                App.setCurrentMenu(Menu.COLLECTION_MENU);
-                game.setScreen(new CollectionMenu(game));
-            }
-        });
+//        collectionButton.addListener(new ClickListener() {
+//            @Override
+//            public void clicked(InputEvent event, float x, float y) {
+//                App.setCurrentMenu(Menu.COLLECTION_MENU);
+//                game.setScreen(new CollectionMenu(game));
+//            }
+//        });
 
         newsButton.addListener(new ClickListener() {
             @Override

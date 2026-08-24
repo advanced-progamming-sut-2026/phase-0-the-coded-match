@@ -4,8 +4,6 @@ import PvZ2.APproject.enums.Gender;
 import PvZ2.APproject.enums.QuestRelated.QuestCategory;
 import PvZ2.APproject.enums.SecurityQuestions;
 import PvZ2.APproject.models.greenhouse.GreenHouse;
-import PvZ2.APproject.models.plants.PlantData;
-import PvZ2.APproject.models.plants.PlantRepository;
 import PvZ2.APproject.models.seasons.Season;
 
 import java.util.ArrayList;

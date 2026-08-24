@@ -50,8 +50,6 @@ public class PotActor extends Group {
 
         timeLabel = new Label("", skin, "secondary");
         growButton = new TextButton("", skin, "purple");
-        addActor(timeLabel);
-        addActor(growButton);
         timeLabel.setVisible(false);
         growButton.setVisible(false);
 
@@ -66,12 +64,7 @@ public class PotActor extends Group {
         if (pot.getPlantType() == null) {
             plantClip = null;
         } else {
-            String plantName = pot.getPlantType();
-            String pamPath = getPamPath(plantName.toUpperCase());
-            player.loadSync(pamPath);
-            plantClip = player.getClip(pamPath, "idle");
-            timeLabel.setVisible(true);
-            growButton.setVisible(true);
+            setPlant();
         }
 
     }
@@ -107,8 +100,13 @@ public class PotActor extends Group {
                 player.loadSync(pamPath);
                 plantClip = player.getClip(pamPath, "idle");
             }
+            addActor(timeLabel);
+            addActor(growButton);
+            growButton.setSize(80, 35);
+            growButton.setPosition(10, 5);
             timeLabel.setVisible(true);
             growButton.setVisible(true);
+
         }
     }
 
@@ -120,9 +118,9 @@ public class PotActor extends Group {
         String fullPath = "768/FULL/PLANT/" + plantId + "/" + plantId + ".PAM";
         String initialPath = "768/INITIAL/PLANT/" + plantId + "/" + plantId + ".PAM";
 
-        if (Gdx.files.internal(fullPath).exists()) { //or "assets/" + ?
+        if (Gdx.files.internal("IMAGES/" + fullPath).exists()) {
             return fullPath;
-        } else if (Gdx.files.internal(initialPath).exists()){
+        } else if (Gdx.files.internal("IMAGES/" + initialPath).exists()){
             return initialPath;
         }
 
@@ -158,8 +156,8 @@ public class PotActor extends Group {
                 batch,
                 plantClip,
                 stateTime,
-                getX(),
-                getY(),
+                getX() + 60,
+                getY() + 90,
                 true
             );
         }

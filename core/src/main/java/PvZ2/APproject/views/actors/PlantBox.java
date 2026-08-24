@@ -45,7 +45,7 @@ public class PlantBox extends Group {
                 background = textures.region("IMAGE_UI_PACKETS_PIRATE");
         }
 
-        plantImage = textures.region("IMAGE_UI_PACKETS_" + plantData.getName().toUpperCase());
+        plantImage = textures.region("IMAGE_UI_PACKETS_" + plantData.getId().toUpperCase());
 
     }
 
