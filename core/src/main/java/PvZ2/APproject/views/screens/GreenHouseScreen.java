@@ -34,6 +34,8 @@ public class GreenHouseScreen extends BaseScreen {
         backgroundImage.setFillParent(true);
         stage.addActor(backgroundImage);
 
+        addCurrencyBar();
+
         createPots();
 
         messageNotif = new Label("", skin, "promo_ribbon");

@@ -67,24 +67,13 @@ public class GameMenuController{
         return message;
     }
 
-    public static String[] cheatAddCoinOrGem(String input, String[] message) {
-        Pattern pattern = Pattern.compile(Commands.CHEAT_ADD_CURRENCY.getPattern());
-        Matcher matcher = pattern.matcher(input);
+    public static void cheatAddCoinOrGem(int amount, String currency) {
 
-        if (!matcher.matches()) {
-            message[0] = "Invalid command";
-            return message;
-        }
-
-        int amount = Integer.parseInt(matcher.group("amount"));
-        String currency = matcher.group("currency");
-        if (currency.equals("coin")) {
+        if (currency.equalsIgnoreCase("coin")) {
             App.getCurrentUser().addCoins(amount);
         } else {
             App.getCurrentUser().addGems(amount);
         }
-        message[0] = amount + currency + " added successfully";
-        return message;
     }
 //    public static void exitGame() {
 //        App.saveLoggedInUser();

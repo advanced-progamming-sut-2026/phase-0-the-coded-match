@@ -53,5 +53,6 @@ public class Main extends Game {
     @Override
     public void dispose() {
         super.dispose();
+        SignupMenuController.saveToJson();
     }
 }

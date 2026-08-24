@@ -36,6 +36,7 @@ public class SettingsScreen extends BaseScreen{
         settingsTable.setFillParent(true);
         stage.addActor(settingsTable);
         showSettingsTable();
+        addCurrencyBar();
 
     }
 
@@ -82,6 +83,7 @@ public class SettingsScreen extends BaseScreen{
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 settings.setDebugMode(debugCheckBox.isChecked());
+                addCurrencyBar();
             }
         });
 

@@ -31,6 +31,8 @@ public class LeaderBoardScreen extends BaseScreen {
         backgroundImage.setFillParent(true);
         stage.addActor(backgroundImage);
 
+        addCurrencyBar();
+
         Table mainTable = new Table(skin);
 
         leaderboardTable = new Table();

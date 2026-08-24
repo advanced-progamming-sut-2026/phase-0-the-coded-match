@@ -2,11 +2,13 @@ package PvZ2.APproject.views.screens;
 
 import PvZ2.APproject.Main;
 import PvZ2.APproject.controllers.menus.GameMenuController;
+import PvZ2.APproject.enums.Menu;
 import PvZ2.APproject.models.App;
 import PvZ2.APproject.models.LevelData;
 import PvZ2.APproject.models.seasons.SeasonData;
 import PvZ2.APproject.models.seasons.SeasonRepository;
 import PvZ2.APproject.views.menus.ChoosePlantsMenu;
+import PvZ2.APproject.views.menus.MainMenu;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
@@ -33,10 +35,13 @@ public class GameMenuScreen extends BaseScreen{
     @Override
     public void show(){
         super.show();
+
         background = textures.region("IMAGE_MAINMENU_BACKGROUND");
         backgroundImage = new Image(new TextureRegionDrawable(background));
         backgroundImage.setFillParent(true);
         stage.addActor(backgroundImage);
+
+        addCurrencyBar();
 
         containerTable = new Table();
         containerTable.setFillParent(true);
@@ -133,6 +138,11 @@ public class GameMenuScreen extends BaseScreen{
         scrollPane.setScrollingDisabled(false, true);
         scrollPane.setOverscroll(false, true);
         containerTable.add(scrollPane).width(VIRTUAL_WIDTH).height(VIRTUAL_HEIGHT);
+
+        addBackButton(() -> {
+            App.setCurrentMenu(Menu.MAIN_MENU);
+            game.setScreen(new MainMenu(game));
+        });
     }
 
     private void showListGrid(int seasonId){

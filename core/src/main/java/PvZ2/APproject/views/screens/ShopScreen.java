@@ -31,6 +31,8 @@ public class ShopScreen extends  BaseScreen{
         backgroundImage.setFillParent(true);
         stage.addActor(backgroundImage);
 
+        addCurrencyBar();
+
         containerTable = new Table();
         containerTable.setFillParent(true);
         stage.addActor(containerTable);

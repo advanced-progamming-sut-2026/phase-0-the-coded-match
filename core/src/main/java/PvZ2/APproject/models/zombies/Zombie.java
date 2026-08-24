@@ -73,7 +73,7 @@ public class Zombie implements Update {
     }
 
     @Override
-    public void update() {
+    public void update(float delta) {
        if(isFrozenInBlock){
            return;
        }
