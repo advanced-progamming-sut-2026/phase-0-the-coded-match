@@ -10,6 +10,7 @@ import PvZ2.APproject.models.plants.PlantData;
 import PvZ2.APproject.models.plants.PlantUpgradeData;
 import PvZ2.APproject.views.screens.BaseScreen;
 import PvZ2.APproject.views.screens.PamActor;
+import PvZ2.APproject.views.screens.PlayScreen;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -106,6 +107,7 @@ public class ChoosePlantsMenu extends BaseScreen {
             public void clicked(InputEvent event, float x, float y) {
                 String message = ChoosePlantsMenuController.startGame();
                 showMessage(messageLabel, message);
+                game.setScreen(new PlayScreen(game));
             }
         });
 

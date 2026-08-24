@@ -6,6 +6,7 @@ import PvZ2.APproject.models.App;
 import PvZ2.APproject.models.LevelData;
 import PvZ2.APproject.models.seasons.SeasonData;
 import PvZ2.APproject.models.seasons.SeasonRepository;
+import PvZ2.APproject.views.menus.ChoosePlantsMenu;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
@@ -231,6 +232,7 @@ public class GameMenuScreen extends BaseScreen{
                         public void clicked(InputEvent event, float x, float y) {
                             GameMenuController.enterLevel(ld.getLevelNumber());
                             // enter choose plants menu;
+                            game.setScreen(new ChoosePlantsMenu(game));
                         }
                     });
                     card.add(enterBtn).width(160).height(50).padTop(10).row();
