@@ -51,12 +51,14 @@
     "eatDPS": 100,
     "speed": 0.185,
     "waveCost": 400,
-    "armors": {
-      "type": "BUCKET",
-      "hp": 1100,
-      "metallic": true,
-      "path": "zombie_armor_bucket_norm"
-    },
+    "armors": [
+      {
+        "type": "BUCKET",
+        "hp": 1100,
+        "metallic": true,
+        "path": "zombie_armor_bucket_norm"
+      }
+    ],
     "behaviorType": "Normal",
     "state": "WALKING",
     "cost": 100
@@ -85,7 +87,8 @@
         "hp": 1600,
         "metallic": true,
         "path": "zombie_shoulder_armor"
-      }],
+      }
+    ],
     "behaviorType": "Normal",
     "state": "WALKING",
     "cost": 120
@@ -102,12 +105,14 @@
     "eatDPS": 100,
     "speed": 0.185,
     "waveCost": 700,
-    "armors": {
-      "type": "BRICK",
-      "hp": 1100,
-      "metallic": true,
-      "path": "zombie_armor_brick_norm"
-    },
+    "armors": [
+      {
+        "type": "BRICK",
+        "hp": 1100,
+        "metallic": true,
+        "path": "zombie_armor_brick_norm"
+      }
+    ],
     "behaviorType": "Normal",
     "state": "WALKING",
     "cost": 100
@@ -249,11 +254,13 @@
     "eatDPS": 200,
     "speed": 0.22,
     "waveCost": 700,
-    "armors": {
-      "type": "NEWSPAPER",
-      "hp": 800,
-      "metallic": false
-    },
+    "armors": [
+      {
+        "type": "NEWSPAPER",
+        "hp": 800,
+        "metallic": false
+      }
+    ],
     "behaviorType": "Normal",
     "state": "WALKING",
     "runningState": 0.44

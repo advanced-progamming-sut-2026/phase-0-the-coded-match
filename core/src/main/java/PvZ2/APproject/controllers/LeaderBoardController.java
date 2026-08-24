@@ -33,15 +33,15 @@ public class LeaderBoardController {
 //        return sb;
 //    }
 
-    public List<User> getSortedUsers(String sortBy) {
+    public List<User> getSortedUsers(String sortBy, String ascendOrDescend) {
         List<User> allUsers = new ArrayList<>(App.getUsers());
 
-//        boolean isAscending;
-//        if (isAscendingSt.equalsIgnoreCase("true")) {
-//            isAscending = true;
-//        } else {
-//            isAscending = false;
-//        }
+        boolean isAscending;
+        if (ascendOrDescend.equalsIgnoreCase("ascending")) {
+            isAscending = true;
+        } else {
+            isAscending = false;
+        }
         Comparator<User> comparator;
 
         switch (sortBy) {
@@ -69,9 +69,9 @@ public class LeaderBoardController {
                 comparator = Comparator.comparingInt(User::getHighestPointAchieved);
                 break;
         }
-//        if (!isAscending) {
-//            comparator = comparator.reversed();
-//        }
+        if (isAscending) {
+            comparator = comparator.reversed();
+        }
         allUsers.sort(comparator);
         return allUsers;
     }

@@ -1,23 +1,22 @@
 package PvZ2.APproject.views.screens;
 
 import PvZ2.APproject.Main;
+import PvZ2.APproject.controllers.menus.GameMenuController;
+import PvZ2.APproject.enums.Menu;
 import PvZ2.APproject.models.GameSettings;
 import PvZ2.APproject.models.App;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -37,6 +36,10 @@ public abstract class BaseScreen implements Screen {
     protected Image backgroundImage;
     protected static final float VIRTUAL_WIDTH = 1024;
     protected static final float VIRTUAL_HEIGHT = 768;
+    protected GameSettings gameSettings;
+    protected Table currencyTable;
+    protected Label coinLabel;
+    protected Label gemLabel;
 
     @Override
     public void show() {
@@ -48,6 +51,7 @@ public abstract class BaseScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
         textures = ((Main) Gdx.app.getApplicationListener()).getTextures();
         player = ((Main) Gdx.app.getApplicationListener()).getPlayer();
+        gameSettings = GameSettings.getInstance();
     }
 
     protected void addBackground(String regionName) {
@@ -66,22 +70,127 @@ public abstract class BaseScreen implements Screen {
             return;
         }
 
-        Table currencyTable = new Table(skin);
+        if (currencyTable != null) {
+            currencyTable.remove();
+        }
+
+        currencyTable = new Table(skin);
+
+        Table coinTable = new Table(skin);
+        Table gemTable = new Table(skin);
+
         Image gemImage = new Image(textures.region("IMAGE_UI_HUD_INGAME_GEM"));
         Image coinImage = new Image(textures.region("IMAGE_UI_HUD_INGAME_COIN"));
-        Label gemLabel = new Label(Integer.toString(App.getCurrentUser().getGemsCount()), skin, "default");
-        Label coinLabel = new Label(Integer.toString(App.getCurrentUser().getCoinsCount()), skin, "default");
+        gemLabel = new Label(Integer.toString(App.getCurrentUser().getGemsCount()), skin, "default");
+        coinLabel = new Label(Integer.toString(App.getCurrentUser().getCoinsCount()), skin, "default");
 
-        currencyTable.add(coinImage).size(36, 36).padRight(4);
-        currencyTable.add(coinLabel).padRight(18);
-        currencyTable.add(gemImage).size(36, 36).padRight(4);
-        currencyTable.add(gemLabel);
+        coinTable.add(coinImage).size(36, 36).padRight(4);
+        coinTable.add(coinLabel).padRight(8);
+        gemTable.add(gemImage).size(36, 36).padRight(4);
+        gemTable.add(gemLabel).padRight(8);
+
+        if (gameSettings.isDebugMode()) {
+            TextButton cheatAddCoin = new TextButton("+", skin, "default");
+            TextField coinAmount = new TextField("", skin, "default");
+
+            TextButton cheatAddGem = new TextButton("+", skin, "default");
+            TextField gemAmount = new TextField("", skin, "default");
+
+//            coinAmount.setVisible(false);
+//            gemAmount.setVisible(false);
+
+            coinTable.add(cheatAddCoin).size(25, 25);
+            coinTable.add(coinAmount).size(50, 25).padLeft(4);
+            gemTable.add(cheatAddGem).size(25, 25);
+            gemTable.add(gemAmount).size(50, 25).padLeft(4);
+
+            coinAmount.setVisible(false);
+            gemAmount.setVisible(false);
+
+            cheatAddCoin.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    cheatAddCoin.setVisible(false);
+                    coinAmount.setVisible(true);
+                    stage.setKeyboardFocus(coinAmount);
+                }
+            });
+
+            coinAmount.addListener(new InputListener() {
+                @Override
+                public boolean keyDown(InputEvent event, int keycode) {
+                    if (keycode == Input.Keys.ENTER) {
+                        try {
+                            int amount = Integer.parseInt(coinAmount.getText());
+
+                            GameMenuController.cheatAddCoinOrGem(amount, "coin");
+
+                            coinLabel.setText(Integer.toString(App.getCurrentUser().getCoinsCount()));
+
+                            coinAmount.setText("");
+                            coinAmount.setVisible(false);
+                            cheatAddCoin.setVisible(true);
+
+                            stage.setKeyboardFocus(null);
+
+                        } catch (NumberFormatException e) {
+                            coinAmount.setText("");
+                        }
+                        return true;
+                    }
+                    return false;
+                }
+            });
+
+            cheatAddGem.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    cheatAddGem.setVisible(false);
+                    gemAmount.setVisible(true);
+                    stage.setKeyboardFocus(gemAmount);
+                }
+            });
+
+            gemAmount.addListener(new InputListener() {
+                @Override
+                public boolean keyDown(InputEvent event, int keycode) {
+                    if (keycode == Input.Keys.ENTER) {
+                        try {
+                            int amount = Integer.parseInt(gemAmount.getText());
+
+                            GameMenuController.cheatAddCoinOrGem(amount, "gem");
+
+                            gemLabel.setText(Integer.toString(App.getCurrentUser().getGemsCount()));
+
+                            gemAmount.setText("");
+                            gemAmount.setVisible(false);
+                            cheatAddGem.setVisible(true);
+
+                            stage.setKeyboardFocus(null);
+
+                        } catch (NumberFormatException e) {
+                            gemAmount.setText("");
+                        }
+                        return true;
+                    }
+                    return false;
+                }
+            });
+        }
+
+        currencyTable.add(coinTable).padRight(15);
+        currencyTable.add(gemTable);
         currencyTable.pack();
         currencyTable.setPosition(
             VIRTUAL_WIDTH - currencyTable.getWidth() - 20,
             VIRTUAL_HEIGHT - currencyTable.getHeight() - 18
         );
         stage.addActor(currencyTable);
+    }
+
+    protected void updateCurrency() {
+        coinLabel.setText(Integer.toString(App.getCurrentUser().getCoinsCount()));
+        gemLabel.setText(Integer.toString(App.getCurrentUser().getGemsCount()));
     }
 
     protected ImageButton addBackButton(Runnable action) {

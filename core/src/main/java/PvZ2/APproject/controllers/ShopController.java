@@ -101,7 +101,11 @@ public class ShopController {
             }
         }
 //        return addItemToProfile(item, plantChosen, 1);
-        return plantChosen.getName();
+        if (plantChosen != null) {
+            return plantChosen.getName();
+        } else {
+            return "";
+        }
     }
 
     public static PlantData getRandomPlant(){

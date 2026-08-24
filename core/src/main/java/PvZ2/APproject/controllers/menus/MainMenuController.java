@@ -9,6 +9,7 @@ public class MainMenuController {
         if (App.getCurrentUser() != null) {
             App.getCurrentUser().setStayLoggedIn(false);
         }
+        SignupMenuController.saveToJson();
         App.clearLoggedInUser();
         App.setCurrentUser(null);
         App.setCurrentMenu(Menu.SIGNUP_MENU);

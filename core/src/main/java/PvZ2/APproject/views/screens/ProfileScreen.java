@@ -30,6 +30,8 @@ public class ProfileScreen extends BaseScreen {
         backgroundImage.setFillParent(true);
         stage.addActor(backgroundImage);
 
+        addCurrencyBar();
+
         BorderedTable wrapper = new BorderedTable();
 
         Table usernameTable = new Table(skin);
@@ -108,35 +110,35 @@ public class ProfileScreen extends BaseScreen {
 
         stage.addActor(exitButton);
 
-        Table currencyTable = new Table(skin);
+//        Table currencyTable = new Table(skin);
+//
+//        TextureRegion gemRegion = textures.region("IMAGE_UI_HUD_INGAME_GEM");
+//        Image gemImage = new Image(gemRegion);
+//
+//        int gemsCount = App.getCurrentUser().getGemsCount();
+//
+//        Label gemLabel = new Label(Integer.toString(gemsCount), skin, "default");//Integer.toString(gemsCount)
+//
+//        TextureRegion coinRegion = textures.region("IMAGE_UI_HUD_INGAME_COIN");
+//        Image coinImage = new Image(coinRegion);
+//
+//        int coinCount = App.getCurrentUser().getCoinsCount();
+//
+//        Label coinLabel = new Label(Integer.toString(coinCount), skin, "default");//Integer.toString(coinCount)
+//
+//        currencyTable.add(coinImage).size(40, 40).padRight(5);
+//        currencyTable.add(coinLabel);
+//        currencyTable.add(gemImage).size(40, 40).padRight(10);
+//        currencyTable.add(gemLabel);
+//
+//        currencyTable.pack();
+//
+//        currencyTable.setPosition(
+//            VIRTUAL_WIDTH - currencyTable.getWidth() - 20,
+//            VIRTUAL_HEIGHT - currencyTable.getHeight() - 20
+//        );
 
-        TextureRegion gemRegion = textures.region("IMAGE_UI_HUD_INGAME_GEM");
-        Image gemImage = new Image(gemRegion);
-
-        int gemsCount = App.getCurrentUser().getGemsCount();
-
-        Label gemLabel = new Label(Integer.toString(gemsCount), skin, "default");//Integer.toString(gemsCount)
-
-        TextureRegion coinRegion = textures.region("IMAGE_UI_HUD_INGAME_COIN");
-        Image coinImage = new Image(coinRegion);
-
-        int coinCount = App.getCurrentUser().getCoinsCount();
-
-        Label coinLabel = new Label(Integer.toString(coinCount), skin, "default");//Integer.toString(coinCount)
-
-        currencyTable.add(coinImage).size(40, 40).padRight(5);
-        currencyTable.add(coinLabel);
-        currencyTable.add(gemImage).size(40, 40).padRight(10);
-        currencyTable.add(gemLabel);
-
-        currencyTable.pack();
-
-        currencyTable.setPosition(
-            VIRTUAL_WIDTH - currencyTable.getWidth() - 20,
-            VIRTUAL_HEIGHT - currencyTable.getHeight() - 20
-        );
-
-        stage.addActor(currencyTable);
+//        stage.addActor(currencyTable);
 
         changeUN.addListener(new ClickListener() {
             @Override

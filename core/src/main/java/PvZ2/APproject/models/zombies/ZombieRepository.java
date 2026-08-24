@@ -16,7 +16,7 @@ public class ZombieRepository {
     private List<ZombieData> zombies;
 
     public ZombieRepository() {
-        loadZombies("assets/Zombies.json");
+        loadZombies("Zombies.json");
     }
 
     public static ZombieRepository getInstance() {

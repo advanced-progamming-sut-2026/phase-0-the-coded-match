@@ -97,6 +97,7 @@ public class LoginMenuController{
     }
 
     public static void exit(Main game) {
+        App.setCurrentMenu(Menu.SIGNUP_MENU);
         game.setScreen(new SignupScreen(game));
     }
 }

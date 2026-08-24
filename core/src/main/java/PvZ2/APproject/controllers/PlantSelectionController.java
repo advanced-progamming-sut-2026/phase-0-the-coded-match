@@ -7,12 +7,14 @@ import PvZ2.APproject.models.plants.PlantData;
 
 public class PlantSelectionController {
     private final Level level;
+    private PlantController plantController;
 
     private PlantData selectedPlant;
     private Tile hoveredTile;
 
     public PlantSelectionController(Level level) {
         this.level = level;
+        this.plantController = new PlantController();
     }
 
     public void selectPlant(PlantData plantData) {

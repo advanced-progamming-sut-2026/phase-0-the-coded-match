@@ -1,5 +1,6 @@
 package PvZ2.APproject;
 
+import PvZ2.APproject.controllers.QuestController;
 import PvZ2.APproject.controllers.menus.SignupMenuController;
 import PvZ2.APproject.enums.Menu;
 import PvZ2.APproject.models.App;
@@ -20,7 +21,10 @@ public class Main extends Game {
         SignupMenuController.loadFromJson();
         App.initialize();
         App.loadLoggedInUser();
-
+        if (App.getCurrentUser() != null) {
+            QuestController.generateAllQuests();
+            QuestController.refreshDailyQuests();
+        }
 
         FileHandle assetsFolder = Gdx.files.internal("pvz-assets");
         textures = new TextureBank("768", assetsFolder);
@@ -53,5 +57,6 @@ public class Main extends Game {
     @Override
     public void dispose() {
         super.dispose();
+        SignupMenuController.saveToJson();
     }
 }
