@@ -2,6 +2,8 @@ package PvZ2.APproject.views.screens;
 
 import PvZ2.APproject.Main;
 import PvZ2.APproject.controllers.menus.SignupMenuController;
+import PvZ2.APproject.enums.Menu;
+import PvZ2.APproject.models.App;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -49,6 +51,7 @@ public class SignupScreen extends BaseScreen {
         genderField.setMessageText("Gender");
 
         TextButton register = new TextButton("Register", skin, "default");
+        TextButton login = new TextButton("Already Have an Account?  Log In", skin, "default");
 
         wrapper.add(usernameField).width(200).height(50).row();
         wrapper.add(passwordField).width(200).height(50).row();
@@ -57,7 +60,8 @@ public class SignupScreen extends BaseScreen {
         wrapper.add(emailField).width(200).height(50).row();
         wrapper.add(genderField).width(200).height(50).row();
 
-        wrapper.add(register);
+        wrapper.add(register).width(160).height(40).padTop(8).row();
+        wrapper.add(login).width(260).height(36).padTop(6);
 
         wrapper.pack();
         wrapper.setPosition(
@@ -111,6 +115,14 @@ public class SignupScreen extends BaseScreen {
 
         registered = false;
         questionPicked = false;
+
+        login.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                App.setCurrentMenu(Menu.LOGIN_MENU);
+                game.setScreen(new LoginScreen(game));
+            }
+        });
 
         register.addListener(new ClickListener() {
             @Override

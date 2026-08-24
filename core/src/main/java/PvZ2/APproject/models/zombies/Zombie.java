@@ -32,8 +32,10 @@ public class Zombie implements Update {
     private boolean abilityDone;
     private List<Sun> stolenActiveSuns;
     private boolean isSubmerged;
-    private boolean isFrozen;
-    private int frozenTimer;
+    private boolean isFrozenInBlock;
+    private int blockIceHP = 0;
+    private boolean isChilled;
+    private float chilledTimer = 0;
     private boolean sunProduced;
     private boolean glowing;
     private int lastDamageTaken;
@@ -54,7 +56,8 @@ public class Zombie implements Update {
         this.abilityDone = false;
         this.stolenActiveSuns = new ArrayList<>();
         this.isSubmerged = false;
-        this.isFrozen = false;
+        this.isFrozenInBlock = false;
+        this.isChilled = false;
         this.sunProduced = false;
         this.glowing = Math.random() < 0.05;
         this.lastDamageTaken = 0;
@@ -70,9 +73,16 @@ public class Zombie implements Update {
     }
 
     @Override
-    public void update(float delta) {
-       if(isFrozen){
+    public void update() {
+       if(isFrozenInBlock){
            return;
+       }
+       if(isChilled){
+//           chilledTimer -= delta;
+           if(chilledTimer <= 0){
+               chilledTimer = 0;
+               isChilled = false;
+           }
        }
 
         Plant target = GameManagerController.getInstance().getCurrentLevel().getFrontMostPlantInRow(this.y);
@@ -129,7 +139,14 @@ public class Zombie implements Update {
 
     public void takeDamage(int damage, Plant killerPlant) {
         lastDamageTaken = Math.max(0, damage);
-        if (killerPlant != null && killerPlant.hasThisTag(PlantTag.POISON) &&
+        if(isFrozenInBlock){
+            blockIceHP -= damage;
+            if(blockIceHP <= 0){
+                isFrozenInBlock = false;
+                blockIceHP = 0;
+            }
+        }
+        else if (killerPlant != null && killerPlant.hasThisTag(PlantTag.POISON) &&
                 (data.getId().equalsIgnoreCase("ZombieArmor1") ||
                         data.getId().equalsIgnoreCase("ZombieArmor2") ||
                         data.getId().equalsIgnoreCase("ZombieDarkArmor3") ||
@@ -286,12 +303,25 @@ public class Zombie implements Update {
         isSubmerged = submerged;
     }
 
-    public boolean isFrozen() {
-        return isFrozen;
+    public boolean isFrozenInBlock() {
+        return isFrozenInBlock;
     }
 
-    public void setFrozen(boolean frozen) {
-        isFrozen = frozen;
+    public void setFrozenInBlock(boolean frozen) {
+        isFrozenInBlock = frozen;
+    }
+
+    public void setBlockIceHP(int iceHP){
+        this.blockIceHP = iceHP;
+    }
+
+    public boolean getIsChilled(){
+        return isChilled;
+    }
+
+    public void setChilled(boolean chilled){
+        isChilled = chilled;
+        chilledTimer = 10f;
     }
 
     public ZombieBehavior getBehavior() {

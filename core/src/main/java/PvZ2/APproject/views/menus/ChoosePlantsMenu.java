@@ -11,6 +11,7 @@ import PvZ2.APproject.models.plants.PlantUpgradeData;
 import PvZ2.APproject.views.screens.BaseScreen;
 import PvZ2.APproject.views.screens.PamActor;
 import PvZ2.APproject.views.screens.PlayScreen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -18,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import pvz.skin.BorderedTable;
 
 import java.util.List;
@@ -72,16 +74,17 @@ public class ChoosePlantsMenu extends BaseScreen {
 
         Table root = new Table();
         root.setFillParent(true);
-        root.top().padTop(60).padLeft(28).padRight(28).padBottom(24);
+        root.top().padTop(54).padLeft(28).padRight(28).padBottom(18);
 
         Label title = new Label("CHOOSE YOUR PLANTS", skin, "medium_outline");
         root.add(title).colspan(2).padBottom(8).row();
 
         BorderedTable selectedWrapper = new BorderedTable();
+        selectedWrapper.top().padTop(4);
         selectedTable = new Table(skin);
-        selectedWrapper.add(new Label("SELECTED", skin, "medium_outline")).padBottom(5).row();
-        selectedWrapper.add(selectedTable).width(920).height(84);
-        root.add(selectedWrapper).colspan(2).width(950).height(120).padBottom(8).row();
+        selectedWrapper.add(new Label("SELECTED", skin, "medium_outline")).padBottom(2).row();
+        selectedWrapper.add(selectedTable).width(920).height(66);
+        root.add(selectedWrapper).colspan(2).width(950).height(110).padBottom(8).row();
 
         plantGrid = new Table(skin);
         plantGrid.top().left();
@@ -95,11 +98,11 @@ public class ChoosePlantsMenu extends BaseScreen {
         detailsScroll.setFadeScrollBars(false);
         detailsScroll.setScrollingDisabled(true, false);
 
-        root.add(scrollPane).width(665).height(480).padRight(12);
-        root.add(detailsScroll).width(275).height(480).row();
+        root.add(scrollPane).width(665).height(465).padRight(12);
+        root.add(detailsScroll).width(275).height(465).row();
 
         TextButton startButton = new TextButton("LET'S ROCK!", skin, "purple");
-        root.add(startButton).colspan(2).width(240).height(52).padTop(8);
+        root.add(startButton).colspan(2).width(240).height(48).padTop(6);
         stage.addActor(root);
 
         startButton.addListener(new ClickListener() {
@@ -115,9 +118,6 @@ public class ChoosePlantsMenu extends BaseScreen {
         rebuildGrid();
         showDefaultDetails();
 
-        if (!ChoosePlantsMenuController.hasCurrentLevel()) {
-            showMessage(messageLabel, "No active level. You can preview plants, but select a level before starting.");
-        }
     }
 
     private void rebuildSelected() {
@@ -125,7 +125,9 @@ public class ChoosePlantsMenu extends BaseScreen {
         List<String> chosen = ChoosePlantsMenuController.getChosenPlantsForUi();
         if (chosen.isEmpty()) {
             Label empty = new Label("No plants selected", skin, "default");
-            selectedTable.add(empty).pad(12);
+            empty.setColor(Color.DARK_GRAY);
+            empty.setFontScale(0.75f);
+            selectedTable.add(empty).pad(8);
             return;
         }
 
@@ -165,6 +167,9 @@ public class ChoosePlantsMenu extends BaseScreen {
             );
             Label name = new Label(plant.getDisplayName(), skin, "default");
             name.setWrap(true);
+            name.setAlignment(Align.center);
+            name.setFontScale(0.72f);
+            name.setColor(Color.DARK_GRAY);
             Label state = new Label(
                 unlocked
                     ? "Lv " + Math.max(level, 1) + "   " + plant.getSunCost() + " sun" + (selected ? "   SELECTED" : "")
@@ -172,10 +177,13 @@ public class ChoosePlantsMenu extends BaseScreen {
                 skin,
                 "default"
             );
+            state.setAlignment(Align.center);
+            state.setFontScale(0.64f);
+            state.setColor(Color.DARK_GRAY);
 
-            card.add(preview).size(100, 72).row();
-            card.add(name).width(180).row();
-            card.add(state).width(180).padBottom(4);
+            card.add(preview).size(150, 90).padTop(2).row();
+            card.add(name).width(185).height(28).row();
+            card.add(state).width(185).height(18).padBottom(4);
             card.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
@@ -199,7 +207,7 @@ public class ChoosePlantsMenu extends BaseScreen {
                 }
             });
 
-            plantGrid.add(card).width(205).height(138).pad(5);
+            plantGrid.add(card).width(205).height(150).pad(5);
             column++;
             if (column == 3) {
                 plantGrid.row();
@@ -242,10 +250,12 @@ public class ChoosePlantsMenu extends BaseScreen {
             "default"
         );
         info.setWrap(true);
+        info.setFontScale(0.76f);
+        info.setColor(Color.DARK_GRAY);
 
-        detailsTable.add(name).width(245).padBottom(5).row();
-        detailsTable.add(preview).size(205, 135).padBottom(5).row();
-        detailsTable.add(info).width(245).left().padBottom(7).row();
+        detailsTable.add(name).width(245).padBottom(4).row();
+        detailsTable.add(preview).size(225, 150).padBottom(4).row();
+        detailsTable.add(info).width(245).left().padBottom(6).row();
 
         if (unlocked && selected) {
             TextButton boost = new TextButton("BOOST - 2 GEMS", skin, "purple");
@@ -275,6 +285,8 @@ public class ChoosePlantsMenu extends BaseScreen {
 
         Label description = new Label(plant.getDescription() == null ? "" : plant.getDescription(), skin, "default");
         description.setWrap(true);
+        description.setFontScale(0.72f);
+        description.setColor(Color.DARK_GRAY);
         detailsTable.add(description).width(245).left();
     }
 

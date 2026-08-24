@@ -4,6 +4,7 @@ import PvZ2.APproject.controllers.GameManagerController;
 import PvZ2.APproject.models.Level;
 import PvZ2.APproject.models.Projectile;
 import PvZ2.APproject.models.plants.Plant;
+import PvZ2.APproject.enums.PlantState;
 import PvZ2.APproject.models.zombies.Zombie;
 
 public class ShootAbility implements PlantAbilityHandler {
@@ -22,6 +23,7 @@ public class ShootAbility implements PlantAbilityHandler {
 
     @Override
     public void execute(Plant plant) {
+        plant.setState(PlantState.SHOOTING);
         Level level = GameManagerController.getInstance().getCurrentLevel();
         if (level == null || !hasZombieInLane(level, plant.getY(), plant.getX())) {
             return;

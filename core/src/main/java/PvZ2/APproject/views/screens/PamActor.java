@@ -22,17 +22,18 @@ public class PamActor extends Actor {
 
     private static final Map<String, String> PLANT_PATHS = new HashMap<>();
     private static final Map<String, String> ZOMBIE_PATHS = new HashMap<>();
-    private static boolean plantsIndexed;
-    private static boolean zombiesIndexed;
+    private static boolean plantsIndexed = false;
+    private static boolean zombiesIndexed = false;
 
     private final PamPlayer player;
     private final String pamPath;
     private final String preferredClip;
     private String clip;
     private float stateTime;
+    private float scale = 1f;
+    private boolean scaleCalculated;
     private boolean loadRequested;
     private boolean ready;
-
     public PamActor(Main game, Kind kind, String preferredClip, String... keys) {
         this.player = game.getPlayer();
         this.preferredClip = preferredClip;
@@ -59,14 +60,16 @@ public class PamActor extends Actor {
             return;
         }
 
-        float scale = 1f;
-        try {
-            Rectangle bounds = player.bounds(pamPath, clip);
-            if (bounds != null && bounds.width > 0f && bounds.height > 0f) {
-                scale = Math.min(getWidth() / bounds.width, getHeight() / bounds.height) * 0.82f;
+        if (!scaleCalculated && getWidth() > 0f && getHeight() > 0f) {
+            try {
+                Rectangle bounds = player.bounds(pamPath, clip);
+                if (bounds != null && bounds.width > 0f && bounds.height > 0f) {
+                    scale = Math.min(getWidth() / bounds.width, getHeight() / bounds.height) * 0.82f;
+                }
+            } catch (RuntimeException ignored) {
+                scale = 0.5f;
             }
-        } catch (RuntimeException ignored) {
-            scale = 0.5f;
+            scaleCalculated = true;
         }
 
         float x = getX() + getWidth() / 2f;
@@ -113,12 +116,19 @@ public class PamActor extends Actor {
         return clips.get(0);
     }
 
+    public static String resolvePlantPam(String... keys) {
+        return findPam(Kind.PLANT, keys);
+    }
+
     private static String findPam(Kind kind, String... keys) {
+        //System.out.println("NOT FOUND " + kind + " : " + java.util.Arrays.toString(keys));
         Map<String, String> index = kind == Kind.PLANT ? PLANT_PATHS : ZOMBIE_PATHS;
         ensureIndexed(kind);
 
         for (String key : keys) {
             String normalized = normalize(key);
+            if (normalized.equals("PIERCEMINT")) normalized = "SPEARMINT";
+            if (normalized.equals("CATTAIL")) normalized = "HOMINGTHISTLE";
             if (normalized.isEmpty()) {
                 continue;
             }
@@ -130,6 +140,8 @@ public class PamActor extends Actor {
 
         for (String key : keys) {
             String normalized = normalize(key);
+            if (normalized.equals("PIERCEMINT")) normalized = "SPEARMINT";
+            if (normalized.equals("CATTAIL")) normalized = "HOMINGTHISTLE";
             if (normalized.isEmpty()) {
                 continue;
             }
@@ -152,21 +164,44 @@ public class PamActor extends Actor {
 
         Map<String, String> index = kind == Kind.PLANT ? PLANT_PATHS : ZOMBIE_PATHS;
         String type = kind == Kind.PLANT ? "PLANT" : "ZOMBIE";
-        FileHandle root = Gdx.files.internal("IMAGES/768/INITIAL/" + type);
 
-        if (root.exists()) {
+        String[] roots;
+
+        if (kind == Kind.PLANT) {
+            roots = new String[] {
+                "IMAGES/768/INITIAL/PLANT",
+                "IMAGES/768/FULL/PLANT",
+                "IMAGES/768/INITIAL/EMPOWERMINTS/PLANT"
+            };
+        } else {
+            roots = new String[] {
+                "IMAGES/768/INITIAL/ZOMBIE",
+                "IMAGES/768/FULL/ZOMBIE"
+            };
+        }
+
+        for (String rootPath : roots) {
+            FileHandle root = Gdx.files.internal(rootPath);
+
+            if (!root.exists()) {
+                continue;
+            }
+
             for (FileHandle folder : root.list()) {
                 if (!folder.isDirectory()) {
                     continue;
                 }
+
                 FileHandle[] files = folder.list(".PAM");
-                if (files.length == 0) {
-                    continue;
+
+                for (FileHandle pam : files) {
+                    String relative = rootPath.replace("IMAGES/", "")
+                        + "/" + folder.name()
+                        + "/" + pam.name();
+
+                    index.put(normalize(folder.name()), relative);
+                    index.put(normalize(pam.nameWithoutExtension()), relative);
                 }
-                FileHandle pam = files[0];
-                String relative = "768/INITIAL/" + type + "/" + folder.name() + "/" + pam.name();
-                index.put(normalize(folder.name()), relative);
-                index.put(normalize(pam.nameWithoutExtension()), relative);
             }
         }
 

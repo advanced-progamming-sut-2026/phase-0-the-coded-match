@@ -22,17 +22,13 @@ public class GameSettings {
     public boolean isDebugMode() { return debugMode; }
     public void setDebugMode(boolean debugMode) { this.debugMode = debugMode; }
 
-//    public int getGameDifficulty(){return App.getCurrentUser().getDifficultyLevel();}
-//    public String setGameDifficulty(int difficulty){
-//        if(App.getCurrentUser().getDifficultyLevel() == difficulty){
-//            return "Difficulty is already set";
-//        }
-//        App.getCurrentUser().setDifficultyLevel(difficulty);
-//        return "Difficulty changed to " + difficulty;
-//    }
-
-    public int getGameDifficulty(){return 1;}
-    public void setGameDifficulty(int difficulty){
-
+    public int getGameDifficulty(){return App.getCurrentUser().getDifficultyLevel();}
+    public String setGameDifficulty(int difficulty){
+        if(App.getCurrentUser().getDifficultyLevel() == difficulty){
+            return "Difficulty is already set";
+        }
+        App.getCurrentUser().setDifficultyLevel(difficulty);
+        return "Difficulty changed to " + difficulty;
     }
+
 }

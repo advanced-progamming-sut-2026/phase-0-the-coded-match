@@ -13,6 +13,7 @@ import PvZ2.APproject.models.zombies.ZombieData;
 import PvZ2.APproject.models.zombies.ZombieRepository;
 import PvZ2.APproject.views.screens.BaseScreen;
 import PvZ2.APproject.views.screens.PamActor;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -23,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import pvz.skin.BorderedTable;
 
 import java.util.ArrayList;
@@ -79,7 +81,7 @@ public class CollectionMenu extends BaseScreen {
 
         Table root = new Table();
         root.setFillParent(true);
-        root.top().padTop(66).padLeft(38).padRight(38).padBottom(30);
+        root.top().padTop(54).padLeft(38).padRight(38).padBottom(18);
 
         Label title = new Label("COLLECTION", skin, "medium_outline");
         root.add(title).colspan(2).padBottom(10).row();
@@ -106,8 +108,8 @@ public class CollectionMenu extends BaseScreen {
         detailsScroll.setFadeScrollBars(false);
         detailsScroll.setScrollingDisabled(true, false);
 
-        root.add(listScroll).width(630).height(565).padRight(14);
-        root.add(detailsScroll).width(315).height(565);
+        root.add(listScroll).width(630).height(500).padRight(14);
+        root.add(detailsScroll).width(315).height(500);
         stage.addActor(root);
 
         plantsTab.addListener(new ClickListener() {
@@ -203,6 +205,9 @@ public class CollectionMenu extends BaseScreen {
             );
             Label name = new Label(plant.getDisplayName(), skin, "default");
             name.setWrap(true);
+            name.setAlignment(Align.center);
+            name.setFontScale(0.72f);
+            name.setColor(Color.DARK_GRAY);
             Label state = new Label(
                 unlocked
                     ? "Lv " + Math.max(level, 1) + "   Seeds " + seeds + "/" + required
@@ -210,10 +215,13 @@ public class CollectionMenu extends BaseScreen {
                 skin,
                 "default"
             );
+            state.setAlignment(Align.center);
+            state.setFontScale(0.62f);
+            state.setColor(Color.DARK_GRAY);
 
-            card.add(preview).size(105, 78).row();
-            card.add(name).width(170).padTop(2).row();
-            card.add(state).width(170).padBottom(5);
+            card.add(preview).size(140, 90).padTop(2).row();
+            card.add(name).width(174).height(28).row();
+            card.add(state).width(174).height(18).padBottom(4);
             card.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
@@ -221,7 +229,7 @@ public class CollectionMenu extends BaseScreen {
                 }
             });
 
-            listTable.add(card).width(190).height(145).pad(6);
+            listTable.add(card).width(190).height(150).pad(6);
             column++;
             if (column == 3) {
                 listTable.row();
@@ -298,13 +306,17 @@ public class CollectionMenu extends BaseScreen {
             "Tags: " + plant.getTags();
         Label info = new Label(infoText, skin, "default");
         info.setWrap(true);
+        info.setFontScale(0.74f);
+        info.setColor(Color.DARK_GRAY);
         Label description = new Label(plant.getDescription() == null ? "" : plant.getDescription(), skin, "default");
         description.setWrap(true);
+        description.setFontScale(0.7f);
+        description.setColor(Color.DARK_GRAY);
 
-        detailsTable.add(name).width(275).padBottom(6).row();
-        detailsTable.add(preview).size(225, 150).padBottom(6).row();
-        detailsTable.add(info).width(275).left().padBottom(8).row();
-        detailsTable.add(description).width(275).left().padBottom(10).row();
+        detailsTable.add(name).width(275).padBottom(4).row();
+        detailsTable.add(preview).size(245, 165).padBottom(4).row();
+        detailsTable.add(info).width(275).left().padBottom(6).row();
+        detailsTable.add(description).width(275).left().padBottom(8).row();
 
         if (!unlocked) {
             TextButton purchase = new TextButton("PURCHASE - " + CollectionMenuController.getPlantPrice() + " COINS", skin, "purple");
@@ -367,7 +379,10 @@ public class CollectionMenu extends BaseScreen {
                 card.add(preview).size(105, 92).row();
                 Label name = new Label(zombie.getDisplayName(), skin, "default");
                 name.setWrap(true);
-                card.add(name).width(170).padBottom(6);
+                name.setAlignment(Align.center);
+                name.setFontScale(0.72f);
+                name.setColor(Color.DARK_GRAY);
+                card.add(name).width(170).height(30).padBottom(4);
                 card.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
@@ -411,6 +426,8 @@ public class CollectionMenu extends BaseScreen {
             "Seasons: " + zombie.getSeasons();
         Label info = new Label(infoText, skin, "default");
         info.setWrap(true);
+        info.setFontScale(0.74f);
+        info.setColor(Color.DARK_GRAY);
 
         detailsTable.add(name).width(275).padBottom(8).row();
         detailsTable.add(preview).size(230, 230).padBottom(8).row();
