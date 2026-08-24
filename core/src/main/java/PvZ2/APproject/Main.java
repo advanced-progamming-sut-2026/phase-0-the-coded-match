@@ -21,8 +21,10 @@ public class Main extends Game {
         SignupMenuController.loadFromJson();
         App.initialize();
         App.loadLoggedInUser();
-        QuestController.generateAllQuests();
-        QuestController.refreshDailyQuests();
+        if (App.getCurrentUser() != null) {
+            QuestController.generateAllQuests();
+            QuestController.refreshDailyQuests();
+        }
 
         FileHandle assetsFolder = Gdx.files.internal(".");
         textures = new TextureBank("768", assetsFolder);

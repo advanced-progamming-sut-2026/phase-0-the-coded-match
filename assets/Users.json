@@ -1,0 +1,146 @@
+[
+  {
+    "username": "test",
+    "password": "26c07ff2223e5a8140ffe3d0b95a4afe7358a5e57e1e2da603f433d443d4d32a",
+    "nickname": "test",
+    "email": "test@gamil.com",
+    "gender": "male",
+    "questions": {
+      "QUESTION1": "green"
+    },
+    "gamesPlayedCount": 0,
+    "coinsCount": 0,
+    "gemsCount": 0,
+    "levelsCount": 0,
+    "meowPoints": 0,
+    "lastLevelNumber": 0,
+    "isVictroy": false,
+    "lastSeasonId": 0,
+    "difficultyLevel": 3,
+    "minigamesWonCount": 0,
+    "highestPointAchieved": 0,
+    "stayLoggedIn": false,
+    "collection": {
+      "availableZombiesIds": [],
+      "availablePlantsIds": [
+        "peashooter",
+        "sunflower",
+        "wallnut"
+      ],
+      "availablePlants": [],
+      "unlockedMinigames": [],
+      "unlockedLevels": []
+    },
+    "greenHouse": {
+      "greenhouseCurrency": {
+        "diamonds": 0,
+        "coins": 0
+      },
+      "storedBoosts": {},
+      "grid": [
+        [
+          {
+            "x": 1,
+            "y": 1,
+            "isLocked": true,
+            "status": "EMPTY",
+            "growthDurationHours": 0
+          },
+          {
+            "x": 2,
+            "y": 1,
+            "isLocked": true,
+            "status": "EMPTY",
+            "growthDurationHours": 0
+          },
+          {
+            "x": 3,
+            "y": 1,
+            "isLocked": true,
+            "status": "EMPTY",
+            "growthDurationHours": 0
+          },
+          {
+            "x": 4,
+            "y": 1,
+            "isLocked": true,
+            "status": "EMPTY",
+            "growthDurationHours": 0
+          }
+        ],
+        [
+          {
+            "x": 1,
+            "y": 2,
+            "isLocked": false,
+            "status": "EMPTY",
+            "growthDurationHours": 0
+          },
+          {
+            "x": 2,
+            "y": 2,
+            "isLocked": false,
+            "status": "EMPTY",
+            "growthDurationHours": 0
+          },
+          {
+            "x": 3,
+            "y": 2,
+            "isLocked": false,
+            "status": "EMPTY",
+            "growthDurationHours": 0
+          },
+          {
+            "x": 4,
+            "y": 2,
+            "isLocked": false,
+            "status": "EMPTY",
+            "growthDurationHours": 0
+          }
+        ],
+        [
+          {
+            "x": 1,
+            "y": 3,
+            "isLocked": false,
+            "status": "EMPTY",
+            "growthDurationHours": 0
+          },
+          {
+            "x": 2,
+            "y": 3,
+            "isLocked": false,
+            "status": "EMPTY",
+            "growthDurationHours": 0
+          },
+          {
+            "x": 3,
+            "y": 3,
+            "isLocked": false,
+            "status": "EMPTY",
+            "growthDurationHours": 0
+          },
+          {
+            "x": 4,
+            "y": 3,
+            "isLocked": false,
+            "status": "EMPTY",
+            "growthDurationHours": 0
+          }
+        ]
+      ]
+    },
+    "shop": {
+      "dailyItemSoldOut": false
+    },
+    "personalNews": {
+      "unreadNews": [],
+      "allNews": []
+    },
+    "seedPackets": {},
+    "questsModel": {
+      "availableQuests": []
+    },
+    "plantFoodBoughtCount": 0
+  }
+]
