@@ -9,9 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class PauseScreen extends BaseScreen {
-    //todo: enter this screen from play screen, which should have a field called state which show RUNNING or PAUSED,
-    // so add this code to create method of play screen
-    //set state to paused
     private GameState state = GameState.RUNNING;
     private Stage pauseStage;
 
@@ -19,7 +16,6 @@ public class PauseScreen extends BaseScreen {
     public void show() {
         super.show();
 
-        state = GameState.PAUSED;
         Table pauseTable = new Table(skin);
         pauseTable.setFillParent(true);
 

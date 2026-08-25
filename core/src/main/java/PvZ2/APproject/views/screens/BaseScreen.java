@@ -28,7 +28,8 @@ import pvz.skin.PvzSkin;
 
 public abstract class BaseScreen implements Screen {
     protected Skin skin;
-    protected Viewport viewport;
+    OrthographicCamera camera = new OrthographicCamera();
+    protected Viewport viewport = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, camera);
     protected Stage stage;
     protected TextureBank textures;
     protected PamPlayer player;
@@ -45,8 +46,6 @@ public abstract class BaseScreen implements Screen {
     public void show() {
         skin = PvzSkin.get();
         addDialogStyleToSkin();
-        OrthographicCamera camera = new OrthographicCamera();
-        viewport = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, camera);
         stage = new Stage(viewport);
         Gdx.input.setInputProcessor(stage);
         textures = ((Main) Gdx.app.getApplicationListener()).getTextures();
