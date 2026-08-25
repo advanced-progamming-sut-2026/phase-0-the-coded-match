@@ -49,6 +49,7 @@ public class ZombieView extends Actor {
         }
 
         return null;
+//        return  fullPath;
     }
 
     @Override
@@ -96,6 +97,13 @@ public class ZombieView extends Actor {
 //                80f,
 //                100f
 //            ); TODO: SEE IF IT WORKS IF IT DOESNT SWITCH TO AN ICE IMAGE NOT AN ANIMATION!!
+        }
+        if (currentClip == null) {
+            System.err.println(
+                "Cannot draw zombie: PAM clip is null. Zombie path = "
+                    + zombie.getData().getPath()
+            );
+            return;
         }
 
         game.getPlayer().draw(batch, currentClip, clipName, stateTime, getX(), getY(), true, armorVisibility);

@@ -9,6 +9,8 @@ import PvZ2.APproject.models.seasons.SeasonData;
 import PvZ2.APproject.models.seasons.SeasonRepository;
 import PvZ2.APproject.views.menus.ChoosePlantsMenu;
 import PvZ2.APproject.views.menus.CollectionMenu;
+import PvZ2.APproject.views.menus.ChoosePlantsMenu;
+import PvZ2.APproject.views.menus.CollectionMenu;
 import PvZ2.APproject.views.menus.MainMenu;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -132,19 +134,26 @@ public class GameMenuScreen extends BaseScreen{
             float width = isCenter ? 420f : 240f;
             float height = isCenter ? 440f : 260f;
 
-            boolean unlocked = true;
-//            if(szn.getId() <= App.getCurrentUser().getLastSeason().getData().getId()){
-//                unlocked = true;
-//            }
+            boolean unlocked = false;
+            if(App.getCurrentUser().getLastSeason() != null) {
+                if (szn.getId() <= App.getCurrentUser().getLastSeason().getData().getId()) {
+                    unlocked = true;
+                }
+            }
 
 
             Table card = new Table();
             Label nameLabel = new Label(szn.getDisplayName(), skin, "default");
             nameLabel.setFontScale(isCenter ? 1.5f : 1.0f);
             card.add(nameLabel).padTop(10).padBottom(5).row();
-            Label progressLabel = new Label(3 + "/ 4  Completed", skin, "default");
+            int lvlNum = 0;
+            if(App.getCurrentUser().getLastLevel() == null){
+                lvlNum = 0;
+            }else {
+                lvlNum = App.getCurrentUser().getLastLevel().getLevelNumber();
+            }
+            Label progressLabel = new Label( lvlNum + "/ 4  Completed", skin, "default");
             card.add(progressLabel).padBottom(10).row();
-//            App.getCurrentUser().getLastLevel().getLevelNumber()
 
             if (!isCenter) {
                 chapterImage.setColor(1, 1, 1, 0.5f);
@@ -154,7 +163,7 @@ public class GameMenuScreen extends BaseScreen{
             card.add(chapterImage).size(width, height).row();
 
             if (isCenter) {
-                if (unlocked) {
+                if (unlocked || szn.getId() == 1) {
                     TextButton enterBtn = new TextButton("ENTER", skin, "default");
                     enterBtn.addListener(new ClickListener() {
                         @Override
@@ -272,10 +281,12 @@ public class GameMenuScreen extends BaseScreen{
             float width = isCenter ? 420f : 240f;
             float height = isCenter ? 440f : 260f;
 
-            boolean unlocked = true; // make false after we compile also for the chapters
-//            if(ld.getLevelNumber() <= App.getCurrentUser().getLastLevel().getLevelNumber()){
-//                unlocked = true;
-//            }
+            boolean unlocked = false;
+            if(App.getCurrentUser().getLastLevel() != null) {
+                if (ld.getLevelNumber() <= App.getCurrentUser().getLastLevel().getLevelNumber()) {
+                    unlocked = true;
+                }
+            }
 
             Table card = new Table();
             Label nameLabel = new Label(ld.getName(), skin, "default");
@@ -284,15 +295,14 @@ public class GameMenuScreen extends BaseScreen{
             card.add(levelImage).size(width, height).row();
 
             if(isCenter) {
-                if (unlocked) {
+                if (unlocked || ld.getLevelNumber() == 1) {
                     TextButton enterBtn = new TextButton("ENTER", skin, "default");
                     enterBtn.addListener(new ClickListener() {
                         @Override
                         public void clicked(InputEvent event, float x, float y) {
                             GameMenuController.enterLevel(ld.getLevelNumber());
-                            // enter choose plants menu;
-                            game.setScreen(new ChoosePlantsMenu(game));
                             App.setCurrentMenu(Menu.CHOOSEPLANTS_MENU);
+                            game.setScreen(new ChoosePlantsMenu(game));
                         }
                     });
                     card.add(enterBtn).width(160).height(50).padTop(10).row();

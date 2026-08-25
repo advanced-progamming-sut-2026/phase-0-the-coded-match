@@ -64,7 +64,7 @@ public class MainMenu extends BaseScreen {
         playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                App.setCurrentMenu(Menu.CHOOSEPLANTS_MENU);
+                App.setCurrentMenu(Menu.GAME_MENU);
                 game.setScreen(new GameMenuScreen(game));
             }
         });

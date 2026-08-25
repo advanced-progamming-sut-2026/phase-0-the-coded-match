@@ -69,7 +69,7 @@ public class PlantSelectionController {
             return "No tile selected";
         }
 
-        String error = plantController.plantPlant(
+        String error = PlantController.plantPlant(
             selectedPlant.getName(),
             hoveredTile.getColumn(),
             hoveredTile.getRow()
