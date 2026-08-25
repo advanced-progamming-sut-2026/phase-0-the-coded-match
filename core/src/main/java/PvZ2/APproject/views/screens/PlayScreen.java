@@ -50,8 +50,6 @@ public class PlayScreen extends BaseScreen {
     public void show() {
         super.show();
 
-        createPlantBoxes();
-
         gameMapView = new GameMapView(game, currentLevel, textures);
         plantSelectionController = new PlantSelectionController(currentLevel);
 //        gameMapView = new GameMapView(game, textures);
@@ -59,6 +57,7 @@ public class PlayScreen extends BaseScreen {
         backgroundImage = new Image(new TextureRegionDrawable(gameMapView.getBackground()));
         backgroundImage.setFillParent(true);
         stage.addActor(backgroundImage);
+        createPlantBoxes();
 
         messageNotif = new Label("", skin, "promo_ribbon");
         messageNotif.setVisible(false);

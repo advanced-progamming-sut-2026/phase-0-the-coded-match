@@ -26,7 +26,7 @@ public class Main extends Game {
             QuestController.refreshDailyQuests();
         }
 
-        FileHandle assetsFolder = Gdx.files.internal("pvz-assets");
+        FileHandle assetsFolder = Gdx.files.internal("");
         textures = new TextureBank("768", assetsFolder);
         player = new PamPlayer(textures, assetsFolder);
 
