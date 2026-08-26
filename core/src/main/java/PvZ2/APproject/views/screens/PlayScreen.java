@@ -50,8 +50,9 @@ public class PlayScreen extends BaseScreen {
     public void show() {
         super.show();
 
-        gameMapView = new GameMapView(game, currentLevel, textures);
         plantSelectionController = new PlantSelectionController(currentLevel);
+        gameMapView = new GameMapView(game, currentLevel, textures, this);
+
 //        gameMapView = new GameMapView(game, textures);
 
         backgroundImage = new Image(new TextureRegionDrawable(gameMapView.getBackground()));
@@ -191,5 +192,9 @@ public class PlayScreen extends BaseScreen {
 
     public float getStateTime() {
         return stateTime;
+    }
+
+    public PlantSelectionController getPlantSelectionController(){
+        return plantSelectionController;
     }
 }
