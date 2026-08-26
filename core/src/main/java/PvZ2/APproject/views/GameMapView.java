@@ -36,17 +36,10 @@ public class GameMapView extends Group {
         createTiles();
     }
 
-//    public GameMapView(Main game, TextureBank textures) {
-//        this.game = game;
-//        this.textures = textures;
-//        loadBackground();
-//    }
-
     public void loadBackground() {
         if (getPath() != null) {
         background = textures.region(getPath());
         }
-//        background = textures.region("IMAGE_BACKGROUNDS_EGYPT_TEXTURE");
     }
 
     public String getPath() {

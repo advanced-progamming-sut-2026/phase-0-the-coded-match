@@ -16,7 +16,7 @@ public class Sun implements Update {
     protected boolean isFalling;
     protected boolean hasFallen;
 
-    public Sun(float x, float y, int value, float timeToReachGround, boolean isFalling, SunType type) { //if plant is producing: 0, false
+    public Sun(float x, float y, int value, float timeToReachGround, boolean isFalling, SunType type) {
         this.x = x;
         this.y = y;
         this.value = value;

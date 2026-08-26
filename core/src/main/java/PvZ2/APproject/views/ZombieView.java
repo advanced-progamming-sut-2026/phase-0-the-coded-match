@@ -42,9 +42,9 @@ public class ZombieView extends Actor {
         String fullPath = "768/FULL/ZOMBIE/" + zombiePath + "/" + zombiePath + ".PAM";
         String initialPath = "768/INITIAL/ZOMBIE/" + zombiePath + "/" + zombiePath + ".PAM";
 
-        if (Gdx.files.internal("IMAGES/" + fullPath).exists()) {
+        if (Gdx.files.internal("./IMAGES/" + fullPath).exists()) {
             return fullPath;
-        } else if (Gdx.files.internal("IMAGES/" + initialPath).exists()){
+        } else if (Gdx.files.internal("./IMAGES/" + initialPath).exists()){
             return initialPath;
         }
 

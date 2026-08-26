@@ -117,11 +117,11 @@ public class Zombie implements Update {
         if (currentState == ZombieState.EATING) {
             return;
         }
-        x -= data.getSpeed() / 10.0;
+        x -= data.getSpeed() / 100.0;
     }
 
     public void run() {
-        x -= runningSpeed / 10.0;
+        x -= runningSpeed / 100.0;
     }
 
     public void attack(Plant plant) {

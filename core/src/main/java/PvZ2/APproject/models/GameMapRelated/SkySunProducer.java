@@ -62,8 +62,8 @@ public class SkySunProducer implements Update {
         Level currentLevel = GameManagerController.getInstance().getCurrentLevel();
         if (random == null) random = new Random();
         int chance = random.nextInt(100);
-        int randomX = random.nextInt(currentLevel.getGameMap().getColumns());
-        int randomY = random.nextInt(currentLevel.getGameMap().getRows());
+        int randomX = random.nextInt(1, currentLevel.getGameMap().getColumns());
+        int randomY = random.nextInt(1, currentLevel.getGameMap().getRows());
 
         Sun droppedSun = null;
         if (chance < SunType.NORMAL.getDropChancePercentage()) {
@@ -81,6 +81,7 @@ public class SkySunProducer implements Update {
             sun = droppedSun;
             producedASun = true;
         }
+        System.out.println(droppedSun.getType().getName() + "sun spawned in (" + randomX + ", " + randomY + ")");
     }
 
     @Override
