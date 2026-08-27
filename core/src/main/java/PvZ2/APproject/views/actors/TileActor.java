@@ -23,10 +23,10 @@ public class TileActor extends Group {
     private ShapeRenderer shapeRenderer = new ShapeRenderer();
     private PlantSelectionController selectionController;
 
-    public TileActor(Tile tile, PlantSelectionController plantSelectionController) {
-    public TileActor(Tile tile, PlayScreen screen) {
+    public TileActor(Tile tile, PlayScreen screen, PlantSelectionController plantSelectionController) {
         this.tile = tile;
         this.screen = screen;
+        this.selectionController = plantSelectionController;
 
         float pixelX = PlayScreen.BOARD_X + (tile.getRow() - 1) * PlayScreen.TILE_WIDTH;
         float pixelY = PlayScreen.BOARD_Y + (tile.getColumn() - 1) * PlayScreen.TILE_HEIGHT;
@@ -60,6 +60,54 @@ public class TileActor extends Group {
                 inTile = false;
             }
         });
+
+//        this.selectionController = plantSelectionController;
+//
+//        addListener(new InputListener(){
+//
+//            @Override
+//            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+//
+//                if(plantSelectionController.hasSelectedPlant()){
+//                    plantSelectionController.setHoveredTile(tile);
+//                }
+//            }
+//
+//            @Override
+//            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+//
+//                if (plantSelectionController.getHoveredTile() == tile) {
+//                    plantSelectionController.setHoveredTile(null);
+//                }
+//            }
+//
+//            @Override
+//            public boolean touchDown( InputEvent event, float x, float y, int pointer, int button) {
+//
+//                return plantSelectionController.hasSelectedPlant();
+//            }
+//
+//            @Override
+//            public void touchUp( InputEvent event, float x, float y, int pointer, int button) {
+//
+//                if (!plantSelectionController.hasSelectedPlant()) {
+//                    return;
+//                }
+//
+//                plantSelectionController.setHoveredTile(tile);
+//
+//                String error =
+//                    plantSelectionController.tryPlaceSelectedPlant();
+//
+//                if (error != null) {
+//                    System.out.println(error);
+//                }
+//            }
+//        });  TODO: I made these for placing the plants but when i pulled someone wrote the same methods in a
+//                   different way i'll keep this here but if its useles delete it later on !!
+
+
+//
     }
 
     @Override
@@ -95,49 +143,7 @@ public class TileActor extends Group {
         } else {
             shapeRenderer.setColor(1, 1, 1, 0f);
         }
-        this.selectionController = plantSelectionController;
 
-        addListener(new InputListener(){
-
-            @Override
-                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-
-                if(plantSelectionController.hasSelectedPlant()){
-                    plantSelectionController.setHoveredTile(tile);
-                }
-            }
-
-            @Override
-            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-
-                if (plantSelectionController.getHoveredTile() == tile) {
-                    plantSelectionController.setHoveredTile(null);
-                }
-            }
-
-            @Override
-            public boolean touchDown( InputEvent event, float x, float y, int pointer, int button) {
-
-                return plantSelectionController.hasSelectedPlant();
-            }
-
-            @Override
-            public void touchUp( InputEvent event, float x, float y, int pointer, int button) {
-
-                if (!plantSelectionController.hasSelectedPlant()) {
-                    return;
-                }
-
-                plantSelectionController.setHoveredTile(tile);
-
-                String error =
-                    plantSelectionController.tryPlaceSelectedPlant();
-
-                if (error != null) {
-                    System.out.println(error);
-                }
-            }
-        });
     }
 
     public Tile getTile() {

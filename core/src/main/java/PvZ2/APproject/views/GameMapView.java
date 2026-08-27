@@ -20,7 +20,6 @@ import pvz.libpvz.textures.TextureBank;
 
 public class GameMapView extends Group {
     private final Main game;
-    private final PlayScreen gameScreen;
     private final PlantSelectionController plantSelectionController;
     private PlayScreen screen;
     private Level currentLevel;
@@ -31,11 +30,9 @@ public class GameMapView extends Group {
     private Stage stage;
 
     public GameMapView(Main game, PlayScreen screen, Level currentLevel, TextureBank textures, Image backgroundImage, Stage stage) {
-    public GameMapView(Main game, Level currentLevel, TextureBank textures, PlayScreen gameScreen) {
         this.game = game;
-        this.gameScreen = gameScreen;
-        this.plantSelectionController = gameScreen.getPlantSelectionController();
         this.screen = screen;
+        this.plantSelectionController = screen.getPlantSelectionController();
         this.currentLevel = currentLevel;
         this.textures = textures;
         shapeRenderer = new ShapeRenderer();
@@ -81,8 +78,7 @@ public class GameMapView extends Group {
             for (int j = 1; j <= gameMap.getColumns(); j++) {
                 Tile tile = gameMap.getTile(j, i);
 
-                TileActor tileActor = new TileActor(tile, screen);
-                TileActor tileActor = new TileActor(tile, plantSelectionController);
+                TileActor tileActor = new TileActor(tile, screen, plantSelectionController);
 
                 tileActor.setSize(PlayScreen.TILE_WIDTH, PlayScreen.TILE_HEIGHT);
 
