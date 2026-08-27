@@ -38,29 +38,29 @@ public class ChoosePlantsMenu extends BaseScreen {
         this.game = game;
     }
 
-    public static void check(String input) {
-        if (input.matches(Commands.CHOOSE_SHOW_ALL.getPattern())) {
-            System.out.println(ChoosePlantsMenuController.showAllPlants());
-        } else if (input.matches(Commands.CHOOSE_SHOW_AVAILABLE.getPattern())) {
-            System.out.println(ChoosePlantsMenuController.showAvailablePlants());
-        } else if (input.matches(Commands.CHOOSE_ADD_PLANT.getPattern())) {
-            Matcher matcher = Pattern.compile(Commands.CHOOSE_ADD_PLANT.getPattern()).matcher(input);
-            matcher.matches();
-            System.out.println(ChoosePlantsMenuController.addPlant(matcher.group("type")));
-        } else if (input.matches(Commands.CHOOSE_REMOVE_PLANT.getPattern())) {
-            Matcher matcher = Pattern.compile(Commands.CHOOSE_REMOVE_PLANT.getPattern()).matcher(input);
-            matcher.matches();
-            System.out.println(ChoosePlantsMenuController.removePlant(matcher.group("type")));
-        } else if (input.matches(Commands.CHOOSE_BOOST_PLANT.getPattern())) {
-            Matcher matcher = Pattern.compile(Commands.CHOOSE_BOOST_PLANT.getPattern()).matcher(input);
-            matcher.matches();
-            System.out.println(ChoosePlantsMenuController.boostPlant(matcher.group("type")));
-        } else if (input.matches(Commands.CHOOSE_START_GAME.getPattern())) {
-            System.out.println(ChoosePlantsMenuController.startGame());
-        } else {
-            System.out.println("invalid command");
-        }
-    }
+//    public static void check(String input) {
+//        if (input.matches(Commands.CHOOSE_SHOW_ALL.getPattern())) {
+//            System.out.println(ChoosePlantsMenuController.showAllPlants());
+//        } else if (input.matches(Commands.CHOOSE_SHOW_AVAILABLE.getPattern())) {
+//            System.out.println(ChoosePlantsMenuController.showAvailablePlants());
+//        } else if (input.matches(Commands.CHOOSE_ADD_PLANT.getPattern())) {
+//            Matcher matcher = Pattern.compile(Commands.CHOOSE_ADD_PLANT.getPattern()).matcher(input);
+//            matcher.matches();
+//            System.out.println(ChoosePlantsMenuController.addPlant(matcher.group("type")));
+//        } else if (input.matches(Commands.CHOOSE_REMOVE_PLANT.getPattern())) {
+//            Matcher matcher = Pattern.compile(Commands.CHOOSE_REMOVE_PLANT.getPattern()).matcher(input);
+//            matcher.matches();
+//            System.out.println(ChoosePlantsMenuController.removePlant(matcher.group("type")));
+//        } else if (input.matches(Commands.CHOOSE_BOOST_PLANT.getPattern())) {
+//            Matcher matcher = Pattern.compile(Commands.CHOOSE_BOOST_PLANT.getPattern()).matcher(input);
+//            matcher.matches();
+//            System.out.println(ChoosePlantsMenuController.boostPlant(matcher.group("type")));
+//        } else if (input.matches(Commands.CHOOSE_START_GAME.getPattern())) {
+//            System.out.println(ChoosePlantsMenuController.startGame());
+//        } else {
+//            System.out.println("invalid command");
+//        }
+//    }
 
     @Override
     public void show() {

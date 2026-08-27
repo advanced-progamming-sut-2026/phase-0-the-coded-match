@@ -49,7 +49,6 @@ public class ZombieView extends Actor {
         }
 
         return null;
-//        return  fullPath;
     }
 
     @Override

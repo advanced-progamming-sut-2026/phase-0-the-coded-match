@@ -65,7 +65,9 @@ public class SunActor extends Group {
         float groundY = playScreen.BOARD_Y + sun.getY() * playScreen.TILE_HEIGHT;
 
         if (sun.isFalling()) {
-            float progress = 1f - sun.getTimeToReachGround() / 5f;
+            float progress = 1f - (sun.getTimeToReachGround() / 5f);
+            progress = Math.max(0f, Math.min(1f, progress));
+
 
             float startY = 768;
 
