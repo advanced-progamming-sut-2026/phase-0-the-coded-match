@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import pvz.libpvz.textures.TextureBank;
 
@@ -22,6 +23,7 @@ public class PlantBox extends Group {
         this.selectionController = selectionController;
 
         setSize(100, 120);
+        setTouchable(Touchable.enabled);
 
         createVisuals(textures);
         addClickListener();
@@ -67,6 +69,7 @@ public class PlantBox extends Group {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
+        super.draw(batch, parentAlpha);
 
         batch.draw(
             background,

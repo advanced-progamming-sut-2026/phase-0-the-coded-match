@@ -69,6 +69,7 @@ public class PlayScreen extends BaseScreen {
         backgroundImage = new Image(new TextureRegionDrawable(gameMapView.getBackground()));
         backgroundImage.setFillParent(true);
         stage.addActor(backgroundImage);
+        stage.addActor(gameMapView);
 
         createPlantBoxes();
 

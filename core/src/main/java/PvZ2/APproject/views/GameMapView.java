@@ -64,8 +64,8 @@ public class GameMapView extends Group {
         int spacingX = 80;
         int spacingY = 100;
 
-        for (int i = 1; i < gameMap.getRows(); i++) {
-            for (int j = 1; j < gameMap.getColumns(); j++) {
+        for (int i = 1; i <= gameMap.getRows(); i++) {
+            for (int j = 1; j <= gameMap.getColumns(); j++) {
                 Tile tile = gameMap.getTile(j, i);
 
                 TileActor tileActor = new TileActor(tile, plantSelectionController);
@@ -108,8 +108,8 @@ public class GameMapView extends Group {
 
             GameMap gameMap = currentLevel.getGameMap();
 
-            for (int i = 1; i < gameMap.getRows(); i++) {
-                for (int j = 1; j < gameMap.getColumns(); j++) {
+            for (int i = 1; i <= gameMap.getRows(); i++) {
+                for (int j = 1; j <= gameMap.getColumns(); j++) {
                     shapeRenderer.rect(
                         startX + (j - 1) * spacingX,
                         startY + (i - 1) * spacingY,
@@ -147,7 +147,7 @@ public class GameMapView extends Group {
 
         GameMap gameMap = currentLevel.getGameMap();
 
-        for (int j = 1; j < gameMap.getColumns(); j++) {
+        for (int j = 1; j <= gameMap.getColumns(); j++) {
             float x = startX + (j - 1) * spacingX;
             float y = startY + (row - 1) * spacingY;
             shapeRenderer.rect(
@@ -158,7 +158,7 @@ public class GameMapView extends Group {
             );
         }
 
-        for (int i = 1; i < gameMap.getRows(); i++) {
+        for (int i = 1; i <= gameMap.getRows(); i++) {
             float x = startX + (column - 1) * spacingX;
             float y = startY + (i - 1) * spacingY;
             shapeRenderer.rect(

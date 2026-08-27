@@ -15,19 +15,265 @@
     "meowPoints": 0,
     "lastLevelNumber": 0,
     "isVictroy": false,
-    "lastSeasonId": 0,
+    "lastSeasonId": 1,
     "difficultyLevel": 3,
     "minigamesWonCount": 0,
     "highestPointAchieved": 0,
     "stayLoggedIn": false,
     "collection": {
-      "availableZombiesIds": [],
+      "availableZombiesIds": [
+        "ZombieDarkArmor3",
+        "ZombieImp",
+        "ZombieDefault",
+        "ZombieExplorer",
+        "ZombieArmZombieNewspaper",
+        "ZombieTombRaiser",
+        "ZombieBarrelRoller",
+        "ZombieCrystalSkull",
+        "ZombieArmor1",
+        "ZombieArmor2",
+        "ZombieRa",
+        "ZombieLostCityJane",
+        "ZombieArmor4"
+      ],
       "availablePlantsIds": [
         "peashooter",
         "sunflower",
         "wallnut"
       ],
-      "availablePlants": [],
+      "availablePlants": [
+        {
+          "data": {
+            "id": "peashooter",
+            "name": "Peashooter",
+            "displayName": "Peashooter",
+            "category": "SHOOTER",
+            "tags": [
+              "PEA"
+            ],
+            "sunCost": 100,
+            "baseHp": 300,
+            "damage": 20,
+            "actionInterval": 1.5,
+            "recharge": 5.0,
+            "behaviorType": "SHOOTER",
+            "abilities": [
+              "SHOOT_FORWARD"
+            ],
+            "plantFoodAbilities": [
+              "RAPID_SHOOT"
+            ],
+            "projectileCount": 1,
+            "projectileSpeed": 0.5,
+            "baseAbility": "Fires a pea straight ahead.",
+            "plantFoodEffect": "Rapidly fires peas for several seconds.",
+            "upgrades": [
+              {
+                "level": 2,
+                "requiredSeedPackets": 0,
+                "requiredCoins": 0,
+                "hpBonus": 0,
+                "damageBonus": 0,
+                "costReduction": 0,
+                "rechargeReduction": 0.0
+              },
+              {
+                "level": 3,
+                "requiredSeedPackets": 0,
+                "requiredCoins": 0,
+                "hpBonus": 0,
+                "damageBonus": 0,
+                "costReduction": 0,
+                "rechargeReduction": 0.0
+              },
+              {
+                "level": 4,
+                "requiredSeedPackets": 0,
+                "requiredCoins": 0,
+                "hpBonus": 0,
+                "damageBonus": 0,
+                "costReduction": 0,
+                "rechargeReduction": 0.0
+              }
+            ],
+            "description": "Fires a pea straight ahead."
+          },
+          "currentHp": 300,
+          "x": 0,
+          "y": 0,
+          "level": 1,
+          "boosted": false,
+          "cooldownRemaining": 0,
+          "activeEffects": [],
+          "tags": [
+            "PEA"
+          ],
+          "isLocked": false,
+          "cooldownTicks": 15,
+          "currentCooldownTimer": 15,
+          "producedSun": false,
+          "sunCollected": true,
+          "freezeLevel": 0,
+          "iceHP": 0,
+          "disabled": false,
+          "coverHp": 0,
+          "stackCount": 1,
+          "protectedFromZombies": false,
+          "currentState": "IDLE"
+        },
+        {
+          "data": {
+            "id": "sunflower",
+            "name": "Sunflower",
+            "displayName": "Sunflower",
+            "category": "SUN_PRODUCER",
+            "tags": [
+              "DAY"
+            ],
+            "sunCost": 50,
+            "baseHp": 300,
+            "damage": 0,
+            "actionInterval": 24.0,
+            "recharge": 5.0,
+            "behaviorType": "SUN_PRODUCER",
+            "abilities": [
+              "PRODUCE_SUN"
+            ],
+            "plantFoodAbilities": [
+              "INSTANT_SUN"
+            ],
+            "projectileCount": 1,
+            "projectileSpeed": 0.5,
+            "baseAbility": "Produces 50 sun every 24 seconds.",
+            "plantFoodEffect": "Instantly produces 150 sun.",
+            "upgrades": [
+              {
+                "level": 2,
+                "requiredSeedPackets": 0,
+                "requiredCoins": 0,
+                "hpBonus": 0,
+                "damageBonus": 0,
+                "costReduction": 0,
+                "rechargeReduction": 0.0
+              },
+              {
+                "level": 3,
+                "requiredSeedPackets": 0,
+                "requiredCoins": 0,
+                "hpBonus": 0,
+                "damageBonus": 0,
+                "costReduction": 0,
+                "rechargeReduction": 0.0
+              },
+              {
+                "level": 4,
+                "requiredSeedPackets": 0,
+                "requiredCoins": 0,
+                "hpBonus": 0,
+                "damageBonus": 0,
+                "costReduction": 0,
+                "rechargeReduction": 0.0
+              }
+            ],
+            "description": "Produces 50 sun every 24 seconds."
+          },
+          "currentHp": 300,
+          "x": 0,
+          "y": 0,
+          "level": 1,
+          "boosted": false,
+          "cooldownRemaining": 0,
+          "activeEffects": [],
+          "tags": [
+            "DAY"
+          ],
+          "isLocked": false,
+          "cooldownTicks": 240,
+          "currentCooldownTimer": 240,
+          "producedSun": false,
+          "sunCollected": true,
+          "freezeLevel": 0,
+          "iceHP": 0,
+          "disabled": false,
+          "coverHp": 0,
+          "stackCount": 1,
+          "protectedFromZombies": false,
+          "currentState": "IDLE"
+        },
+        {
+          "data": {
+            "id": "wallnut",
+            "name": "Wall-nut",
+            "displayName": "Wall-nut",
+            "category": "WALL_NUT",
+            "tags": [],
+            "sunCost": 50,
+            "baseHp": 4000,
+            "damage": 0,
+            "actionInterval": 0.0,
+            "recharge": 20.0,
+            "behaviorType": "WALL_NUT",
+            "abilities": [],
+            "plantFoodAbilities": [
+              "REINFORCE"
+            ],
+            "projectileCount": 1,
+            "projectileSpeed": 0.5,
+            "baseAbility": "A durable defensive barrier that blocks zombies.",
+            "plantFoodEffect": "Gains permanent armor worth 4000 HP.",
+            "upgrades": [
+              {
+                "level": 2,
+                "requiredSeedPackets": 0,
+                "requiredCoins": 0,
+                "hpBonus": 0,
+                "damageBonus": 0,
+                "costReduction": 0,
+                "rechargeReduction": 0.0
+              },
+              {
+                "level": 3,
+                "requiredSeedPackets": 0,
+                "requiredCoins": 0,
+                "hpBonus": 0,
+                "damageBonus": 0,
+                "costReduction": 0,
+                "rechargeReduction": 0.0
+              },
+              {
+                "level": 4,
+                "requiredSeedPackets": 0,
+                "requiredCoins": 0,
+                "hpBonus": 0,
+                "damageBonus": 0,
+                "costReduction": 0,
+                "rechargeReduction": 0.0
+              }
+            ],
+            "description": "A durable defensive barrier that blocks zombies."
+          },
+          "currentHp": 4000,
+          "x": 0,
+          "y": 0,
+          "level": 1,
+          "boosted": false,
+          "cooldownRemaining": 0,
+          "activeEffects": [],
+          "tags": [],
+          "isLocked": false,
+          "cooldownTicks": 1,
+          "currentCooldownTimer": 1,
+          "producedSun": false,
+          "sunCollected": true,
+          "freezeLevel": 0,
+          "iceHP": 0,
+          "disabled": false,
+          "coverHp": 0,
+          "stackCount": 1,
+          "protectedFromZombies": false,
+          "currentState": "IDLE"
+        }
+      ],
       "unlockedMinigames": [],
       "unlockedLevels": []
     },
@@ -141,6 +387,7 @@
     "questsModel": {
       "availableQuests": []
     },
-    "plantFoodBoughtCount": 0
+    "plantFoodBoughtCount": 0,
+    "lastDailyQuestRefreshDate": "2026-08-27"
   }
 ]
