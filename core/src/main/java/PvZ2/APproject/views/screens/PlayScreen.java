@@ -20,7 +20,9 @@ import PvZ2.APproject.views.actors.LawnmowerActor;
 import PvZ2.APproject.views.ZombieView;
 import PvZ2.APproject.views.actors.PlantBox;
 import PvZ2.APproject.views.actors.SunActor;
+import PvZ2.APproject.views.menus.ChoosePlantsMenu;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -44,11 +46,13 @@ public class PlayScreen extends BaseScreen {
 
     public static float TILE_WIDTH = 80;
     public static float TILE_HEIGHT = 100;
-    public static float BOARD_X = 250;
+    public static float BOARD_X = 260;
     public static float BOARD_Y = 80;
 
     private Label messageNotif;
+    private Image shovelCursor;
     private float stateTime = 0f;
+    private Boolean harvestMood = false;
 
     private Map<Sun, SunActor> renderedSuns = new HashMap<>();
     private Map<Lawnmower, LawnmowerActor> renderedLawnmowers = new HashMap<>();
@@ -63,14 +67,13 @@ public class PlayScreen extends BaseScreen {
     public void show() {
         super.show();
 
+        gameMapView = new GameMapView(game, this, currentLevel, textures, backgroundImage, stage);
         plantSelectionController = new PlantSelectionController(currentLevel);
-        gameMapView = new GameMapView(game, currentLevel, textures, this);
 
         backgroundImage = new Image(new TextureRegionDrawable(gameMapView.getBackground()));
         backgroundImage.setFillParent(true);
         stage.addActor(backgroundImage);
         stage.addActor(gameMapView);
-
         createPlantBoxes();
 
         messageNotif = new Label("", skin, "promo_ribbon");
@@ -117,6 +120,32 @@ public class PlayScreen extends BaseScreen {
                 resumeGame();
             }
         });
+
+
+        shovelCursor = new Image(
+            new TextureRegionDrawable(
+            textures.region(
+                "IMAGE_UI_HUD_INGAME_SHOVEL_ICON")
+            )
+        );
+
+        shovelCursor.setSize(130, 70);
+        shovelCursor.setVisible(false);
+        stage.addActor(shovelCursor);
+
+        ImageButton harvestBtn = new ImageButton(skin, "ingame_shovel");
+
+        harvestBtn.setPosition(VIRTUAL_WIDTH - harvestBtn.getWidth(), harvestBtn.getHeight() - 60);
+        stage.addActor(harvestBtn);
+
+        harvestBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                harvestMood = !harvestMood;
+                shovelCursor.setVisible(harvestMood);
+            }
+        });
+
     }
 
     @Override
@@ -125,6 +154,10 @@ public class PlayScreen extends BaseScreen {
             super.render(delta);
 
             stateTime += delta;
+
+            if (harvestMood) {
+                updateShovelCursor();
+            }
 
             String message = GameManagerController.getInstance().updateObjects(delta);
             if (!message.equals("")) {
@@ -246,6 +279,15 @@ public class PlayScreen extends BaseScreen {
         }
     }
 
+    public void updateShovelCursor() {
+        Vector2 mousePosition = new Vector2(Gdx.input.getX(), Gdx.input.getY());
+
+        viewport.unproject(mousePosition);
+
+        shovelCursor.setPosition(mousePosition.x - shovelCursor.getWidth() / 2f,
+            mousePosition.y - shovelCursor.getHeight() / 2f);
+    }
+
     public void removeSunActor(Sun sun) {
         SunActor sunActor = renderedSuns.remove(sun);
 
@@ -280,7 +322,7 @@ public class PlayScreen extends BaseScreen {
         GameManagerController.getInstance().setCurrentLevel(newLevel);
         GameManagerController.getInstance().getCurrentLevel().setCurrentSeason(App.getCurrentUser().getLastSeason());
 
-        game.setScreen(new PlayScreen(game));
+        game.setScreen(new ChoosePlantsMenu(game));
     }
 
     public void exitGame() {
@@ -295,6 +337,10 @@ public class PlayScreen extends BaseScreen {
 
     public float getStateTime() {
         return stateTime;
+    }
+
+    public Boolean getHarvestMood() {
+        return harvestMood;
     }
 
     public PlantSelectionController getPlantSelectionController(){

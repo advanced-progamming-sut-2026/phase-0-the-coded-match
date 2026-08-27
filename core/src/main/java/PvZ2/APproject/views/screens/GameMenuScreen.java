@@ -207,8 +207,8 @@ public class GameMenuScreen extends BaseScreen{
         containerTable.clearChildren();
 
 
-        Label title = new Label("Select Level", skin, "default");
-        containerTable.add(title).expandX().center().row();
+        Label title = new Label("Select Level", skin, "big");
+        containerTable.add(title).padLeft(500).row();
 
         Table levelsGrid = new Table();
 
@@ -290,8 +290,8 @@ public class GameMenuScreen extends BaseScreen{
 
             Table card = new Table();
             Label nameLabel = new Label(ld.getName(), skin, "default");
-            card.add(nameLabel).padTop(10).padBottom(5).row();
             nameLabel.setFontScale(isCenter ? 1.5f : 1.0f);
+            card.add(nameLabel).padTop(10).padBottom(5).row();
             card.add(levelImage).size(width, height).row();
 
             if(isCenter) {
@@ -331,8 +331,8 @@ public class GameMenuScreen extends BaseScreen{
         ScrollPane scrollPane = new ScrollPane(levelsGrid, skin);
         scrollPane.setFadeScrollBars(false);
         scrollPane.setScrollingDisabled(false, true);
-        scrollPane.setOverscroll(false, true);
-        containerTable.add(scrollPane).width(VIRTUAL_WIDTH).height(VIRTUAL_HEIGHT-50);
+        scrollPane.setOverscroll(false, false);
+        containerTable.add(scrollPane).height(VIRTUAL_HEIGHT-120).row();
 
         TextButton backBtn = new TextButton("< Back to Chapters", skin, "default");
         backBtn.addListener(new ClickListener() {
@@ -341,7 +341,7 @@ public class GameMenuScreen extends BaseScreen{
                 showChaptersList();
             }
         });
-        containerTable.add(backBtn).bottom().pad(10);
+        containerTable.add(backBtn).width(220).height(50).right().padRight(20).padTop(5).padBottom(10).row();
 
     }
 }
