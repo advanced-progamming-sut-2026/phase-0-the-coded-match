@@ -14,7 +14,6 @@ import java.util.List;
 public class Tile implements Update {
     private int row;
     private int column;
-    private int tileWidth; //TODO: choose an optional width?
     private TileType type;
     private int currentHp;
     private Plant plant;
@@ -30,6 +29,7 @@ public class Tile implements Update {
     }
     private GraveReward graveReward = GraveReward.NONE;
     private boolean holdsNecromancyPotential = false;
+    private boolean slippery;
 
     public Tile(int row, int column, TileType type) {
         this.row = row;
@@ -166,6 +166,9 @@ public class Tile implements Update {
     public boolean isGrave(){return isGrave;}
     public GraveReward getGraveReward() { return graveReward; }
     public boolean holdsNecromancyPotential() { return holdsNecromancyPotential; }
+    public void setNecromancyPotential(boolean potential){
+        holdsNecromancyPotential = potential;
+    }
 
     public void setGrave(boolean active, GraveReward reward) {
         this.isGrave = active;
@@ -185,4 +188,12 @@ public class Tile implements Update {
     public Plant getLilyPadPlant() { return lilyPadPlant; }
 
     public void setLilyPadPlant(Plant lilyPad) { this.lilyPadPlant = lilyPad; }
+
+    public boolean isSlippery() {
+        return slippery;
+    }
+
+    public void setSlippery(boolean slippery) {
+        this.slippery = slippery;
+    }
 }

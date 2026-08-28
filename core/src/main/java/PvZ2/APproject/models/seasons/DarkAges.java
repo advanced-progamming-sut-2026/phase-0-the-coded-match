@@ -27,12 +27,34 @@ public final class DarkAges extends Season {
 
     @Override
     public void LevelStarted(Level level) {
+
         level.setSkySunProducer(null);
+        markNecromancyTiles(level);
+    }
+
+    private void markNecromancyTiles(Level level){
+        Random random = new Random();
+
+        int rows = level.getGameMap().getRows();
+        int cols = level.getGameMap().getColumns();
+
+        int necromancyTileCount = 2 + random.nextInt(3);
+
+        for (int i = 0; i < necromancyTileCount; i++) {
+            int row = 1 + random.nextInt(rows);
+            int col = 2 + random.nextInt(cols - 2);
+
+            Tile tile = level.getGameMap().getTile(col, row);
+
+            if (tile != null && !tile.isGrave()) {
+                tile.setNecromancyPotential(true);
+            }
+        }
     }
 
 
     @Override
-    public void Update(Level level) {return;}
+    public void Update(Level level, float delta) {return;}
 
     @Override
     public void WaveStarted(Level level, int waveNumber) {

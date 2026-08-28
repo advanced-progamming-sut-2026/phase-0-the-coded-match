@@ -89,6 +89,10 @@ public class Plant implements Update {
         }
     }
 
+    public int getFreezeLevel(){
+        return this.freezeLevel;
+    }
+
     public void addFreezeLevel(int amount){
         if(this.hasThisTag(PlantTag.FIRE)){
             return;
@@ -96,6 +100,7 @@ public class Plant implements Update {
         this.freezeLevel = Math.min(3, this.freezeLevel + amount);
         if(this.freezeLevel == 3 && this.iceHP <= 0){
             this.iceHP = 600;
+            this.disabled = true;
         }
     }
 
@@ -108,6 +113,7 @@ public class Plant implements Update {
         if(iceHP <= 0){
             this.iceHP = 0;
             this.freezeLevel = 0;
+            this.disabled = false;
         }
     }
 

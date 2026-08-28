@@ -2,6 +2,8 @@ package PvZ2.APproject.views;
 
 import PvZ2.APproject.Main;
 import PvZ2.APproject.controllers.PlantSelectionController;
+import PvZ2.APproject.enums.SeasonType;
+import PvZ2.APproject.enums.TileType;
 import PvZ2.APproject.models.GameMapRelated.GameMap;
 import PvZ2.APproject.models.GameMapRelated.Tile;
 import PvZ2.APproject.models.GameSettings;
@@ -18,9 +20,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import pvz.libpvz.textures.TextureBank;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class GameMapView extends Group {
     private final Main game;
     private final PlantSelectionController plantSelectionController;
+    private final Map<Tile, TileActor> tileActors = new HashMap<>();
     private PlayScreen screen;
     private Level currentLevel;
     private TextureBank textures;
@@ -78,6 +84,14 @@ public class GameMapView extends Group {
             for (int j = 1; j <= gameMap.getColumns(); j++) {
                 Tile tile = gameMap.getTile(j, i);
 
+                /// TEST ///
+
+                if (i == 1 && j == 5) {
+                    tile.setNecromancyPotential(true);
+                }
+
+                /// END OF TEST ///
+
                 TileActor tileActor = new TileActor(tile, screen, plantSelectionController);
 
                 tileActor.setSize(PlayScreen.TILE_WIDTH, PlayScreen.TILE_HEIGHT);
@@ -85,6 +99,7 @@ public class GameMapView extends Group {
 //                tileActor.setPosition(startX, startY);
 
                 addActor(tileActor);
+                tileActors.put(tile, tileActor);
 
                 startX += spacingX;
             }
@@ -101,14 +116,80 @@ public class GameMapView extends Group {
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
 
-        Tile hoveredTile = plantSelectionController.getHoveredTile();
-        if (hoveredTile != null && plantSelectionController.hasSelectedPlant()) {
-            drawPlacementHighlight(batch, hoveredTile);
-        }
+        drawSeasonTiles(batch);
+
+//        Tile hoveredTile = plantSelectionController.getHoveredTile();
+//        if (hoveredTile != null && plantSelectionController.hasSelectedPlant()) {
+//            drawPlacementHighlight(batch, hoveredTile);
+//        }  TODO: this is for highlighting the column and row of the plant wanting to be placed on the tile
 
         if (GameSettings.getInstance().isShowGrid()) {
-            batch.end();
+            drawRedLinesOnGrid(batch);
+        }
 
+    }
+
+    private void drawSeasonTiles(Batch batch){
+        GameMap map = currentLevel.getGameMap();
+
+        int rows = map.getRows();
+        int columns = map.getColumns();
+
+        for(int row = 1; row <= rows; row++){
+            for(int col = 1; col <= columns; col++){
+                Tile tile = map.getTile(col, row);
+
+                if (tile == null) {
+                    continue;
+                }
+                TileActor tileActor = tileActors.get(tile);
+                float x = tileActor.getX();
+                float y = tileActor.getY();
+
+                if(tile.getType() == TileType.WATER){
+                    batch.draw(textures.region("IMAGE_UI_CARDS_BACKGROUNDS_CARD_PLANT_BG_BEACH_WATER"), x - 5 , y - 10, PlayScreen.TILE_WIDTH, PlayScreen.TILE_HEIGHT);
+                    continue;
+                }
+
+                if(tile.isSlippery()){
+                    batch.draw(textures.region("IMAGE_EFFECTS_ZOMBONI_TILE_ICE_ZOMBONI_TILE_ICE_133X157"), x - 5 , y - 10, PlayScreen.TILE_WIDTH, PlayScreen.TILE_HEIGHT);
+                    continue;
+                }
+
+                if(tile.holdsNecromancyPotential()){
+                    batch.draw(textures.region("IMAGE_NPC_GHOSTPEPPER_GHOSTPEPPER_277X309"), x-5, y-10, 50, 70);
+                } // TODO : when it holds the necromancy potential maybe it should show on the tile otherwise theres no need
+
+                if(tile.isGrave() && tile.getType() == TileType.GRAVE){
+                    if(tile.holdsNecromancyPotential()){
+                        batch.draw(textures.region("IMAGE_GRAVESTONES_TUTORIAL_GRAVESTONE_TUTORIAL_GRAVESTONE_101X159"), x, y, PlayScreen.TILE_WIDTH, PlayScreen.TILE_HEIGHT);
+                        continue;
+                    }
+                    switch(tile.getGraveReward()){
+                        case NONE:
+                            if(currentLevel.getCurrentSeason().getData().getId() == 1){
+                                batch.draw(textures.region("IMAGE_GRAVESTONES_EGYPT_HIEROGLYPH_EGYPT_HIEROGLYPH_118X148"), x, y, PlayScreen.TILE_WIDTH, PlayScreen.TILE_HEIGHT);
+                            }else {
+                                batch.draw(textures.region("IMAGE_GRAVESTONES_DARK_NOOP_DARK_NOOP_132X160"), x, y, PlayScreen.TILE_WIDTH, PlayScreen.TILE_HEIGHT);
+                            }
+                            break;
+                        case PLANT_FOOD:
+                            batch.draw(textures.region("IMAGE_GRAVESTONES_DARK_PLANTFOOD_DARK_PLANTFOOD_132X160"), x, y, PlayScreen.TILE_WIDTH, PlayScreen.TILE_HEIGHT);
+                            break;
+                        case SUN_50:
+                            batch.draw(textures.region("IMAGE_GRAVESTONES_DARK_SUN_DARK_SUN_132X160"), x, y, PlayScreen.TILE_WIDTH, PlayScreen.TILE_HEIGHT);
+                            break;
+                        default:
+                            batch.draw(textures.region("IMAGE_GRAVESTONES_DARK_NOOP_DARK_NOOP_132X160"), x, y, PlayScreen.TILE_WIDTH, PlayScreen.TILE_HEIGHT);
+                    }
+                }
+
+            }
+        }
+    }
+
+    private void drawRedLinesOnGrid(Batch batch){
+            batch.end();
             shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
             shapeRenderer.setTransformMatrix(batch.getTransformMatrix());
             shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
@@ -134,7 +215,6 @@ public class GameMapView extends Group {
 
             shapeRenderer.end();
             batch.begin();
-        }
     }
 
     private void drawPlacementHighlight(Batch batch, Tile tile){

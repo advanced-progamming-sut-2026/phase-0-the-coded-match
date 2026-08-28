@@ -96,6 +96,7 @@ public class GameManagerController {
             updateProjectiles();
         } else {
             decreasePlantCooldowns();
+            updateSeason(delta);
             updatePlants(delta);
             updateBarrels(delta);
             dropMessage = updateZombies(delta);
@@ -106,7 +107,6 @@ public class GameManagerController {
             updateSuns(delta);
             updateTiles(delta);
             updateProjectiles();
-            updateSeason();
             if (currentLevel instanceof Beghouled beghouled) {
                 beghouled.updateMinigameTick();
             }
@@ -253,10 +253,10 @@ public class GameManagerController {
         }
     }
 
-    public void updateSeason(){
+    public void updateSeason(float delta){
         Season season = currentLevel.getCurrentSeason();
         if (season != null) {
-            season.Update(currentLevel);
+            season.Update(currentLevel, delta);
         }
     }
 

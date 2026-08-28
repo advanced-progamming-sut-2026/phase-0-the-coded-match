@@ -11,8 +11,10 @@ import PvZ2.APproject.models.GameMapRelated.Lawnmower;
 import PvZ2.APproject.models.plants.Plant;
 import PvZ2.APproject.models.plants.PlantData;
 import PvZ2.APproject.models.plants.PlantRepository;
+import PvZ2.APproject.models.seasons.EnvironmentEvent;
 import PvZ2.APproject.models.zombies.Zombie;
 import PvZ2.APproject.views.GameMapView;
+import PvZ2.APproject.views.actors.EnvironmentView;
 import PvZ2.APproject.views.actors.LawnmowerActor;
 import PvZ2.APproject.views.ZombieView;
 import PvZ2.APproject.views.actors.PlantBox;
@@ -40,6 +42,7 @@ public class PlayScreen extends BaseScreen {
     private Level currentLevel = GameManagerController.getInstance().getCurrentLevel();
     private GameMapView gameMapView;
     private PlantSelectionController plantSelectionController;
+    private EnvironmentView environmentView;
 
     public static float TILE_WIDTH = 80;
     public static float TILE_HEIGHT = 100;
@@ -64,13 +67,16 @@ public class PlayScreen extends BaseScreen {
     public void show() {
         super.show();
 
-        gameMapView = new GameMapView(game, this, currentLevel, textures, backgroundImage, stage);
         plantSelectionController = new PlantSelectionController(currentLevel);
+        gameMapView = new GameMapView(game, this, currentLevel, textures, backgroundImage, stage);
+        environmentView = new EnvironmentView(game, currentLevel, textures);
 
         backgroundImage = new Image(new TextureRegionDrawable(gameMapView.getBackground()));
         backgroundImage.setFillParent(true);
         stage.addActor(backgroundImage);
         stage.addActor(gameMapView);
+        stage.addActor(environmentView);
+
         createPlantBoxes();
 
         messageNotif = new Label("", skin, "promo_ribbon");
@@ -215,6 +221,7 @@ public class PlayScreen extends BaseScreen {
                 renderedZombies.put(zombie, zombieView);
 
                 stage.addActor(zombieView);
+                environmentView.toFront();
             }
         }
 

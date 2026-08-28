@@ -6,6 +6,7 @@ import PvZ2.APproject.models.GameMapRelated.GameMap;
 import PvZ2.APproject.models.GameMapRelated.SkySunProducer;
 import PvZ2.APproject.models.GameMapRelated.Tile;
 import PvZ2.APproject.models.plants.Plant;
+import PvZ2.APproject.models.seasons.EnvironmentEvent;
 import PvZ2.APproject.models.seasons.Season;
 import PvZ2.APproject.models.specialLevels.*;
 import PvZ2.APproject.models.zombies.Barrel;
@@ -37,6 +38,7 @@ public class Level {
     private int removedPlantsCount;
     private SpecialLevelStrategy specialLevel;
     private int levelDifficulty;
+    private EnvironmentEvent pendingEnvironmentEvent;
 
     @SuppressWarnings("this-escape")
     public Level(LevelData data) {
@@ -314,5 +316,15 @@ public class Level {
 
     public boolean isDay(){
         return !this.getData().getName().toLowerCase().contains("dark ages") && !(specialLevel instanceof NightOpsStrategy);
+    }
+
+    public void triggerEnvironmentEvent(EnvironmentEvent.EnvironmentEventType type, float duration) {
+        pendingEnvironmentEvent = new EnvironmentEvent(type, duration);
+    }
+
+    public EnvironmentEvent consumePendingEnvironmentEvent(){
+        EnvironmentEvent event = pendingEnvironmentEvent;
+        pendingEnvironmentEvent = null;
+        return event;
     }
 }

@@ -117,22 +117,22 @@ public class GameMenuScreen extends BaseScreen{
             Image chapterImage = null;
             switch(szn.getId()){
                 case 1:
-                    chapterImage = new Image(textures.region("IMAGE_WORLDMAP_EGYPT_ISLAND14"));
+                    chapterImage = new Image(textures.region("IMAGE_UI_UNIVERSE_WORLDS_EGYPT"));
                     break;
                 case 2:
-                    chapterImage = new Image(textures.region("IMAGE_WORLDMAP_ICEAGE_ANIM3_ANIM3_1307X1318"));
+                    chapterImage = new Image(textures.region("IMAGE_UI_UNIVERSE_WORLDS_ICEAGE"));
                     break;
                 case 3:
-                    chapterImage = new Image(textures.region("IMAGE_WORLDMAP_BEACH_ISLAND1"));
+                    chapterImage = new Image(textures.region("IMAGE_UI_UNIVERSE_WORLDS_BEACH"));
                     break;
                 case 4:
-                    chapterImage = new Image(textures.region("IMAGE_WORLDMAP_DARK_ANIM1_ANIM1_1201X1413"));
+                    chapterImage = new Image(textures.region("IMAGE_UI_UNIVERSE_WORLDS_DARK"));
                     break;
             }
             chapterImage.setScaling(Scaling.fit);
 
-            float width = isCenter ? 420f : 240f;
-            float height = isCenter ? 440f : 260f;
+            float width = isCenter ? 420f : 300f;
+            float height = isCenter ? 440f : 320f;
 
             boolean unlocked = false;
             if(App.getCurrentUser().getLastSeason() != null) {
