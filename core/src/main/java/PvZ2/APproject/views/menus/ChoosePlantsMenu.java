@@ -9,6 +9,7 @@ import PvZ2.APproject.models.App;
 import PvZ2.APproject.models.plants.PlantData;
 import PvZ2.APproject.models.plants.PlantUpgradeData;
 import PvZ2.APproject.views.screens.BaseScreen;
+import PvZ2.APproject.views.screens.GameMenuScreen;
 import PvZ2.APproject.views.screens.PamActor;
 import PvZ2.APproject.views.screens.PlayScreen;
 import com.badlogic.gdx.graphics.Color;
@@ -70,7 +71,7 @@ public class ChoosePlantsMenu extends BaseScreen {
         messageLabel = addMessageLabel();
         addBackButton(() -> {
             App.setCurrentMenu(Menu.MAIN_MENU);
-            game.setScreen(new MainMenu(game));
+            game.setScreen(new GameMenuScreen(game));
         });
 
         Table root = new Table();
