@@ -6,11 +6,8 @@ import PvZ2.APproject.controllers.PlantController;
 import PvZ2.APproject.controllers.PlantSelectionController;
 import PvZ2.APproject.enums.Menu;
 import PvZ2.APproject.enums.ScreenRelated.GameState;
-import PvZ2.APproject.models.App;
+import PvZ2.APproject.models.*;
 import PvZ2.APproject.models.GameMapRelated.Lawnmower;
-import PvZ2.APproject.models.Level;
-import PvZ2.APproject.models.LevelData;
-import PvZ2.APproject.models.Sun;
 import PvZ2.APproject.models.plants.Plant;
 import PvZ2.APproject.models.plants.PlantData;
 import PvZ2.APproject.models.plants.PlantRepository;
@@ -151,15 +148,17 @@ public class PlayScreen extends BaseScreen {
     @Override
     public void render(float delta) {
         if (state == GameState.RUNNING) {
-            super.render(delta);
+            int speedMultiplier = GameSettings.getInstance().getGameSpeed();
+            float adjustedSpeed = delta * speedMultiplier;
+            super.render(adjustedSpeed);
 
-            stateTime += delta;
+            stateTime += adjustedSpeed;
 
             if (harvestMood) {
                 updateShovelCursor();
             }
 
-            String message = GameManagerController.getInstance().updateObjects(delta);
+            String message = GameManagerController.getInstance().updateObjects(adjustedSpeed);
             if (!message.equals("")) {
                 showMessage(message);
             }
