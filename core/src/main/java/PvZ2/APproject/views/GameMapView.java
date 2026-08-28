@@ -10,14 +10,16 @@ import PvZ2.APproject.models.GameSettings;
 import PvZ2.APproject.models.Level;
 import PvZ2.APproject.views.actors.TileActor;
 import PvZ2.APproject.views.screens.PlayScreen;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import pvz.libpvz.textures.TextureBank;
 
 import java.util.HashMap;
@@ -215,6 +217,32 @@ public class GameMapView extends Group {
 
             shapeRenderer.end();
             batch.begin();
+    }
+
+    public void updateTile() {
+        Vector2 mouse = new Vector2(
+            Gdx.input.getX(),
+            Gdx.input.getY()
+        );
+
+        stage.getViewport().unproject(mouse);
+
+        for (Actor actor : getChildren()) {
+
+            if (!(actor instanceof TileActor)) {
+                continue;
+            }
+
+            TileActor tileActor = (TileActor) actor;
+
+            boolean inTile =
+                mouse.x >= tileActor.getX()
+                    && mouse.x <= tileActor.getX() + tileActor.getWidth()
+                    && mouse.y >= tileActor.getY()
+                    && mouse.y <= tileActor.getY() + tileActor.getHeight();
+
+            tileActor.setInTile(inTile);
+        }
     }
 
     private void drawPlacementHighlight(Batch batch, Tile tile){

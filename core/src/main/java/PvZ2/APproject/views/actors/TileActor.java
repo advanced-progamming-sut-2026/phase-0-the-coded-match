@@ -28,8 +28,8 @@ public class TileActor extends Group {
         this.screen = screen;
         this.selectionController = plantSelectionController;
 
-        float pixelX = PlayScreen.BOARD_X + (tile.getRow() - 1) * PlayScreen.TILE_WIDTH;
-        float pixelY = PlayScreen.BOARD_Y + (tile.getColumn() - 1) * PlayScreen.TILE_HEIGHT;
+        float pixelX = PlayScreen.BOARD_X + (tile.getColumn() - 1) * PlayScreen.TILE_WIDTH;
+        float pixelY = PlayScreen.BOARD_Y + (tile.getRow() - 1) * PlayScreen.TILE_HEIGHT;
 
         setBounds(pixelX, pixelY, PlayScreen.TILE_WIDTH, PlayScreen.TILE_HEIGHT);
 
@@ -39,6 +39,8 @@ public class TileActor extends Group {
                 if (!screen.getHarvestMood()) {
                     return;
                 }
+                System.out.println("ENTER TILE: " + tile.getRow()
+                    + ", " + tile.getColumn());
                 inTile = true;
             }
 
@@ -48,9 +50,9 @@ public class TileActor extends Group {
                     return false;
                 }
 
-                if (screen.getHarvestMood()) {
-                    //todo: call harvest method here
-                }
+//                if (screen.getHarvestMood()) {
+//                    //todo: call harvest method here
+//                }
 
                 return true;
             }
@@ -113,40 +115,36 @@ public class TileActor extends Group {
     @Override
     public void draw(Batch batch, float parentAlpha) {
 
-        batch.end();
+        if (screen.getHarvestMood() && inTile) {
 
-        Gdx.gl.glEnable(GL20.GL_BLEND);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+            batch.end();
 
-        shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
-        shapeRenderer.setTransformMatrix(batch.getTransformMatrix());
+            shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+            shapeRenderer.setTransformMatrix(batch.getTransformMatrix());
 
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(1f, 1f, 1f, 0.25f);
 
-        updateColor();
+            shapeRenderer.rect(
+                getX(),
+                getY(),
+                getWidth(),
+                getHeight()
+            );
 
-//        shapeRenderer.rect(PlayScreen.BOARD_X + (tile.getRow() - 1) * PlayScreen.TILE_WIDTH,
-//            PlayScreen.BOARD_Y + (tile.getColumn() - 1) * PlayScreen.TILE_HEIGHT, PlayScreen.TILE_WIDTH, PlayScreen.TILE_HEIGHT);
-        shapeRenderer.rect(getX(), getY(), getWidth(), getHeight());
-        shapeRenderer.end();
+            shapeRenderer.end();
 
-        Gdx.gl.glDisable(GL20.GL_BLEND);
-
-        batch.begin();
+            batch.begin();
+        }
 
         super.draw(batch, parentAlpha);
     }
 
-    public void updateColor() {
-        if (inTile) {
-            shapeRenderer.setColor(1, 1, 1, 0.4f);
-        } else {
-            shapeRenderer.setColor(1, 1, 1, 0f);
-        }
-
-    }
-
     public Tile getTile() {
         return tile;
+    }
+
+    public void setInTile(Boolean inTile) {
+        this.inTile = inTile;
     }
 }

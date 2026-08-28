@@ -67,6 +67,7 @@ public class PlayScreen extends BaseScreen {
     public void show() {
         super.show();
 
+        gameMapView = new GameMapView(game, this, currentLevel, textures, backgroundImage, stage);
         plantSelectionController = new PlantSelectionController(currentLevel);
         gameMapView = new GameMapView(game, this, currentLevel, textures, backgroundImage, stage);
         environmentView = new EnvironmentView(game, currentLevel, textures);
@@ -162,6 +163,7 @@ public class PlayScreen extends BaseScreen {
 
             if (harvestMood) {
                 updateShovelCursor();
+                gameMapView.updateTile();
             }
 
             String message = GameManagerController.getInstance().updateObjects(adjustedSpeed);
