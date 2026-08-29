@@ -82,4 +82,7 @@ public class PlantSelectionController {
         return error;
     }
 
+    public PlantController getPlantController() {
+        return plantController;
+    }
 }

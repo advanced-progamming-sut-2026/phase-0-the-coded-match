@@ -39,8 +39,7 @@ public class TileActor extends Group {
                 if (!screen.getHarvestMood()) {
                     return;
                 }
-                System.out.println("ENTER TILE: " + tile.getRow()
-                    + ", " + tile.getColumn());
+
                 inTile = true;
             }
 
@@ -50,9 +49,10 @@ public class TileActor extends Group {
                     return false;
                 }
 
-//                if (screen.getHarvestMood()) {
-//                    //todo: call harvest method here
-//                }
+                if (screen.getHarvestMood()) {
+                    plantSelectionController.getPlantController().pluckPlant(tile);
+                    //todo: remove plant animation too
+                }
 
                 return true;
             }
@@ -107,9 +107,6 @@ public class TileActor extends Group {
 //            }
 //        });  TODO: I made these for placing the plants but when i pulled someone wrote the same methods in a
 //                   different way i'll keep this here but if its useles delete it later on !!
-
-
-//
     }
 
     @Override
@@ -119,11 +116,14 @@ public class TileActor extends Group {
 
             batch.end();
 
+            Gdx.gl.glEnable(GL20.GL_BLEND);
+            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+
             shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
             shapeRenderer.setTransformMatrix(batch.getTransformMatrix());
 
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-            shapeRenderer.setColor(1f, 1f, 1f, 0.25f);
+            shapeRenderer.setColor(1f, 1f, 1f, 0.5f);
 
             shapeRenderer.rect(
                 getX(),
@@ -133,6 +133,8 @@ public class TileActor extends Group {
             );
 
             shapeRenderer.end();
+
+            Gdx.gl.glDisable(GL20.GL_BLEND);
 
             batch.begin();
         }

@@ -1,6 +1,7 @@
 package PvZ2.APproject.models;
 
 import PvZ2.APproject.enums.LevelType;
+import PvZ2.APproject.enums.SpecialLevelType;
 import PvZ2.APproject.models.GameMapRelated.GameMap;
 import PvZ2.APproject.models.seasons.Season;
 
@@ -11,6 +12,7 @@ public class LevelData {
     private String name;
     private int levelNumber;
     private LevelType levelType;
+    private SpecialLevelType specialLevelType;
     private boolean isUnlocked;
     private int waveCount;
     private int baseWaveCost;
@@ -35,6 +37,10 @@ public class LevelData {
 
     public LevelType getLevelType() {
         return levelType;
+    }
+
+    public SpecialLevelType getSpecialLevelType() {
+        return specialLevelType;
     }
 
     public int getWaveCount() {

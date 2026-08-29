@@ -121,24 +121,16 @@ public class PlantController {
         System.out.println("all plant cooldowns removed");
     }
 
-    public void pluckPlant(String input) {
-        Matcher matcher = Pattern.compile(Commands.PLUCK_PLANT.getPattern()).matcher(input);
-        if (!matcher.matches()) {
-            System.out.println("invalid command");
-            return;
-        }
-        int x = Integer.parseInt(matcher.group("x"));
-        int y = Integer.parseInt(matcher.group("y"));
+    public void pluckPlant(Tile tile) {
+        int x = tile.getColumn();
+        int y = tile.getRow();
         Plant plant = findPlant(x, y);
         if (plant == null) {
             System.out.println("there is no plant at this location");
             return;
         }
         currentLevel.getActivePlants().remove(plant);
-        Tile tile = currentLevel.getGameMap().getTile(x, y);
-        if (tile != null) {
-            tile.removePlant();
-        }
+        tile.removePlant();
         System.out.println("Plant " + plant.getData().getDisplayName() + " at (" + x + ", " + y + ") removed");
     }
 

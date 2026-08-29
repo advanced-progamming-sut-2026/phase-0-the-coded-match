@@ -2,13 +2,12 @@ package PvZ2.APproject.views.screens;
 
 import PvZ2.APproject.Main;
 import PvZ2.APproject.controllers.GameManagerController;
-import PvZ2.APproject.controllers.PlantController;
 import PvZ2.APproject.controllers.PlantSelectionController;
 import PvZ2.APproject.enums.Menu;
 import PvZ2.APproject.enums.ScreenRelated.GameState;
+import PvZ2.APproject.enums.SpecialLevelType;
 import PvZ2.APproject.models.*;
 import PvZ2.APproject.models.GameMapRelated.Lawnmower;
-import PvZ2.APproject.models.plants.Plant;
 import PvZ2.APproject.models.plants.PlantData;
 import PvZ2.APproject.models.plants.PlantRepository;
 import PvZ2.APproject.models.zombies.Zombie;
@@ -19,6 +18,7 @@ import PvZ2.APproject.views.actors.PlantBox;
 import PvZ2.APproject.views.actors.SunActor;
 import PvZ2.APproject.views.menus.ChoosePlantsMenu;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -26,7 +26,6 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import pvz.skin.BorderedTable;
 
 import java.util.HashMap;
@@ -71,7 +70,7 @@ public class PlayScreen extends BaseScreen {
         backgroundImage.setFillParent(true);
         stage.addActor(backgroundImage);
         stage.addActor(gameMapView);
-        createPlantBoxes();
+        setupSpecialLevel();
 
         messageNotif = new Label("", skin, "promo_ribbon");
         messageNotif.setVisible(false);
@@ -167,6 +166,7 @@ public class PlayScreen extends BaseScreen {
             updateZombieActors();
             updateSunActors();
             updateLawnmowerActors();
+            createPlantBoxes();
         }
 
         createPauseButton();
@@ -301,6 +301,21 @@ public class PlayScreen extends BaseScreen {
 
         if (lawnmowerActor != null) {
             lawnmowerActor.remove();
+        }
+    }
+
+    public void setupSpecialLevel() {
+        switch (currentLevel.getData().getSpecialLevelType()) {
+            case SpecialLevelType.SAVE_OUR_SEEDS -> {
+                Image dangerTile = new Image(
+                    new TextureRegionDrawable(
+                        textures.region("IMAGE_BACKGROUNDS_PROTECT_TILE_PROTECT_TILE_112X125")
+                    )
+                );
+
+            }
+
+
         }
     }
 

@@ -9,8 +9,8 @@
       "QUESTION1": "red"
     },
     "gamesPlayedCount": 0,
-    "coinsCount": 2500,
-    "gemsCount": 960,
+    "coinsCount": 7500,
+    "gemsCount": 872,
     "levelsCount": 0,
     "meowPoints": 0,
     "lastLevelNumber": 0,
@@ -33,7 +33,9 @@
         "ZombieProspector",
         "ZombieBarrelRoller",
         "ZombieArmor4",
-        "ZombieModernAllStar"
+        "ZombieModernAllStar",
+        "ZombieArmor2",
+        "ZombieDarkArmor3"
       ],
       "availablePlantsIds": [
         "peashooter",
@@ -322,37 +324,29 @@
             "x": 1,
             "y": 2,
             "isLocked": false,
-            "status": "GROWING",
-            "plantType": "peashooter",
-            "plantedTimestamp": 1787918897,
-            "growthDurationHours": 8
+            "status": "EMPTY",
+            "growthDurationHours": 0
           },
           {
             "x": 2,
             "y": 2,
             "isLocked": false,
-            "status": "GROWING",
-            "plantType": "sunflower",
-            "plantedTimestamp": 1787918875,
-            "growthDurationHours": 8
+            "status": "EMPTY",
+            "growthDurationHours": 0
           },
           {
             "x": 3,
             "y": 2,
             "isLocked": false,
-            "status": "GROWING",
-            "plantType": "marigold",
-            "plantedTimestamp": 1787918840,
-            "growthDurationHours": 2
+            "status": "EMPTY",
+            "growthDurationHours": 0
           },
           {
             "x": 4,
             "y": 2,
             "isLocked": false,
-            "status": "GROWING",
-            "plantType": "marigold",
-            "plantedTimestamp": 1787918865,
-            "growthDurationHours": 2
+            "status": "EMPTY",
+            "growthDurationHours": 0
           }
         ],
         [
@@ -360,37 +354,29 @@
             "x": 1,
             "y": 3,
             "isLocked": false,
-            "status": "GROWING",
-            "plantType": "sunflower",
-            "plantedTimestamp": 1787918891,
-            "growthDurationHours": 8
+            "status": "EMPTY",
+            "growthDurationHours": 0
           },
           {
             "x": 2,
             "y": 3,
             "isLocked": false,
-            "status": "GROWING",
-            "plantType": "wallnut",
-            "plantedTimestamp": 1787918888,
-            "growthDurationHours": 8
+            "status": "EMPTY",
+            "growthDurationHours": 0
           },
           {
             "x": 3,
             "y": 3,
             "isLocked": false,
-            "status": "GROWING",
-            "plantType": "marigold",
-            "plantedTimestamp": 1787918867,
-            "growthDurationHours": 2
+            "status": "EMPTY",
+            "growthDurationHours": 0
           },
           {
             "x": 4,
             "y": 3,
             "isLocked": false,
-            "status": "GROWING",
-            "plantType": "marigold",
-            "plantedTimestamp": 1787918884,
-            "growthDurationHours": 2
+            "status": "EMPTY",
+            "growthDurationHours": 0
           }
         ]
       ]

@@ -2,6 +2,7 @@ package PvZ2.APproject.models;
 
 import PvZ2.APproject.controllers.ZombieWaveManager;
 import PvZ2.APproject.enums.LevelType;
+import PvZ2.APproject.enums.SpecialLevelType;
 import PvZ2.APproject.models.GameMapRelated.GameMap;
 import PvZ2.APproject.models.GameMapRelated.SkySunProducer;
 import PvZ2.APproject.models.GameMapRelated.Tile;
@@ -73,22 +74,22 @@ public class Level {
     public void setUpSpecialLevel(){
         Random random = new Random();
         if(this.data.getLevelType() == LevelType.SPECIAL) {
-            switch (data.getName()) {
-                case "NIGHT_OPS":
+            switch (data.getSpecialLevelType()) {
+                case SpecialLevelType.NIGHT_OPS:
                     this.specialLevel = new NightOpsStrategy();
                     break;
-                case "DEAD_LINE":
+                case SpecialLevelType.DEAD_LINE:
                     int deadLine = random.nextInt(6);
                     this.specialLevel = new DeadLineStrategy(deadLine); // e.g., column 4 is the deadline
                     break;
-                case "LOVE_YOUR_PLANTS":
+                case SpecialLevelType.LOVE_YOUR_PLANTS:
                     int maxLoss = random.nextInt(6);
                     this.specialLevel = new LoveYourPlantsStrategy(maxLoss); // e.g., max 5 plants lost
                     break;
-                case "SAVE_OUR_SEEDS":
+                case SpecialLevelType.SAVE_OUR_SEEDS:
                     this.specialLevel = new SaveOurSeedsStrategy();
                     break;
-                case "LOCKED_PLANTS_LEVEL":
+                case SpecialLevelType.LOCKED_PLANTS_LEVEL:
                     this.specialLevel = new LockedPlantsLevel();
                     break;
                 default:
@@ -313,6 +314,6 @@ public class Level {
     }
 
     public boolean isDay(){
-        return !this.getData().getName().toLowerCase().contains("dark ages") && !(specialLevel instanceof NightOpsStrategy);
+        return !this.getData().getId().toLowerCase().contains("dark_level") && !(specialLevel instanceof NightOpsStrategy);
     }
 }
