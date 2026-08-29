@@ -1,14 +1,21 @@
 package PvZ2.APproject.models.seasons;
 
 import PvZ2.APproject.enums.PlantTag;
+import PvZ2.APproject.enums.TileType;
+import PvZ2.APproject.models.GameMapRelated.GameMap;
+import PvZ2.APproject.models.GameMapRelated.Tile;
 import PvZ2.APproject.models.Level;
 import PvZ2.APproject.models.Projectile;
 import PvZ2.APproject.models.plants.Plant;
 import PvZ2.APproject.models.zombies.Zombie;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 public final class FrostbiteCaves extends Season {
+    private int slipperyTileCount = 8;
 
     public FrostbiteCaves(SeasonData data) {
         super(data);
@@ -23,11 +30,35 @@ public final class FrostbiteCaves extends Season {
 
     @Override
     public void LevelStarted(Level level) {
+        initializeSlipperyTiles(level);
         for(Zombie zombie : level.getActiveZombies()){
             if(zombieShouldBeFrozen(zombie)){
                 zombie.setFrozenInBlock(true);
                 zombie.setBlockIceHP(60);
             }
+        }
+    }
+
+    private void initializeSlipperyTiles(Level level) {
+        GameMap map = level.getGameMap();
+        List<Tile> availableTiles = new ArrayList<>();
+
+        for (int row = 1; row <= map.getRows(); row++) {
+            for (int col = 1; col <= map.getColumns(); col++) {
+
+                Tile tile = map.getTile(col, row);
+
+                if (tile != null && tile.getType() == TileType.NORMAL) {
+                    availableTiles.add(tile);
+                }
+            }
+        }
+
+        Collections.shuffle(availableTiles);
+
+        int tilesToMakeSlippery = Math.min(slipperyTileCount, availableTiles.size());
+        for (int i = 0; i < tilesToMakeSlippery; i++) {
+            availableTiles.get(i).setSlippery(true);
         }
     }
 
@@ -37,7 +68,7 @@ public final class FrostbiteCaves extends Season {
     }
 
     @Override
-    public void Update(Level level) {
+    public void Update(Level level, float delta) {
 
         for(Projectile projectile : level.getActiveProjectiles()){
             int x = (int) projectile.getxCoordinate();
@@ -58,7 +89,7 @@ public final class FrostbiteCaves extends Season {
         for(Plant plant : level.getActivePlants()){
             if(plant.isFullyFrozen()){
                 if(hasNeighboringFirePlant(level, plant)){
-                    plant.decreaseIceHP(6); // later on work with delta time;
+                    plant.decreaseIceHP((int) (6*delta));
                 }
             }
         }
@@ -80,7 +111,7 @@ public final class FrostbiteCaves extends Season {
     @Override
     public void WaveStarted(Level level, int waveNumber) {
         Random random = new Random();
-         int randomRow = 1 + random.nextInt(level.getGameMap().getRows());
+        int randomRow = 1 + random.nextInt(level.getGameMap().getRows());
         int affectedRows = random.nextInt(2) + 1;
         for (int i = 0; i < affectedRows; i++) {
             for (Plant plant : level.getActivePlants()) {
@@ -89,6 +120,11 @@ public final class FrostbiteCaves extends Season {
                 }
             }
         }
+        level.triggerEnvironmentEvent(
+            EnvironmentEvent.EnvironmentEventType.ICE_WIND,
+            1.5f
+//           ,affectedRows
+        );
 
     }
 

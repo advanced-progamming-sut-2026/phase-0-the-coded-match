@@ -50,10 +50,14 @@ public final class BigWaveBeach extends Season {
                 }
             }
         }
+        level.triggerEnvironmentEvent(
+            EnvironmentEvent.EnvironmentEventType.TIDE,
+            1.5f
+        );
     }
 
     @Override
-    public void Update(Level level) {
+    public void Update(Level level, float delta) {
         int rows = level.getGameMap().getRows();
         int cols = level.getGameMap().getColumns();
 
@@ -116,6 +120,10 @@ public final class BigWaveBeach extends Season {
             Zombie lowTideZombie = new Zombie (ZombieRepository.getInstance().findById(name), randomCol, randomRow);
             level.getActiveZombies().add(lowTideZombie);
         }
+        level.triggerEnvironmentEvent(
+            EnvironmentEvent.EnvironmentEventType.TIDE,
+            1.5f
+        );
     }
 
     @Override

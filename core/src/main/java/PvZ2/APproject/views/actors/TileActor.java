@@ -105,7 +105,7 @@ public class TileActor extends Group {
 //                    System.out.println(error);
 //                }
 //            }
-//        });  TODO: I made these for placing the plants but when i pulled someone wrote the same methods in a
+//        });  TODO: I made these for placing the plants (planting) but when i pulled someone wrote the same methods in a
 //                   different way i'll keep this here but if its useles delete it later on !!
     }
 

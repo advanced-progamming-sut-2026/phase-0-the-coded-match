@@ -30,14 +30,14 @@ public final class AncientEgypt extends Season {
                 Tile tile = level.getGameMap().getTile(c, r);
 
                 if(tile != null && tile.getType() == TileType.GRAVE){
-                    tile.setGrave(true);
+                    tile.setGrave(true, Tile.GraveReward.NONE);
                 }
             }
         }
     }
 
     @Override
-    public void Update(Level level) {
+    public void Update(Level level, float delta) {
 //        for(Projectile projectile : level.getActiveProjectiles()){
 //            int row = (int) projectile.getyCoordinate();
 //            int col = (int) projectile.getxCoordinate();
@@ -55,6 +55,7 @@ public final class AncientEgypt extends Season {
     @Override
     public void WaveStarted(Level level, int waveNumber) {
         if(waveNumber == level.getData().getWaveCount() - 1){
+            boolean sandstormOccurred = false;
             for(Zombie zombie : level.getActiveZombies()){
                 if(checkZombieForSandstorm(zombie)){
                     Random random = new Random();
@@ -67,7 +68,14 @@ public final class AncientEgypt extends Season {
                     }
 
                     zombie.setX(newCol);
+                    sandstormOccurred = true;
                 }
+            }
+            if (sandstormOccurred) {
+                level.triggerEnvironmentEvent(
+                    EnvironmentEvent.EnvironmentEventType.SANDSTORM,
+                    1.5f
+                );
             }
         }
     }
@@ -84,7 +92,6 @@ public final class AncientEgypt extends Season {
         if(tile != null && tile.isGrave()){
             System.out.println("Cannot place a plant on top of a grave");
         }
-        // double check if we should add a plant here or the main manager does it itself?
 
     }
 
