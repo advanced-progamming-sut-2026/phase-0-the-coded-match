@@ -58,7 +58,7 @@ public class Level {
         this.activeZombies = new ArrayList<>();
         this.activePlants = new ArrayList<>();
         this.activeSuns = new ArrayList<>();
-        this.collectedSunsAmount = 0;
+        this.collectedSunsAmount = 50;
         this.currentSeason = data.getType();
         this.currentTick = 0;
         this.zombieWave = new ZombieWaveManager(this);

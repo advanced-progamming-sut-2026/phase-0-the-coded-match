@@ -1,6 +1,5 @@
 package PvZ2.APproject.controllers;
 
-import PvZ2.APproject.Main;
 import PvZ2.APproject.controllers.menus.SignupMenuController;
 import PvZ2.APproject.enums.Commands;
 import PvZ2.APproject.enums.LevelType;
@@ -21,8 +20,6 @@ import PvZ2.APproject.models.plants.PlantData;
 import PvZ2.APproject.models.plants.PlantRepository;
 import PvZ2.APproject.models.seasons.Season;
 import PvZ2.APproject.models.zombies.*;
-import PvZ2.APproject.views.screens.GameMenuScreen;
-import PvZ2.APproject.views.screens.PlayScreen;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -38,7 +35,7 @@ public class GameManagerController {
     private Level currentLevel;
     private static boolean cooldownRemoved;
     private static final Map<String, Integer> plantCooldowns = new HashMap<>();
-    private static boolean isGameOver = false;
+    private static boolean isGameEnded = false;
 
     public static GameManagerController getInstance() {
         if (instance == null) {
@@ -101,7 +98,7 @@ public class GameManagerController {
             decreasePlantCooldowns();
             updateSeason(delta);
             updatePlants(delta);
-            if (isIsGameOver()) {
+            if (isIsGameEnded()) {
                 return dropMessage;
             }
             updateBarrels(delta);
@@ -509,7 +506,7 @@ public class GameManagerController {
     }
 
     public void gameOver() {
-        isGameOver = true;
+        isGameEnded = true;
         if (BonusGameController.isActive()) {
             System.out.println(BonusGameController.endGame());
             return;
@@ -517,10 +514,11 @@ public class GameManagerController {
         App.getCurrentUser().setVictroy(false);
         SignupMenuController.saveToJson();
         App.setCurrentMenu(Menu.GAME_MENU);
-        this.currentLevel = null;
+//        this.currentLevel = null;
     }
 
     public String gameWon(){
+        isGameEnded = true;
         if (showSunsAmount() == 0) {
             QuestController.notifyNoSunsLeft();
         }
@@ -684,7 +682,11 @@ public class GameManagerController {
         System.out.println("Planted " + plantName + " at (" + x + ", " + y + ")");
     }
 
-    public boolean isIsGameOver() {
-        return isGameOver;
+    public boolean isIsGameEnded() {
+        return isGameEnded;
+    }
+
+    public void setIsGameEnded(boolean isGameEnded) {
+        GameManagerController.isGameEnded = isGameEnded;
     }
 }

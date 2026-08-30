@@ -112,7 +112,8 @@ public class ZombieWaveManager implements Update {
         currentWave++;
         previousWaveZombies.clear();
         if (currentWave >= wavePattern.size()) {
-            GameManagerController.getInstance().gameWon(); return;
+            GameManagerController.getInstance().gameWon();
+            return;
         }
         isLastWave = currentWave == wavePattern.size() - 1;
         newWaveStarted = true;

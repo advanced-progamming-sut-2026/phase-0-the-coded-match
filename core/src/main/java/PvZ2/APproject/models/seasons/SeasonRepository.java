@@ -2,11 +2,13 @@ package PvZ2.APproject.models.seasons;
 
 
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Reader;
 import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import PvZ2.APproject.utils.AssetPaths;
+import com.badlogic.gdx.Gdx;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -20,16 +22,19 @@ public class SeasonRepository {
 
     public static SeasonRepository getInstance() {
         if (instance == null) {
-            instance = new SeasonRepository("assets/Seasons.json");
+            instance = new SeasonRepository("Seasons.json");
         }
         return instance;
     }
 
     private List<SeasonData> loadSeasons(String jsonPath) {
         Gson gson = new Gson();
-        try (Reader reader = AssetPaths.reader(jsonPath)) {
-            Type listType = new TypeToken<ArrayList<SeasonData>>(){}.getType();
+
+        try (Reader reader = new InputStreamReader(Gdx.files.internal(jsonPath).read(), StandardCharsets.UTF_8)) {
+            Type listType = new TypeToken<ArrayList<SeasonData>>() {}.getType();
+
             return gson.fromJson(reader, listType);
+
         } catch (IOException e) {
             System.err.println("Failed to load seasons JSON: " + e.getMessage());
             return new ArrayList<>();

@@ -8,7 +8,6 @@ import PvZ2.APproject.enums.ScreenRelated.GameState;
 import PvZ2.APproject.enums.SpecialLevelType;
 import PvZ2.APproject.models.*;
 import PvZ2.APproject.models.GameMapRelated.Lawnmower;
-import PvZ2.APproject.models.plants.Plant;
 import PvZ2.APproject.models.plants.PlantData;
 import PvZ2.APproject.models.plants.PlantRepository;
 import PvZ2.APproject.models.zombies.Zombie;
@@ -20,7 +19,6 @@ import PvZ2.APproject.views.actors.PlantBox;
 import PvZ2.APproject.views.actors.SunActor;
 import PvZ2.APproject.views.menus.ChoosePlantsMenu;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -214,13 +212,36 @@ public class PlayScreen extends BaseScreen {
         }
 
         stage.addActor(waveProgressGroup);
+
+        switch (currentLevel.getData().getSpecialLevelType()) {
+            case SpecialLevelType.SAVE_OUR_SEEDS -> {
+                showMessage("Save endangered plants");
+            }
+
+            case SpecialLevelType.DEAD_LINE -> {
+                showMessage("Don't let zombies pass the deadline");
+            }
+
+            case SpecialLevelType.LOVE_YOUR_PLANTS -> {
+                showMessage("Don't let zombies eat specific plants count");
+            }
+
+            default -> {
+                showMessage("Defeat all zombies");
+            }
+        }
     }
 
     @Override
     public void render(float delta) {
 
-        if (GameManagerController.getInstance().isIsGameOver()) {
-            gameOver();
+        if (state == GameState.ENDED) {
+            pauseStage.act(delta);
+            pauseStage.draw();
+        }
+
+        if (GameManagerController.getInstance().isIsGameEnded()) {
+            gameEnded();
             return;
         }
 
@@ -242,18 +263,30 @@ public class PlayScreen extends BaseScreen {
             }
 
             updateZombieActors();
+            if (GameManagerController.getInstance().isIsGameEnded()) {
+                gameEnded();
+                return;
+            }
             updateSunActors();
+            if (GameManagerController.getInstance().isIsGameEnded()) {
+                gameEnded();
+                return;
+            }
             updateLawnmowerActors();
+            if (GameManagerController.getInstance().isIsGameEnded()) {
+                gameEnded();
+                return;
+            }
             updateWaveProgressBar();
-            if (GameManagerController.getInstance().isIsGameOver()) {
-                gameOver();
+            if (GameManagerController.getInstance().isIsGameEnded()) {
+                gameEnded();
                 return;
             }
             createPlantBoxes();
             sunAmount.setText(Integer.toString(currentLevel.getCollectedSunsAmount()));
+            createPauseButton();
         }
 
-        createPauseButton();
 
         if (state == GameState.PAUSED) {
             pauseStage.act(delta);
@@ -431,8 +464,79 @@ public class PlayScreen extends BaseScreen {
         game.setScreen(new GameMenuScreen(game));
     }
 
-    public void gameOver() {
-        game.setScreen(new GameMenuScreen(game));
+    public void gameEnded() {
+        state = GameState.ENDED;
+        if (App.getCurrentUser().isVictroy()) {
+            showGameWon();
+        } else {
+            showGameOver();
+        }
+        Gdx.input.setInputProcessor(pauseStage);
+        App.getCurrentUser().setVictroy(false);
+        GameManagerController.getInstance().setIsGameEnded(false);
+    }
+
+    public void showGameWon() {
+        pauseStage.clear();
+
+        Table mainPauseTable = new Table(skin);
+        mainPauseTable.setFillParent(true);
+        BorderedTable pauseTable = new BorderedTable();
+
+        Label pauseLabel = new Label(
+            "Dear humanz, zis is not done yet; we will come back to eat your brainz, humanz.",
+            skin, "big");
+        TextButton exitBtn = new TextButton("EXIT", skin, "purple");
+
+        pauseTable.add(pauseLabel).row();
+        pauseTable.add(exitBtn).row();
+        pauseTable.center();
+        pauseTable.pack();
+        mainPauseTable.add(pauseTable);
+
+        pauseStage.addActor(mainPauseTable);
+
+        exitBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                exitGame();
+            }
+        });
+    }
+
+    public void showGameOver() {
+        pauseStage.clear();
+
+        Table mainPauseTable = new Table(skin);
+        mainPauseTable.setFillParent(true);
+        BorderedTable pauseTable = new BorderedTable();
+
+        Label pauseLabel = new Label("The zombie ate your brain; LOSER!!!", skin, "big");
+        TextButton restartBtn = new TextButton("RESTART", skin, "brown");
+        TextButton exitBtn = new TextButton("EXIT", skin, "brown");
+
+        pauseTable.add(pauseLabel).row();
+        pauseTable.add(restartBtn).row();
+        pauseTable.add(exitBtn).row();
+        pauseTable.center();
+        pauseTable.pack();
+        mainPauseTable.add(pauseTable);
+
+        pauseStage.addActor(mainPauseTable);
+
+        exitBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                exitGame();
+            }
+        });
+
+        restartBtn.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                restartGame();
+            }
+        });
     }
 
     public Level getCurrentLevel() {

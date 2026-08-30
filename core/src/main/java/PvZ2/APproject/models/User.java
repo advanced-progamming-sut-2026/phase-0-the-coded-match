@@ -49,6 +49,8 @@ public class User {
         this.email = email;
         this.gender = gender;
         this.questions = new HashMap<>();
+        this.coinsCount = 1000;
+        this.gemsCount = 100;
         this.difficultyLevel = 3;
         this.collection = new Collection();
         this.shop = new Shop();
