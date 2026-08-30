@@ -67,7 +67,10 @@ public class ZombieView extends Actor {
             }
         }
 
-        setPosition(PlayScreen.BOARD_X + (float) zombie.getX()*PlayScreen.TILE_WIDTH, PlayScreen.BOARD_Y+ zombie.getY()*PlayScreen.TILE_HEIGHT);
+        setPosition(
+            PlayScreen.BOARD_X + (float) zombie.getX()*PlayScreen.TILE_WIDTH,
+            PlayScreen.BOARD_Y+ zombie.getY()*PlayScreen.TILE_HEIGHT
+        );
     }
 
     @Override

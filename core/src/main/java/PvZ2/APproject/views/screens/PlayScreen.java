@@ -22,6 +22,7 @@ import PvZ2.APproject.views.menus.ChoosePlantsMenu;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -52,6 +53,8 @@ public class PlayScreen extends BaseScreen {
     private Image shovelCursor;
     private float stateTime = 0f;
     private Boolean harvestMode = false;
+    private Label sunAmount;
+    private ProgressBar waveProgressBar;
 
     private Map<Sun, SunActor> renderedSuns = new HashMap<>();
     private Map<Lawnmower, LawnmowerActor> renderedLawnmowers = new HashMap<>();
@@ -150,6 +153,67 @@ public class PlayScreen extends BaseScreen {
             }
         });
 
+        addCurrencyBar();
+
+        Table sunAmountTable = new Table(skin);
+
+        Image sunImage = new Image(
+            new TextureRegionDrawable(
+                textures.region("IMAGE_UI_SEASONS_UNCOMPRESSED_PVZ2_SEASONS_UIASSET_ICON_SUN")
+            )
+        );
+        sunAmount = new Label(Integer.toString(currentLevel.getCollectedSunsAmount()), skin, "default");
+
+        sunAmountTable.add(sunImage).size(36, 36);
+        sunAmountTable.add(sunAmount);
+        sunAmountTable.pack();
+        sunAmountTable.setPosition(
+            sunAmountTable.getWidth() + 20, VIRTUAL_HEIGHT - sunAmountTable.getHeight() - 10);
+
+        stage.addActor(sunAmountTable);
+
+        Group waveProgressGroup = new Group();
+
+        waveProgressBar = new ProgressBar(0, currentLevel.getZombieWave().getWavePattern().size(), 0.01f,
+            false, skin, "ingame_progress");
+
+        waveProgressBar.setSize(300, 40);
+        waveProgressGroup.setSize(300, 70);
+        waveProgressGroup.setPosition(VIRTUAL_WIDTH - waveProgressBar.getWidth() - 100, waveProgressBar.getHeight() - 20);
+        waveProgressGroup.addActor(waveProgressBar);
+
+        int waveCount = currentLevel.getZombieWave().getWavePattern().size();
+
+        for (int i = 0; i < waveCount; i++) {
+
+            if (i == waveCount - 1) {
+                continue;
+            }
+
+            Image flag = new Image(
+                new TextureRegionDrawable(
+                    textures.region("IMAGE_ZOMBIE_ZOMBIE_BIGHEAD_FLAG_ZOMBIE_BIGHEAD_FLAG_123X95")
+                )
+            );
+
+            float x;
+
+            if (waveCount == 1) {
+                x = waveProgressBar.getWidth() / 2f;
+            } else {
+                x = i * waveProgressBar.getWidth() / (waveCount - 1f);
+            }
+
+            x -= flag.getWidth() / 2f;
+
+            flag.setPosition(x + 30, waveProgressBar.getHeight() - 30);
+
+            flag.setSize(25, 35);
+
+            waveProgressGroup.addActor(flag);
+        }
+
+        stage.addActor(waveProgressGroup);
     }
 
     @Override
@@ -180,11 +244,13 @@ public class PlayScreen extends BaseScreen {
             updateZombieActors();
             updateSunActors();
             updateLawnmowerActors();
+            updateWaveProgressBar();
             if (GameManagerController.getInstance().isIsGameOver()) {
                 gameOver();
                 return;
             }
             createPlantBoxes();
+            sunAmount.setText(Integer.toString(currentLevel.getCollectedSunsAmount()));
         }
 
         createPauseButton();
@@ -197,7 +263,8 @@ public class PlayScreen extends BaseScreen {
 
     public void createPauseButton() {
         ImageButton pauseButton = new ImageButton(skin, "ingame_pause");
-        pauseButton.setPosition(VIRTUAL_WIDTH - pauseButton.getWidth() - 20, VIRTUAL_HEIGHT - pauseButton.getHeight() - 20);
+        pauseButton.setPosition(
+            VIRTUAL_WIDTH - pauseButton.getWidth() - 20, VIRTUAL_HEIGHT - pauseButton.getHeight() - 50);
         stage.addActor(pauseButton);
 
         pauseButton.addListener(new ClickListener() {
@@ -305,6 +372,20 @@ public class PlayScreen extends BaseScreen {
 
         shovelCursor.setPosition(mousePosition.x - shovelCursor.getWidth() / 2f,
             mousePosition.y - shovelCursor.getHeight() / 2f);
+    }
+
+    private void updateWaveProgressBar() {
+        int totalWaves = currentLevel.getZombieWave().getWavePattern().size();
+
+        if (totalWaves <= 0) {
+            return;
+        }
+
+        float progress = (currentLevel.getZombieWave().getCurrentWave() + 1f) / totalWaves;
+
+        progress = Math.min(progress, 1f);
+
+        waveProgressBar.setValue(totalWaves - progress * totalWaves);
     }
 
     public void removeSunActor(Sun sun) {

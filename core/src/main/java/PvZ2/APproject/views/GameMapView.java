@@ -46,7 +46,8 @@ public class GameMapView extends Group {
     private Skin skin;
     private Label plantCount;
 
-    public GameMapView(Main game, PlayScreen screen, Level currentLevel, TextureBank textures, Image backgroundImage, Stage stage, Skin skin) {
+    public GameMapView(Main game, PlayScreen screen, Level currentLevel, TextureBank textures,
+                       Image backgroundImage, Stage stage, Skin skin) {
         this.game = game;
         this.screen = screen;
         this.plantSelectionController = screen.getPlantSelectionController();
@@ -147,9 +148,11 @@ public class GameMapView extends Group {
         super.act(delta);
 
         if (currentLevel.getData().getSpecialLevelType() == SpecialLevelType.LOVE_YOUR_PLANTS) {
-            LoveYourPlantsStrategy loveYourPlantsStrategy = (LoveYourPlantsStrategy) currentLevel.getSpecialLevelStrategy();
+            LoveYourPlantsStrategy loveYourPlantsStrategy =
+                (LoveYourPlantsStrategy) currentLevel.getSpecialLevelStrategy();
 
-            plantCount.setText("Plants Lost:\n" + loveYourPlantsStrategy.getLostPlantsCount() + "/" + loveYourPlantsStrategy.getMaxAllowedLosses());
+            plantCount.setText("Plants Lost:\n" + loveYourPlantsStrategy.getLostPlantsCount() +
+                "/" + loveYourPlantsStrategy.getMaxAllowedLosses());
         }
     }
 
@@ -171,40 +174,94 @@ public class GameMapView extends Group {
                 float y = tileActor.getY();
 
                 if(tile.getType() == TileType.WATER){
-                    batch.draw(textures.region("IMAGE_UI_CARDS_BACKGROUNDS_CARD_PLANT_BG_BEACH_WATER"), x - 5 , y - 10, PlayScreen.TILE_WIDTH, PlayScreen.TILE_HEIGHT);
+                    batch.draw(
+                        textures.region("IMAGE_UI_CARDS_BACKGROUNDS_CARD_PLANT_BG_BEACH_WATER"),
+                        x - 5 ,
+                        y - 10,
+                        PlayScreen.TILE_WIDTH,
+                        PlayScreen.TILE_HEIGHT
+                    );
                     continue;
                 }
 
                 if(tile.isSlippery()){
-                    batch.draw(textures.region("IMAGE_EFFECTS_ZOMBONI_TILE_ICE_ZOMBONI_TILE_ICE_133X157"), x - 5 , y - 10, PlayScreen.TILE_WIDTH, PlayScreen.TILE_HEIGHT);
+                    batch.draw(
+                        textures.region("IMAGE_EFFECTS_ZOMBONI_TILE_ICE_ZOMBONI_TILE_ICE_133X157"),
+                        x - 5 ,
+                        y - 10,
+                        PlayScreen.TILE_WIDTH,
+                        PlayScreen.TILE_HEIGHT
+                    );
                     continue;
                 }
 
                 if(tile.holdsNecromancyPotential()){
-                    batch.draw(textures.region("IMAGE_NPC_GHOSTPEPPER_GHOSTPEPPER_277X309"), x, y, 50, 70);
+                    batch.draw(
+                        textures.region("IMAGE_NPC_GHOSTPEPPER_GHOSTPEPPER_277X309"),
+                        x,
+                        y,
+                        50,
+                        70
+                    );
                 } // TODO : when it holds the necromancy potential maybe it should show on the tile otherwise theres no need
 
                 if(tile.isGrave() && tile.getType() == TileType.GRAVE){
                     if(tile.holdsNecromancyPotential()){
-                        batch.draw(textures.region("IMAGE_GRAVESTONES_TUTORIAL_GRAVESTONE_TUTORIAL_GRAVESTONE_101X159"), x, y, PlayScreen.TILE_WIDTH, PlayScreen.TILE_HEIGHT);
+                        batch.draw(
+                            textures.region("IMAGE_GRAVESTONES_TUTORIAL_GRAVESTONE_TUTORIAL_GRAVESTONE_101X159"),
+                            x,
+                            y,
+                            PlayScreen.TILE_WIDTH,
+                            PlayScreen.TILE_HEIGHT
+                        );
                         continue;
                     }
                     switch(tile.getGraveReward()){
                         case NONE:
                             if(currentLevel.getCurrentSeason().getData().getId() == 1){
-                                batch.draw(textures.region("IMAGE_GRAVESTONES_EGYPT_HIEROGLYPH_EGYPT_HIEROGLYPH_118X148"), x, y, PlayScreen.TILE_WIDTH, PlayScreen.TILE_HEIGHT);
+                                batch.draw(
+                                    textures.region("IMAGE_GRAVESTONES_EGYPT_HIEROGLYPH_EGYPT_HIEROGLYPH_118X148"),
+                                    x,
+                                    y,
+                                    PlayScreen.TILE_WIDTH,
+                                    PlayScreen.TILE_HEIGHT
+                                );
                             }else {
-                                batch.draw(textures.region("IMAGE_GRAVESTONES_DARK_NOOP_DARK_NOOP_132X160"), x, y, PlayScreen.TILE_WIDTH, PlayScreen.TILE_HEIGHT);
+                                batch.draw(
+                                    textures.region("IMAGE_GRAVESTONES_DARK_NOOP_DARK_NOOP_132X160"),
+                                    x,
+                                    y,
+                                    PlayScreen.TILE_WIDTH,
+                                    PlayScreen.TILE_HEIGHT
+                                );
                             }
                             break;
                         case PLANT_FOOD:
-                            batch.draw(textures.region("IMAGE_GRAVESTONES_DARK_PLANTFOOD_DARK_PLANTFOOD_132X160"), x, y, PlayScreen.TILE_WIDTH, PlayScreen.TILE_HEIGHT);
+                            batch.draw(
+                                textures.region("IMAGE_GRAVESTONES_DARK_PLANTFOOD_DARK_PLANTFOOD_132X160"),
+                                x,
+                                y,
+                                PlayScreen.TILE_WIDTH,
+                                PlayScreen.TILE_HEIGHT
+                            );
                             break;
                         case SUN_50:
-                            batch.draw(textures.region("IMAGE_GRAVESTONES_DARK_SUN_DARK_SUN_132X160"), x, y, PlayScreen.TILE_WIDTH, PlayScreen.TILE_HEIGHT);
+                            batch.draw(
+                                textures.region("IMAGE_GRAVESTONES_DARK_SUN_DARK_SUN_132X160"),
+                                x,
+                                y,
+                                PlayScreen.TILE_WIDTH,
+                                PlayScreen.TILE_HEIGHT
+                            );
                             break;
                         default:
-                            batch.draw(textures.region("IMAGE_GRAVESTONES_DARK_NOOP_DARK_NOOP_132X160"), x, y, PlayScreen.TILE_WIDTH, PlayScreen.TILE_HEIGHT);
+                            batch.draw(
+                                textures.region("IMAGE_GRAVESTONES_DARK_NOOP_DARK_NOOP_132X160"),
+                                x,
+                                y,
+                                PlayScreen.TILE_WIDTH,
+                                PlayScreen.TILE_HEIGHT
+                            );
                     }
                 }
 
