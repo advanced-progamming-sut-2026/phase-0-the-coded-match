@@ -86,14 +86,6 @@ public class GameMapView extends Group {
             for (int j = 1; j <= gameMap.getColumns(); j++) {
                 Tile tile = gameMap.getTile(j, i);
 
-                /// TEST ///
-
-                if (i == 1 && j == 5) {
-                    tile.setNecromancyPotential(true);
-                }
-
-                /// END OF TEST ///
-
                 TileActor tileActor = new TileActor(tile, screen, plantSelectionController);
 
                 tileActor.setSize(PlayScreen.TILE_WIDTH, PlayScreen.TILE_HEIGHT);
@@ -159,7 +151,7 @@ public class GameMapView extends Group {
                 }
 
                 if(tile.holdsNecromancyPotential()){
-                    batch.draw(textures.region("IMAGE_NPC_GHOSTPEPPER_GHOSTPEPPER_277X309"), x-5, y-10, 50, 70);
+                    batch.draw(textures.region("IMAGE_NPC_GHOSTPEPPER_GHOSTPEPPER_277X309"), x, y, 50, 70);
                 } // TODO : when it holds the necromancy potential maybe it should show on the tile otherwise theres no need
 
                 if(tile.isGrave() && tile.getType() == TileType.GRAVE){
