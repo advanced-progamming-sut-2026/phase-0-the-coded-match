@@ -48,10 +48,12 @@ public class PlayScreen extends BaseScreen {
     public static float BOARD_Y = 80;
 
     private Label messageNotif;
+    private Label missionNotif;
     private Image shovelCursor;
     private float stateTime = 0f;
     private Boolean harvestMode = false;
     private Label sunAmount;
+    private Label plantFoodAmount;
     private ProgressBar waveProgressBar;
 
     private Map<Sun, SunActor> renderedSuns = new HashMap<>();
@@ -85,6 +87,11 @@ public class PlayScreen extends BaseScreen {
         messageNotif.setVisible(false);
         messageNotif.setPosition(265, 50);
         stage.addActor(messageNotif);
+
+        missionNotif = new Label("", skin, "bundle_reward_multiplier");
+        missionNotif.setVisible(false);
+        missionNotif.setPosition(265, VIRTUAL_HEIGHT - missionNotif.getHeight() - 50);
+        stage.addActor(missionNotif);
 
         Table mainPauseTable = new Table(skin);
         mainPauseTable.setFillParent(true);
@@ -170,6 +177,25 @@ public class PlayScreen extends BaseScreen {
 
         stage.addActor(sunAmountTable);
 
+        Table plantFoodTable = new Table(skin);
+
+        Image plantFoodImage = new Image(
+            new TextureRegionDrawable(
+                textures.region("IMAGE_BACKGROUNDS_TILE_PLANTFOOD_TILE_PLANTFOOD_45X46")
+            )
+        );
+        plantFoodAmount = new Label(Integer.toString(currentLevel.getPlantFoodCount()) + "/4",
+            skin, "default");
+
+        plantFoodTable.add(plantFoodImage).size(36, 36);
+        plantFoodTable.add(plantFoodAmount);
+        plantFoodTable.pack();
+        plantFoodTable.setPosition(
+            plantFoodTable.getWidth() + 20, VIRTUAL_HEIGHT - plantFoodTable.getHeight() - 50
+        );
+
+        stage.addActor(plantFoodTable);
+
         Group waveProgressGroup = new Group();
 
         waveProgressBar = new ProgressBar(0, currentLevel.getZombieWave().getWavePattern().size(), 0.01f,
@@ -204,7 +230,7 @@ public class PlayScreen extends BaseScreen {
 
             x -= flag.getWidth() / 2f;
 
-            flag.setPosition(x + 30, waveProgressBar.getHeight() - 30);
+            flag.setPosition(x + 40, waveProgressBar.getHeight() - 30);
 
             flag.setSize(25, 35);
 
@@ -215,19 +241,19 @@ public class PlayScreen extends BaseScreen {
 
         switch (currentLevel.getData().getSpecialLevelType()) {
             case SpecialLevelType.SAVE_OUR_SEEDS -> {
-                showMessage("Save endangered plants");
+                showMission("Mission: Save endangered plants");
             }
 
             case SpecialLevelType.DEAD_LINE -> {
-                showMessage("Don't let zombies pass the deadline");
+                showMission("Mission: Don't let zombies pass the deadline");
             }
 
             case SpecialLevelType.LOVE_YOUR_PLANTS -> {
-                showMessage("Don't let zombies eat specific plants count");
+                showMission("Mission: Don't let zombies eat specific plants count");
             }
 
             default -> {
-                showMessage("Defeat all zombies");
+                showMission("Mission: Defeat all zombies");
             }
         }
     }
@@ -360,6 +386,23 @@ public class PlayScreen extends BaseScreen {
         messageNotif.getColor().a = 1f;
 
         messageNotif.addAction(
+            Actions.sequence(
+                Actions.delay(2f),
+                Actions.fadeOut(0.5f),
+                Actions.hide()
+            )
+        );
+    }
+
+    public void showMission(String mission) {
+        missionNotif.clearActions();
+
+        missionNotif.setText(mission);
+        missionNotif.setVisible(true);
+        missionNotif.pack();
+        missionNotif.getColor().a = 1f;
+
+        missionNotif.addAction(
             Actions.sequence(
                 Actions.delay(2f),
                 Actions.fadeOut(0.5f),

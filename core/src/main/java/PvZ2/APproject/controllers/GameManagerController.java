@@ -88,7 +88,7 @@ public class GameManagerController {
 //    }
 
     public String updateObjects(float delta) {
-        String dropMessage = "";
+        String message = "";
         if (currentLevel.getLevelType() == LevelType.I_ZOMBIE) {
             decreasePlantCooldowns();
             updatePlants(delta);
@@ -99,12 +99,12 @@ public class GameManagerController {
             updateSeason(delta);
             updatePlants(delta);
             if (isIsGameEnded()) {
-                return dropMessage;
+                return message;
             }
             updateBarrels(delta);
-            dropMessage = updateZombies(delta);
+            message += updateZombies(delta);
             if (!(currentLevel instanceof MiniGame)) {
-                updateWaves(delta);
+                message += updateWaves(delta);
                 updateSkySuns(delta);
             }
             updateSuns(delta);
@@ -120,7 +120,7 @@ public class GameManagerController {
         if (currentLevel instanceof VaseBreaker) {
             ((VaseBreaker) currentLevel).updateGroundSeeds();
         }
-        return dropMessage;
+        return message;
     }
 
     private void decreasePlantCooldowns() {
@@ -177,7 +177,7 @@ public class GameManagerController {
                 iterator.remove();
                 killedThisTick++;
                 damageThisTick += zombie.getLastDamageTaken();
-                dropMessage = handleZombieDrop(zombie);
+                dropMessage = handleZombieDrop(zombie) + "\n";
                 if (!(currentLevel instanceof MiniGame)) {
                     QuestController.notifyZombieKilled(zombie);
                     if (currentLevel.getCurrentSeason() != null) {
@@ -195,20 +195,22 @@ public class GameManagerController {
         return dropMessage;
     }
 
-    private void updateWaves(float delta) {
+    private String updateWaves(float delta) {
         if (currentLevel instanceof VaseBreaker) {
-            return;
+            return "";
         }
+        String message = "";
         if (currentLevel.getZombieWave() != null) {
             currentLevel.getZombieWave().update(delta);
             if (currentLevel.getZombieWave().isLastWave()) {
-//                append(message, "The final wave has come.");
+                message = "The final wave has come.\n";
                 currentLevel.getZombieWave().setLastWave(false);
             } else if (currentLevel.getZombieWave().isNewWaveStarted()){
-//                append(message, "Wave " + (currentLevel.getZombieWave().getCurrentWave() + 1) + " started.");
+                message = "Wave " + (currentLevel.getZombieWave().getCurrentWave() + 1) + " started.\n";
                 currentLevel.getZombieWave().setNewWaveStarted(false);
             }
         }
+        return message;
     }
 
     private void updateSkySuns(float delta) {
