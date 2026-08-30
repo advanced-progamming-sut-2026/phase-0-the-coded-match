@@ -3,11 +3,15 @@ package PvZ2.APproject.views;
 import PvZ2.APproject.Main;
 import PvZ2.APproject.controllers.PlantSelectionController;
 import PvZ2.APproject.enums.SeasonType;
+import PvZ2.APproject.enums.SpecialLevelType;
 import PvZ2.APproject.enums.TileType;
 import PvZ2.APproject.models.GameMapRelated.GameMap;
 import PvZ2.APproject.models.GameMapRelated.Tile;
 import PvZ2.APproject.models.GameSettings;
 import PvZ2.APproject.models.Level;
+import PvZ2.APproject.models.plants.Plant;
+import PvZ2.APproject.models.specialLevels.LoveYourPlantsStrategy;
+import PvZ2.APproject.models.specialLevels.SpecialLevelStrategy;
 import PvZ2.APproject.views.actors.TileActor;
 import PvZ2.APproject.views.screens.PlayScreen;
 import com.badlogic.gdx.Gdx;
@@ -20,6 +24,9 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import pvz.libpvz.textures.TextureBank;
 
 import java.util.HashMap;
@@ -36,8 +43,10 @@ public class GameMapView extends Group {
     private ShapeRenderer shapeRenderer;
     private Image backgroundImage;
     private Stage stage;
+    private Skin skin;
+    private Label plantCount;
 
-    public GameMapView(Main game, PlayScreen screen, Level currentLevel, TextureBank textures, Image backgroundImage, Stage stage) {
+    public GameMapView(Main game, PlayScreen screen, Level currentLevel, TextureBank textures, Image backgroundImage, Stage stage, Skin skin) {
         this.game = game;
         this.screen = screen;
         this.plantSelectionController = screen.getPlantSelectionController();
@@ -46,6 +55,8 @@ public class GameMapView extends Group {
         shapeRenderer = new ShapeRenderer();
         this.backgroundImage = backgroundImage;
         this.stage = stage;
+        this.skin = skin;
+        plantCount = new Label("", skin, "bundle_reward_multiplier");
 
         loadBackground();
         createTiles();
@@ -120,6 +131,14 @@ public class GameMapView extends Group {
 
         drawSeasonTiles(batch);
 
+        if (currentLevel.getData().getSpecialLevelType() == SpecialLevelType.SAVE_OUR_SEEDS) {
+            drawDangerTiles();
+        } else if (currentLevel.getData().getSpecialLevelType() == SpecialLevelType.DEAD_LINE) {
+            drawDeadLine(batch);
+        } else if (currentLevel.getData().getSpecialLevelType() == SpecialLevelType.LOVE_YOUR_PLANTS) {
+            showDestroyedPlantsCount();
+        }
+
 //        Tile hoveredTile = plantSelectionController.getHoveredTile();
 //        if (hoveredTile != null && plantSelectionController.hasSelectedPlant()) {
 //            drawPlacementHighlight(batch, hoveredTile);
@@ -129,6 +148,17 @@ public class GameMapView extends Group {
             drawRedLinesOnGrid(batch);
         }
 
+    }
+
+    @Override
+    public void act(float delta) {
+        super.act(delta);
+
+        if (currentLevel.getData().getSpecialLevelType() == SpecialLevelType.LOVE_YOUR_PLANTS) {
+            LoveYourPlantsStrategy loveYourPlantsStrategy = (LoveYourPlantsStrategy) currentLevel.getSpecialLevelStrategy();
+
+            plantCount.setText("Plants Lost:\n" + loveYourPlantsStrategy.getLostPlantsCount() + "/" + loveYourPlantsStrategy.getMaxAllowedLosses());
+        }
     }
 
     private void drawSeasonTiles(Batch batch){
@@ -292,5 +322,47 @@ public class GameMapView extends Group {
 
         shapeRenderer.end();
         batch.begin();
+    }
+
+    public void drawDangerTiles() {
+        for (Plant plant : currentLevel.getSpecialLevelStrategy().getProtectedPlantsList()) {
+            Image dangerTile = new Image(
+                new TextureRegionDrawable(
+                    textures.region("IMAGE_BACKGROUNDS_PROTECT_TILE_PROTECT_TILE_112X125")
+                )
+            );
+            dangerTile.setPosition(PlayScreen.BOARD_X + (plant.getX() - 1) * PlayScreen.TILE_WIDTH,
+                PlayScreen.BOARD_Y + (plant.getY() - 1) * PlayScreen.TILE_HEIGHT);
+            dangerTile.setSize(PlayScreen.TILE_WIDTH, PlayScreen.TILE_HEIGHT);
+
+            stage.addActor(dangerTile);
+        }
+    }
+
+    public void drawDeadLine(Batch batch) {
+        batch.end();
+
+        shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+        shapeRenderer.setTransformMatrix(batch.getTransformMatrix());
+
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(Color.RED);
+
+
+        float x = PlayScreen.BOARD_X + (4 * PlayScreen.TILE_WIDTH);
+        float y1 = PlayScreen.BOARD_Y;
+        float y2 = PlayScreen.BOARD_Y + 4 * PlayScreen.TILE_HEIGHT;
+
+        shapeRenderer.rect(x, y1, 5, y2);
+
+        shapeRenderer.end();
+        batch.begin();
+    }
+
+    public void showDestroyedPlantsCount() {
+        plantCount.setPosition(30, 650);
+        plantCount.setSize(110, 60);
+
+        addActor(plantCount);
     }
 }

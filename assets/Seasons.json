@@ -17,6 +17,7 @@
         "levelNumber": 1,
         "levelType": "NORMAL",
         "specialLevelType": "NORMAL",
+        "isUnlocked": true,
         "waveCount": 5,
         "baseWaveCost": 1000,
         "availablePlants": [
@@ -46,11 +47,12 @@
         "levelNumber": 2,
         "levelType": "SPECIAL",
         "specialLevelType": "SAVE_OUR_SEEDS",
+        "isUnlocked": true,
         "waveCount": 5,
         "baseWaveCost": 1000,
         "availablePlants": [],
         "lockedPlants": [],
-        "protectedPlants": [],
+        "protectedPlants": ["Sunflower"],
         "wavePatterns": [
           {
             "waveNumber": 1,
@@ -71,6 +73,7 @@
         "levelNumber": 3,
         "levelType": "SPECIAL",
         "specialLevelType": "LOCKED_PLANTS_LEVEL",
+        "isUnlocked": true,
         "waveCount": 4,
         "baseWaveCost": 1000,
         "availablePlants": [
@@ -98,6 +101,7 @@
         "levelNumber": 4,
         "levelType": "BOSS",
         "specialLevelType": "BOSS",
+        "isUnlocked": true,
         "waveCount": 1,
         "baseWaveCost": 100,
         "availablePlants": [],
@@ -130,6 +134,7 @@
         "levelNumber": 1,
         "levelType": "NORMAL",
         "specialLevelType": "NORMAL",
+        "isUnlocked": true,
         "waveCount": 5,
         "baseWaveCost": 1000,
         "availablePlants": [
@@ -153,6 +158,7 @@
         "levelNumber": 2,
         "levelType": "NORMAL",
         "specialLevelType": "NORMAL",
+        "isUnlocked": true,
         "waveCount": 4,
         "baseWaveCost": 1000,
         "availablePlants": [
@@ -176,6 +182,7 @@
         "levelNumber": 3,
         "levelType": "SPECIAL",
         "specialLevelType": "NIGHT_OPS",
+        "isUnlocked": true,
         "waveCount": 5,
         "baseWaveCost": 1000,
         "availablePlants": [
@@ -201,6 +208,7 @@
         "levelNumber": 4,
         "levelType": "BOSS",
         "specialLevelType": "BOSS",
+        "isUnlocked": true,
         "waveCount": 1,
         "baseWaveCost": 1000,
         "availablePlants": [
@@ -237,6 +245,7 @@
         "levelNumber": 1,
         "levelType": "NORMAL",
         "specialLevelType": "NORMAL",
+        "isUnlocked": true,
         "waveCount": 5,
         "baseWaveCost": 1000,
         "availablePlants": [
@@ -260,6 +269,7 @@
         "levelNumber": 2,
         "levelType": "NORMAL",
         "specialLevelType": "NORMAL",
+        "isUnlocked": true,
         "waveCount": 4,
         "baseWaveCost": 1000,
         "availablePlants": [
@@ -283,6 +293,7 @@
         "levelNumber": 3,
         "levelType": "SPECIAL",
         "specialLevelType": "DEAD_LINE",
+        "isUnlocked": true,
         "waveCount": 4,
         "baseWaveCost": 1000,
         "availablePlants": [
@@ -306,6 +317,7 @@
         "levelNumber": 4,
         "levelType": "BOSS",
         "specialLevelType": "BOSS",
+        "isUnlocked": true,
         "waveCount": 1,
         "baseWaveCost": 150,
         "availablePlants": [
@@ -342,6 +354,7 @@
         "levelNumber": 1,
         "levelType": "NORMAL",
         "specialLevelType": "NORMAL",
+        "isUnlocked": true,
         "waveCount": 5,
         "baseWaveCost": 1000,
         "availablePlants": [
@@ -365,6 +378,7 @@
         "levelNumber": 2,
         "levelType": "SPECIAL",
         "specialLevelType": "LOVE_YOUR_PLANTS",
+        "isUnlocked": true,
         "waveCount": 4,
         "baseWaveCost": 1000,
         "availablePlants": [
@@ -388,6 +402,7 @@
         "levelNumber": 3,
         "levelType": "NORMAL",
         "specialLevelType": "NORMAL",
+        "isUnlocked": true,
         "waveCount": 4,
         "baseWaveCost": 1000,
         "availablePlants": [
@@ -410,6 +425,7 @@
         "levelNumber": 4,
         "levelType": "BOSS",
         "specialLevelType": "BOSS",
+        "isUnlocked": true,
         "waveCount": 1,
         "baseWaveCost": 1000,
         "availablePlants": [

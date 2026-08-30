@@ -18,14 +18,15 @@ public class SaveOurSeedsStrategy implements SpecialLevelStrategy{
         int rows = level.getGameMap().getRows();
         int cols = level.getGameMap().getColumns();
 
-        for(String data : level.getData().getProtectedPlants()) {
+        for(String plantName : level.getData().getProtectedPlants()) {
             boolean placed = false;
             while(!placed) {
                 int randomRow = 1 + random.nextInt(rows);
                 int randomCol = 1 + random.nextInt(cols);
                 Tile tile = level.getGameMap().getTile(randomCol, randomRow);
                 if (tile != null && tile.getPlant() == null) {
-                    Plant protectedPlant = new Plant(PlantRepository.getInstance().findByName(data), randomCol, randomRow, level.getLevelNumber());
+                    Plant protectedPlant = new Plant
+                        (PlantRepository.getInstance().findByName(plantName), randomCol, randomRow, level.getLevelNumber());
                     tile.setPlant(protectedPlant);
                     level.getActivePlants().add(protectedPlant);
                     protectedPlantsList.add(protectedPlant);
@@ -33,8 +34,6 @@ public class SaveOurSeedsStrategy implements SpecialLevelStrategy{
                 }
             }
         }
-
-
     }
 
     @Override
@@ -47,5 +46,10 @@ public class SaveOurSeedsStrategy implements SpecialLevelStrategy{
         if (protectedPlantsList.contains(plant)) {
             GameManagerController.getInstance().gameOver();
         }
+    }
+
+    @Override
+    public List<Plant> getProtectedPlantsList() {
+        return protectedPlantsList;
     }
 }

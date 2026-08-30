@@ -34,7 +34,9 @@ public class QuestController {
     private static void useCurrentUserQuests() {
         if (App.getCurrentUser() != null) {
             questsModel = App.getCurrentUser().getQuestsModel();
-            questsModel.setAvailableQuests(new ArrayList<>());
+            if (questsModel.getAvailableQuests() == null) {
+                questsModel.setAvailableQuests(new ArrayList<>());
+            }
         }
     }
 
@@ -240,6 +242,7 @@ public class QuestController {
     }
 
     public static void notifyZombieKilled(Season season) {
+        useCurrentUserQuests();
         Quest ancientEgyptHunter = questsModel.getQuestByName("AncientEgypt Hunter");
         Quest frostbiteCavesHunter = questsModel.getQuestByName("FrostbiteCaves Hunter");
         Quest bigWaveBeachHunter = questsModel.getQuestByName("BigWaveBeach Hunter");

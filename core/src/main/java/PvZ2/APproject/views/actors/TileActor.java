@@ -2,16 +2,12 @@ package PvZ2.APproject.views.actors;
 
 import PvZ2.APproject.controllers.PlantSelectionController;
 import PvZ2.APproject.models.GameMapRelated.Tile;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import PvZ2.APproject.models.GameSettings;
 import PvZ2.APproject.views.screens.PlayScreen;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -36,7 +32,7 @@ public class TileActor extends Group {
         addListener(new InputListener() {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                if (!screen.getHarvestMood()) {
+                if (!screen.getHarvestMode()) {
                     return;
                 }
 
@@ -45,11 +41,11 @@ public class TileActor extends Group {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if (!screen.getHarvestMood()) {
+                if (!screen.getHarvestMode()) {
                     return false;
                 }
 
-                if (screen.getHarvestMood()) {
+                if (screen.getHarvestMode()) {
                     plantSelectionController.getPlantController().pluckPlant(tile);
                     //todo: remove plant animation too
                 }
@@ -112,7 +108,7 @@ public class TileActor extends Group {
     @Override
     public void draw(Batch batch, float parentAlpha) {
 
-        if (screen.getHarvestMood() && inTile) {
+        if (screen.getHarvestMode() && inTile) {
 
             batch.end();
 

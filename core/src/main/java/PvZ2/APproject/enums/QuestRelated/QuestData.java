@@ -19,7 +19,7 @@ public enum QuestData {
     DARKAGES_HUNTER("DarkAges Hunter", MAIN,
             "Defeat 50 zombies from the chapter season", SEED_PACKET, 10,
             ORANGE, HIGH, new int[]{50}, false),
-    FROSBITE_HUNTER("FrostbiteCaves Hunter", MAIN,
+    FROSTBITE_HUNTER("FrostbiteCaves Hunter", MAIN,
             "Defeat 50 zombies from the chapter season", SEED_PACKET, 10,
             ORANGE, HIGH, new int[]{50}, false),
     PRO_PLANT_PLAYER("Pro Plant Player", DAILY,

@@ -5,6 +5,7 @@ import PvZ2.APproject.models.Level;
 import PvZ2.APproject.models.plants.Plant;
 import PvZ2.APproject.models.zombies.Zombie;
 
+import java.util.List;
 import java.util.Random;
 
 public class DeadLineStrategy implements SpecialLevelStrategy{
@@ -33,5 +34,10 @@ public class DeadLineStrategy implements SpecialLevelStrategy{
     @Override
     public void plantLost(Level level, Plant plant) {
 
+    }
+
+    @Override
+    public List<Plant> getProtectedPlantsList() {
+        return List.of();
     }
 }

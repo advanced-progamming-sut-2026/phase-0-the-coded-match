@@ -35,6 +35,11 @@ public class LockedPlantsLevel implements SpecialLevelStrategy{
 
     }
 
+    @Override
+    public List<Plant> getProtectedPlantsList() {
+        return List.of();
+    }
+
     public boolean isPlantLocked(String plantName) {
         return lockedPlantNames.contains(plantName);
     }

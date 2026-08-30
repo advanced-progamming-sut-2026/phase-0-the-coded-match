@@ -8,19 +8,24 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import pvz.libpvz.textures.TextureBank;
 
 public class PlantBox extends Group {
-     private final PlantData plantData;
-     private final PlantSelectionController selectionController;
+    private final PlantData plantData;
+    private final PlantSelectionController selectionController;
     private TextureRegion background;
     private TextureRegion plantImage;
+    private Skin skin;
 
-
-    public PlantBox(PlantData plantDatal, PlantSelectionController selectionController, TextureBank textures) {
+    public PlantBox(PlantData plantDatal, PlantSelectionController selectionController, TextureBank textures, Skin skin) {
         this.plantData = plantDatal;
         this.selectionController = selectionController;
+        this.skin = skin;
 
         setSize(100, 120);
         setTouchable(Touchable.enabled);
@@ -49,6 +54,20 @@ public class PlantBox extends Group {
 
         plantImage = textures.region("IMAGE_UI_PACKETS_" + plantData.getId().toUpperCase());
 
+        Label sunCost = new Label(Integer.toString(plantData.getSunCost()), skin, "default");
+
+        Image sun = new Image(
+            new TextureRegionDrawable(
+                textures.region("IMAGE_UI_SEASONS_UNCOMPRESSED_PVZ2_SEASONS_UIASSET_ICON_SUN")
+            )
+        );
+
+        sunCost.setPosition(10, 10);
+        sun.setSize(20, 20);
+        sun.setPosition(30, 12);
+        addActor(sunCost);
+        addActor(sun);
+
     }
 
     private void addClickListener() {
@@ -69,7 +88,6 @@ public class PlantBox extends Group {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        super.draw(batch, parentAlpha);
 
         batch.draw(
             background,
@@ -86,6 +104,8 @@ public class PlantBox extends Group {
             60,
             60
         );
+
+        super.draw(batch, parentAlpha);
 
     }
 

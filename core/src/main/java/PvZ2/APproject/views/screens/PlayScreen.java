@@ -8,9 +8,9 @@ import PvZ2.APproject.enums.ScreenRelated.GameState;
 import PvZ2.APproject.enums.SpecialLevelType;
 import PvZ2.APproject.models.*;
 import PvZ2.APproject.models.GameMapRelated.Lawnmower;
+import PvZ2.APproject.models.plants.Plant;
 import PvZ2.APproject.models.plants.PlantData;
 import PvZ2.APproject.models.plants.PlantRepository;
-import PvZ2.APproject.models.seasons.EnvironmentEvent;
 import PvZ2.APproject.models.zombies.Zombie;
 import PvZ2.APproject.views.GameMapView;
 import PvZ2.APproject.views.actors.EnvironmentView;
@@ -20,7 +20,7 @@ import PvZ2.APproject.views.actors.PlantBox;
 import PvZ2.APproject.views.actors.SunActor;
 import PvZ2.APproject.views.menus.ChoosePlantsMenu;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -51,7 +51,7 @@ public class PlayScreen extends BaseScreen {
     private Label messageNotif;
     private Image shovelCursor;
     private float stateTime = 0f;
-    private Boolean harvestMood = false;
+    private Boolean harvestMode = false;
 
     private Map<Sun, SunActor> renderedSuns = new HashMap<>();
     private Map<Lawnmower, LawnmowerActor> renderedLawnmowers = new HashMap<>();
@@ -66,8 +66,12 @@ public class PlayScreen extends BaseScreen {
     public void show() {
         super.show();
 
+        if (currentLevel.getSpecialLevelStrategy() != null) {
+            currentLevel.getSpecialLevelStrategy().levelStart(currentLevel);
+        }
+
         plantSelectionController = new PlantSelectionController(currentLevel);
-        gameMapView = new GameMapView(game, this, currentLevel, textures, backgroundImage, stage);
+        gameMapView = new GameMapView(game, this, currentLevel, textures, backgroundImage, stage, skin);
         environmentView = new EnvironmentView(game, currentLevel, textures);
 
         backgroundImage = new Image(new TextureRegionDrawable(gameMapView.getBackground()));
@@ -75,7 +79,6 @@ public class PlayScreen extends BaseScreen {
         stage.addActor(backgroundImage);
         stage.addActor(gameMapView);
         stage.addActor(environmentView);
-        setupSpecialLevel();
 
         messageNotif = new Label("", skin, "promo_ribbon");
         messageNotif.setVisible(false);
@@ -142,8 +145,8 @@ public class PlayScreen extends BaseScreen {
         harvestBtn.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                harvestMood = !harvestMood;
-                shovelCursor.setVisible(harvestMood);
+                harvestMode = !harvestMode;
+                shovelCursor.setVisible(harvestMode);
             }
         });
 
@@ -151,6 +154,12 @@ public class PlayScreen extends BaseScreen {
 
     @Override
     public void render(float delta) {
+
+        if (GameManagerController.getInstance().isIsGameOver()) {
+            gameOver();
+            return;
+        }
+
         if (state == GameState.RUNNING) {
             int speedMultiplier = GameSettings.getInstance().getGameSpeed();
             float adjustedSpeed = delta * speedMultiplier;
@@ -158,7 +167,7 @@ public class PlayScreen extends BaseScreen {
 
             stateTime += adjustedSpeed;
 
-            if (harvestMood) {
+            if (harvestMode) {
                 updateShovelCursor();
                 gameMapView.updateTile();
             }
@@ -171,6 +180,10 @@ public class PlayScreen extends BaseScreen {
             updateZombieActors();
             updateSunActors();
             updateLawnmowerActors();
+            if (GameManagerController.getInstance().isIsGameOver()) {
+                gameOver();
+                return;
+            }
             createPlantBoxes();
         }
 
@@ -203,7 +216,7 @@ public class PlayScreen extends BaseScreen {
             if(plantData == null){
                 continue;
             }
-            PlantBox plantBox = new PlantBox(plantData, plantSelectionController, textures);
+            PlantBox plantBox = new PlantBox(plantData, plantSelectionController, textures, skin);
             plantBox.setPosition(x, y);
             plantBox.setSize(100, 120);
 
@@ -310,21 +323,6 @@ public class PlayScreen extends BaseScreen {
         }
     }
 
-    public void setupSpecialLevel() {
-        switch (currentLevel.getData().getSpecialLevelType()) {
-            case SpecialLevelType.SAVE_OUR_SEEDS -> {
-                Image dangerTile = new Image(
-                    new TextureRegionDrawable(
-                        textures.region("IMAGE_BACKGROUNDS_PROTECT_TILE_PROTECT_TILE_112X125")
-                    )
-                );
-
-            }
-
-
-        }
-    }
-
     public void pauseGame() {
         state = GameState.PAUSED;
         Gdx.input.setInputProcessor(pauseStage);
@@ -352,6 +350,10 @@ public class PlayScreen extends BaseScreen {
         game.setScreen(new GameMenuScreen(game));
     }
 
+    public void gameOver() {
+        game.setScreen(new GameMenuScreen(game));
+    }
+
     public Level getCurrentLevel() {
         return currentLevel;
     }
@@ -360,8 +362,8 @@ public class PlayScreen extends BaseScreen {
         return stateTime;
     }
 
-    public Boolean getHarvestMood() {
-        return harvestMood;
+    public Boolean getHarvestMode() {
+        return harvestMode;
     }
 
     public PlantSelectionController getPlantSelectionController(){

@@ -71,8 +71,8 @@ public class PlantController {
         }
         PlantData data = PlantRepository.getInstance().findByName(type);
         Plant plant = new Plant(data, x, y, 1);
-        if (currentLevel.getSpecialLevel() instanceof LockedPlantsLevel &&
-            ((LockedPlantsLevel) currentLevel.getSpecialLevel()).isPlantLocked(plant.getData().getName())) {
+        if (currentLevel.getSpecialLevelStrategy() instanceof LockedPlantsLevel &&
+            ((LockedPlantsLevel) currentLevel.getSpecialLevelStrategy()).isPlantLocked(plant.getData().getName())) {
             return "Plant is locked";
         }
         currentLevel.getActivePlants().add(plant);

@@ -134,13 +134,13 @@ public class GameMenuScreen extends BaseScreen{
             float width = isCenter ? 420f : 300f;
             float height = isCenter ? 440f : 320f;
 
-            boolean unlocked = false;
-            if(App.getCurrentUser().getLastSeason() != null) {
-                if (szn.getId() <= App.getCurrentUser().getLastSeason().getData().getId()) {
-                    unlocked = true;
-                }
-            }
-
+//            boolean unlocked = false;
+//            if(App.getCurrentUser().getLastSeason() != null) {
+//                if (szn.getId() <= App.getCurrentUser().getLastSeason().getData().getId()) {
+//                    unlocked = true;
+//                }
+//            }
+            boolean unlocked = true;
 
             Table card = new Table();
             Label nameLabel = new Label(szn.getDisplayName(), skin, "default");
@@ -153,7 +153,7 @@ public class GameMenuScreen extends BaseScreen{
                 lvlNum = App.getCurrentUser().getLastLevel().getLevelNumber();
             }
             Label progressLabel = new Label( lvlNum + "/ 4  Completed", skin, "default");
-            card.add(progressLabel).padBottom(10).row();
+            card.add(progressLabel).padBottom(10).row();//todo: this is for all seasons all at once
 
             if (!isCenter) {
                 chapterImage.setColor(1, 1, 1, 0.5f);
@@ -281,12 +281,13 @@ public class GameMenuScreen extends BaseScreen{
             float width = isCenter ? 420f : 240f;
             float height = isCenter ? 440f : 260f;
 
-            boolean unlocked = false;
-            if(App.getCurrentUser().getLastLevel() != null) {
-                if (ld.getLevelNumber() <= App.getCurrentUser().getLastLevel().getLevelNumber()) {
-                    unlocked = true;
-                }
-            }
+//            boolean unlocked = false;
+//            if(App.getCurrentUser().getLastLevel() != null) {
+//                if (ld.getLevelNumber() <= App.getCurrentUser().getLastLevel().getLevelNumber()) {
+//                    unlocked = true;
+//                }
+//            }
+            boolean unlocked = true;
 
             Table card = new Table();
             Label nameLabel = new Label(ld.getName(), skin, "default");
@@ -301,7 +302,6 @@ public class GameMenuScreen extends BaseScreen{
                         @Override
                         public void clicked(InputEvent event, float x, float y) {
                             GameMenuController.enterLevel(ld.getLevelNumber());
-                            App.setCurrentMenu(Menu.CHOOSEPLANTS_MENU);
                             game.setScreen(new ChoosePlantsMenu(game));
                         }
                     });

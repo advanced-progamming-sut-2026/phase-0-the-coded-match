@@ -37,7 +37,7 @@ public class Level {
     private SkySunProducer skySunProducer;
     private List<Barrel> barrels;
     private int removedPlantsCount;
-    private SpecialLevelStrategy specialLevel;
+    private SpecialLevelStrategy specialLevelStrategy;
     private int levelDifficulty;
     private EnvironmentEvent pendingEnvironmentEvent;
 
@@ -78,30 +78,30 @@ public class Level {
         if(this.data.getLevelType() == LevelType.SPECIAL) {
             switch (data.getSpecialLevelType()) {
                 case SpecialLevelType.NIGHT_OPS:
-                    this.specialLevel = new NightOpsStrategy();
+                    this.specialLevelStrategy = new NightOpsStrategy();
                     break;
                 case SpecialLevelType.DEAD_LINE:
-                    int deadLine = random.nextInt(6);
-                    this.specialLevel = new DeadLineStrategy(deadLine); // e.g., column 4 is the deadline
+                    int deadLine = 4;
+                    this.specialLevelStrategy = new DeadLineStrategy(deadLine); // e.g., column 4 is the deadline
                     break;
                 case SpecialLevelType.LOVE_YOUR_PLANTS:
                     int maxLoss = random.nextInt(6);
-                    this.specialLevel = new LoveYourPlantsStrategy(maxLoss); // e.g., max 5 plants lost
+                    this.specialLevelStrategy = new LoveYourPlantsStrategy(maxLoss); // e.g., max 5 plants lost
                     break;
                 case SpecialLevelType.SAVE_OUR_SEEDS:
-                    this.specialLevel = new SaveOurSeedsStrategy();
+                    this.specialLevelStrategy = new SaveOurSeedsStrategy();
                     break;
                 case SpecialLevelType.LOCKED_PLANTS_LEVEL:
-                    this.specialLevel = new LockedPlantsLevel();
+                    this.specialLevelStrategy = new LockedPlantsLevel();
                     break;
                 default:
-                    this.specialLevel = null;
+                    this.specialLevelStrategy = null;
                     break;
 
             }
 
-            if (this.specialLevel!= null) {
-                this.specialLevel.levelStart(this);
+            if (this.specialLevelStrategy != null) {
+                this.specialLevelStrategy.levelStart(this);
             }
         }
 
@@ -307,8 +307,8 @@ public class Level {
         this.removedPlantsCount = removedPlantsCount;
     }
 
-    public SpecialLevelStrategy getSpecialLevel(){
-        return specialLevel;
+    public SpecialLevelStrategy getSpecialLevelStrategy(){
+        return specialLevelStrategy;
     }
 
     public int getLevelDifficulty() {
@@ -316,7 +316,7 @@ public class Level {
     }
 
     public boolean isDay(){
-        return !this.getData().getId().toLowerCase().contains("dark_level") && !(specialLevel instanceof NightOpsStrategy);
+        return !this.getData().getId().toLowerCase().contains("dark_level") && !(specialLevelStrategy instanceof NightOpsStrategy);
     }
 
     public void triggerEnvironmentEvent(EnvironmentEvent.EnvironmentEventType type, float duration) {

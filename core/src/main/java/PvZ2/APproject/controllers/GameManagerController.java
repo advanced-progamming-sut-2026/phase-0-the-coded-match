@@ -1,5 +1,6 @@
 package PvZ2.APproject.controllers;
 
+import PvZ2.APproject.Main;
 import PvZ2.APproject.controllers.menus.SignupMenuController;
 import PvZ2.APproject.enums.Commands;
 import PvZ2.APproject.enums.LevelType;
@@ -19,8 +20,9 @@ import PvZ2.APproject.models.plants.Plant;
 import PvZ2.APproject.models.plants.PlantData;
 import PvZ2.APproject.models.plants.PlantRepository;
 import PvZ2.APproject.models.seasons.Season;
-import PvZ2.APproject.models.specialLevels.LockedPlantsLevel;
 import PvZ2.APproject.models.zombies.*;
+import PvZ2.APproject.views.screens.GameMenuScreen;
+import PvZ2.APproject.views.screens.PlayScreen;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -36,6 +38,7 @@ public class GameManagerController {
     private Level currentLevel;
     private static boolean cooldownRemoved;
     private static final Map<String, Integer> plantCooldowns = new HashMap<>();
+    private static boolean isGameOver = false;
 
     public static GameManagerController getInstance() {
         if (instance == null) {
@@ -98,6 +101,9 @@ public class GameManagerController {
             decreasePlantCooldowns();
             updateSeason(delta);
             updatePlants(delta);
+            if (isIsGameOver()) {
+                return dropMessage;
+            }
             updateBarrels(delta);
             dropMessage = updateZombies(delta);
             if (!(currentLevel instanceof MiniGame)) {
@@ -111,8 +117,8 @@ public class GameManagerController {
                 beghouled.updateMinigameTick();
             }
         }
-        if (currentLevel.getSpecialLevel() != null) {
-            currentLevel.getSpecialLevel().update(currentLevel);
+        if (currentLevel.getSpecialLevelStrategy() != null) {
+            currentLevel.getSpecialLevelStrategy().update(currentLevel);
         }
         if (currentLevel instanceof VaseBreaker) {
             ((VaseBreaker) currentLevel).updateGroundSeeds();
@@ -152,8 +158,8 @@ public class GameManagerController {
                     beghouled.onPlantDestroyed(plant);
                 }
                 currentLevel.setRemovedPlantsCount(currentLevel.getRemovedPlantsCount() + 1);
-                if (currentLevel.getSpecialLevel() != null) {
-                    currentLevel.getSpecialLevel().plantLost(currentLevel, plant);
+                if (currentLevel.getSpecialLevelStrategy() != null) {
+                    currentLevel.getSpecialLevelStrategy().plantLost(currentLevel, plant);
                 }
             }
         }
@@ -503,14 +509,15 @@ public class GameManagerController {
     }
 
     public void gameOver() {
+        isGameOver = true;
         if (BonusGameController.isActive()) {
             System.out.println(BonusGameController.endGame());
             return;
         }
-        this.currentLevel = null;
-        App.setCurrentMenu(Menu.GAME_MENU);
         App.getCurrentUser().setVictroy(false);
         SignupMenuController.saveToJson();
+        App.setCurrentMenu(Menu.GAME_MENU);
+        this.currentLevel = null;
     }
 
     public String gameWon(){
@@ -675,5 +682,9 @@ public class GameManagerController {
         level.getActivePlants().add(plant);
         tile.setPlant(plant);
         System.out.println("Planted " + plantName + " at (" + x + ", " + y + ")");
+    }
+
+    public boolean isIsGameOver() {
+        return isGameOver;
     }
 }

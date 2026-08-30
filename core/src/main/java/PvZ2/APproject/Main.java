@@ -5,6 +5,7 @@ import PvZ2.APproject.controllers.menus.SignupMenuController;
 import PvZ2.APproject.enums.Menu;
 import PvZ2.APproject.models.App;
 import PvZ2.APproject.views.menus.MainMenu;
+import PvZ2.APproject.views.screens.GameMenuScreen;
 import PvZ2.APproject.views.screens.SignupScreen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -32,6 +33,8 @@ public class Main extends Game {
 
         if (App.getCurrentMenu() == Menu.MAIN_MENU && App.getCurrentUser() != null) {
             setScreen(new MainMenu(this));
+        } else if (App.getCurrentMenu() == Menu.GAME_MENU) {
+            setScreen(new GameMenuScreen(this));
         } else {
             setScreen(new SignupScreen(this));
         }
