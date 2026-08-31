@@ -3,6 +3,7 @@ package PvZ2.APproject.views.screens;
 import PvZ2.APproject.Main;
 import PvZ2.APproject.controllers.GameManagerController;
 import PvZ2.APproject.controllers.PlantSelectionController;
+import PvZ2.APproject.controllers.menus.GameMenuController;
 import PvZ2.APproject.enums.Menu;
 import PvZ2.APproject.enums.ScreenRelated.GameState;
 import PvZ2.APproject.enums.SpecialLevelType;
@@ -19,9 +20,11 @@ import PvZ2.APproject.views.actors.PlantBox;
 import PvZ2.APproject.views.actors.SunActor;
 import PvZ2.APproject.views.menus.ChoosePlantsMenu;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
@@ -52,8 +55,8 @@ public class PlayScreen extends BaseScreen {
     private Image shovelCursor;
     private float stateTime = 0f;
     private Boolean harvestMode = false;
-    private Label sunAmount;
-    private Label plantFoodAmount;
+    private Label sunLabel;
+    private Label plantFoodLabel;
     private ProgressBar waveProgressBar;
 
     private Map<Sun, SunActor> renderedSuns = new HashMap<>();
@@ -160,41 +163,7 @@ public class PlayScreen extends BaseScreen {
 
         addCurrencyBar();
 
-        Table sunAmountTable = new Table(skin);
-
-        Image sunImage = new Image(
-            new TextureRegionDrawable(
-                textures.region("IMAGE_UI_SEASONS_UNCOMPRESSED_PVZ2_SEASONS_UIASSET_ICON_SUN")
-            )
-        );
-        sunAmount = new Label(Integer.toString(currentLevel.getCollectedSunsAmount()), skin, "default");
-
-        sunAmountTable.add(sunImage).size(36, 36);
-        sunAmountTable.add(sunAmount);
-        sunAmountTable.pack();
-        sunAmountTable.setPosition(
-            sunAmountTable.getWidth() + 20, VIRTUAL_HEIGHT - sunAmountTable.getHeight() - 10);
-
-        stage.addActor(sunAmountTable);
-
-        Table plantFoodTable = new Table(skin);
-
-        Image plantFoodImage = new Image(
-            new TextureRegionDrawable(
-                textures.region("IMAGE_BACKGROUNDS_TILE_PLANTFOOD_TILE_PLANTFOOD_45X46")
-            )
-        );
-        plantFoodAmount = new Label(Integer.toString(currentLevel.getPlantFoodCount()) + "/4",
-            skin, "default");
-
-        plantFoodTable.add(plantFoodImage).size(36, 36);
-        plantFoodTable.add(plantFoodAmount);
-        plantFoodTable.pack();
-        plantFoodTable.setPosition(
-            plantFoodTable.getWidth() + 20, VIRTUAL_HEIGHT - plantFoodTable.getHeight() - 50
-        );
-
-        stage.addActor(plantFoodTable);
+        addSunAndPlantFoodTables();
 
         Group waveProgressGroup = new Group();
 
@@ -203,7 +172,8 @@ public class PlayScreen extends BaseScreen {
 
         waveProgressBar.setSize(300, 40);
         waveProgressGroup.setSize(300, 70);
-        waveProgressGroup.setPosition(VIRTUAL_WIDTH - waveProgressBar.getWidth() - 100, waveProgressBar.getHeight() - 20);
+        waveProgressGroup.setPosition(VIRTUAL_WIDTH - waveProgressBar.getWidth() - 100,
+            waveProgressBar.getHeight() - 20);
         waveProgressGroup.addActor(waveProgressBar);
 
         int waveCount = currentLevel.getZombieWave().getWavePattern().size();
@@ -258,6 +228,131 @@ public class PlayScreen extends BaseScreen {
         }
     }
 
+    public void addSunAndPlantFoodTables() {
+        Table sunAmountTable = new Table(skin);
+
+        Image sunImage = new Image(
+            new TextureRegionDrawable(
+                textures.region("IMAGE_UI_SEASONS_UNCOMPRESSED_PVZ2_SEASONS_UIASSET_ICON_SUN")
+            )
+        );
+        sunLabel = new Label(Integer.toString(currentLevel.getCollectedSunsAmount()), skin, "default");
+
+        sunAmountTable.add(sunImage).size(36, 36);
+        sunAmountTable.add(sunLabel);
+        sunAmountTable.pack();
+        sunAmountTable.setPosition(
+            sunAmountTable.getWidth() + 20, VIRTUAL_HEIGHT - sunAmountTable.getHeight() - 10);
+
+
+        Table plantFoodTable = new Table(skin);
+
+        Image plantFoodImage = new Image(
+            new TextureRegionDrawable(
+                textures.region("IMAGE_BACKGROUNDS_TILE_PLANTFOOD_TILE_PLANTFOOD_45X46")
+            )
+        );
+        plantFoodLabel = new Label(currentLevel.getPlantFoodCount() + "/4", skin, "default");
+
+        plantFoodTable.add(plantFoodImage).size(36, 36);
+        plantFoodTable.add(plantFoodLabel);
+        plantFoodTable.pack();
+        plantFoodTable.setPosition(
+            plantFoodTable.getWidth() + 20, VIRTUAL_HEIGHT - plantFoodTable.getHeight() - 50
+        );
+
+
+        if (gameSettings.isDebugMode()) {
+            TextButton cheatAddSun = new TextButton("+", skin, "default");
+            TextField sunAmount = new TextField("", skin, "default");
+
+            TextButton cheatAddPlantFood = new TextButton("+", skin, "default");
+            TextField plantFoodAmount = new TextField("", skin, "default");
+
+
+            sunAmountTable.add(cheatAddSun).size(25, 25);
+            sunAmountTable.add(sunAmount).size(50, 25).padLeft(4);
+            plantFoodTable.add(cheatAddPlantFood).size(25, 25);
+            plantFoodTable.add(plantFoodAmount).size(50, 25).padLeft(4);
+
+            sunAmount.setVisible(false);
+            plantFoodAmount.setVisible(false);
+
+            cheatAddSun.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    cheatAddSun.setVisible(false);
+                    sunAmount.setVisible(true);
+                    stage.setKeyboardFocus(sunAmount);
+                }
+            });
+
+            sunAmount.addListener(new InputListener() {
+                @Override
+                public boolean keyDown(InputEvent event, int keycode) {
+                    if (keycode == Input.Keys.ENTER) {
+                        try {
+                            int amount = Integer.parseInt(sunAmount.getText());
+
+                            GameManagerController.getInstance().cheatAddSuns(amount);
+
+                            sunLabel.setText(Integer.toString(currentLevel.getCollectedSunsAmount()));
+
+                            sunAmount.setText("");
+                            sunAmount.setVisible(false);
+                            cheatAddSun.setVisible(true);
+
+                            stage.setKeyboardFocus(null);
+
+                        } catch (NumberFormatException e) {
+                            sunAmount.setText("");
+                        }
+                        return true;
+                    }
+                    return false;
+                }
+            });
+
+            cheatAddPlantFood.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    cheatAddPlantFood.setVisible(false);
+                    plantFoodAmount.setVisible(true);
+                    stage.setKeyboardFocus(plantFoodAmount);
+                }
+            });
+
+            plantFoodAmount.addListener(new InputListener() {
+                @Override
+                public boolean keyDown(InputEvent event, int keycode) {
+                    if (keycode == Input.Keys.ENTER) {
+                        try {
+                            int amount = Integer.parseInt(plantFoodAmount.getText());
+
+                            plantSelectionController.getPlantController().cheatAddPlantFood(amount);
+
+                            plantFoodLabel.setText(currentLevel.getPlantFoodCount() + "/4");
+
+                            plantFoodAmount.setText("");
+                            plantFoodAmount.setVisible(false);
+                            cheatAddPlantFood.setVisible(true);
+
+                            stage.setKeyboardFocus(null);
+
+                        } catch (NumberFormatException e) {
+                            plantFoodAmount.setText("");
+                        }
+                        return true;
+                    }
+                    return false;
+                }
+            });
+        }
+
+        stage.addActor(sunAmountTable);
+        stage.addActor(plantFoodTable);
+    }
+
     @Override
     public void render(float delta) {
 
@@ -309,7 +404,7 @@ public class PlayScreen extends BaseScreen {
                 return;
             }
             createPlantBoxes();
-            sunAmount.setText(Integer.toString(currentLevel.getCollectedSunsAmount()));
+            sunLabel.setText(Integer.toString(currentLevel.getCollectedSunsAmount()));
             createPauseButton();
         }
 

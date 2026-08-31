@@ -287,14 +287,9 @@ public class GameManagerController {
         return currentLevel.getCollectedSunsAmount();
     }
 
-    public String cheatAddSuns(String input) {
-        Matcher matcher = Pattern.compile(Commands.CHEAT_ADD_SUNS.getPattern()).matcher(input);
-        if (!matcher.matches()) {
-            return "invalid command";
-        }
-        int count = Integer.parseInt(matcher.group("count"));
+    public void cheatAddSuns(int count) {
         currentLevel.setCollectedSunsAmount(currentLevel.getCollectedSunsAmount() + count);
-        return "you have " + currentLevel.getCollectedSunsAmount() + " suns now";
+//        return "you have " + currentLevel.getCollectedSunsAmount() + " suns now";
     }
 
     public void cheatReleaseTheNuke() {

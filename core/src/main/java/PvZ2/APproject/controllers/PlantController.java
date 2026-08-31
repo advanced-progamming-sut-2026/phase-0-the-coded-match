@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 
 public class PlantController {
     private static Level currentLevel = null;
-    private static final int MAX_PLANT_FOOD = 3;
+    private static final int MAX_PLANT_FOOD = 4;
 
 
     public PlantController() {
@@ -157,12 +157,12 @@ public class PlantController {
             + currentLevel.getPlantFoodCount() + " plant foods now");
     }
 
-    public void cheatAddPlantFood() {
-        if (currentLevel.getPlantFoodCount() >= MAX_PLANT_FOOD) {
-            System.out.println("plant food storage is full");
+    public void cheatAddPlantFood(int count) {
+        if (currentLevel.getPlantFoodCount() >= MAX_PLANT_FOOD || count > 4 || count + currentLevel.getPlantFoodCount() > 4) {
+            System.out.println("plant food storage is full or will get full by this amount");
             return;
         }
-        currentLevel.setPlantFoodCount(currentLevel.getPlantFoodCount() + 1);
+        currentLevel.setPlantFoodCount(currentLevel.getPlantFoodCount() + count);
         System.out.println("you have " + currentLevel.getPlantFoodCount() + " plant foods now");
     }
 
