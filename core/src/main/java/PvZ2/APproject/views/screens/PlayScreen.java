@@ -9,6 +9,7 @@ import PvZ2.APproject.enums.ScreenRelated.GameState;
 import PvZ2.APproject.enums.SpecialLevelType;
 import PvZ2.APproject.models.*;
 import PvZ2.APproject.models.GameMapRelated.Lawnmower;
+import PvZ2.APproject.models.plants.Plant;
 import PvZ2.APproject.models.plants.PlantData;
 import PvZ2.APproject.models.plants.PlantRepository;
 import PvZ2.APproject.models.zombies.Zombie;
