@@ -36,14 +36,10 @@ public class LeaderBoardController {
     public List<User> getSortedUsers(String sortBy, String ascendOrDescend) {
         List<User> allUsers = new ArrayList<>(App.getUsers());
 
-        boolean isAscending;
-        if (ascendOrDescend.equalsIgnoreCase("ascending")) {
-            isAscending = true;
-        } else {
-            isAscending = false;
-        }
+        boolean isAscending = ascendOrDescend == null || ascendOrDescend.equalsIgnoreCase("ascending");
         Comparator<User> comparator;
 
+        if (sortBy == null) sortBy = "score";
         switch (sortBy) {
             case "last level":
                 comparator = Comparator.comparingInt((User user) -> user.getLastSeason() == null ? 0 :
@@ -69,7 +65,7 @@ public class LeaderBoardController {
                 comparator = Comparator.comparingInt(User::getHighestPointAchieved);
                 break;
         }
-        if (isAscending) {
+        if (!isAscending) {
             comparator = comparator.reversed();
         }
         allUsers.sort(comparator);

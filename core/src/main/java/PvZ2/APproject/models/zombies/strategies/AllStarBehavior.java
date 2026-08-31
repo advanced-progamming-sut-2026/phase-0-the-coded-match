@@ -15,6 +15,10 @@ public class AllStarBehavior implements ZombieBehavior {
             targetZombie.setCurrentHp(0);
         }
         if (zombie.getCurrentState() == ZombieState.EATING) {
+            if (targetPlant == null) {
+                zombie.setCurrentState(ZombieState.WALKING);
+                return;
+            }
             if (zombie.isWasRunning()) {
                 zombie.destroyPlant(targetPlant);
                 zombie.setWasRunning(false);

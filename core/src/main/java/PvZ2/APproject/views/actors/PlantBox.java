@@ -2,7 +2,9 @@ package PvZ2.APproject.views.actors;
 
 import PvZ2.APproject.controllers.GameManagerController;
 import PvZ2.APproject.controllers.PlantSelectionController;
+import PvZ2.APproject.models.Level;
 import PvZ2.APproject.models.plants.PlantData;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Group;
@@ -14,73 +16,84 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import pvz.libpvz.textures.TextureBank;
+import pvz.skin.PvzSkin;
 
 public class PlantBox extends Group {
     private final PlantData plantData;
     private final PlantSelectionController selectionController;
+    private final Label costLabel;
+    private final Label cooldownLabel;
     private TextureRegion background;
     private TextureRegion plantImage;
-    private Skin skin;
+    private boolean available = true;
 
-    public PlantBox(PlantData plantDatal, PlantSelectionController selectionController, TextureBank textures, Skin skin) {
-        this.plantData = plantDatal;
+    public PlantBox(PlantData plantData, PlantSelectionController selectionController, TextureBank textures) {
+        this(plantData, selectionController, textures, PvzSkin.get());
+    }
+
+    public PlantBox(PlantData plantData, PlantSelectionController selectionController, TextureBank textures, Skin skin) {
+        this.plantData = plantData;
         this.selectionController = selectionController;
-        this.skin = skin;
-
         setSize(100, 120);
         setTouchable(Touchable.enabled);
-
         createVisuals(textures);
+
+        costLabel = new Label(Integer.toString(plantData.getSunCost()), skin, "default");
+        costLabel.setFontScale(0.85f);
+        costLabel.setPosition(8f, 6f);
+        addActor(costLabel);
+
+        Image sun = new Image(new TextureRegionDrawable(
+            textures.region("IMAGE_UI_SEASONS_UNCOMPRESSED_PVZ2_SEASONS_UIASSET_ICON_SUN")
+        ));
+        sun.setSize(18f, 18f);
+        sun.setPosition(30f, 7f);
+        addActor(sun);
+
+        cooldownLabel = new Label("", skin, "default");
+        cooldownLabel.setFontScale(0.75f);
+        cooldownLabel.setPosition(58f, 76f);
+        addActor(cooldownLabel);
         addClickListener();
     }
 
-    public void createVisuals(TextureBank textures){
-        switch(GameManagerController.getInstance().getCurrentLevel().getCurrentSeason().getName()) {
-            case "ANCIENT EGYPT":
-                background = textures.region("IMAGE_UI_PACKETS_EGYPT");
-                break;
-            case "FROSTBITE CAVES":
-                background = textures.region("IMAGE_UI_PACKETS_ICEAGE");
-                break;
-            case "BIG BEACH WAVES":
-                background = textures.region("IMAGE_UI_PACKETS_BEACH");
-                break;
-            case "DARK AGES":
-                background = textures.region("IMAGE_UI_PACKETS_DARK");
-                break;
-            default:
-                background = textures.region("IMAGE_UI_PACKETS_PIRATE");
+    public void createVisuals(TextureBank textures) {
+        Level level = GameManagerController.getInstance().getCurrentLevel();
+        int seasonId = 0;
+        if (level != null && level.getCurrentSeason() != null && level.getCurrentSeason().getData() != null) {
+            seasonId = level.getCurrentSeason().getData().getId();
         }
-
+        background = switch (seasonId) {
+            case 1 -> textures.region("IMAGE_UI_PACKETS_EGYPT");
+            case 2 -> textures.region("IMAGE_UI_PACKETS_ICEAGE");
+            case 3 -> textures.region("IMAGE_UI_PACKETS_BEACH");
+            case 4 -> textures.region("IMAGE_UI_PACKETS_DARK");
+            default -> textures.region("IMAGE_UI_PACKETS_PIRATE");
+        };
         plantImage = textures.region("IMAGE_UI_PACKETS_" + plantData.getId().toUpperCase());
+    }
 
-        Label sunCost = new Label(Integer.toString(plantData.getSunCost()), skin, "default");
-
-        Image sun = new Image(
-            new TextureRegionDrawable(
-                textures.region("IMAGE_UI_SEASONS_UNCOMPRESSED_PVZ2_SEASONS_UIASSET_ICON_SUN")
-            )
-        );
-
-        sunCost.setPosition(10, 10);
-        sun.setSize(20, 20);
-        sun.setPosition(30, 12);
-        addActor(sunCost);
-        addActor(sun);
-
+    @Override
+    public void act(float delta) {
+        super.act(delta);
+        Level level = GameManagerController.getInstance().getCurrentLevel();
+        int cooldown = GameManagerController.getInstance().getPlantCooldowns()
+            .getOrDefault(plantData.getName().toLowerCase(), 0);
+        available = level != null && level.getCollectedSunsAmount() >= plantData.getSunCost()
+            && (GameManagerController.getInstance().isCooldownRemoved() || cooldown <= 0);
+        if (!GameManagerController.getInstance().isCooldownRemoved() && cooldown > 0) {
+            cooldownLabel.setText((int) Math.ceil(cooldown / 10.0) + "s");
+            cooldownLabel.setVisible(true);
+        } else {
+            cooldownLabel.setVisible(false);
+        }
+        cooldownLabel.setPosition(Math.max(4f, getWidth() - cooldownLabel.getPrefWidth() - 7f), getHeight() - 22f);
     }
 
     private void addClickListener() {
-
         addListener(new ClickListener() {
-
             @Override
-            public void clicked(
-                InputEvent event,
-                float x,
-                float y
-            ) {
-
+            public void clicked(InputEvent event, float x, float y) {
                 selectionController.selectPlant(plantData);
             }
         });
@@ -88,26 +101,18 @@ public class PlantBox extends Group {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
+        boolean selected = selectionController.getSelectedPlant() != null
+            && selectionController.getSelectedPlant().getId().equalsIgnoreCase(plantData.getId());
+        if (!available) batch.setColor(0.55f, 0.55f, 0.55f, parentAlpha);
+        else if (selected) batch.setColor(1f, 1f, 0.78f, parentAlpha);
+        else batch.setColor(1f, 1f, 1f, parentAlpha);
 
-        batch.draw(
-            background,
-            getX(),
-            getY(),
-            getWidth(),
-            getHeight()
-        );
-
-        batch.draw(
-            plantImage,
-            getX() + 20,
-            getY() + 35,
-            60,
-            60
-        );
-
+        batch.draw(background, getX(), getY(), getWidth(), getHeight());
+        float plantSize = Math.min(getWidth() * 0.64f, getHeight() * 0.58f);
+        float plantX = getX() + (getWidth() - plantSize) * 0.5f;
+        float plantY = getY() + getHeight() * 0.29f;
+        batch.draw(plantImage, plantX, plantY, plantSize, plantSize);
+        batch.setColor(Color.WHITE);
         super.draw(batch, parentAlpha);
-
     }
-
-
 }

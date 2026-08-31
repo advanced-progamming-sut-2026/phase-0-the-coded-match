@@ -47,13 +47,8 @@ public class Level {
         this.levelNumber = data.getLevelNumber();
         this.isUnlocked = data.isUnlocked();
         this.levelType = data.getLevelType();
-        this.gameMap = data.getMap();
-        if (this.gameMap != null) {
-            this.gameMap.initializeGrid();
-            this.gameMap.initializeLawnMowers(gameMap.getRows());
-        } else {
-            this.gameMap = new GameMap(5, 9);
-        }
+        GameMap templateMap = data.getMap();
+        this.gameMap = templateMap == null ? new GameMap(5, 9) : templateMap.copy();
         this.chosenPlants = new ArrayList<>();
         this.activeZombies = new ArrayList<>();
         this.activePlants = new ArrayList<>();
@@ -75,41 +70,39 @@ public class Level {
 
     public void setUpSpecialLevel(){
         Random random = new Random();
-        if(this.data.getLevelType() == LevelType.SPECIAL) {
+        if (this.data.getLevelType() == LevelType.SPECIAL) {
             switch (data.getSpecialLevelType()) {
-                case SpecialLevelType.NIGHT_OPS:
+                case NIGHT_OPS:
                     this.specialLevelStrategy = new NightOpsStrategy();
                     break;
-                case SpecialLevelType.DEAD_LINE:
-                    int deadLine = 4;
-                    this.specialLevelStrategy = new DeadLineStrategy(deadLine); // e.g., column 4 is the deadline
+                case DEAD_LINE:
+                    int deadLine = 1 + random.nextInt(Math.max(1, this.gameMap.getColumns() - 1));
+                    this.specialLevelStrategy = new DeadLineStrategy(deadLine);
                     break;
-                case SpecialLevelType.LOVE_YOUR_PLANTS:
-                    int maxLoss = random.nextInt(6);
-                    this.specialLevelStrategy = new LoveYourPlantsStrategy(maxLoss); // e.g., max 5 plants lost
+                case LOVE_YOUR_PLANTS:
+                    int maxLoss = 1 + random.nextInt(5);
+                    this.specialLevelStrategy = new LoveYourPlantsStrategy(maxLoss);
                     break;
-                case SpecialLevelType.SAVE_OUR_SEEDS:
+                case SAVE_OUR_SEEDS:
                     this.specialLevelStrategy = new SaveOurSeedsStrategy();
                     break;
-                case SpecialLevelType.LOCKED_PLANTS_LEVEL:
+                case LOCKED_PLANTS_LEVEL:
                     this.specialLevelStrategy = new LockedPlantsLevel();
                     break;
                 default:
                     this.specialLevelStrategy = null;
                     break;
-
             }
 
             if (this.specialLevelStrategy != null) {
                 this.specialLevelStrategy.levelStart(this);
             }
         }
-
     }
 
     public Zombie getAdjacentZombie(Zombie zombie) {
         for (Zombie adjacentZombie : activeZombies) {
-            if (zombie.getX() == adjacentZombie.getX() && zombie.getY() == adjacentZombie.getY()) {
+            if (adjacentZombie != zombie && zombie.getX() == adjacentZombie.getX() && zombie.getY() == adjacentZombie.getY()) {
                 return adjacentZombie;
             }
         }
@@ -120,7 +113,7 @@ public class Level {
         for (Plant plant : activePlants) {
             if (plant.getY() == zombie.getY()) {
                 double distance = zombie.getX() - plant.getX();
-                if (distance <= requiredDistance) {
+                if (distance >= 0 && distance <= requiredDistance) {
                     return true;
                 }
             }
@@ -269,24 +262,43 @@ public class Level {
     }
 
     public Plant getFrontMostPlantInRow(double row){
-        Plant front= null;
-        int minCol = Integer.MAX_VALUE;
-        for(Plant p : activePlants){
-            if(p.getY() == row && p.getX() < minCol){
-                minCol = p.getX();
-                front = p;
+        Plant front = null;
+        int maxCol = Integer.MIN_VALUE;
+        for (Plant plant : activePlants) {
+            if (plant.getY() == row && plant.getX() > maxCol) {
+                maxCol = plant.getX();
+                front = plant;
             }
         }
         return front;
     }
 
-    public Plant getPlantInFrontOfZombie(Zombie zombie) {
-        for (Plant p : activePlants) {
-            if (p.getX() <= zombie.getX() + 0.5 && p.getX() >= zombie.getX() && p.getY() == zombie.getY()) {
-                return p;
+    public Plant getClosestPlantInFront(Zombie zombie) {
+        Plant closest = null;
+        double closestDistance = Double.MAX_VALUE;
+        for (Plant plant : activePlants) {
+            if (plant.getY() != zombie.getY() || plant.isDead()) continue;
+            double distance = zombie.getX() - plant.getX();
+            if (distance >= 0 && distance < closestDistance) {
+                closest = plant;
+                closestDistance = distance;
             }
         }
-        return null;
+        return closest;
+    }
+
+    public Plant getPlantInFrontOfZombie(Zombie zombie) {
+        Plant closest = null;
+        double closestDistance = Double.MAX_VALUE;
+        for (Plant plant : activePlants) {
+            if (plant.getY() != zombie.getY()) continue;
+            double distance = zombie.getX() - plant.getX();
+            if (distance >= 0 && distance <= 0.5 && distance < closestDistance) {
+                closest = plant;
+                closestDistance = distance;
+            }
+        }
+        return closest;
     }
 
     public Plant getPlantAt(int x, int y){
@@ -316,7 +328,11 @@ public class Level {
     }
 
     public boolean isDay(){
-        return !this.getData().getId().toLowerCase().contains("dark_level") && !(specialLevelStrategy instanceof NightOpsStrategy);
+        if (specialLevelStrategy instanceof NightOpsStrategy) return false;
+        if (this.getData() != null && this.getData().getId() != null &&
+            this.getData().getId().toLowerCase().contains("dark_level")) return false;
+        return currentSeason == null || currentSeason.getName() == null ||
+            !currentSeason.getName().replace("_", " ").equalsIgnoreCase("dark ages");
     }
 
     public void triggerEnvironmentEvent(EnvironmentEvent.EnvironmentEventType type, float duration) {

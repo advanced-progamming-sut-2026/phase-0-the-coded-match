@@ -20,7 +20,6 @@ public final class FrostbiteCaves extends Season {
     public FrostbiteCaves(SeasonData data) {
         super(data);
         this.name = data.getName();
-        this.setUnlocked(true);
     }
 
     @Override
@@ -64,7 +63,7 @@ public final class FrostbiteCaves extends Season {
 
     private boolean zombieShouldBeFrozen(Zombie zombie){
         if (zombie == null || zombie.getData() == null) return false;
-        return zombie.getData().getId().toLowerCase().contains("IceAge");
+        return zombie.getData().getId().toLowerCase().contains("iceage");
     }
 
     @Override
@@ -76,7 +75,7 @@ public final class FrostbiteCaves extends Season {
 
             Plant plant = level.getPlantAt(x, y);
             if(plant != null && plant.isFullyFrozen()){
-                if(projectile.getCreatorPlantCategory().hasThisTag(PlantTag.FIRE)){
+                if(projectile.getCreatorPlantCategory() != null && projectile.getCreatorPlantCategory().hasThisTag(PlantTag.FIRE)){
                     plant.decreaseIceHP(plant.getIceHP());
                 }else{
                     plant.decreaseIceHP(projectile.getDamage());
@@ -110,6 +109,12 @@ public final class FrostbiteCaves extends Season {
 
     @Override
     public void WaveStarted(Level level, int waveNumber) {
+        for (Zombie zombie : level.getActiveZombies()) {
+            if (zombieShouldBeFrozen(zombie) && !zombie.isFrozenInBlock()) {
+                zombie.setFrozenInBlock(true);
+                zombie.setBlockIceHP(60);
+            }
+        }
         Random random = new Random();
         int randomRow = 1 + random.nextInt(level.getGameMap().getRows());
         int affectedRows = random.nextInt(2) + 1;

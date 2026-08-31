@@ -39,6 +39,18 @@ public class Tile implements Update {
         this.zombies = new ArrayList<>();
     }
 
+    public Tile(Tile source) {
+        this.row = source.row;
+        this.column = source.column;
+        this.type = source.type;
+        this.currentHp = source.currentHp;
+        this.isGrave = source.isGrave;
+        this.graveReward = source.graveReward;
+        this.holdsNecromancyPotential = source.holdsNecromancyPotential;
+        this.slippery = source.slippery;
+        this.zombies = new ArrayList<>();
+    }
+
     public void takeDamage(int damage) {
         if (currentHp > 0) {
             currentHp -= damage;
@@ -101,9 +113,10 @@ public class Tile implements Update {
             return false;
         }
         if (this.getType() == TileType.WATER) {
-            if (plant.getData().getName().equalsIgnoreCase("LilyPad") || plant.hasThisTag(PlantTag.WATER)) {
-                return this.getPlant() == null; // Can plant if empty
+            if (plant.getData().getName().equalsIgnoreCase("LilyPad")) {
+                return this.lilyPadPlant == null && this.getPlant() == null;
             }
+            if (plant.hasThisTag(PlantTag.WATER)) return this.getPlant() == null;
             return this.lilyPadPlant != null && this.getPlant() == null;
         }
         return this.getPlant() == null && !isGrave();
@@ -147,6 +160,13 @@ public class Tile implements Update {
 
     public void setType(TileType type) {
         this.type = type;
+        if (type == TileType.GRAVE) {
+            this.isGrave = true;
+            if (currentHp <= 0) currentHp = type.getMaxHp();
+        } else if (this.isGrave) {
+            this.isGrave = false;
+            this.graveReward = GraveReward.NONE;
+        }
     }
 
     public int getCurrentHp() {
@@ -161,7 +181,16 @@ public class Tile implements Update {
         return zombies;
     }
 
-    public void setGrave(boolean isGrave){this.isGrave = isGrave;}
+    public void setGrave(boolean isGrave){
+        this.isGrave = isGrave;
+        if (isGrave) {
+            this.type = TileType.GRAVE;
+            if (currentHp <= 0) currentHp = TileType.GRAVE.getMaxHp();
+        } else if (this.type == TileType.GRAVE) {
+            this.type = TileType.NORMAL;
+            this.graveReward = GraveReward.NONE;
+        }
+    }
 
     public boolean isGrave(){return isGrave;}
     public GraveReward getGraveReward() { return graveReward; }
@@ -172,8 +201,13 @@ public class Tile implements Update {
 
     public void setGrave(boolean active, GraveReward reward) {
         this.isGrave = active;
-        this.graveReward = reward;
-        this.setType(TileType.GRAVE);
+        this.graveReward = reward == null ? GraveReward.NONE : reward;
+        if (active) {
+            this.type = TileType.GRAVE;
+            this.currentHp = TileType.GRAVE.getMaxHp();
+        } else if (this.type == TileType.GRAVE) {
+            this.type = TileType.NORMAL;
+        }
     }
 
 

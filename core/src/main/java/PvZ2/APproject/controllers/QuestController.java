@@ -41,6 +41,7 @@ public class QuestController {
     }
 
     public static void generateAllQuests() {
+        if (App.getCurrentUser() == null) return;
         useCurrentUserQuests();
         if (!questsModel.getAvailableQuests().isEmpty()) {
             return;
@@ -82,9 +83,10 @@ public class QuestController {
     }
 
     public static void refreshDailyQuests(boolean force) {
+        if (App.getCurrentUser() == null) return;
         useCurrentUserQuests();
         String today = LocalDate.now().toString();
-        if (!force && today.equals(App.getCurrentUser().getLastDailyQuestRefreshDate())) {
+        if (today.equals(App.getCurrentUser().getLastDailyQuestRefreshDate())) {
             return;
         }
         List<Quest> refreshed = new ArrayList<>();
@@ -204,7 +206,7 @@ public class QuestController {
             case SEED_PACKET -> {
                 PlantData rewardPlant = quest.getTargetPlant() == null ? getRandomPlant() : quest.getTargetPlant();
                 if (rewardPlant != null) {
-                    currentUser.addSeedPackets(rewardPlant.getName(), Math.max(0, rewardAmount));
+                    currentUser.addSeedPackets(rewardPlant.getId(), Math.max(0, rewardAmount));
                 }
             }
         }

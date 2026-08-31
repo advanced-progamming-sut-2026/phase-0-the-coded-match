@@ -15,12 +15,17 @@ public class ProfileMenuController {
     public String changeUsername(String username) {
         User user = App.getCurrentUser();
 
-        if (user.getUsername().equals(username)) {
+        if (user == null) return "Error: No logged in user.";
+        if (!SignupMenuController.validateUsername(username) && (username == null || !user.getUsername().equalsIgnoreCase(username))) {
+            return "Error: Invalid username or username already exists.";
+        } else if (user.getUsername().equals(username)) {
             return "Error: New username is the same as current username.";
         } else if (App.doesUsernameExists(username)) {
             return "Error: Username already exists.";
         } else {
             user.setUsername(username);
+            if (user.isStayLoggedIn()) App.saveLoggedInUser(username);
+            SignupMenuController.saveToJson();
             return "Username changed successfully!";
         }
     }
@@ -34,6 +39,7 @@ public class ProfileMenuController {
             return "Error: Invalid nickname.";
         } else {
             user.setNickname(nickname);
+            SignupMenuController.saveToJson();
             return "Nickname changed successfully!";
         }
     }
@@ -47,6 +53,7 @@ public class ProfileMenuController {
             return "Error: Invalid email.";
         } else {
             user.setEmail(email);
+            SignupMenuController.saveToJson();
             return "Email changed successfully!";
         }
     }
@@ -65,6 +72,7 @@ public class ProfileMenuController {
             return "Error: Password is not strong enough.";
         } else {
             user.setPassword(hashedNewPassword);
+            SignupMenuController.saveToJson();
             return "Password changed successfully!";
         }
     }

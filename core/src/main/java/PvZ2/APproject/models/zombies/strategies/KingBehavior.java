@@ -2,6 +2,7 @@ package PvZ2.APproject.models.zombies.strategies;
 
 import PvZ2.APproject.controllers.GameManagerController;
 import PvZ2.APproject.enums.ArmorType;
+import PvZ2.APproject.enums.ZombieState;
 import PvZ2.APproject.models.Projectile;
 import PvZ2.APproject.models.plants.Plant;
 import PvZ2.APproject.models.zombies.Zombie;
@@ -15,6 +16,12 @@ public class KingBehavior implements ZombieBehavior {
 
     @Override
     public void updateZombie(Zombie zombie, Plant targetPlant) {
+        if (zombie.getCurrentState() == ZombieState.EATING) {
+            if (targetPlant != null) zombie.attack(targetPlant);
+            if (targetPlant == null || targetPlant.isDead()) zombie.setCurrentState(ZombieState.WALKING);
+        } else {
+            zombie.walk();
+        }
         zombie.setAbilityTickTimer(zombie.getAbilityTickTimer() + 1);
         if (zombie.getAbilityTickTimer() >= ABILITY_TICKS) {
             makeKnight();

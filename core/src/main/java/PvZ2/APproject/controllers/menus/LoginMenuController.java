@@ -14,6 +14,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class LoginMenuController{
+    private static SecurityQuestions resetQuestion;
 
     public static String login(String username, String password, boolean stayLoggedIn) {
 //        Pattern pattern = Pattern.compile(Commands.LOGIN.getPattern());
@@ -56,22 +57,22 @@ public class LoginMenuController{
             return "Incorrect email";
         }
         App.setUserUndergoingReset(target);
+        resetQuestion = null;
         for (SecurityQuestions questions : target.getQuestions().keySet()) {
+            resetQuestion = questions;
             return questions.getText();
         }
         return "no question";
     }
 
     public static String isAnswerCorrect(String input) {
-        Pattern pattern = Pattern.compile(Commands.ANSWER.getPattern());
-        Matcher matcher = pattern.matcher(input);
-        if (!matcher.matches()) {
-            return "invalid command";
-        }
-        String answer = matcher.group("answer");
+        if (input == null) return "Wrong answer";
+        String answer = input.trim();
+        Matcher matcher = Pattern.compile(Commands.ANSWER.getPattern()).matcher(input);
+        if (matcher.matches()) answer = matcher.group("answer").trim();
         User target = App.getUserUndergoingReset();
-        if (target == null || !target.getQuestions().containsValue(answer)){
-            App.setCurrentMenu(Menu.SIGNUP_MENU);
+        String expected = target == null || resetQuestion == null ? null : target.getQuestions().get(resetQuestion);
+        if (expected == null || !expected.trim().equalsIgnoreCase(answer)){
             return "Wrong answer";
         }
         App.setCurrentPhase(Phases.RESETTING_PASSWORD);
@@ -79,19 +80,19 @@ public class LoginMenuController{
     }
 
     public static String resetPassword(String input) {
-        Pattern pattern = Pattern.compile(Commands.NEW_PASSWORD.getPattern());
-        Matcher matcher = pattern.matcher(input);
-        if (!matcher.matches()) {
-            return "invalid command";
-        }
-        String newPassword = matcher.group("password");
-        if (newPassword == null || !SignupMenuController.validatePassword(newPassword)) {
+        if (input == null) return "invalid password";
+        String newPassword = input.trim();
+        Matcher matcher = Pattern.compile(Commands.NEW_PASSWORD.getPattern()).matcher(input);
+        if (matcher.matches()) newPassword = matcher.group("password");
+        if (!SignupMenuController.validatePassword(newPassword)) {
             return "invalid password";
         }
         User target = App.getUserUndergoingReset();
         if (target == null) return "No password reset request";
         target.setPassword(SignupMenuController.hashPassword(newPassword));
         App.setCurrentPhase(Phases.NORMAL_GAMEPLAY);
+        App.setUserUndergoingReset(null);
+        resetQuestion = null;
         SignupMenuController.saveToJson();
         return "Password reset successfully";
     }

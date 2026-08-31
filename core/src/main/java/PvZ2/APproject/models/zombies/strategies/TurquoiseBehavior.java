@@ -29,10 +29,16 @@ public class TurquoiseBehavior implements ZombieBehavior {
                 isCastingAbility = false;
                 zombie.setCurrentState(ZombieState.WALKING);
             } else {
-                zombie.setStolenSuns(zombie.getStolenSuns() + stealSuns());
+                if (zombie.getAbilityTickTimer() % 5 == 0) {
+                    zombie.setStolenSuns(zombie.getStolenSuns() + stealSuns());
+                }
                 zombie.setAbilityTickTimer(zombie.getAbilityTickTimer() + 1);
             }
             if (zombie.getCurrentState() == ZombieState.EATING) {
+                if (targetPlant == null) {
+                    zombie.setCurrentState(ZombieState.WALKING);
+                    return;
+                }
                 zombie.attack(targetPlant);
                 if(targetPlant.isDead()) {
                     zombie.setCurrentState(ZombieState.WALKING);
@@ -46,9 +52,10 @@ public class TurquoiseBehavior implements ZombieBehavior {
 
         for (int x = 1; x <= map.getColumns(); x++) {
             for (int y = 1; y <= map.getRows(); y++) {
-                if (y == zombie.getY() && zombie.getX() - x <= 4) {
+                double distance = zombie.getX() - x;
+                if (y == zombie.getY() && distance >= 0 && distance <= 4) {
                     Tile tile = map.getTile(x, y);
-                    if (!tile.isEmpty()) {
+                    if (tile != null && tile.getPlant() != null) {
                         tile.getPlant().setCurrentHp(0);
                     }
                 }

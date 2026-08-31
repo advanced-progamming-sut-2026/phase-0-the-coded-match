@@ -37,7 +37,7 @@ public class ShootAbility implements PlantAbilityHandler {
     protected Projectile createProjectile(Plant plant, int lane, int offset) {
         double startX = plant.getX() + 0.15 + (offset * 0.08);
         double speed = plant.getData().getProjectileSpeed() > 0 ? plant.getData().getProjectileSpeed() : DEFAULT_PROJECTILE_SPEED;
-        int damage = Math.max(0, plant.getData().getDamage() * damageMultiplier);
+        int damage = Math.max(0, plant.getDamage() * damageMultiplier);
         return new Projectile(startX, lane, speed, damage, false, false, plant);
     }
 

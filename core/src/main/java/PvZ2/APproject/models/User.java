@@ -62,11 +62,11 @@ public class User {
     public void addGamesPlayed() { gamesPlayedCount++; }
 
     public void addCoins(int amount) {
-        this.coinsCount = coinsCount + amount;
+        this.coinsCount = Math.max(0, coinsCount + amount);
     }
 
     public void addGems(int amount) {
-        this.gemsCount = gemsCount + amount;
+        this.gemsCount = Math.max(0, gemsCount + amount);
     }
 
     public void addChapters() { levelsCount++; }
@@ -89,10 +89,9 @@ public class User {
         if (seedPackets == null) seedPackets = new HashMap<>();
         if (questsModel == null) questsModel = new QuestsModel();
         if (difficultyLevel < 1 || difficultyLevel > 5) difficultyLevel = 3;
-        restoreProgress();
     }
 
-    private void restoreProgress() {
+    public void restoreProgress() {
         if (lastSeasonId <= 0) return;
         for (Season season : App.getAllSeasons()) {
             int seasonId = season.getData().getId();
@@ -121,12 +120,14 @@ public class User {
         }
     }
     public void recordLevelVictory(Season season, LevelData level, int score) {
-        this.lastSeason = season;
-        if (season != null && season.getData() != null) {
-            this.lastSeasonId = season.getData().getId();
+        int seasonId = season != null && season.getData() != null ? season.getData().getId() : 0;
+        int levelNumber = level == null ? 0 : level.getLevelNumber();
+        if (seasonId > lastSeasonId || (seasonId == lastSeasonId && levelNumber >= lastLevelNumber)) {
+            this.lastSeason = season;
+            this.lastSeasonId = seasonId;
+            this.lastLevel = level;
+            this.lastLevelNumber = levelNumber;
         }
-        this.lastLevel = level;
-        if (level != null) this.lastLevelNumber = level.getLevelNumber();
         if (score > this.highestPointAchieved) {
             this.highestPointAchieved = score;
         }
@@ -170,6 +171,7 @@ public class User {
 
     public void setLastLevel(LevelData lastLevel) {
         this.lastLevel = lastLevel;
+        if (lastLevel != null) this.lastLevelNumber = lastLevel.getLevelNumber();
     }
 
     public Season getLastSeason() {
@@ -245,7 +247,7 @@ public class User {
     }
 
     public void setCoinsCount(int coinsCount) {
-        this.coinsCount = coinsCount;
+        this.coinsCount = Math.max(0, coinsCount);
     }
 
     public int getGemsCount() {
@@ -253,7 +255,7 @@ public class User {
     }
 
     public void setGemsCount(int gemsCount) {
-        this.gemsCount = gemsCount;
+        this.gemsCount = Math.max(0, gemsCount);
     }
 
     public int getDifficultyLevel() {
@@ -261,7 +263,7 @@ public class User {
     }
 
     public void setDifficultyLevel(int difficultyLevel) {
-        this.difficultyLevel = difficultyLevel;
+        this.difficultyLevel = Math.max(1, Math.min(5, difficultyLevel));
     }
 
     public int getGamesPlayedCount() {
@@ -278,6 +280,7 @@ public class User {
 
     public int getSeedPacketCount(String plantName) {
         ensureDefaults();
+        if (plantName == null) return 0;
         return seedPackets.getOrDefault(plantName.toLowerCase(), 0);
     }
 
@@ -290,11 +293,13 @@ public class User {
     }
 
     public void addSeedPackets(String plantName, int count) {
+        if (plantName == null || count <= 0) return;
         String key = plantName.toLowerCase();
         seedPackets.put(key, getSeedPacketCount(key) + count);
     }
 
     public boolean spendSeedPackets(String plantName, int count) {
+        if (plantName == null || count <= 0) return false;
         String key = plantName.toLowerCase();
         int current = getSeedPacketCount(key);
         if (current < count) {

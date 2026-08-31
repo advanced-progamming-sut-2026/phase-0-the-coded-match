@@ -28,6 +28,27 @@ public final class GameMap {
         initializeLawnMowers(rows);
     }
 
+    public GameMap(GameMap source) {
+        this.rows = source.rows;
+        this.columns = source.columns;
+        this.length = source.length;
+        this.width = source.width;
+        this.defaultPathDirection = source.defaultPathDirection;
+        source.initializeGrid();
+        this.tiles = new ArrayList<>();
+        for (int r = 0; r < source.rows; r++) {
+            for (int c = 0; c < source.columns; c++) {
+                this.tiles.add(new Tile(source.grid[r][c]));
+            }
+        }
+        initializeGrid();
+        initializeLawnMowers(rows);
+    }
+
+    public GameMap copy() {
+        return new GameMap(this);
+    }
+
     public void initializeGrid() {
         if (rows <= 0) rows = 5;
         if (columns <= 0) columns = 9;
@@ -63,39 +84,43 @@ public final class GameMap {
 
     public void handleLawnMower(Zombie zombie){
         int row = zombie.getY();
-        Lawnmower mower = lawnMowerUsed(row);
-        if(mower == null){
-//            System.out.println( "The zombie ate your brain; LOSER!!!");
+        Lawnmower mower = findLawnMower(row);
+        if (mower == null || mower.HasBeenUsed()) {
             GameManagerController.getInstance().gameOver();
             return;
         }
+        if (mower.isTriggered()) {
+            zombie.takeDamage(Math.max(1, zombie.getCurrentHp() + zombie.getMaxHp()), null);
+            QuestController.notifyZombiesKilledByLawnmower(1);
+            return;
+        }
 
-        mower.setHasBeenUsed(true);
-//        System.out.println("The lawn mower in the row " + row + " is triggered and killed these zombies:");
+        mower.trigger();
 
         List<Zombie> killed = new ArrayList<>();
         List<Zombie> activeZombies = GameManagerController.getInstance().getCurrentLevel().getActiveZombies();
         for (Zombie zombieInRow : new ArrayList<>(activeZombies)) {
             if (zombieInRow.getY() == row) {
                 killed.add(zombieInRow);
-                zombieInRow.setCurrentHp(0);
+                zombieInRow.takeDamage(Math.max(1, zombieInRow.getCurrentHp() + zombieInRow.getMaxHp()), null);
             }
         }
         QuestController.notifyZombiesKilledByLawnmower(killed.size());
-
-//        for (Zombie z : killed) System.out.println(z.getData().getDisplayName());
-
     }
 
     public Lawnmower lawnMowerUsed(int row){
-        for(Lawnmower mower: lawnmowers){
-            if (mower.getRow() != row){
-                continue;
+        Lawnmower mower = findLawnMower(row);
+        if (mower == null || mower.HasBeenUsed() || mower.isTriggered()) {
+            return null;
+        }
+        return mower;
+    }
+
+    private Lawnmower findLawnMower(int row) {
+        for (Lawnmower mower : lawnmowers) {
+            if (mower.getRow() == row) {
+                return mower;
             }
-            if (mower.HasBeenUsed()){
-                return null;
-            }
-            return mower;
         }
         return null;
     }
@@ -108,26 +133,16 @@ public final class GameMap {
     }
 
     public boolean checkGardenSymmetry() {
-        int totalRows = rows;
-        int totalColumns = columns;
-
-        for (int x = 0; x < totalColumns; x++) {
-
-            String plantRow1 = getPlantNameAt(x, 0);
-            String plantRow5 = getPlantNameAt(x, 4);
-
-            if (!isSamePlant(plantRow1, plantRow5)) {
-                return false;
-            }
-
-            String plantRow2 = getPlantNameAt(x, 1);
-            String plantRow4 = getPlantNameAt(x, 3);
-
-            if (!isSamePlant(plantRow2, plantRow4)) {
-                return false;
+        if (grid == null) initializeGrid();
+        for (int column = 0; column < columns; column++) {
+            for (int row = 0; row < rows / 2; row++) {
+                String first = getPlantNameAt(column, row);
+                String mirrored = getPlantNameAt(column, rows - 1 - row);
+                if (!isSamePlant(first, mirrored)) {
+                    return false;
+                }
             }
         }
-
         return true;
     }
 

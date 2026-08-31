@@ -91,6 +91,6 @@ public class ZombieData {
     }
 
     public void setSpeed(int speed){
-        this.runningSpeed = speed;
+        this.speed = speed;
     }
 }

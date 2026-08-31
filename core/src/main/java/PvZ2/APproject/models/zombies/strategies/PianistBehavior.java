@@ -15,7 +15,7 @@ public class PianistBehavior implements ZombieBehavior {
     public void updateZombie(Zombie zombie, Plant targetPlant) {
         zombie.setAbilityTickTimer(zombie.getAbilityTickTimer() + 1);
         if (zombie.getCurrentState() == ZombieState.EATING) {
-            zombie.destroyPlant(targetPlant);
+            if (targetPlant != null) zombie.destroyPlant(targetPlant);
             zombie.setCurrentState(ZombieState.WALKING);
         } else if (zombie.getCurrentState() == ZombieState.WALKING) {
             zombie.walk();
@@ -27,14 +27,14 @@ public class PianistBehavior implements ZombieBehavior {
     }
 
     public void shuffleZombies(Zombie pianist) {
-        for (Zombie zombie : GameManagerController.getInstance().getCurrentLevel().getActiveZombies()) {
+        int totalRows = GameManagerController.getInstance().getCurrentLevel().getGameMap().getRows();
+        if (totalRows <= 1) return;
+        Random random = new Random();
+        for (Zombie zombie : new java.util.ArrayList<>(GameManagerController.getInstance().getCurrentLevel().getActiveZombies())) {
             if (zombie != pianist) {
-                Random random = new Random();
-                int totalRows = GameManagerController.getInstance().getCurrentLevel().getGameMap().getRows();
-                int newRow = 1 + random.nextInt(totalRows);
-                while (newRow == zombie.getY()) {
-                    newRow = 1 + random.nextInt(totalRows);
-                }
+                int currentRow = zombie.getY();
+                int newRow = 1 + random.nextInt(totalRows - 1);
+                if (newRow >= currentRow) newRow++;
                 zombie.setY(newRow);
             }
         }

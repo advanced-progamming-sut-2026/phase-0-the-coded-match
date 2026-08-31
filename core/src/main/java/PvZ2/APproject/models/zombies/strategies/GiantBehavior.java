@@ -19,7 +19,7 @@ public class GiantBehavior implements ZombieBehavior {
         } else if (zombie.getCurrentState() == ZombieState.WALKING) {
             zombie.walk();
         }
-        if (zombie.getCurrentHp() <= (zombie.getData().getHP() / 2) && !zombie.isHasThrownImp()) {
+        if (zombie.getCurrentHp() <= (zombie.getMaxHp() / 2) && !zombie.isHasThrownImp()) {
             spawnImp(3.0, zombie);
             zombie.setHasThrownImp(true);
         }
@@ -27,6 +27,8 @@ public class GiantBehavior implements ZombieBehavior {
 
     public void spawnImp(double x, Zombie zombie) {
         ZombieData impData = ZombieRepository.getInstance().findByDisplayName("Imp");
+        if (impData == null) impData = ZombieRepository.getInstance().findById("ZombieImp");
+        if (impData == null || GameManagerController.getInstance().getCurrentLevel() == null) return;
         Zombie newImp = new Zombie(impData, x, zombie.getY());
         GameManagerController.getInstance().getCurrentLevel().getActiveZombies().add(newImp);
     }

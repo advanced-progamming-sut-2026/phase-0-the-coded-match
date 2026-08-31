@@ -2,7 +2,6 @@ package PvZ2.APproject.controllers;
 
 import PvZ2.APproject.models.GameMapRelated.Tile;
 import PvZ2.APproject.models.Level;
-import PvZ2.APproject.models.plants.Plant;
 import PvZ2.APproject.models.plants.PlantData;
 
 public class PlantSelectionController {
@@ -46,18 +45,11 @@ public class PlantSelectionController {
         if (selectedPlant == null || hoveredTile == null) {
             return false;
         }
-
-        Plant tempPlant = new Plant(
-            selectedPlant,
+        return PlantController.getPlantingError(
+            selectedPlant.getName(),
             hoveredTile.getColumn(),
-            hoveredTile.getRow(),
-            1
-        );
-
-        return PlantController.canPlaceOnTile(
-            tempPlant,
-            hoveredTile
-        );
+            hoveredTile.getRow()
+        ) == null;
     }
 
     public String tryPlaceSelectedPlant() {

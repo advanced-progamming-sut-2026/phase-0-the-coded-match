@@ -40,10 +40,6 @@ public class SeasonController {
     }
     public void startLevel(Level level, String seasonType) {
         Season season = getSeasonByType(seasonType);
-        if (season == null) {
-            season = currentSeason;
-        }
-
         if (season != null && level != null) {
             this.currentSeason = season;
             level.setCurrentSeason(season);
@@ -60,6 +56,6 @@ public class SeasonController {
         return null;
     }
     public Season getCurrentSeason() { return currentSeason; }
-    public List<Season> getActiveSeasons() { return activeSeasons; }
+    public List<Season> getActiveSeasons() { return List.copyOf(activeSeasons); }
 
 }

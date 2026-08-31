@@ -188,6 +188,7 @@ public abstract class BaseScreen implements Screen {
     }
 
     protected void updateCurrency() {
+        if (App.getCurrentUser() == null || coinLabel == null || gemLabel == null) return;
         coinLabel.setText(Integer.toString(App.getCurrentUser().getCoinsCount()));
         gemLabel.setText(Integer.toString(App.getCurrentUser().getGemsCount()));
     }
@@ -278,10 +279,17 @@ public abstract class BaseScreen implements Screen {
 
     @Override
     public void hide() {
+        if (stage != null) {
+            stage.dispose();
+            stage = null;
+        }
     }
 
     @Override
     public void dispose() {
-        stage.dispose();
+        if (stage != null) {
+            stage.dispose();
+            stage = null;
+        }
     }
 }

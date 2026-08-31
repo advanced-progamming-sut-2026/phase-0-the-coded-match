@@ -49,7 +49,7 @@ public class SkySunProducer implements Update {
 
     public void calculateDropTime() {
         Level level = GameManagerController.getInstance().getCurrentLevel();
-        double time = Math.min(12, 6 + 0.05 * elapsedTime);
+        double time = Math.min(14, 8 + 0.05 * elapsedTime);
         int dl = App.getCurrentUser() == null ? 3 : App.getCurrentUser().getDifficultyLevel();
         time *= dl / 3.0;
         if (level.isDay() && timeSinceLastDrop >= time) {
@@ -62,18 +62,18 @@ public class SkySunProducer implements Update {
         Level currentLevel = GameManagerController.getInstance().getCurrentLevel();
         if (random == null) random = new Random();
         int chance = random.nextInt(100);
-        int randomX = random.nextInt(1, currentLevel.getGameMap().getColumns());
-        int randomY = random.nextInt(1, currentLevel.getGameMap().getRows());
+        int randomX = random.nextInt(1, currentLevel.getGameMap().getColumns() + 1);
+        int randomY = random.nextInt(1, currentLevel.getGameMap().getRows() + 1);
 
         Sun droppedSun = null;
         if (chance < SunType.NORMAL.getDropChancePercentage()) {
-            droppedSun = new Sun(randomX, randomY, SunType.NORMAL.getValue(), 5f,
+            droppedSun = new Sun(randomX, randomY, SunType.NORMAL.getValue(), 7f,
                     true, SunType.NORMAL);
         } else if (chance < SunType.NORMAL.getDropChancePercentage() + SunType.SPECIAL.getDropChancePercentage()) {
-            droppedSun = new Sun(randomX, randomY, SunType.SPECIAL.getValue(), 5f,
+            droppedSun = new Sun(randomX, randomY, SunType.SPECIAL.getValue(), 7f,
                     true, SunType.SPECIAL);
         } else {
-            droppedSun = new Sun(randomX, randomY, SunType.RADIOACTIVE.getValue(), 5f,
+            droppedSun = new Sun(randomX, randomY, SunType.RADIOACTIVE.getValue(), 7f,
                     true, SunType.RADIOACTIVE);
         }
         if (droppedSun != null) {

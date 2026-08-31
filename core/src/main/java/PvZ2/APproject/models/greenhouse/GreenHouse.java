@@ -27,11 +27,13 @@ public class GreenHouse {
 
 
     public GreenHousePot getPot(int x, int y) {
+        if (x < 1 || x > grid[0].length || y < 1 || y > grid.length) return null;
         return grid[y - 1][x - 1];
     }
 
     public void plantPot(int x, int y, List<String> unlockedPlants) {
         GreenHousePot pot = getPot(x, y);
+        if (pot == null || pot.isLocked || !"EMPTY".equals(pot.status) || unlockedPlants == null) return;
 
         Random random = new Random();
         List<PlantData> boostablePlants = new ArrayList<>();
@@ -57,6 +59,9 @@ public class GreenHouse {
 
     public String collect(int x, int y) {
         GreenHousePot pot = getPot(x, y);
+        if (pot == null) return "Invalid pot";
+        if (pot.isLocked) return "Pot is locked";
+        if (!pot.isReady()) return "Plant is not ready";
         String message = "";
 
         if ("marigold".equalsIgnoreCase(pot.plantType)) {
@@ -82,6 +87,8 @@ public class GreenHouse {
 
     public void grow(int x, int y) {
         GreenHousePot pot = getPot(x, y);
+        if (pot == null || pot.isLocked || !"GROWING".equals(pot.status) || pot.plantedTimestamp == null) return;
+        if (pot.isReady()) return;
 
 //        if (pot == null || pot.isLocked || "EMPTY".equals(pot.status)) {
 //            System.out.println("Error: Cannot speed up growth on this pot.");
@@ -97,7 +104,7 @@ public class GreenHouse {
         double elapsedHours = (now - pot.plantedTimestamp) / 3600.0;
         double remainingHours = pot.growthDurationHours - elapsedHours;
 
-        int diamondCost = (int) Math.ceil(remainingHours);
+        int diamondCost = Math.max(0, (int) Math.ceil(remainingHours));
         int currentDiamonds = App.getCurrentUser() == null ? 0 : App.getCurrentUser().getGemsCount();
 
         if (currentDiamonds < diamondCost) {
@@ -144,6 +151,10 @@ public class GreenHouse {
 //            System.out.println();
 //        }
 //    }
+
+    public int getCapacity() {
+        return grid.length * grid[0].length;
+    }
 
     public int getPotsCount(){
         int count = 0;

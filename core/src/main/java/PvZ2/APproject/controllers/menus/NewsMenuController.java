@@ -21,6 +21,7 @@ public class NewsMenuController {
             n.setUnread(false);
             current.getPersonalNews().removeReadNews(n);
         }
+        SignupMenuController.saveToJson();
         return message.toString();
     }
 
@@ -37,6 +38,7 @@ public class NewsMenuController {
                 n.setUnread(false);
             }
         }
+        SignupMenuController.saveToJson();
         return message.toString();
     }
 
@@ -65,5 +67,6 @@ public class NewsMenuController {
             news.setUnread(false);
             current.getPersonalNews().removeReadNews(news);
         }
+        SignupMenuController.saveToJson();
     }
 }

@@ -13,27 +13,34 @@ import PvZ2.APproject.models.plants.PlantData;
 import PvZ2.APproject.models.plants.PlantRepository;
 import PvZ2.APproject.models.zombies.Zombie;
 import PvZ2.APproject.views.GameMapView;
+import PvZ2.APproject.views.PlantView;
+import PvZ2.APproject.views.ProjectileView;
 import PvZ2.APproject.views.actors.EnvironmentView;
 import PvZ2.APproject.views.actors.LawnmowerActor;
 import PvZ2.APproject.views.ZombieView;
 import PvZ2.APproject.views.actors.PlantBox;
 import PvZ2.APproject.views.actors.SunActor;
-import PvZ2.APproject.views.menus.ChoosePlantsMenu;
+import PvZ2.APproject.views.actors.SunHudActor;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import pvz.skin.BorderedTable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 public class PlayScreen extends BaseScreen {
@@ -52,8 +59,17 @@ public class PlayScreen extends BaseScreen {
 
     private Label messageNotif;
     private Label missionNotif;
+    private Label sunAmountLabel;
+    private Label waveLabel;
     private Image shovelCursor;
+    private Table resultOverlay;
+    private Image resultShade;
+    private Texture resultShadeTexture;
+    private boolean resultShown;
     private float stateTime = 0f;
+    private float simulationAccumulator = 0f;
+    private float finishDelay = 0f;
+    private static final float FIXED_STEP = 0.1f;
     private Boolean harvestMode = false;
     private Label sunLabel;
     private Label plantFoodLabel;
@@ -62,15 +78,17 @@ public class PlayScreen extends BaseScreen {
     private Map<Sun, SunActor> renderedSuns = new HashMap<>();
     private Map<Lawnmower, LawnmowerActor> renderedLawnmowers = new HashMap<>();
     private Map<Zombie, ZombieView> renderedZombies = new HashMap<>();
+    private Map<Plant, PlantView> renderedPlants = new HashMap<>();
+    private Map<Projectile, ProjectileView> renderedProjectiles = new HashMap<>();
 
     public PlayScreen(Main game) {
         this.game = game;
-        pauseStage = new Stage(viewport);
     }
 
     @Override
     public void show() {
         super.show();
+        pauseStage = new Stage(viewport);
 
         if (currentLevel.getSpecialLevelStrategy() != null) {
             currentLevel.getSpecialLevelStrategy().levelStart(currentLevel);
@@ -85,6 +103,7 @@ public class PlayScreen extends BaseScreen {
         stage.addActor(backgroundImage);
         stage.addActor(gameMapView);
         stage.addActor(environmentView);
+        createPlantBoxes();
 
         messageNotif = new Label("", skin, "promo_ribbon");
         messageNotif.setVisible(false);
@@ -146,6 +165,7 @@ public class PlayScreen extends BaseScreen {
 
         shovelCursor.setSize(130, 70);
         shovelCursor.setVisible(false);
+        shovelCursor.setTouchable(Touchable.disabled);
         stage.addActor(shovelCursor);
 
         ImageButton harvestBtn = new ImageButton(skin, "ingame_shovel");
@@ -157,6 +177,7 @@ public class PlayScreen extends BaseScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 harvestMode = !harvestMode;
+                if (harvestMode) plantSelectionController.cancelSelection();
                 shovelCursor.setVisible(harvestMode);
             }
         });
@@ -226,6 +247,7 @@ public class PlayScreen extends BaseScreen {
                 showMission("Mission: Defeat all zombies");
             }
         }
+        createPauseButton();
     }
 
     public void addSunAndPlantFoodTables() {
@@ -355,14 +377,11 @@ public class PlayScreen extends BaseScreen {
 
     @Override
     public void render(float delta) {
-
         if (state == GameState.ENDED) {
-            pauseStage.act(delta);
-            pauseStage.draw();
-        }
-
-        if (GameManagerController.getInstance().isIsGameEnded()) {
-            gameEnded();
+            if (pauseStage != null) {
+                pauseStage.act(delta);
+                pauseStage.draw();
+            }
             return;
         }
 
@@ -370,7 +389,6 @@ public class PlayScreen extends BaseScreen {
             int speedMultiplier = GameSettings.getInstance().getGameSpeed();
             float adjustedSpeed = delta * speedMultiplier;
             super.render(adjustedSpeed);
-
             stateTime += adjustedSpeed;
 
             if (harvestMode) {
@@ -378,38 +396,38 @@ public class PlayScreen extends BaseScreen {
                 gameMapView.updateTile();
             }
 
-            String message = GameManagerController.getInstance().updateObjects(adjustedSpeed);
-            if (!message.equals("")) {
-                showMessage(message);
+            simulationAccumulator += adjustedSpeed;
+            String message = "";
+            int steps = 0;
+            while (simulationAccumulator >= FIXED_STEP && steps < 20) {
+                String tickMessage = GameManagerController.getInstance().updateObjects(FIXED_STEP);
+                if (tickMessage != null && !tickMessage.isEmpty()) message = tickMessage;
+                simulationAccumulator -= FIXED_STEP;
+                steps++;
+                if (GameManagerController.getInstance().isGameFinished()) break;
             }
+            if (!message.isEmpty()) showMessage(message);
 
+            updatePlantActors();
             updateZombieActors();
-            if (GameManagerController.getInstance().isIsGameEnded()) {
-                gameEnded();
-                return;
-            }
+            updateProjectileActors();
             updateSunActors();
-            if (GameManagerController.getInstance().isIsGameEnded()) {
-                gameEnded();
-                return;
-            }
             updateLawnmowerActors();
-            if (GameManagerController.getInstance().isIsGameEnded()) {
-                gameEnded();
-                return;
-            }
             updateWaveProgressBar();
-            if (GameManagerController.getInstance().isIsGameEnded()) {
-                gameEnded();
-                return;
+            if (sunLabel != null) sunLabel.setText(Integer.toString(currentLevel.getCollectedSunsAmount()));
+            if (plantFoodLabel != null) plantFoodLabel.setText(currentLevel.getPlantFoodCount() + "/4");
+
+            if (GameManagerController.getInstance().isGameFinished()) {
+                finishDelay += adjustedSpeed;
+                if (!resultShown && finishDelay >= 0.65f && !hasRunningLawnmower()) {
+                    showResultOverlay();
+                }
+            } else {
+                finishDelay = 0f;
             }
-            createPlantBoxes();
-            sunLabel.setText(Integer.toString(currentLevel.getCollectedSunsAmount()));
-            createPauseButton();
         }
 
-
-        if (state == GameState.PAUSED) {
+        if (state == GameState.PAUSED && pauseStage != null) {
             pauseStage.act(delta);
             pauseStage.draw();
         }
@@ -429,21 +447,60 @@ public class PlayScreen extends BaseScreen {
         });
     }
 
-    public void createPlantBoxes(){
-        float x = 20;
-        float y = 500;
-        for(String plantName : currentLevel.getChosenPlants()){
+    public void createPlantBoxes() {
+        float x = 16f;
+        float y = VIRTUAL_HEIGHT - 175f;
+        float width = 92f;
+        float height = 100f;
+        float gap = 8f;
+        for (String plantName : currentLevel.getChosenPlants()) {
             PlantData plantData = PlantRepository.getInstance().findByName(plantName);
             if(plantData == null){
                 continue;
             }
             PlantBox plantBox = new PlantBox(plantData, plantSelectionController, textures, skin);
             plantBox.setPosition(x, y);
-            plantBox.setSize(100, 120);
-
+            plantBox.setSize(width, height);
             stage.addActor(plantBox);
+            y -= height + gap;
+        }
+    }
 
-            y -= 130;
+    public void updatePlantActors() {
+        for (Plant plant : currentLevel.getActivePlants()) {
+            if (!renderedPlants.containsKey(plant)) {
+                PlantView plantView = new PlantView(plant, game);
+                renderedPlants.put(plant, plantView);
+                stage.addActor(plantView);
+            }
+        }
+
+        Iterator<Map.Entry<Plant, PlantView>> iterator = renderedPlants.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<Plant, PlantView> entry = iterator.next();
+            if (!currentLevel.getActivePlants().contains(entry.getKey())) {
+                entry.getValue().remove();
+                iterator.remove();
+            }
+        }
+    }
+
+    public void updateProjectileActors() {
+        for (Projectile projectile : currentLevel.getActiveProjectiles()) {
+            if (!renderedProjectiles.containsKey(projectile)) {
+                ProjectileView projectileView = new ProjectileView(projectile, this, player);
+                renderedProjectiles.put(projectile, projectileView);
+                stage.addActor(projectileView);
+            }
+        }
+
+        Iterator<Map.Entry<Projectile, ProjectileView>> iterator = renderedProjectiles.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<Projectile, ProjectileView> entry = iterator.next();
+            if (!currentLevel.getActiveProjectiles().contains(entry.getKey())) {
+                entry.getValue().remove();
+                iterator.remove();
+            }
         }
     }
 
@@ -455,7 +512,6 @@ public class PlayScreen extends BaseScreen {
                 renderedZombies.put(zombie, zombieView);
 
                 stage.addActor(zombieView);
-                environmentView.toFront();
             }
         }
 
@@ -466,8 +522,10 @@ public class PlayScreen extends BaseScreen {
             Map.Entry<Zombie, ZombieView> entry = iterator.next();
 
             if (!currentLevel.getActiveZombies().contains(entry.getKey())) {
-                entry.getValue().remove();
-                iterator.remove();
+                entry.getValue().beginRemoval();
+                if (entry.getValue().isRemovalComplete()) {
+                    iterator.remove();
+                }
             }
         }
     }
@@ -510,12 +568,118 @@ public class PlayScreen extends BaseScreen {
         for (Sun sun : currentLevel.getActiveSuns()) {
             if (!renderedSuns.containsKey(sun)) {
                 SunActor sunActor = new SunActor(sun, this, player);
-
                 renderedSuns.put(sun, sunActor);
-
                 stage.addActor(sunActor);
             }
         }
+
+        Iterator<Map.Entry<Sun, SunActor>> iterator = renderedSuns.entrySet().iterator();
+        while (iterator.hasNext()) {
+            Map.Entry<Sun, SunActor> entry = iterator.next();
+            if (!currentLevel.getActiveSuns().contains(entry.getKey())) {
+                entry.getValue().remove();
+                iterator.remove();
+            }
+        }
+    }
+
+
+    public void updateWaveLabel() {
+        if (waveLabel == null || currentLevel == null || currentLevel.getZombieWave() == null) return;
+        int total = currentLevel.getZombieWave().getTotalWaves();
+        if (total <= 0) {
+            waveLabel.setVisible(false);
+            return;
+        }
+        waveLabel.setVisible(true);
+        int current = Math.min(total, Math.max(1, currentLevel.getZombieWave().getCurrentWave() + 1));
+        waveLabel.setText("WAVE  " + current + " / " + total);
+        waveLabel.pack();
+        waveLabel.setPosition((VIRTUAL_WIDTH - waveLabel.getWidth()) * 0.5f, VIRTUAL_HEIGHT - 45f);
+    }
+
+    private void showResultOverlay() {
+        if (resultShown || stage == null) return;
+        resultShown = true;
+
+        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pixmap.setColor(0f, 0f, 0f, 0.68f);
+        pixmap.fill();
+        resultShadeTexture = new Texture(pixmap);
+        pixmap.dispose();
+
+        resultShade = new Image(resultShadeTexture);
+        resultShade.setFillParent(true);
+        resultShade.setTouchable(Touchable.disabled);
+        stage.addActor(resultShade);
+
+        resultOverlay = new Table();
+        resultOverlay.setFillParent(true);
+        resultOverlay.setTouchable(Touchable.enabled);
+        resultOverlay.addListener(new InputListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                return true;
+            }
+        });
+
+        boolean won = App.getCurrentUser() != null && App.getCurrentUser().isVictroy();
+        BorderedTable panel = new BorderedTable();
+        Label title = new Label(won ? "LEVEL COMPLETE" : "GAME OVER", skin, "big");
+        Label text = new Label(won ? "The lawn is safe." : "The zombies reached your house.", skin, "default");
+        TextButton primary = new TextButton(won ? "CONTINUE" : "RETRY", skin);
+        TextButton replay = new TextButton("REPLAY", skin);
+        TextButton menu = new TextButton("MENU", skin);
+
+        panel.add(title).pad(10f).row();
+        panel.add(text).pad(8f).row();
+        panel.add(primary).width(180f).pad(6f).row();
+        if (won) panel.add(replay).width(180f).pad(6f).row();
+        panel.add(menu).width(180f).pad(6f).row();
+        resultOverlay.add(panel);
+        stage.addActor(resultOverlay);
+
+        primary.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if (won) exitGame();
+                else restartGame();
+            }
+        });
+        replay.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                restartGame();
+            }
+        });
+        menu.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                exitGame();
+            }
+        });
+    }
+
+    private void disposeResultShade() {
+        if (resultShadeTexture != null) {
+            resultShadeTexture.dispose();
+            resultShadeTexture = null;
+        }
+    }
+
+    public void updateSunAmountLabel() {
+        if (sunAmountLabel != null) {
+            sunAmountLabel.setText(Integer.toString(currentLevel.getCollectedSunsAmount()));
+        }
+    }
+
+    private boolean hasRunningLawnmower() {
+        for (Lawnmower lawnmower : currentLevel.getGameMap().getLawnmowers()) {
+            if (lawnmower.isTriggered() && !lawnmower.HasBeenUsed()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void updateLawnmowerActors() {
@@ -546,6 +710,7 @@ public class PlayScreen extends BaseScreen {
     }
 
     private void updateWaveProgressBar() {
+        if (waveProgressBar == null || currentLevel == null || currentLevel.getZombieWave() == null) return;
         int totalWaves = currentLevel.getZombieWave().getWavePattern().size();
 
         if (totalWaves <= 0) {
@@ -586,14 +751,15 @@ public class PlayScreen extends BaseScreen {
     }
 
     public void restartGame() {
-        state = GameState.RUNNING;
-        Gdx.input.setInputProcessor(stage);
+        List<String> chosenPlants = new ArrayList<>(currentLevel.getChosenPlants());
         Level newLevel = new Level(currentLevel.getData());
-
+        newLevel.setCurrentSeason(currentLevel.getCurrentSeason());
+        for (String plant : chosenPlants) newLevel.addChosenPlant(plant);
         GameManagerController.getInstance().setCurrentLevel(newLevel);
-        GameManagerController.getInstance().getCurrentLevel().setCurrentSeason(App.getCurrentUser().getLastSeason());
-
-        game.setScreen(new ChoosePlantsMenu(game));
+        if (newLevel.getCurrentSeason() != null) newLevel.getCurrentSeason().LevelStarted(newLevel);
+        App.setCurrentMenu(Menu.GAME_MANAGER);
+        state = GameState.RUNNING;
+        game.setScreen(new PlayScreen(game));
     }
 
     public void exitGame() {
@@ -691,5 +857,27 @@ public class PlayScreen extends BaseScreen {
 
     public PlantSelectionController getPlantSelectionController(){
         return plantSelectionController;
+    }
+
+    @Override
+    public void hide() {
+        if (gameMapView != null) gameMapView.dispose();
+        super.hide();
+        if (pauseStage != null) {
+            pauseStage.dispose();
+            pauseStage = null;
+        }
+        disposeResultShade();
+    }
+
+    @Override
+    public void dispose() {
+        if (gameMapView != null) gameMapView.dispose();
+        super.dispose();
+        if (pauseStage != null) {
+            pauseStage.dispose();
+            pauseStage = null;
+        }
+        disposeResultShade();
     }
 }

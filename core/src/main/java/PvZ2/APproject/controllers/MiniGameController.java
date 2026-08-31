@@ -52,8 +52,10 @@ public class MiniGameController {
 
     public static void verifyWinLossConditions() {
         if (miniGame instanceof IZombie) {
-            boolean allBrainsEaten = ((IZombie) miniGame).allBrainsEaten();
-            boolean outOfSunAndZombies = ((IZombie) miniGame).getSunAmount() < 50 && miniGame.getActiveZombies().isEmpty();
+            IZombie game = (IZombie) miniGame;
+            boolean allBrainsEaten = game.allBrainsEaten();
+            int cheapest = game.getCheapestAvailableZombieCost();
+            boolean outOfSunAndZombies = cheapest > 0 && game.getSunAmount() < cheapest && miniGame.getActiveZombies().isEmpty();
 
             if (allBrainsEaten) {
                 EndGame(true);
@@ -73,6 +75,7 @@ public class MiniGameController {
     public static void EndGame(Boolean won){
         if (resultRecorded) return;
         resultRecorded = true;
+        if (miniGame != null) miniGame.isGameOver = true;
         if (won) {
             if (App.getCurrentUser() != null) {
                 App.getCurrentUser().addMinigamesWon();

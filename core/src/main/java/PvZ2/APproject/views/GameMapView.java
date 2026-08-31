@@ -16,6 +16,7 @@ import PvZ2.APproject.views.actors.TileActor;
 import PvZ2.APproject.views.screens.PlayScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -73,6 +74,9 @@ public class GameMapView extends Group {
     }
 
     public String getPath() {
+        if (currentLevel == null || currentLevel.getCurrentSeason() == null || currentLevel.getCurrentSeason().getData() == null) {
+            return "IMAGE_BACKGROUNDS_EGYPT_TEXTURE";
+        }
         switch (currentLevel.getCurrentSeason().getData().getId()) {
             case 1:
                 return "IMAGE_BACKGROUNDS_EGYPT_TEXTURE";
@@ -82,8 +86,9 @@ public class GameMapView extends Group {
                 return "IMAGE_BACKGROUNDS_BEACH_TEXTURE";
             case 4:
                 return "IMAGE_BACKGROUNDS_DARK_TEXTURE";
+            default:
+                return "IMAGE_BACKGROUNDS_EGYPT_TEXTURE";
         }
-        return "";
     }
 
     public void createTiles() {
@@ -132,10 +137,19 @@ public class GameMapView extends Group {
             showDestroyedPlantsCount();
         }
 
-//        Tile hoveredTile = plantSelectionController.getHoveredTile();
-//        if (hoveredTile != null && plantSelectionController.hasSelectedPlant()) {
-//            drawPlacementHighlight(batch, hoveredTile);
-//        }  TODO: this is for highlighting the column and row of the plant wanting to be placed on the tile
+        Tile hoveredTile = plantSelectionController.getHoveredTile();
+        if (hoveredTile != null && plantSelectionController.hasSelectedPlant()) {
+            drawPlacementHighlight(batch, hoveredTile);
+        }
+
+        if (screen.getHarvestMode()) {
+            for (TileActor tileActor : tileActors.values()) {
+                if (tileActor.isInTile()) {
+                    drawTileHighlight(batch, tileActor.getTile());
+                    break;
+                }
+            }
+        }
 
         if (GameSettings.getInstance().isShowGrid()) {
             drawRedLinesOnGrid(batch);
@@ -218,14 +232,8 @@ public class GameMapView extends Group {
                     }
                     switch(tile.getGraveReward()){
                         case NONE:
-                            if(currentLevel.getCurrentSeason().getData().getId() == 1){
-                                batch.draw(
-                                    textures.region("IMAGE_GRAVESTONES_EGYPT_HIEROGLYPH_EGYPT_HIEROGLYPH_118X148"),
-                                    x,
-                                    y,
-                                    PlayScreen.TILE_WIDTH,
-                                    PlayScreen.TILE_HEIGHT
-                                );
+                            if(currentLevel.getCurrentSeason() != null && currentLevel.getCurrentSeason().getData() != null && currentLevel.getCurrentSeason().getData().getId() == 1){
+                                batch.draw(textures.region("IMAGE_GRAVESTONES_EGYPT_HIEROGLYPH_EGYPT_HIEROGLYPH_118X148"), x, y, PlayScreen.TILE_WIDTH, PlayScreen.TILE_HEIGHT);
                             }else {
                                 batch.draw(
                                     textures.region("IMAGE_GRAVESTONES_DARK_NOOP_DARK_NOOP_132X160"),
@@ -324,52 +332,59 @@ public class GameMapView extends Group {
         }
     }
 
-    private void drawPlacementHighlight(Batch batch, Tile tile){
+    public void dispose() {
+        if (shapeRenderer != null) {
+            shapeRenderer.dispose();
+            shapeRenderer = null;
+        }
+    }
+
+    private void drawTileHighlight(Batch batch, Tile tile) {
+        if (shapeRenderer == null || tile == null) return;
         batch.end();
-
-        shapeRenderer.setProjectionMatrix(
-            batch.getProjectionMatrix()
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+        shapeRenderer.setTransformMatrix(batch.getTransformMatrix());
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(1f, 1f, 1f, 0.28f);
+        shapeRenderer.rect(
+            PlayScreen.BOARD_X + (tile.getColumn() - 1) * PlayScreen.TILE_WIDTH,
+            PlayScreen.BOARD_Y + (tile.getRow() - 1) * PlayScreen.TILE_HEIGHT,
+            PlayScreen.TILE_WIDTH,
+            PlayScreen.TILE_HEIGHT
         );
+        shapeRenderer.end();
+        Gdx.gl.glDisable(GL20.GL_BLEND);
+        batch.begin();
+    }
 
-        shapeRenderer.begin(
-            ShapeRenderer.ShapeType.Line
-        );
+    private void drawPlacementHighlight(Batch batch, Tile tile) {
+        if (shapeRenderer == null || tile == null) return;
 
-        shapeRenderer.setColor(Color.WHITE);
+        batch.end();
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
-        int startX = 290;
-        int startY = 130;
-        int spacingX = 80;
-        int spacingY = 100;
-
-        int row = tile.getRow();
-        int column = tile.getColumn();
+        shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+        shapeRenderer.setTransformMatrix(batch.getTransformMatrix());
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
         GameMap gameMap = currentLevel.getGameMap();
+        float boardWidth = gameMap.getColumns() * PlayScreen.TILE_WIDTH;
+        float boardHeight = gameMap.getRows() * PlayScreen.TILE_HEIGHT;
+        float rowY = PlayScreen.BOARD_Y + (tile.getRow() - 1) * PlayScreen.TILE_HEIGHT;
+        float columnX = PlayScreen.BOARD_X + (tile.getColumn() - 1) * PlayScreen.TILE_WIDTH;
 
-        for (int j = 1; j <= gameMap.getColumns(); j++) {
-            float x = startX + (j - 1) * spacingX;
-            float y = startY + (row - 1) * spacingY;
-            shapeRenderer.rect(
-                x,
-                y,
-                spacingX,
-                spacingY
-            );
-        }
+        shapeRenderer.setColor(1f, 1f, 1f, 0.10f);
+        shapeRenderer.rect(PlayScreen.BOARD_X, rowY, boardWidth, PlayScreen.TILE_HEIGHT);
+        shapeRenderer.rect(columnX, PlayScreen.BOARD_Y, PlayScreen.TILE_WIDTH, boardHeight);
 
-        for (int i = 1; i <= gameMap.getRows(); i++) {
-            float x = startX + (column - 1) * spacingX;
-            float y = startY + (i - 1) * spacingY;
-            shapeRenderer.rect(
-                x,
-                y,
-                spacingX,
-                spacingY
-            );
-        }
+        shapeRenderer.setColor(1f, 1f, 1f, plantSelectionController.isHoveredTileValid() ? 0.30f : 0.18f);
+        shapeRenderer.rect(columnX, rowY, PlayScreen.TILE_WIDTH, PlayScreen.TILE_HEIGHT);
 
         shapeRenderer.end();
+        Gdx.gl.glDisable(GL20.GL_BLEND);
         batch.begin();
     }
 

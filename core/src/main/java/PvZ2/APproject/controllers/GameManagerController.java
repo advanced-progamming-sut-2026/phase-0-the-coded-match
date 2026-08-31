@@ -10,9 +10,13 @@ import PvZ2.APproject.models.GameMapRelated.GameMap;
 import PvZ2.APproject.models.Level;
 import PvZ2.APproject.models.LevelData;
 import PvZ2.APproject.models.MiniGameRelated.Beghouled;
+import PvZ2.APproject.models.MiniGameRelated.IZombie;
 import PvZ2.APproject.models.MiniGameRelated.MiniGame;
 import PvZ2.APproject.models.MiniGameRelated.VaseBreaker;
+import PvZ2.APproject.models.MiniGameRelated.WallNutBowling;
+import PvZ2.APproject.models.MiniGameRelated.Zombotany;
 import PvZ2.APproject.models.Sun;
+import PvZ2.APproject.models.User;
 import PvZ2.APproject.models.Projectile;
 import PvZ2.APproject.models.GameMapRelated.Tile;
 import PvZ2.APproject.models.plants.Plant;
@@ -33,6 +37,7 @@ public class GameManagerController {
     private static final int MAX_PLANT_FOOD = 3;
     private static final int TICKS_PER_SECOND = 10;
     private Level currentLevel;
+    private boolean gameFinished;
     private static boolean cooldownRemoved;
     private static final Map<String, Integer> plantCooldowns = new HashMap<>();
     private static boolean isGameEnded = false;
@@ -46,6 +51,10 @@ public class GameManagerController {
 
     public Level getCurrentLevel() {
         return currentLevel;
+    }
+
+    public boolean isGameFinished() {
+        return gameFinished;
     }
 
     public boolean isCooldownRemoved() {
@@ -66,6 +75,8 @@ public class GameManagerController {
 
     public void setCurrentLevel(Level level) {
         currentLevel = level;
+        gameFinished = false;
+        isGameEnded = false;
         cooldownRemoved = false;
         plantCooldowns.clear();
     }
@@ -88,23 +99,27 @@ public class GameManagerController {
 //    }
 
     public String updateObjects(float delta) {
+        if (currentLevel == null || gameFinished) return "";
+        currentLevel.setCurrentTick(currentLevel.getCurrentTick() + 1);
         String message = "";
+
         if (currentLevel.getLevelType() == LevelType.I_ZOMBIE) {
             decreasePlantCooldowns();
             updatePlants(delta);
-            updateZombies(delta);
+            message += updateZombies(delta);
+            if (gameFinished) return message;
             updateProjectiles();
         } else {
             decreasePlantCooldowns();
             updateSeason(delta);
             updatePlants(delta);
-            if (isIsGameEnded()) {
-                return message;
-            }
+            if (gameFinished || isGameEnded) return message;
             updateBarrels(delta);
             message += updateZombies(delta);
+            if (gameFinished || isGameEnded) return message;
             if (!(currentLevel instanceof MiniGame)) {
                 message += updateWaves(delta);
+                if (gameFinished || isGameEnded) return message;
                 updateSkySuns(delta);
             }
             updateSuns(delta);
@@ -114,11 +129,21 @@ public class GameManagerController {
                 beghouled.updateMinigameTick();
             }
         }
+
         if (currentLevel.getSpecialLevelStrategy() != null) {
             currentLevel.getSpecialLevelStrategy().update(currentLevel);
         }
-        if (currentLevel instanceof VaseBreaker) {
-            ((VaseBreaker) currentLevel).updateGroundSeeds();
+        if (currentLevel instanceof IZombie game) {
+            game.Update();
+        } else if (currentLevel instanceof WallNutBowling game) {
+            game.tick();
+        } else if (currentLevel instanceof Zombotany game) {
+            game.tick();
+        } else if (currentLevel instanceof VaseBreaker game) {
+            game.updateGroundSeeds();
+        }
+        if (currentLevel instanceof MiniGame) {
+            MiniGameController.verifyWinLossConditions();
         }
         return message;
     }
@@ -147,8 +172,9 @@ public class GameManagerController {
 //                append(message, "Plant " + plant.getData().getDisplayName() + " at (" + plant.getX() + ", "
 //                        + plant.getY() + ") is destroyed.");
                 Tile tile = currentLevel.getGameMap().getTile(plant.getX(), plant.getY());
-                if (tile != null && tile.getPlant() == plant) {
-                    tile.removePlant();
+                if (tile != null) {
+                    if (tile.getPlant() == plant) tile.removePlant();
+                    if (tile.getLilyPadPlant() == plant) tile.setLilyPadPlant(null);
                 }
                 iterator.remove();
                 if (currentLevel instanceof Beghouled beghouled) {
@@ -166,15 +192,14 @@ public class GameManagerController {
         int killedThisTick = 0;
         int damageThisTick = 0;
         String dropMessage = "";
-        Iterator<Zombie> iterator = currentLevel.getActiveZombies().iterator();
-        while (iterator.hasNext()) {
-            Zombie zombie = iterator.next();
+        for (Zombie zombie : currentLevel.getActiveZombies().toArray(new Zombie[0])) {
+            if (!currentLevel.getActiveZombies().contains(zombie)) continue;
             zombie.update(delta);
-            if (zombie.getX() <= 0) { //todo: 0 -> 250(x from left side of the screen)
+            if (zombie.getX() <= 0.25) {
                 currentLevel.getGameMap().handleLawnMower(zombie);
+                if (gameFinished) break;
             }
-            if (zombie.isDead()) {
-                iterator.remove();
+            if (zombie.isDead() && currentLevel.getActiveZombies().remove(zombie)) {
                 killedThisTick++;
                 damageThisTick += zombie.getLastDamageTaken();
                 dropMessage = handleZombieDrop(zombie) + "\n";
@@ -253,8 +278,8 @@ public class GameManagerController {
     }
 
     private void updateBarrels(float delta) {
-        for (Barrel barrel : currentLevel.getBarrels()) {
-            barrel.update(delta);
+        for (Barrel barrel : currentLevel.getBarrels().toArray(new Barrel[0])) {
+            if (currentLevel.getBarrels().contains(barrel)) barrel.update(delta);
         }
     }
 
@@ -503,27 +528,38 @@ public class GameManagerController {
     }
 
     public void gameOver() {
+        if (gameFinished) return;
+        gameFinished = true;
         isGameEnded = true;
         if (BonusGameController.isActive()) {
             System.out.println(BonusGameController.endGame());
             return;
         }
-        App.getCurrentUser().setVictroy(false);
-        SignupMenuController.saveToJson();
         App.setCurrentMenu(Menu.GAME_MENU);
-//        this.currentLevel = null;
+        User user = App.getCurrentUser();
+        if (user != null) user.setVictroy(false);
+        try {
+            SignupMenuController.saveToJson();
+        } catch (RuntimeException e) {
+            System.err.println("Could not save game-over state: " + e.getMessage());
+        }
     }
 
     public String gameWon(){
+        if (gameFinished) return "";
+        gameFinished = true;
         isGameEnded = true;
         if (showSunsAmount() == 0) {
             QuestController.notifyNoSunsLeft();
         }
         QuestController.notifyPlantsDestroyed(currentLevel.getRemovedPlantsCount());
-        App.getCurrentUser().setVictroy(true);
-        App.getCurrentUser().addGamesPlayed();
-        App.getCurrentUser().addChapters();
-        App.getCurrentUser().recordLevelVictory(currentLevel.getCurrentSeason(), currentLevel.getData(), 0);
+        User user = App.getCurrentUser();
+        if (user != null) {
+            user.setVictroy(true);
+            user.addGamesPlayed();
+            user.addChapters();
+            user.recordLevelVictory(currentLevel.getCurrentSeason(), currentLevel.getData(), 0);
+        }
         if (currentLevel.getCurrentSeason() != null) {
             LevelData next = App.getLevelByNumber(currentLevel.getLevelNumber() + 1, currentLevel.getCurrentSeason());
             if (next != null) next.setUnlocked(true);
@@ -539,7 +575,11 @@ public class GameManagerController {
             }
         }
         App.setCurrentMenu(Menu.GAME_MENU);
-        SignupMenuController.saveToJson();
+        try {
+            SignupMenuController.saveToJson();
+        } catch (RuntimeException e) {
+            System.err.println("Could not save victory state: " + e.getMessage());
+        }
         QuestController.onLevelCompleted(true);
         return "Dear humanz, zis is not done yet; we will come back to eat your brainz, humanz.";
     }
@@ -556,29 +596,51 @@ public class GameManagerController {
                 continue;
             }
             projectile.move();
-            for (Zombie zombie : currentLevel.getActiveZombies().toArray(new Zombie[0])) {
-                if (projectile.checkZombieCollision(zombie)) {
-                    if(projectile.getCreatorPlantCategory().hasThisTag(PlantTag.ICE)){
-                        zombie.setChilled(true);
+            boolean hit = false;
+            Plant creator = projectile.getCreatorPlantCategory();
+            if (creator != null) {
+                for (Zombie zombie : currentLevel.getActiveZombies().toArray(new Zombie[0])) {
+                    if (projectile.checkZombieCollision(zombie)) {
+                        if (creator.hasThisTag(PlantTag.ICE)) zombie.setChilled(true);
+                        if (zombie.getBehavior() != null) zombie.getBehavior().onProjectileHit(zombie, projectile);
+                        projectile.destroy();
+                        hit = true;
+                        break;
                     }
-                    zombie.getBehavior().onProjectileHit(zombie, projectile);
-                    iterator.remove();
-                    break;
+                }
+                if (!hit) {
+                    int col = (int) Math.round(projectile.getxCoordinate());
+                    int row = (int) Math.round(projectile.getyCoordinate());
+                    Tile tile = currentLevel.getGameMap().getTile(col, row);
+                    if (tile != null && tile.isGrave()) {
+                        tile.takeDamage(projectile.getDamage());
+                        projectile.destroy();
+                        hit = true;
+                    }
+                }
+                if (!hit) {
+                    for (Barrel barrel : currentLevel.getBarrels().toArray(new Barrel[0])) {
+                        if (projectile.checkBarrelCollision(barrel)) {
+                            barrel.onProjectileHit(projectile);
+                            projectile.destroy();
+                            hit = true;
+                            break;
+                        }
+                    }
+                }
+            } else {
+                for (Plant plant : currentLevel.getActivePlants().toArray(new Plant[0])) {
+                    if (projectile.checkPlantCollision(plant)) {
+                        plant.takeDamage(projectile.getDamage());
+                        projectile.destroy();
+                        hit = true;
+                        break;
+                    }
                 }
             }
-            int col = (int) projectile.getxCoordinate();
-            int row = (int) projectile.getyCoordinate();
-
-            Tile tile = currentLevel.getGameMap().getTile(col, row);
-            if (tile != null && tile.isGrave()) {
-                tile.takeDamage(projectile.getDamage());
-                projectile.destroy();
-            }
-            List<Barrel> barrels = currentLevel.getBarrels();
-            for (Barrel barrel : barrels) {
-                if (projectile.checkBarrelCollision(barrel)) {
-                    barrel.onProjectileHit(projectile);
-                }
+            if (hit || projectile.isDestroyed() || projectile.getxCoordinate() < 0 ||
+                    projectile.getxCoordinate() > currentLevel.getGameMap().getColumns() + 1) {
+                iterator.remove();
             }
         }
     }

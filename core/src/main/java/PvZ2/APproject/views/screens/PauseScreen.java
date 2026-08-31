@@ -9,13 +9,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 public class PauseScreen extends BaseScreen {
-    private GameState state = GameState.RUNNING;
+    private GameState state = GameState.PAUSED;
     private Stage pauseStage;
 
     @Override
     public void show() {
         super.show();
 
+        pauseStage = stage;
         Table pauseTable = new Table(skin);
         pauseTable.setFillParent(true);
 
@@ -54,12 +55,9 @@ public class PauseScreen extends BaseScreen {
 
     @Override
     public void render(float delta) {
-        super.render(delta);
-
         Gdx.input.setInputProcessor(pauseStage);
         if (state == GameState.PAUSED) {
-            pauseStage.act();
-            pauseStage.draw();
+            super.render(delta);
         }
     }
 

@@ -21,7 +21,7 @@ public class ExplodeAbility implements PlantAbilityHandler {
         if (level == null) {
             return;
         }
-        int damage = Math.max(0, plant.getData().getDamage() * damageMultiplier);
+        int damage = Math.max(0, plant.getDamage() * damageMultiplier);
         for (Zombie zombie : level.getActiveZombies().toArray(new Zombie[0])) {
             if (Math.abs(zombie.getY() - plant.getY()) <= 1 && Math.abs(zombie.getX() - plant.getX()) <= 1.5) {
                 zombie.takeDamage(damage, plant);

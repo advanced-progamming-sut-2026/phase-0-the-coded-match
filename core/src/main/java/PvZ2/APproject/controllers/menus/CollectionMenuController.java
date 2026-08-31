@@ -147,12 +147,13 @@ public class CollectionMenuController {
         if (user.getCoinsCount() < upgrade.getRequiredCoins()) {
             return "not enough coins";
         }
-        if (user.getSeedPacketCount(plant.getData().getDisplayName()) < upgrade.getRequiredSeedPackets()) {
+        if (user.getSeedPacketCount(plant.getData().getId()) < upgrade.getRequiredSeedPackets()) {
             return "not enough seed packets";
         }
         user.setCoinsCount(user.getCoinsCount() - upgrade.getRequiredCoins());
-        user.spendSeedPackets(plant.getData().getDisplayName(), upgrade.getRequiredSeedPackets());
+        user.spendSeedPackets(plant.getData().getId(), upgrade.getRequiredSeedPackets());
         plant.setLevel(upgrade.getLevel());
+        SignupMenuController.saveToJson();
         return "plant upgraded successfully";
     }
 
@@ -173,6 +174,7 @@ public class CollectionMenuController {
         }
         user.setCoinsCount(user.getCoinsCount() - PLANT_PRICE);
         user.getCollection().addPlant(new Plant(plantData, 0, 0, 1));
+        SignupMenuController.saveToJson();
         return "plant purchased successfully";
     }
 
@@ -226,7 +228,7 @@ public class CollectionMenuController {
             return false;
         }
         return user.getCoinsCount() >= next.getRequiredCoins()
-            && user.getSeedPacketCount(plantData.getDisplayName()) >= next.getRequiredSeedPackets();
+            && user.getSeedPacketCount(plantData.getId()) >= next.getRequiredSeedPackets();
     }
 
     public static int getPlantPrice() {
