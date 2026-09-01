@@ -10,7 +10,9 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -28,10 +30,15 @@ public class PlantBox extends Group {
     private TextureRegion plantImage;
     private boolean available = true;
     private boolean boosted = false;
+    private Skin skin;
+    private Stage stage;
 
-    public PlantBox(PlantData plantData, PlantSelectionController selectionController, TextureBank textures, Skin skin) {
+    public PlantBox(PlantData plantData, PlantSelectionController selectionController, TextureBank textures, Skin skin,
+                    Stage stage) {
         this.plantData = plantData;
         this.selectionController = selectionController;
+        this.skin = skin;
+        this.stage = stage;
         setSize(100, 120);
         setTouchable(Touchable.enabled);
         createVisuals(textures);
@@ -104,9 +111,36 @@ public class PlantBox extends Group {
         addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                selectionController.selectPlant(plantData);
+                String message = selectionController.selectPlant(plantData);
+                if (message != "") {
+                    showMessage(message);
+                }
             }
         });
+    }
+
+    public void showMessage(String message) {
+        if (message == null || message.trim().isEmpty()) {
+            return;
+        }
+
+        Label messageNotif = new Label("", skin, "promo_ribbon");
+        messageNotif.clearActions();
+
+        messageNotif.setText(message);
+        messageNotif.setVisible(true);
+        messageNotif.pack();
+        messageNotif.getColor().a = 1f;
+
+        messageNotif.addAction(
+            Actions.sequence(
+                Actions.delay(2f),
+                Actions.fadeOut(0.5f),
+                Actions.hide()
+            )
+        );
+
+        stage.addActor(messageNotif);
     }
 
     @Override
@@ -121,7 +155,9 @@ public class PlantBox extends Group {
         float plantSize = Math.min(getWidth() * 0.64f, getHeight() * 0.58f);
         float plantX = getX() + (getWidth() - plantSize) * 0.5f;
         float plantY = getY() + getHeight() * 0.29f;
-        batch.draw(plantImage, plantX, plantY, plantSize, plantSize);
+        if (plantImage != null) {
+            batch.draw(plantImage, plantX, plantY, plantSize, plantSize);
+        }
         batch.setColor(Color.WHITE);
         super.draw(batch, parentAlpha);
     }

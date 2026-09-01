@@ -478,7 +478,7 @@ public class PlayScreen extends BaseScreen {
             if(plantData == null){
                 continue;
             }
-            PlantBox plantBox = new PlantBox(plantData, plantSelectionController, textures, skin);
+            PlantBox plantBox = new PlantBox(plantData, plantSelectionController, textures, skin, stage);
             plantBox.setPosition(x, y);
             plantBox.setSize(width, height);
             stage.addActor(plantBox);
