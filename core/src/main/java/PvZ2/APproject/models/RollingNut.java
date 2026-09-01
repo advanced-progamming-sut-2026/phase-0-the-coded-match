@@ -22,7 +22,7 @@ public class RollingNut {
         this.nutType = type;
         this.xCoordinate = startX;
         this.yCoordinate = startY;
-        this.speed = type == BowlingNutType.GIANT_WALLNUT ? 0.20 : 0.25;
+        this.speed = type == BowlingNutType.GIANT_WALLNUT ? 0.13 : 0.16;
         this.damage = type == BowlingNutType.EXPLODE_O_NUT ? 1800 : 200;
         this.movementAngle = 0.0;
         this.firstCollision = true;

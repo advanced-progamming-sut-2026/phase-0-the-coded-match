@@ -6,9 +6,14 @@ import PvZ2.APproject.client.Response;
 import PvZ2.APproject.controllers.menus.SignupMenuController;
 import PvZ2.APproject.enums.Commands;
 import PvZ2.APproject.enums.Menu;
-import PvZ2.APproject.models.Level;
 import PvZ2.APproject.models.App;
-import PvZ2.APproject.models.MiniGameRelated.*;
+import PvZ2.APproject.models.Level;
+import PvZ2.APproject.models.MiniGameRelated.Beghouled;
+import PvZ2.APproject.models.MiniGameRelated.IZombie;
+import PvZ2.APproject.models.MiniGameRelated.MiniGame;
+import PvZ2.APproject.models.MiniGameRelated.VaseBreaker;
+import PvZ2.APproject.models.MiniGameRelated.WallNutBowling;
+import PvZ2.APproject.models.MiniGameRelated.Zombotany;
 import PvZ2.APproject.views.MiniGameView;
 import com.badlogic.gdx.Gdx;
 
@@ -30,61 +35,66 @@ public class MiniGameController {
     private static Consumer<Response> matchFoundListener;
 
     public static String enterMinigame(String input) {
-//        Pattern pattern = Pattern.compile(Commands.ENTER_MINIGAME.getPattern());
-//        Matcher matcher = pattern.matcher(input);
-//
-//        if (!matcher.matches()) {
-//            return "invalid command";
-//        }
-//
-//        String name = matcher.group("name");
-//        name = name.toLowerCase();
-//        int stage = Integer.parseInt(matcher.group("level"));
-//        if (stage <= 0 || stage > 3) {
-//            return "invalid level";
-//        }
-//
-//        switch (name.replace("-", "").replace(" ", "")) {
-//            case "izombie" -> miniGame = new IZombie(stage);
-//            case "vasebreaker" -> miniGame = new VaseBreaker(stage);
-//            case "wallnutbowling" -> miniGame = new WallNutBowling(stage);
-//            case "beghouled" -> miniGame = new Beghouled(stage);
-//            case "zombotany" -> miniGame = new Zombotany(stage);
-//            default -> { return "minigame does not exist"; }
-//        }
-//        GameManagerController.getInstance().setCurrentLevel(miniGame);
-//        resultRecorded = false;
-//        return "entered minigame " + name + " stage " + stage;
-        /// Phase 3 implementation ///
         Matcher matcher = Pattern.compile(Commands.ENTER_MINIGAME.getPattern()).matcher(input);
         if (!matcher.matches()) return "invalid command";
 
-        String name = matcher.group("name").toLowerCase();
+        String name = matcher.group("name");
         int stage = Integer.parseInt(matcher.group("level"));
         if (stage <= 0 || stage > 3) return "invalid level";
 
-        if (name.replace("-", "").replace(" ", "").equals("izombie")) {
+        String key = name.toLowerCase().replace("-", "").replace(" ", "").replace(",", "");
+        if (key.equals("izombie")) {
             networkedIZombie = true;
             resultRecorded = false;
             return MatchmakingController.findRandom(stage);
         }
 
         networkedIZombie = false;
-        switch (name.replace("-", "").replace(" ", "")) {
+        if (!startMinigame(name, stage)) return "minigame does not exist";
+        return "entered minigame " + name.toLowerCase() + " stage " + stage;
+    }
+
+    public static boolean startMinigame(String name, int stage) {
+        if (name == null || stage < 1 || stage > 3) return false;
+        String key = name.toLowerCase().replace("-", "").replace(" ", "").replace(",", "");
+        switch (key) {
+            case "izombie" -> miniGame = new IZombie(stage);
             case "vasebreaker" -> miniGame = new VaseBreaker(stage);
             case "wallnutbowling" -> miniGame = new WallNutBowling(stage);
             case "beghouled" -> miniGame = new Beghouled(stage);
             case "zombotany" -> miniGame = new Zombotany(stage);
-            default -> { return "minigame does not exist"; }
+            default -> { return false; }
         }
         GameManagerController.getInstance().setCurrentLevel(miniGame);
         resultRecorded = false;
-        return "entered minigame " + name + " stage " + stage;
+        return true;
     }
 
-    public void loadMiniGame(){ currentLevel = miniGame; }
+    public static MiniGame restartCurrentMiniGame() {
+        if (miniGame == null) return null;
+        int stage = getStageNumber(miniGame);
+        String name;
+        if (miniGame instanceof IZombie) name = "IZombie";
+        else if (miniGame instanceof VaseBreaker) name = "Vasebreaker";
+        else if (miniGame instanceof WallNutBowling) name = "WallNutBowling";
+        else if (miniGame instanceof Beghouled) name = "Beghouled";
+        else if (miniGame instanceof Zombotany) name = "Zombotany";
+        else return null;
+        return startMinigame(name, stage) ? miniGame : null;
+    }
 
-    public void StartGame(){
+    private static int getStageNumber(MiniGame game) {
+        if (game instanceof IZombie value) return value.getStageNumber();
+        if (game instanceof VaseBreaker value) return value.getStageNumber();
+        if (game instanceof WallNutBowling value) return value.getStageNumber();
+        if (game instanceof Beghouled value) return value.getStageNumber();
+        if (game instanceof Zombotany value) return value.getStageNumber();
+        return 1;
+    }
+
+    public void loadMiniGame() { currentLevel = miniGame; }
+
+    public void StartGame() {
         loadMiniGame();
         if (currentLevel != null) GameManagerController.getInstance().setCurrentLevel(currentLevel);
     }
@@ -225,8 +235,8 @@ public class MiniGameController {
     }
 
     public static void verifyWinLossConditions() {
-        if (miniGame instanceof IZombie) {
-            IZombie game = (IZombie) miniGame;
+        if (miniGame == null || resultRecorded) return;
+        if (miniGame instanceof IZombie game) {
             boolean allBrainsEaten = game.allBrainsEaten();
             int cheapest = game.getCheapestAvailableZombieCost();
             boolean outOfSunAndZombies = cheapest > 0 && game.getSunAmount() < cheapest && miniGame.getActiveZombies().isEmpty();
@@ -236,34 +246,40 @@ public class MiniGameController {
                 return;
             }
 
-            if (allBrainsEaten) {
-                EndGame(true);
-            } else if (outOfSunAndZombies) {
-                EndGame(false);
-            }
+            if (allBrainsEaten) EndGame(true);
+            else if (outOfSunAndZombies) EndGame(false);
+            return;
         }
-        if (miniGame instanceof VaseBreaker && ((VaseBreaker) miniGame).winConditionsChecked()) EndGame(true);
-        if (miniGame instanceof WallNutBowling game && game.isGameOver) EndGame(game.hasWon());
-        if (miniGame instanceof Zombotany game && game.isGameOver) EndGame(game.hasWon());
+        if (miniGame instanceof VaseBreaker game) {
+            if (game.winConditionsChecked()) EndGame(true);
+            else if (game.hasZombieReachedHouse()) EndGame(false);
+            return;
+        }
+        if (miniGame instanceof WallNutBowling game && game.isGameOver) {
+            EndGame(game.hasWon());
+            return;
+        }
+        if (miniGame instanceof Zombotany game && game.isGameOver) {
+            EndGame(game.hasWon());
+            return;
+        }
         if (miniGame instanceof Beghouled game) {
             game.checkRules();
             if (game.isGameOver) EndGame(game.hasWon());
         }
     }
 
-    public static void EndGame(Boolean won){
+    public static void EndGame(Boolean won) {
         if (resultRecorded) return;
         resultRecorded = true;
         if (miniGame != null) miniGame.isGameOver = true;
-        if (won) {
-            if (App.getCurrentUser() != null) {
-                App.getCurrentUser().addMinigamesWon();
-                SignupMenuController.saveToJson();
-            }
-            MiniGameView.miniGameWon();
-        } else {
-            MiniGameView.miniGameLost();
+        if (Boolean.TRUE.equals(won) && App.getCurrentUser() != null) {
+            App.getCurrentUser().addMinigamesWon();
+            SignupMenuController.saveToJson();
         }
+        GameManagerController.getInstance().finishMiniGame(Boolean.TRUE.equals(won));
+        if (Boolean.TRUE.equals(won)) MiniGameView.miniGameWon();
+        else MiniGameView.miniGameLost();
     }
 
     public static MiniGame getMiniGame() {

@@ -44,15 +44,15 @@ public class PlantBox extends Group {
         createVisuals(textures);
 
         costLabel = new Label(Integer.toString(plantData.getSunCost()), skin, "default");
-        costLabel.setFontScale(0.85f);
-        costLabel.setPosition(8f, 6f);
+        costLabel.setFontScale(0.92f);
+        costLabel.setPosition(9f, 7f);
         addActor(costLabel);
 
         Image sun = new Image(new TextureRegionDrawable(
             textures.region("IMAGE_UI_SEASONS_UNCOMPRESSED_PVZ2_SEASONS_UIASSET_ICON_SUN")
         ));
-        sun.setSize(18f, 18f);
-        sun.setPosition(30f, 7f);
+        sun.setSize(19f, 19f);
+        sun.setPosition(34f, 8f);
         addActor(sun);
 
         cooldownLabel = new Label("", skin, "default");
@@ -152,9 +152,9 @@ public class PlantBox extends Group {
         else batch.setColor(1f, 1f, 1f, parentAlpha);
 
         batch.draw(background, getX(), getY(), getWidth(), getHeight());
-        float plantSize = Math.min(getWidth() * 0.64f, getHeight() * 0.58f);
+        float plantSize = Math.min(getWidth() * 0.70f, getHeight() * 0.62f);
         float plantX = getX() + (getWidth() - plantSize) * 0.5f;
-        float plantY = getY() + getHeight() * 0.29f;
+        float plantY = getY() + getHeight() * 0.27f;
         if (plantImage != null) {
             batch.draw(plantImage, plantX, plantY, plantSize, plantSize);
         }

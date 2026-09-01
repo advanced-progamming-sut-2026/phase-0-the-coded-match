@@ -9,6 +9,9 @@ import PvZ2.APproject.models.GameMapRelated.GameMap;
 import PvZ2.APproject.models.GameMapRelated.Tile;
 import PvZ2.APproject.models.GameSettings;
 import PvZ2.APproject.models.Level;
+import PvZ2.APproject.models.MiniGameRelated.Beghouled;
+import PvZ2.APproject.models.MiniGameRelated.IZombie;
+import PvZ2.APproject.models.MiniGameRelated.WallNutBowling;
 import PvZ2.APproject.models.plants.Plant;
 import PvZ2.APproject.models.seasons.BigWaveBeach;
 import PvZ2.APproject.models.specialLevels.LoveYourPlantsStrategy;
@@ -141,6 +144,14 @@ public class GameMapView extends Group {
         Tile hoveredTile = plantSelectionController.getHoveredTile();
         if (hoveredTile != null && plantSelectionController.hasSelectedPlant()) {
             drawPlacementHighlight(batch, hoveredTile);
+        }
+        if (currentLevel instanceof Beghouled && screen.getSelectedBeghouledTile() != null) {
+            drawTileHighlight(batch, screen.getSelectedBeghouledTile());
+        }
+        if (currentLevel instanceof IZombie gameMode) {
+            drawMiniGameLine(batch, gameMode.getRedLineCoordinateX());
+        } else if (currentLevel instanceof WallNutBowling gameMode) {
+            drawMiniGameLine(batch, gameMode.getRedLineCoordinateX());
         }
 
         if (screen.getHarvestMode()) {
@@ -368,6 +379,21 @@ public class GameMapView extends Group {
             shapeRenderer.dispose();
             shapeRenderer = null;
         }
+    }
+
+    private void drawMiniGameLine(Batch batch, double column) {
+        if (shapeRenderer == null) return;
+        batch.end();
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+        shapeRenderer.setTransformMatrix(batch.getTransformMatrix());
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(1f, 0.2f, 0.2f, 0.75f);
+        float x = PlayScreen.BOARD_X + ((float) column - 1f) * PlayScreen.TILE_WIDTH;
+        shapeRenderer.rect(x - 2f, PlayScreen.BOARD_Y, 4f, currentLevel.getGameMap().getRows() * PlayScreen.TILE_HEIGHT);
+        shapeRenderer.end();
+        Gdx.gl.glDisable(GL20.GL_BLEND);
+        batch.begin();
     }
 
     private void drawTileHighlight(Batch batch, Tile tile) {

@@ -66,13 +66,11 @@ public class PlantController {
 //        int x = Integer.parseInt(matcher.group("x"));
 //        int y = Integer.parseInt(matcher.group("y"));
         String error = getPlantingError(type, x, y);
-
-        if (currentLevel instanceof VaseBreaker) {
-            GameManagerController.getInstance().plantVasebreakerSeed((VaseBreaker) currentLevel, type, x, y);
-            return null;
-        }
         if (error != null) {
-           return error;
+            return error;
+        }
+        if (currentLevel instanceof VaseBreaker level) {
+            return GameManagerController.getInstance().plantVasebreakerSeed(level, type, x, y);
         }
         PlantData data = PlantRepository.getInstance().findByName(type);
         Plant plant = new Plant(data, x, y, getOwnedPlantLevel(data));
@@ -113,6 +111,13 @@ public class PlantController {
         if (currentLevel == null) return "no active level";
         PlantData data = PlantRepository.getInstance().findByName(type);
         if (data == null) return "plant type does not exist";
+        if (currentLevel instanceof VaseBreaker level) {
+            Tile tile = currentLevel.getGameMap().getTile(x, y);
+            if (tile == null) return "location is out of map";
+            if (tile.getPlant() != null || tile.getLilyPadPlant() != null || level.hasUnbrokenVaseAt(x, y)) return "cannot plant on this tile";
+            if (!level.hasCollectedSeed(type)) return "seed packet is not available";
+            return null;
+        }
         if (!currentLevel.getChosenPlants().isEmpty() &&
             currentLevel.getChosenPlants().stream().noneMatch(name -> name.equalsIgnoreCase(type)))
             return "plant was not selected";
