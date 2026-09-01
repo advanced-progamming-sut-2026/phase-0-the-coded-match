@@ -160,7 +160,7 @@ public class GameMenuScreen extends BaseScreen{
             }
 
             Label progressLabel = null;
-            if(unlocked) {
+            if(unlocked ) {
                 progressLabel = new Label(lvlNum + "/ 4  Completed", skin, "default");
             }else{
                 progressLabel = new Label(  "0 / 4  Completed", skin, "default");

@@ -31,6 +31,7 @@ public class ShopScreen extends  BaseScreen{
         super.show();
 
         background = textures.region("IMAGE_MAINMENU_BACKGROUND");
+//        background = textures.region("");
         backgroundImage = new Image(new TextureRegionDrawable(background));
         backgroundImage.setFillParent(true);
         stage.addActor(backgroundImage);
