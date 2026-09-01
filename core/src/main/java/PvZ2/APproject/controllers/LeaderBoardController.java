@@ -78,7 +78,10 @@ public class LeaderBoardController {
 
     public List<LeaderboardEntry> getLeaderboard(String sortBy, String order) {
         List<LeaderboardEntry> result = new ArrayList<>();
-        if (App.getCurrentUser() == null || !App.getNetworkClient().isConnected()) return result;
+        if (App.getCurrentUser() == null || !App.getNetworkClient().isConnected()) {
+            System.out.println("no leaderboard");
+            return result;
+        }
         try {
             Request request = new Request(MessageType.GET_LEADERBOARD);
             request.put("sort", sortBy == null ? "score" : sortBy);

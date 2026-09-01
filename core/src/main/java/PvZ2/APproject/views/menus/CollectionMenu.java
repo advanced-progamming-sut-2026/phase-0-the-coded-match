@@ -320,7 +320,8 @@ public class CollectionMenu extends BaseScreen {
         detailsTable.add(description).width(275).left().padBottom(8).row();
 
         if (!unlocked) {
-            TextButton purchase = new TextButton("PURCHASE - " + CollectionMenuController.getPlantPrice() + " COINS", skin, "purple");
+            TextButton purchase = new TextButton("PURCHASE - " + CollectionMenuController.getPlantPrice() +
+                " COINS", skin, "purple");
             detailsTable.add(purchase).width(265).height(48);
             purchase.addListener(new ClickListener() {
                 @Override
@@ -329,6 +330,7 @@ public class CollectionMenu extends BaseScreen {
                     showMessage(messageLabel, message);
                     rebuildPlantList();
                     showPlantDetails(plant);
+                    updateCurrency();
                 }
             });
         } else if (next != null) {
