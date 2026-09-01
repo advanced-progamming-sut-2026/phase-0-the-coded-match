@@ -1,4 +1,30 @@
 package PvZ2.APproject.client;
 
-public class MessageType {
+public enum MessageType {
+    TEST,
+    ERROR,
+    OK,
+
+    LOGIN,
+    REGISTER,
+    LOGOUT,
+
+    GET_PROFILE,
+    UPDATE_PROFILE,
+
+    FIND_PLAYER,
+    FIND_RANDOM_MATCH,
+    ACCEPT_MATCH,
+    REJECT_MATCH,
+    MATCH_FOUND,
+    MATCH_INVITATION,
+
+    GAME_ACTION,
+    GAME_STATE,
+    GAME_OVER,
+
+    SEND_REACTION,
+    REACTION_RECEIVED,
+    GET_LEADERBOARD,
+    SUBMIT_SCORE
 }
