@@ -1017,14 +1017,14 @@
     "questions": {
       "QUESTION1": "green"
     },
-    "gamesPlayedCount": 0,
-    "coinsCount": 5000,
-    "gemsCount": 100,
-    "levelsCount": 0,
+    "gamesPlayedCount": 7,
+    "coinsCount": 6000,
+    "gemsCount": 105,
+    "levelsCount": 7,
     "meowPoints": 0,
-    "lastLevelNumber": 0,
-    "isVictroy": false,
-    "lastSeasonId": 0,
+    "lastLevelNumber": 3,
+    "isVictroy": true,
+    "lastSeasonId": 3,
     "difficultyLevel": 3,
     "minigamesWonCount": 0,
     "highestPointAchieved": 0,
@@ -1036,7 +1036,24 @@
         "ZombieArcade",
         "ZombieRa",
         "ZombieDefault",
-        "ZombiePiano"
+        "ZombiePiano",
+        "ZombieProspector",
+        "ZombieBeachOctopus",
+        "ZombieBarrelRoller",
+        "ZombieBeachFisherman",
+        "ZombieCrystalSkull",
+        "ZombieDarkArmor3",
+        "ZombieBeachSnorkel",
+        "ZombieArmor2",
+        "ZombieArmor1",
+        "ZombieModernAllStar",
+        "ZombieArmor4",
+        "ZombieTombRaiser",
+        "ZombieArmZombieNewspaper",
+        "ZombieExplorer",
+        "ZombieGargantuar",
+        "ZombieIceAgeHunter",
+        "ZombieIceAgeTroglobite"
       ],
       "availablePlantsIds": [
         "peashooter",
@@ -1529,28 +1546,28 @@
           {
             "x": 1,
             "y": 1,
-            "isLocked": true,
+            "isLocked": false,
             "status": "EMPTY",
             "growthDurationHours": 0
           },
           {
             "x": 2,
             "y": 1,
-            "isLocked": true,
+            "isLocked": false,
             "status": "EMPTY",
             "growthDurationHours": 0
           },
           {
             "x": 3,
             "y": 1,
-            "isLocked": true,
+            "isLocked": false,
             "status": "EMPTY",
             "growthDurationHours": 0
           },
           {
             "x": 4,
             "y": 1,
-            "isLocked": true,
+            "isLocked": false,
             "status": "EMPTY",
             "growthDurationHours": 0
           }
@@ -1651,12 +1668,12 @@
           "objective": "ORANGE",
           "reward": "SEED_PACKET",
           "rewardAmount": 10,
-          "isCompleted": false,
+          "isCompleted": true,
           "rewardClaimed": false,
           "pendingRewardAmount": 10,
           "category": "MAIN",
           "missionDescription": "Defeat 50 zombies from the chapter season",
-          "currentValue": 0,
+          "currentValue": 107,
           "targetValue": [
             50
           ]
@@ -1668,12 +1685,12 @@
           "objective": "ORANGE",
           "reward": "SEED_PACKET",
           "rewardAmount": 10,
-          "isCompleted": false,
+          "isCompleted": true,
           "rewardClaimed": false,
           "pendingRewardAmount": 10,
           "category": "MAIN",
           "missionDescription": "Defeat 50 zombies from the chapter season",
-          "currentValue": 0,
+          "currentValue": 207,
           "targetValue": [
             50
           ]
@@ -1707,7 +1724,7 @@
           "pendingRewardAmount": 10,
           "category": "MAIN",
           "missionDescription": "Defeat 50 zombies from the chapter season",
-          "currentValue": 0,
+          "currentValue": 14,
           "targetValue": [
             50
           ]
@@ -1719,9 +1736,9 @@
           "objective": "ORANGE",
           "reward": "SEED_PACKET",
           "rewardAmount": -1,
-          "isCompleted": false,
+          "isCompleted": true,
           "rewardClaimed": false,
-          "pendingRewardAmount": -1,
+          "pendingRewardAmount": 20,
           "category": "MAIN",
           "missionDescription": "Victory in a level without losing more than n plants",
           "currentValue": 0,
@@ -1741,7 +1758,7 @@
           "objective": "ORANGE",
           "reward": "GEM",
           "rewardAmount": 20,
-          "isCompleted": false,
+          "isCompleted": true,
           "rewardClaimed": false,
           "pendingRewardAmount": 20,
           "category": "CHALLENGE",
@@ -1917,7 +1934,7 @@
           "objective": "ORANGE",
           "reward": "GEM",
           "rewardAmount": 100,
-          "isCompleted": false,
+          "isCompleted": true,
           "rewardClaimed": false,
           "pendingRewardAmount": 100,
           "category": "DAILY",
@@ -2002,7 +2019,7 @@
           "objective": "ORANGE",
           "reward": "GEM",
           "rewardAmount": 10,
-          "isCompleted": false,
+          "isCompleted": true,
           "rewardClaimed": false,
           "pendingRewardAmount": 10,
           "category": "DAILY",
@@ -2019,7 +2036,7 @@
           "objective": "ORANGE",
           "reward": "GEM",
           "rewardAmount": 20,
-          "isCompleted": false,
+          "isCompleted": true,
           "rewardClaimed": false,
           "pendingRewardAmount": 20,
           "category": "DAILY",
@@ -2053,12 +2070,12 @@
           "objective": "BLUE",
           "reward": "COIN",
           "rewardAmount": 500,
-          "isCompleted": false,
+          "isCompleted": true,
           "rewardClaimed": false,
           "pendingRewardAmount": 500,
           "category": "MAIN",
           "missionDescription": "Kill 10 zombies in less than 30 seconds from the start of the first wave of the zombie attack",
-          "currentValue": 0,
+          "currentValue": 44,
           "targetValue": [
             10
           ]
@@ -2092,7 +2109,7 @@
           "pendingRewardAmount": -1,
           "category": "DAILY",
           "missionDescription": "Collect sun_amount units of sun in a single day",
-          "currentValue": 0,
+          "currentValue": 375,
           "targetValue": [
             3000,
             4000,
@@ -2106,7 +2123,7 @@
           "objective": "BLUE",
           "reward": "COIN",
           "rewardAmount": 1000,
-          "isCompleted": false,
+          "isCompleted": true,
           "rewardClaimed": false,
           "pendingRewardAmount": 1000,
           "category": "DAILY",

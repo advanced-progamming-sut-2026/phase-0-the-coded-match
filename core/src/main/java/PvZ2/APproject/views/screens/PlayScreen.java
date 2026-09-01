@@ -200,11 +200,7 @@ public class PlayScreen extends BaseScreen {
 
         int waveCount = currentLevel.getZombieWave().getWavePattern().size();
 
-        for (int i = 0; i < waveCount; i++) {
-
-            if (i == waveCount - 1) {
-                continue;
-            }
+        for (int i = 1; i <= waveCount; i++) {
 
             Image flag = new Image(
                 new TextureRegionDrawable(
@@ -217,12 +213,12 @@ public class PlayScreen extends BaseScreen {
             if (waveCount == 1) {
                 x = waveProgressBar.getWidth() / 2f;
             } else {
-                x = i * waveProgressBar.getWidth() / (waveCount - 1f);
+                x = i * waveProgressBar.getWidth() / waveCount;
             }
 
             x -= flag.getWidth() / 2f;
 
-            flag.setPosition(x + 40, waveProgressBar.getHeight() - 30);
+            flag.setPosition(x - 35, waveProgressBar.getHeight() - 30);
 
             flag.setSize(25, 35);
 
