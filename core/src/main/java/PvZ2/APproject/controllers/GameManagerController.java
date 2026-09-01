@@ -319,7 +319,6 @@ public class GameManagerController {
 
     public void cheatReleaseTheNuke() {
         ZombieWaveManager.releaseTheNuke();
-        currentLevel.getActiveZombies().clear();
         System.out.println("all zombies are dead");
     }
 

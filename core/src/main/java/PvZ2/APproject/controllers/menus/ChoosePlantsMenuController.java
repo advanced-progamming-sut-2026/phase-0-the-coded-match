@@ -35,7 +35,7 @@ public class ChoosePlantsMenuController {
         if (level == null) {
             return "Choose a level first";
         }
-        if (plantName == null || !isPlantAvailableForUi(plantName)) {
+        if (plantName == null) {
             return "Plant is not available";
         }
         if (!isPlantUnlockedForUi(plantName)) {
@@ -51,25 +51,25 @@ public class ChoosePlantsMenuController {
         return "Plant added successfully";
     }
 
-    public static boolean isPlantAvailableForUi(String plantName) {
-        if (plantName == null) {
-            return false;
-        }
-        LevelData level = getRelevantLevelData();
-        if (level == null || level.getAvailablePlants() == null || level.getAvailablePlants().isEmpty()) {
-            return PlantRepository.getInstance().findByName(plantName) != null;
-        }
-        for (String available : level.getAvailablePlants()) {
-            if (available.equalsIgnoreCase(plantName)) {
-                return true;
-            }
-            PlantData data = PlantRepository.getInstance().findByName(plantName);
-            if (data != null && available.equalsIgnoreCase(data.getId())) {
-                return true;
-            }
-        }
-        return false;
-    }
+//    public static boolean isPlantAvailableForUi(String plantName) {
+//        if (plantName == null) {
+//            return false;
+//        }
+//        LevelData level = getRelevantLevelData();
+//        if (level == null || level.getAvailablePlants() == null || level.getAvailablePlants().isEmpty()) {
+//            return PlantRepository.getInstance().findByName(plantName) != null;
+//        }
+//        for (String available : level.getAvailablePlants()) {
+//            if (available.equalsIgnoreCase(plantName)) {
+//                return true;
+//            }
+//            PlantData data = PlantRepository.getInstance().findByName(plantName);
+//            if (data != null && available.equalsIgnoreCase(data.getId())) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 
     public static boolean isPlantUnlockedForUi(String plantName) {
         PlantData plant = PlantRepository.getInstance().findByName(plantName);
@@ -103,7 +103,7 @@ public class ChoosePlantsMenuController {
         if (level == null) {
             return "Choose a level first";
         }
-        if (plantName == null || !isPlantAvailableForUi(plantName)) {
+        if (plantName == null) {
             return "Plant is not available";
         }
         if (!hasPlantBeenChosen(plantName)) {
@@ -155,12 +155,12 @@ public class ChoosePlantsMenuController {
     public static List<PlantData> getAvailablePlantsForUi() {
         List<PlantData> result = new ArrayList<>();
         LevelData level = getRelevantLevelData();
-        if (level == null || level.getAvailablePlants() == null || level.getAvailablePlants().isEmpty()) {
+        if (level == null) {
             result.addAll(PlantRepository.getInstance().getAllPlants());
             return result;
         }
-        for (String name : level.getAvailablePlants()) {
-            PlantData plant = PlantRepository.getInstance().findByName(name);
+        for (String id : App.getCurrentUser().getCollection().getAvailablePlantsIds()) {
+            PlantData plant = PlantRepository.getInstance().findById(id);
             if (plant != null && !result.contains(plant)) {
                 result.add(plant);
             }

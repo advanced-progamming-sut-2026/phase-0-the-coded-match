@@ -22,6 +22,7 @@ public class GameMenuController{
           System.out.println("debug szn does not exist");
         } else if (season.isUnlocked()) {
             selectedSeason = season;
+            System.out.println("entered season");
         } else {
             System.out.println(input+" is locked");
         }

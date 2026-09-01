@@ -16,8 +16,12 @@ public class PlantSelectionController {
         this.plantController = new PlantController();
     }
 
-    public void selectPlant(PlantData plantData) {
+    public String selectPlant(PlantData plantData) {
+        if (plantData.getSunCost() > level.getCollectedSunsAmount()) {
+            return "You don't have enough suns";
+        }
         selectedPlant = plantData;
+        return "";
     }
 
     public void cancelSelection() {

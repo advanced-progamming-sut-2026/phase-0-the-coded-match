@@ -2,6 +2,7 @@ package PvZ2.APproject.views.actors;
 
 import PvZ2.APproject.controllers.GameManagerController;
 import PvZ2.APproject.controllers.PlantSelectionController;
+import PvZ2.APproject.models.App;
 import PvZ2.APproject.models.Level;
 import PvZ2.APproject.models.plants.PlantData;
 import com.badlogic.gdx.graphics.Color;
@@ -9,7 +10,9 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -26,14 +29,16 @@ public class PlantBox extends Group {
     private TextureRegion background;
     private TextureRegion plantImage;
     private boolean available = true;
+    private boolean boosted = false;
+    private Skin skin;
+    private Stage stage;
 
-    public PlantBox(PlantData plantData, PlantSelectionController selectionController, TextureBank textures) {
-        this(plantData, selectionController, textures, PvzSkin.get());
-    }
-
-    public PlantBox(PlantData plantData, PlantSelectionController selectionController, TextureBank textures, Skin skin) {
+    public PlantBox(PlantData plantData, PlantSelectionController selectionController, TextureBank textures, Skin skin,
+                    Stage stage) {
         this.plantData = plantData;
         this.selectionController = selectionController;
+        this.skin = skin;
+        this.stage = stage;
         setSize(100, 120);
         setTouchable(Touchable.enabled);
         createVisuals(textures);
@@ -63,14 +68,26 @@ public class PlantBox extends Group {
         if (level != null && level.getCurrentSeason() != null && level.getCurrentSeason().getData() != null) {
             seasonId = level.getCurrentSeason().getData().getId();
         }
-        background = switch (seasonId) {
-            case 1 -> textures.region("IMAGE_UI_PACKETS_EGYPT");
-            case 2 -> textures.region("IMAGE_UI_PACKETS_ICEAGE");
-            case 3 -> textures.region("IMAGE_UI_PACKETS_BEACH");
-            case 4 -> textures.region("IMAGE_UI_PACKETS_DARK");
-            default -> textures.region("IMAGE_UI_PACKETS_PIRATE");
-        };
-        plantImage = textures.region("IMAGE_UI_PACKETS_" + plantData.getId().toUpperCase());
+        for (String plantId : App.getCurrentUser().getGreenHouse().getStoredBoosts().keySet()) {
+            if (plantData.getId().equalsIgnoreCase(plantId)) {
+                background = textures.region("IMAGE_UI_PACKETS_BOOST");
+                boosted = true;
+            }
+        }
+        if (!boosted) {
+            background = switch (seasonId) {
+                case 1 -> textures.region("IMAGE_UI_PACKETS_EGYPT");
+                case 2 -> textures.region("IMAGE_UI_PACKETS_ICEAGE");
+                case 3 -> textures.region("IMAGE_UI_PACKETS_BEACH");
+                case 4 -> textures.region("IMAGE_UI_PACKETS_DARK");
+                default -> textures.region("IMAGE_UI_PACKETS_PIRATE");
+            };
+        }
+        if (plantData.getId().equalsIgnoreCase("sunflower_twin")) {
+            plantImage = textures.region("IMAGE_UI_PACKETS_TWINSUNFLOWER");
+        } else {
+            plantImage = textures.region("IMAGE_UI_PACKETS_" + plantData.getId().toUpperCase());
+        }
     }
 
     @Override
@@ -94,9 +111,36 @@ public class PlantBox extends Group {
         addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                selectionController.selectPlant(plantData);
+                String message = selectionController.selectPlant(plantData);
+                if (message != "") {
+                    showMessage(message);
+                }
             }
         });
+    }
+
+    public void showMessage(String message) {
+        if (message == null || message.trim().isEmpty()) {
+            return;
+        }
+
+        Label messageNotif = new Label("", skin, "promo_ribbon");
+        messageNotif.clearActions();
+
+        messageNotif.setText(message);
+        messageNotif.setVisible(true);
+        messageNotif.pack();
+        messageNotif.getColor().a = 1f;
+
+        messageNotif.addAction(
+            Actions.sequence(
+                Actions.delay(2f),
+                Actions.fadeOut(0.5f),
+                Actions.hide()
+            )
+        );
+
+        stage.addActor(messageNotif);
     }
 
     @Override
@@ -111,7 +155,9 @@ public class PlantBox extends Group {
         float plantSize = Math.min(getWidth() * 0.64f, getHeight() * 0.58f);
         float plantX = getX() + (getWidth() - plantSize) * 0.5f;
         float plantY = getY() + getHeight() * 0.29f;
-        batch.draw(plantImage, plantX, plantY, plantSize, plantSize);
+        if (plantImage != null) {
+            batch.draw(plantImage, plantX, plantY, plantSize, plantSize);
+        }
         batch.setColor(Color.WHITE);
         super.draw(batch, parentAlpha);
     }

@@ -75,7 +75,7 @@ public class GreenHouse {
                 message =  "Collected " + pot.plantType + "! Boost saved for next match.";
             } else {
                 message =  "Collected " + pot.plantType + "! Boost already stored.";
-            } //todo: does this boosting work? where are boosts saved?
+            }
         }
 
         pot.status = "EMPTY";
@@ -200,5 +200,7 @@ public class GreenHouse {
         return grid;
     }
 
-
+    public Map<String, Boolean> getStoredBoosts() {
+        return storedBoosts;
+    }
 }

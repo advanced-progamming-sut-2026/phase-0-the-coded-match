@@ -29,7 +29,7 @@ public class ZombieView extends Actor {
     private List<String> clips;
     private float stateTime;
     private float scale = 0.62f;
-    private static final float VISUAL_X_OFFSET_TILES = 0.18f;
+//    private static final float VISUAL_X_OFFSET_TILES = 0.18f;
     private boolean removing;
     private String deathClipName;
 
@@ -119,7 +119,7 @@ public class ZombieView extends Actor {
         }
 
         setPosition(
-            PlayScreen.BOARD_X + (((float) zombie.getX() - 1f) + VISUAL_X_OFFSET_TILES) * PlayScreen.TILE_WIDTH,
+            PlayScreen.BOARD_X + (((float) zombie.getX() - 1f) * PlayScreen.TILE_WIDTH),
             PlayScreen.BOARD_Y + (zombie.getY() - 1) * PlayScreen.TILE_HEIGHT
         );
     }

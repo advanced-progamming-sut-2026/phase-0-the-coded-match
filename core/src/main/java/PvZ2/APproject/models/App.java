@@ -15,6 +15,8 @@ import PvZ2.APproject.models.GameMapRelated.Lawnmower;
 import PvZ2.APproject.models.plants.PlantData;
 import PvZ2.APproject.models.plants.PlantRepository;
 import PvZ2.APproject.models.seasons.Season;
+import PvZ2.APproject.models.seasons.SeasonData;
+import PvZ2.APproject.models.seasons.SeasonRepository;
 import PvZ2.APproject.models.zombies.Zombie;
 import PvZ2.APproject.models.zombies.ZombieData;
 import PvZ2.APproject.models.zombies.ZombieRepository;
@@ -268,6 +270,18 @@ public class App {
             if (season == null) continue;
             if ((season.getType() != null && (season.getType().getName().equalsIgnoreCase(seasonName) ||
                 season.getType().name().equalsIgnoreCase(seasonName.replace(" ", "_")))) ||
+                (season.getName() != null && season.getName().equalsIgnoreCase(seasonName))) {
+                return season;
+            }
+        }
+        return null;
+    }
+
+    public static SeasonData getSeasonData(String seasonName) {
+        seasonName = seasonName.trim();
+        for (SeasonData season : SeasonRepository.getInstance().getAllSeasons()) {
+            if (season == null) continue;
+            if ((season.getName().equalsIgnoreCase(seasonName)) ||
                 (season.getName() != null && season.getName().equalsIgnoreCase(seasonName))) {
                 return season;
             }

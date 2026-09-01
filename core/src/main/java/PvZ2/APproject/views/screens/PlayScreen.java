@@ -248,6 +248,23 @@ public class PlayScreen extends BaseScreen {
                 showMission("Mission: Defeat all zombies");
             }
         }
+
+        TextButton releaseTheNuke = new TextButton("Release the Nuke", skin, "default");
+        releaseTheNuke.setPosition(VIRTUAL_WIDTH - releaseTheNuke.getWidth() - 100, VIRTUAL_HEIGHT - releaseTheNuke.getHeight() - 60);
+        releaseTheNuke.setVisible(false);
+
+        if (gameSettings.isDebugMode()) {
+            releaseTheNuke.setVisible(true);
+        }
+        stage.addActor(releaseTheNuke);
+
+        releaseTheNuke.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                GameManagerController.getInstance().cheatReleaseTheNuke();
+            }
+        });
+
         createPauseButton();
     }
 
@@ -407,7 +424,9 @@ public class PlayScreen extends BaseScreen {
                 steps++;
                 if (GameManagerController.getInstance().isGameFinished()) break;
             }
-            if (!message.isEmpty()) showMessage(message);
+            if (!message.isEmpty()) {
+                showMessage(message);
+            }
 
             updatePlantActors();
             updateZombieActors();
@@ -459,7 +478,7 @@ public class PlayScreen extends BaseScreen {
             if(plantData == null){
                 continue;
             }
-            PlantBox plantBox = new PlantBox(plantData, plantSelectionController, textures, skin);
+            PlantBox plantBox = new PlantBox(plantData, plantSelectionController, textures, skin, stage);
             plantBox.setPosition(x, y);
             plantBox.setSize(width, height);
             stage.addActor(plantBox);
@@ -532,6 +551,10 @@ public class PlayScreen extends BaseScreen {
     }
 
     public void showMessage(String message) {
+        if (message == null || message.trim().isEmpty()) {
+            return;
+        }
+
         messageNotif.clearActions();
 
         messageNotif.setText(message);
@@ -627,16 +650,15 @@ public class PlayScreen extends BaseScreen {
         boolean won = App.getCurrentUser() != null && App.getCurrentUser().isVictroy();
         BorderedTable panel = new BorderedTable();
         Label title = new Label(won ? "LEVEL COMPLETE" : "GAME OVER", skin, "big");
-        Label text = new Label(won ? "The lawn is safe." : "The zombies reached your house.", skin, "default");
-        TextButton primary = new TextButton(won ? "CONTINUE" : "RETRY", skin);
-        TextButton replay = new TextButton("REPLAY", skin);
-        TextButton menu = new TextButton("MENU", skin);
+        Label text = new Label(won ? "Dear humanz, zis is not done yet; we will come back to eat your brainz, humanz." :
+            "The zombie ate your brain; LOSER!!!", skin, "medium");
+        TextButton primary = new TextButton("RETRY", skin);
+        TextButton exit = new TextButton("EXIT", skin);
 
         panel.add(title).pad(10f).row();
         panel.add(text).pad(8f).row();
-        panel.add(primary).width(180f).pad(6f).row();
-        if (won) panel.add(replay).width(180f).pad(6f).row();
-        panel.add(menu).width(180f).pad(6f).row();
+        if (!won) panel.add(primary).width(180f).pad(6f).row();
+        panel.add(exit).width(180f).pad(6f).row();
         resultOverlay.add(panel);
         stage.addActor(resultOverlay);
 
@@ -647,13 +669,7 @@ public class PlayScreen extends BaseScreen {
                 else restartGame();
             }
         });
-        replay.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                restartGame();
-            }
-        });
-        menu.addListener(new ClickListener() {
+        exit.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 exitGame();
