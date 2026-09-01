@@ -148,7 +148,13 @@ public class GameMenuScreen extends BaseScreen{
             }else {
                 lvlNum = App.getCurrentUser().getLastLevel().getLevelNumber();
             }
-            Label progressLabel = new Label( lvlNum + "/ 4  Completed", skin, "default");
+
+            Label progressLabel = null;
+            if(unlocked) {
+                progressLabel = new Label(lvlNum + "/ 4  Completed", skin, "default");
+            }else{
+                progressLabel = new Label(  "0 / 4  Completed", skin, "default");
+            }
             card.add(progressLabel).padBottom(10).row();//todo: this is for all seasons all at once
 
             if (!isCenter) {
