@@ -1,5 +1,8 @@
 package PvZ2.APproject.controllers;
 
+import PvZ2.APproject.client.MessageType;
+import PvZ2.APproject.client.Request;
+import PvZ2.APproject.client.Response;
 import PvZ2.APproject.controllers.menus.SignupMenuController;
 import PvZ2.APproject.enums.Menu;
 import PvZ2.APproject.models.App;
@@ -82,8 +85,22 @@ public class BonusGameController {
         if (game == null) return "no bonus game is active";
         int score = game.getTotalMioPoints();
         if (App.getCurrentUser() != null) {
-            App.getCurrentUser().addMeowPoints(score);
-            App.getCurrentUser().setHighestPointAchieved(Math.max(App.getCurrentUser().getHighestPointAchieved(), score));
+//            App.getCurrentUser().addMeowPoints(score);
+//            App.getCurrentUser().setHighestPointAchieved(Math.max(App.getCurrentUser().getHighestPointAchieved(), score));
+            /// PHASE 3///
+            try {
+                Request request = new Request(MessageType.SUBMIT_SCORE);
+                request.put("score", String.valueOf(score));
+                Response response = App.getNetworkClient().sendAndWait(request);
+                if (response.isSuccess()) {
+                    App.getCurrentUser().addMeowPoints(score);
+                    App.getCurrentUser().setHighestPointAchieved(Math.max(App.getCurrentUser().getHighestPointAchieved(), score));
+                } else {
+                    return response.getMessage();
+                }
+            } catch (Exception e) {
+                return "Error: could not submit score to server";
+            }
             SignupMenuController.saveToJson();
         }
         game = null;
@@ -91,6 +108,12 @@ public class BonusGameController {
         GameManagerController.getInstance().setCurrentLevel(null);
         App.setCurrentMenu(Menu.MAIN_MENU);
         return "bonus game ended with " + score + " mio points";
+    }
+
+    public static void addStickerPoints(String sticker) {
+        if (game != null && sticker != null && sticker.toLowerCase().startsWith("sticker")) {
+            game.addExternalPoints(100);
+        }
     }
 
     public static boolean isActive() { return game != null; }
