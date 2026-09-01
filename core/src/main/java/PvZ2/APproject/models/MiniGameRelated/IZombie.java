@@ -52,8 +52,10 @@ public final class IZombie extends MiniGame {
 
 
         ZombieData sunZombieData = zombies.findByDisplayName("Sun Zombie");
-        for (int row = 1; row <= 5; row++) {
-            addActiveZombie(new Zombie(sunZombieData, 9, row));
+        if (sunZombieData != null) {
+            for (int row = 1; row <= 5; row++) {
+                addActiveZombie(new Zombie(sunZombieData, 9, row));
+            }
         }
 
         switch (stage) {
@@ -85,15 +87,15 @@ public final class IZombie extends MiniGame {
         }
 
         getGameMap().getTile(1, 3).setPlant(new Plant(plants.findByName("Cabbage-pult"),
-                3, 1, 1));
+                1, 3, 1));
         getGameMap().getTile(2, 2).setPlant(new Plant(plants.findByName("Cabbage-pult"),
                 2, 2, 1));
         getGameMap().getTile(3, 3).setPlant(new Plant(plants.findByName("Cabbage-pult"),
                 3, 3, 1));
         getGameMap().getTile(4, 2).setPlant(new Plant(plants.findByName("Cabbage-pult"),
-                2, 4, 1));
+                4, 2, 1));
         getGameMap().getTile(5, 3).setPlant(new Plant(plants.findByName("Cabbage-pult"),
-                3, 5, 1));
+                5, 3, 1));
     }
 
     public void setUpStage2(PlantRepository plants) {
@@ -113,11 +115,11 @@ public final class IZombie extends MiniGame {
         }
 
         getGameMap().getTile(1, 3).setPlant(new Plant(plants.findByName("Bonk Choy"),
-                3, 1, 1));
+                1, 3, 1));
         getGameMap().getTile(3, 3).setPlant(new Plant(plants.findByName("Bonk Choy"),
                 3, 3, 1));
         getGameMap().getTile(5, 3).setPlant(new Plant(plants.findByName("Bonk Choy"),
-                3, 5, 1));
+                5, 3, 1));
     }
 
     public void setUpStage3(PlantRepository plants) {
@@ -194,6 +196,15 @@ public final class IZombie extends MiniGame {
             }
         }
         return null;
+    }
+
+    public int getCheapestAvailableZombieCost() {
+        int cheapest = Integer.MAX_VALUE;
+        for (String name : availableZombies) {
+            ZombieData data = ZombieRepository.getInstance().findByDisplayName(name);
+            if (data != null && data.getCost() > 0) cheapest = Math.min(cheapest, data.getCost());
+        }
+        return cheapest == Integer.MAX_VALUE ? 0 : cheapest;
     }
 
     public boolean allBrainsEaten() { for (Boolean eaten : brainsEatenInLane) if (!Boolean.TRUE.equals(eaten)) return false; return true; }

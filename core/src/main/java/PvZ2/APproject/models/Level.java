@@ -2,6 +2,7 @@ package PvZ2.APproject.models;
 
 import PvZ2.APproject.controllers.ZombieWaveManager;
 import PvZ2.APproject.enums.LevelType;
+import PvZ2.APproject.enums.SpecialLevelType;
 import PvZ2.APproject.models.GameMapRelated.GameMap;
 import PvZ2.APproject.models.GameMapRelated.SkySunProducer;
 import PvZ2.APproject.models.GameMapRelated.Tile;
@@ -36,7 +37,7 @@ public class Level {
     private SkySunProducer skySunProducer;
     private List<Barrel> barrels;
     private int removedPlantsCount;
-    private SpecialLevelStrategy specialLevel;
+    private SpecialLevelStrategy specialLevelStrategy;
     private int levelDifficulty;
     private EnvironmentEvent pendingEnvironmentEvent;
 
@@ -46,18 +47,13 @@ public class Level {
         this.levelNumber = data.getLevelNumber();
         this.isUnlocked = data.isUnlocked();
         this.levelType = data.getLevelType();
-        this.gameMap = data.getMap();
-        if (this.gameMap != null) {
-            this.gameMap.initializeGrid();
-            this.gameMap.initializeLawnMowers(gameMap.getRows());
-        } else {
-            this.gameMap = new GameMap(5, 9);
-        }
+        GameMap templateMap = data.getMap();
+        this.gameMap = templateMap == null ? new GameMap(5, 9) : templateMap.copy();
         this.chosenPlants = new ArrayList<>();
         this.activeZombies = new ArrayList<>();
         this.activePlants = new ArrayList<>();
         this.activeSuns = new ArrayList<>();
-        this.collectedSunsAmount = 0;
+        this.collectedSunsAmount = 50;
         this.currentSeason = data.getType();
         this.currentTick = 0;
         this.zombieWave = new ZombieWaveManager(this);
@@ -74,41 +70,39 @@ public class Level {
 
     public void setUpSpecialLevel(){
         Random random = new Random();
-        if(this.data.getLevelType() == LevelType.SPECIAL) {
-            switch (data.getName()) {
-                case "NIGHT_OPS":
-                    this.specialLevel = new NightOpsStrategy();
+        if (this.data.getLevelType() == LevelType.SPECIAL) {
+            switch (data.getSpecialLevelType()) {
+                case NIGHT_OPS:
+                    this.specialLevelStrategy = new NightOpsStrategy();
                     break;
-                case "DEAD_LINE":
-                    int deadLine = random.nextInt(6);
-                    this.specialLevel = new DeadLineStrategy(deadLine); // e.g., column 4 is the deadline
+                case DEAD_LINE:
+                    int deadLine = 1 + random.nextInt(Math.max(1, this.gameMap.getColumns() - 1));
+                    this.specialLevelStrategy = new DeadLineStrategy(deadLine);
                     break;
-                case "LOVE_YOUR_PLANTS":
-                    int maxLoss = random.nextInt(6);
-                    this.specialLevel = new LoveYourPlantsStrategy(maxLoss); // e.g., max 5 plants lost
+                case LOVE_YOUR_PLANTS:
+                    int maxLoss = 1 + random.nextInt(5);
+                    this.specialLevelStrategy = new LoveYourPlantsStrategy(maxLoss);
                     break;
-                case "SAVE_OUR_SEEDS":
-                    this.specialLevel = new SaveOurSeedsStrategy();
+                case SAVE_OUR_SEEDS:
+                    this.specialLevelStrategy = new SaveOurSeedsStrategy();
                     break;
-                case "LOCKED_PLANTS_LEVEL":
-                    this.specialLevel = new LockedPlantsLevel();
+                case LOCKED_PLANTS_LEVEL:
+                    this.specialLevelStrategy = new LockedPlantsLevel();
                     break;
                 default:
-                    this.specialLevel = null;
+                    this.specialLevelStrategy = null;
                     break;
-
             }
 
-            if (this.specialLevel!= null) {
-                this.specialLevel.levelStart(this);
+            if (this.specialLevelStrategy != null) {
+                this.specialLevelStrategy.levelStart(this);
             }
         }
-
     }
 
     public Zombie getAdjacentZombie(Zombie zombie) {
         for (Zombie adjacentZombie : activeZombies) {
-            if (zombie.getX() == adjacentZombie.getX() && zombie.getY() == adjacentZombie.getY()) {
+            if (adjacentZombie != zombie && zombie.getX() == adjacentZombie.getX() && zombie.getY() == adjacentZombie.getY()) {
                 return adjacentZombie;
             }
         }
@@ -119,7 +113,7 @@ public class Level {
         for (Plant plant : activePlants) {
             if (plant.getY() == zombie.getY()) {
                 double distance = zombie.getX() - plant.getX();
-                if (distance <= requiredDistance) {
+                if (distance >= 0 && distance <= requiredDistance) {
                     return true;
                 }
             }
@@ -268,24 +262,43 @@ public class Level {
     }
 
     public Plant getFrontMostPlantInRow(double row){
-        Plant front= null;
-        int minCol = Integer.MAX_VALUE;
-        for(Plant p : activePlants){
-            if(p.getY() == row && p.getX() < minCol){
-                minCol = p.getX();
-                front = p;
+        Plant front = null;
+        int maxCol = Integer.MIN_VALUE;
+        for (Plant plant : activePlants) {
+            if (plant.getY() == row && plant.getX() > maxCol) {
+                maxCol = plant.getX();
+                front = plant;
             }
         }
         return front;
     }
 
-    public Plant getPlantInFrontOfZombie(Zombie zombie) {
-        for (Plant p : activePlants) {
-            if (p.getX() <= zombie.getX() + 0.5 && p.getX() >= zombie.getX() && p.getY() == zombie.getY()) {
-                return p;
+    public Plant getClosestPlantInFront(Zombie zombie) {
+        Plant closest = null;
+        double closestDistance = Double.MAX_VALUE;
+        for (Plant plant : activePlants) {
+            if (plant.getY() != zombie.getY() || plant.isDead()) continue;
+            double distance = zombie.getX() - plant.getX();
+            if (distance >= 0 && distance < closestDistance) {
+                closest = plant;
+                closestDistance = distance;
             }
         }
-        return null;
+        return closest;
+    }
+
+    public Plant getPlantInFrontOfZombie(Zombie zombie) {
+        Plant closest = null;
+        double closestDistance = Double.MAX_VALUE;
+        for (Plant plant : activePlants) {
+            if (plant.getY() != zombie.getY()) continue;
+            double distance = zombie.getX() - plant.getX();
+            if (distance >= 0 && distance <= 0.5 && distance < closestDistance) {
+                closest = plant;
+                closestDistance = distance;
+            }
+        }
+        return closest;
     }
 
     public Plant getPlantAt(int x, int y){
@@ -306,8 +319,8 @@ public class Level {
         this.removedPlantsCount = removedPlantsCount;
     }
 
-    public SpecialLevelStrategy getSpecialLevel(){
-        return specialLevel;
+    public SpecialLevelStrategy getSpecialLevelStrategy(){
+        return specialLevelStrategy;
     }
 
     public int getLevelDifficulty() {
@@ -315,7 +328,11 @@ public class Level {
     }
 
     public boolean isDay(){
-        return !this.getData().getName().toLowerCase().contains("dark ages") && !(specialLevel instanceof NightOpsStrategy);
+        if (specialLevelStrategy instanceof NightOpsStrategy) return false;
+        if (this.getData() != null && this.getData().getId() != null &&
+            this.getData().getId().toLowerCase().contains("dark_level")) return false;
+        return currentSeason == null || currentSeason.getName() == null ||
+            !currentSeason.getName().replace("_", " ").equalsIgnoreCase("dark ages");
     }
 
     public void triggerEnvironmentEvent(EnvironmentEvent.EnvironmentEventType type, float duration) {

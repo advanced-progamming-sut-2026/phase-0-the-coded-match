@@ -12,8 +12,8 @@ public class ZombieArmor {
 
     public int takeDamage(Zombie zombie, int damage) {
         currentHp -= damage;
-        if (currentHp < 0) {
-            int remainingDamage =- currentHp;
+        if (currentHp <= 0) {
+            int remainingDamage = Math.max(0, -currentHp);
             currentHp = 0;
             zombie.getArmors().remove(this);
             return remainingDamage;

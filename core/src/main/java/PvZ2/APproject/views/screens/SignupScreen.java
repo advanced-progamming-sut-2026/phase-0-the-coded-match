@@ -41,8 +41,12 @@ public class SignupScreen extends BaseScreen {
         usernameField.setMessageText("Username");
         TextField passwordField = new TextField("", skin, "default");
         passwordField.setMessageText("Password");
+        passwordField.setPasswordMode(true);
+        passwordField.setPasswordCharacter('*');
         TextField passwordConfirmField = new TextField("", skin, "default");
         passwordConfirmField.setMessageText("Confirm Password");
+        passwordConfirmField.setPasswordMode(true);
+        passwordConfirmField.setPasswordCharacter('*');
         TextField nicknameField = new TextField("", skin, "default");
         nicknameField.setMessageText("Nickname");
         TextField emailField = new TextField("", skin, "default");

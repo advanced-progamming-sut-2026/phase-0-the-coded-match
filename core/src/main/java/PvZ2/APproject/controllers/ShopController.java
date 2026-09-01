@@ -1,5 +1,6 @@
 package PvZ2.APproject.controllers;
 
+import PvZ2.APproject.controllers.menus.SignupMenuController;
 import PvZ2.APproject.enums.Commands;
 import PvZ2.APproject.enums.ShopRelated.PaymentType;
 import PvZ2.APproject.enums.ShopRelated.ShopItemData;
@@ -58,54 +59,38 @@ public class ShopController {
     }
 
     public static String buyItem(ShopItemData item, String plantSelected) {
+        if (App.getCurrentUser() == null || item == null) return "ERROR: invalid purchase";
+        checkAndRefreshDailyOffer();
         Shop shop = App.getCurrentUser().getShop();
-//        Pattern pattern = Pattern.compile(Commands.SHOP_BUY.getPattern());
-//        Matcher matcher = pattern.matcher(input);
-//        if (!matcher.matches()) {
-//            return "invalid command";
-//        }
-//        int id = Integer.parseInt(matcher.group("itemId"));
-//        ShopItemData item = getItemById(id);
-//        int count = Integer.parseInt(matcher.group("count"));
-//        if (count < 1) return "invalid count";
-//
-//        if (item == null) {
-//            return "invalid item id";
-//        }
         PlantData plantChosen = null;
-        if (item == ShopItemData.SEED_PACKET_DAILY && shop.isDailyItemSoldOut()) return "ERROR: daily item has been sold out, come back tomorrow";
-
-        if (item == ShopItemData.SEED_PACKET_BY_CHANCE) plantChosen = shop.getRandomSeedPack();
-        else if (item == ShopItemData.SEED_PACKET_DAILY) plantChosen = shop.getRandomSpecialSeedPack();
-        else if (item == ShopItemData.SEED_PACKET_BY_CHOICE) {
+        if (item == ShopItemData.SEED_PACKET_DAILY && shop.isDailyItemSoldOut()) {
+            return "ERROR: daily item has been sold out, come back tomorrow";
+        }
+        if (item == ShopItemData.SEED_PACKET_BY_CHANCE) {
+            plantChosen = shop.getRandomSeedPack();
+        } else if (item == ShopItemData.SEED_PACKET_DAILY) {
+            plantChosen = shop.getRandomSpecialSeedPack();
+        } else if (item == ShopItemData.SEED_PACKET_BY_CHOICE) {
             plantChosen = PlantRepository.getInstance().findByName(plantSelected);
             if (plantChosen == null || !App.getCurrentUser().getCollection().getAvailablePlantsIds().contains(plantChosen.getId())) {
                 return "ERROR: you don't have access to plant";
             }
         }
-
-        if (item == ShopItemData.POT && App.getCurrentUser().getGreenHouse().getPotsCount() + 1 > 20) return "ERROR: greenhouse is full";
-        if (item == ShopItemData.PLANT_FOOD && App.getCurrentUser().getPlantFoodBoughtCount() + 1 > 3) return "ERROR: plant food count is at maximum capacity";
-        int price = item.getPrice() * 1;
-        if (item.getPaymentType() == PaymentType.COIN) {
-            if (price > App.getCurrentUser().getCoinsCount()) {
-                return "ERROR: not enough coins to buy this item";
-            } else {
-                App.getCurrentUser().setCoinsCount(App.getCurrentUser().getCoinsCount() - price);
-            }
-        } else {
-            if (price > App.getCurrentUser().getGemsCount()) {
-                return "ERROR: not enough gems to buy this item";
-            } else {
-                App.getCurrentUser().setGemsCount(App.getCurrentUser().getGemsCount() - price);
-            }
+        GreenHouse greenHouse = App.getCurrentUser().getGreenHouse();
+        if (item == ShopItemData.POT && greenHouse.getPotsCount() >= greenHouse.getCapacity()) {
+            return "ERROR: greenhouse is full";
         }
-//        return addItemToProfile(item, plantChosen, 1);
-        if (plantChosen != null) {
-            return plantChosen.getName();
-        } else {
-            return "";
+        if (item == ShopItemData.PLANT_FOOD && App.getCurrentUser().getPlantFoodBoughtCount() >= 3) {
+            return "ERROR: plant food count is at maximum capacity";
         }
+        int price = item.getPrice();
+        if (item.getPaymentType() == PaymentType.COIN && price > App.getCurrentUser().getCoinsCount()) {
+            return "ERROR: not enough coins to buy this item";
+        }
+        if (item.getPaymentType() == PaymentType.GEM && price > App.getCurrentUser().getGemsCount()) {
+            return "ERROR: not enough gems to buy this item";
+        }
+        return plantChosen == null ? "" : plantChosen.getName();
     }
 
     public static PlantData getRandomPlant(){
@@ -125,42 +110,82 @@ public class ShopController {
     }
 
     public static String addItemToProfile(ShopItemData item, String plantChosen, int count) {
-        PlantData plant = PlantRepository.getInstance().findByName(plantChosen);
+        if (App.getCurrentUser() == null || item == null || count <= 0) return "ERROR: invalid purchase";
+        String validation = buyItem(item, plantChosen);
+        if (validation.startsWith("ERROR:")) return validation;
+        if (plantChosen == null || plantChosen.isBlank()) plantChosen = validation;
+        PlantData plant = plantChosen == null || plantChosen.isBlank() ? null : PlantRepository.getInstance().findByName(plantChosen);
+        int price = item.getPrice() * count;
+        if (item.getPaymentType() == PaymentType.COIN) {
+            if (App.getCurrentUser().getCoinsCount() < price) return "ERROR: not enough coins to buy this item";
+            App.getCurrentUser().setCoinsCount(App.getCurrentUser().getCoinsCount() - price);
+        } else {
+            if (App.getCurrentUser().getGemsCount() < price) return "ERROR: not enough gems to buy this item";
+            App.getCurrentUser().setGemsCount(App.getCurrentUser().getGemsCount() - price);
+        }
         Shop shop = App.getCurrentUser().getShop();
+        String result;
         switch (item) {
             case POT -> {
                 GreenHouse greenHouse = App.getCurrentUser().getGreenHouse();
-                if (greenHouse.getPotsCount() + count > 20) {
+                if (greenHouse.getPotsCount() + count > greenHouse.getCapacity()) {
+                    refund(item, price);
                     return "ERROR: greenhouse is full";
                 }
                 int unlocked = greenHouse.unlockPots(count);
-                return unlocked + " pot bought successfully";
+                if (unlocked != count) {
+                    refund(item, price);
+                    return "ERROR: greenhouse is full";
+                }
+                result = unlocked + " pot bought successfully";
             }
             case PLANT_FOOD -> {
                 if (App.getCurrentUser().getPlantFoodBoughtCount() + count > 3) {
+                    refund(item, price);
                     return "ERROR: plant food count is maximum";
                 }
-                App.getCurrentUser().setPlantFoodBoughtCount(App.getCurrentUser().getPlantFoodBoughtCount() +
-                        (count * item.getUnitBought()));
-                return count + " plant food(s) bought successfully";
+                App.getCurrentUser().setPlantFoodBoughtCount(App.getCurrentUser().getPlantFoodBoughtCount() + count * item.getUnitBought());
+                result = count + " plant food(s) bought successfully";
             }
             case SEED_PACKET_BY_CHANCE, SEED_PACKET_BY_CHOICE -> {
+                if (plant == null) {
+                    refund(item, price);
+                    return "ERROR: invalid plant";
+                }
                 int amount = count * item.getUnitBought();
-                App.getCurrentUser().addSeedPackets(plant.getName(), amount);
-                return amount + " seed packets bought successfully";
+                App.getCurrentUser().addSeedPackets(plant.getId(), amount);
+                result = amount + " seed packets bought successfully";
             }
             case EXCHANGE_CURRENCY -> {
                 int amount = count * item.getUnitBought();
                 App.getCurrentUser().setCoinsCount(App.getCurrentUser().getCoinsCount() + amount);
-                return amount + " coins were exchanged with 5 gems";
+                result = amount + " coins were exchanged with gems";
             }
             case SEED_PACKET_DAILY -> {
+                if (plant == null) {
+                    refund(item, price);
+                    return "ERROR: invalid plant";
+                }
                 int amount = count * item.getUnitBought();
-                App.getCurrentUser().addSeedPackets(plant.getName(), amount);
+                App.getCurrentUser().addSeedPackets(plant.getId(), amount);
                 shop.setDailyItemSoldOut(true);
-                return amount + " daily seed packets bought successfully";
+                result = amount + " daily seed packets bought successfully";
+            }
+            default -> {
+                refund(item, price);
+                return "ERROR: invalid purchase";
             }
         }
-        return "";
+        SignupMenuController.saveToJson();
+        return result;
     }
+
+    private static void refund(ShopItemData item, int price) {
+        if (item.getPaymentType() == PaymentType.COIN) {
+            App.getCurrentUser().setCoinsCount(App.getCurrentUser().getCoinsCount() + price);
+        } else {
+            App.getCurrentUser().setGemsCount(App.getCurrentUser().getGemsCount() + price);
+        }
+    }
+
 }

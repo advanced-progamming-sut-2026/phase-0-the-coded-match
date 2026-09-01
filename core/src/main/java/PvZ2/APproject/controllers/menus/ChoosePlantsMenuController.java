@@ -130,8 +130,13 @@ public class ChoosePlantsMenuController {
         if (current.getGemsCount() < 2) {
             return "Not enough gems";
         }
+        PlantData plant = PlantRepository.getInstance().findByName(plantName);
+        if (plant == null) return "Plant is not available";
+        String key = plant.getId().toLowerCase();
+        if (current.getGreenHouse().storedBoosts.getOrDefault(key, false)) return "Plant is already boosted";
         current.setGemsCount(current.getGemsCount() - 2);
-        current.getGreenHouse().storedBoosts.put(plantName.toLowerCase(), true);
+        current.getGreenHouse().storedBoosts.put(key, true);
+        SignupMenuController.saveToJson();
         return "Plant boosted successfully";
     }
 

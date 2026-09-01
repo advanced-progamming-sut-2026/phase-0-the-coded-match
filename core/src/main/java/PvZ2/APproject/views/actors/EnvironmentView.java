@@ -7,6 +7,7 @@ import PvZ2.APproject.views.screens.PlayScreen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import pvz.libpvz.textures.TextureBank;
 
 public class EnvironmentView extends Actor {
@@ -22,6 +23,7 @@ public class EnvironmentView extends Actor {
         this.level = level;
         this.textures = textures;
         this.currentEvent = null;
+        setTouchable(Touchable.disabled);
     }
 
     public void play(EnvironmentEvent event) {

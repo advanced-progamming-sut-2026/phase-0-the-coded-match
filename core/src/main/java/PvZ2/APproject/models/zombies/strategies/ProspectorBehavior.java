@@ -28,6 +28,10 @@ public class ProspectorBehavior implements ZombieBehavior {
         } else if (zombie.getCurrentState() == ZombieState.WALKING_BACKWARD) {
             walkBackWard(zombie);
         } else if (zombie.getCurrentState() == ZombieState.EATING) {
+            if (targetPlant == null) {
+                zombie.setCurrentState(ZombieState.WALKING_BACKWARD);
+                return;
+            }
             zombie.attack(targetPlant);
             if(targetPlant.isDead()) {
                 zombie.setCurrentState(ZombieState.WALKING_BACKWARD);
@@ -36,12 +40,11 @@ public class ProspectorBehavior implements ZombieBehavior {
     }
 
     public void explodeDynamite(Zombie zombie) {
-        zombie.setY(1);
         zombie.setCurrentState(ZombieState.WALKING_BACKWARD);
     }
 
     public void walkBackWard(Zombie zombie) {
-        zombie.setX(zombie.getX() + zombie.getData().getSpeed() / 10.0);
+        zombie.setX(zombie.getX() + zombie.getData().getSpeed() / 100.0);
     }
 
     @Override

@@ -39,7 +39,7 @@ public class Plant implements Update {
         this.x = x;
         this.y = y;
         this.level = Math.max(1, level);
-        this.currentHp = data.getBaseHp();
+        this.currentHp = getMaxHp();
         this.boosted = false;
         this.cooldownRemaining = 0;
         this.activeEffects = new ArrayList<>();
@@ -50,6 +50,9 @@ public class Plant implements Update {
 
     @Override
     public void update(float delta) {
+        if (currentState == PlantState.HURT || currentState == PlantState.SHOOTING || currentState == PlantState.PRODUCING) {
+            currentState = PlantState.IDLE;
+        }
         if (disabled) {
             return;
         }
@@ -66,10 +69,6 @@ public class Plant implements Update {
 
     private void doAction() {
         if (data.getAbilities() == null || data.getAbilities().isEmpty()) {
-            currentCooldownTimer = cooldownTicks;
-            return;
-        }
-        if (data.getAbilities().contains("PRODUCE_SUN") && !sunCollected) {
             currentCooldownTimer = cooldownTicks;
             return;
         }
@@ -147,7 +146,7 @@ public class Plant implements Update {
 
     public void activatePlantFood() {
         boosted = true;
-        currentHp = Math.max(currentHp, data.getBaseHp());
+        currentHp = Math.max(currentHp, getMaxHp());
         activeEffects.add("plantFood:" + data.getPlantFoodEffect());
         executeAbilities(data.getPlantFoodAbilities());
     }
@@ -166,7 +165,7 @@ public class Plant implements Update {
     }
 
     public void startRecharge() {
-        this.cooldownRemaining = secondsToTicks(data.getRecharge());
+        this.cooldownRemaining = secondsToTicks(getRecharge());
     }
 
     public void removeCooldown() {
@@ -192,6 +191,47 @@ public class Plant implements Update {
             }
         }
         return result;
+    }
+
+
+    public int getMaxHp() {
+        int value = data.getBaseHp();
+        if (data.getUpgrades() != null) {
+            for (PlantUpgradeData upgrade : data.getUpgrades()) {
+                if (upgrade.getLevel() <= level) value += upgrade.getHpBonus();
+            }
+        }
+        return Math.max(1, value);
+    }
+
+    public int getDamage() {
+        int value = data.getDamage();
+        if (data.getUpgrades() != null) {
+            for (PlantUpgradeData upgrade : data.getUpgrades()) {
+                if (upgrade.getLevel() <= level) value += upgrade.getDamageBonus();
+            }
+        }
+        return Math.max(0, value);
+    }
+
+    public int getSunCost() {
+        int value = data.getSunCost();
+        if (data.getUpgrades() != null) {
+            for (PlantUpgradeData upgrade : data.getUpgrades()) {
+                if (upgrade.getLevel() <= level) value -= upgrade.getCostReduction();
+            }
+        }
+        return Math.max(0, value);
+    }
+
+    public double getRecharge() {
+        double value = data.getRecharge();
+        if (data.getUpgrades() != null) {
+            for (PlantUpgradeData upgrade : data.getUpgrades()) {
+                if (upgrade.getLevel() <= level) value -= upgrade.getRechargeReduction();
+            }
+        }
+        return Math.max(0.1, value);
     }
 
     public void setPosition(int x, int y) {

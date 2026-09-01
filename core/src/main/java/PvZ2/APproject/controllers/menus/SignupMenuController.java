@@ -22,12 +22,13 @@ import java.util.ArrayList;
 import static PvZ2.APproject.enums.Menu.LOGIN_MENU;
 
 public class SignupMenuController{
+    private static User pendingUser;
 
     public String register(String username, String password, String passwordConfirm, String nickname, String email,
                            String genderSt) {
 
-        if (validateUsername(username)) {
-            return "Error: username already exists.";
+        if (!validateUsername(username)) {
+            return "Error: username is invalid or already exists.";
         } else if (!validatePassword(password)) {
             return "Error: password is not strong enough.";
         } else if (!passwordIsConfirmed(password, passwordConfirm)) {
@@ -36,38 +37,36 @@ public class SignupMenuController{
             return "Error: nickname is too short";
         } else if (!validateEmail(email)) {
             return "Error: email pattern in not valid";
-        } else if (!(genderSt.equalsIgnoreCase("male")) &&
-            !(genderSt.equalsIgnoreCase("female"))) {
+        } else if (genderSt == null || (!(genderSt.equalsIgnoreCase("male")) &&
+            !(genderSt.equalsIgnoreCase("female")))) {
             return "Error: gender is not valid";
         } else {
             SignupScreen.registered = true;
             Gender gender = whichGender(genderSt);
             String hashedPassword = hashPassword(password);
-            User user = new User(username, hashedPassword, nickname, email, gender);
-            App.addUser(user);
-            saveToJson();
+            pendingUser = new User(username, hashedPassword, nickname, email, gender);
             return "Registered successfully";
         }
     }
 
     public static boolean validateUsername(String username) {
-        return username == null || App.doesUsernameExists(username);
+        return username != null && username.matches("[A-Za-z0-9-]+") && !App.doesUsernameExists(username);
     }
 
     public static boolean validatePassword(String password) {
-        return password == null || password.matches(Commands.PASSWORD.getPattern());
+        return password != null && password.matches(Commands.PASSWORD.getPattern());
     }
 
     public static boolean passwordIsConfirmed(String password, String passwordConfirm) {
-        return passwordConfirm == null || password.equals(passwordConfirm);
+        return password != null && passwordConfirm != null && password.equals(passwordConfirm);
     }
 
     public static boolean validateNickname(String nickname) {
-        return nickname == null || nickname.matches(Commands.NICKNAME.getPattern());
+        return nickname != null && nickname.matches(Commands.NICKNAME.getPattern());
     }
 
     public static boolean validateEmail(String email) {
-        return email == null || email.matches(Commands.EMAIL.getPattern());
+        return email != null && email.matches(Commands.EMAIL.getPattern());
     }
 
     public static Gender whichGender(String gender) {
@@ -90,8 +89,12 @@ public class SignupMenuController{
         SecurityQuestions question = getQuestionByNumber(questionNum);
         if (question == null) {
             return "invalid question";
-        } else if (answer.equals(answerConfirm)) {
-            App.getUsers().get(App.getUsers().size() - 1).addQuestion(question, answer);
+        } else if (pendingUser == null) {
+            return "registration expired";
+        } else if (answer != null && answer.equals(answerConfirm)) {
+            pendingUser.addQuestion(question, answer);
+            App.addUser(pendingUser);
+            pendingUser = null;
             SignupScreen.questionPicked = true;
             saveToJson();
             App.setCurrentMenu(LOGIN_MENU);

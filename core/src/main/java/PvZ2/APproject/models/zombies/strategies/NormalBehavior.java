@@ -19,6 +19,8 @@ import java.util.Random;
 
 public class NormalBehavior implements ZombieBehavior {
     private int abilityTimer = 60;
+    private static final int TOMB_RAISER_INTERVAL = 100;
+    private static final int MAX_GRAVES = 6;
 
     @Override
     public void updateZombie(Zombie zombie, Plant targetPlant) {
@@ -30,13 +32,17 @@ public class NormalBehavior implements ZombieBehavior {
             stealDroppedSuns(zombie);
         } else if (zombie.getData().getId().equalsIgnoreCase("ZombieTombRaiser")) {
             zombie.setAbilityTickTimer(zombie.getAbilityTickTimer() + 1);
-            if (zombie.getAbilityTickTimer() == abilityTimer) {
+            if (zombie.getAbilityTickTimer() >= TOMB_RAISER_INTERVAL) {
                 raiseTomb();
                 zombie.setAbilityTickTimer(0);
             }
         } else if ((zombie.getData().getId().equalsIgnoreCase("ZombieIceAgeHunter") ||
-                (zombie.getData().getId().equalsIgnoreCase("ZombieBeachOctopus"))) && targetPlant != null) {
-            shootProjectile(zombie);
+                zombie.getData().getId().equalsIgnoreCase("ZombieBeachOctopus")) && targetPlant != null) {
+            zombie.setAbilityTickTimer(zombie.getAbilityTickTimer() + 1);
+            if (zombie.getAbilityTickTimer() >= abilityTimer) {
+                shootProjectile(zombie);
+                zombie.setAbilityTickTimer(0);
+            }
         }
 
         if (zombie.getCurrentState() == ZombieState.EATING) {
@@ -52,23 +58,23 @@ public class NormalBehavior implements ZombieBehavior {
     }
 
     public void raiseTomb() {
+        GameMap map = GameManagerController.getInstance().getCurrentLevel().getGameMap();
+        if (countGraves(map) >= MAX_GRAVES) return;
         List<Tile> emptyTiles = getValidTilesForGrave();
-        int gravesToSpawn = Math.min(2, emptyTiles.size());
-
-        if (gravesToSpawn == 0) {
-            return;
-        }
-
-        if (emptyTiles.isEmpty()) {
-            return;
-        }
-
+        if (emptyTiles.isEmpty()) return;
         Collections.shuffle(emptyTiles);
+        emptyTiles.get(0).setGrave(true, Tile.GraveReward.NONE);
+    }
 
-        for (int i = 0; i < gravesToSpawn; i++) {
-            Tile selectedTile = emptyTiles.get(i);
-            selectedTile.setType(TileType.GRAVE);
+    private int countGraves(GameMap map) {
+        int count = 0;
+        for (int row = 1; row <= map.getRows(); row++) {
+            for (int col = 1; col <= map.getColumns(); col++) {
+                Tile tile = map.getTile(col, row);
+                if (tile != null && tile.isGrave()) count++;
+            }
         }
+        return count;
     }
 
     public List<Tile> getValidTilesForGrave() {
@@ -110,26 +116,28 @@ public class NormalBehavior implements ZombieBehavior {
         GameManagerController.getInstance().getCurrentLevel().getActiveSuns().remove(sun);
     }
 
-    public void shootProjectile(Zombie zombie) { //TODO: include projectile TYPE
-        Projectile icyProjectile = new Projectile(zombie.getX(), zombie.getY(), zombie.getData().getSpeed(),
-                zombie.getData().getEatDPS(), false, false, null);
-        //TODO: what should the speed and damage amount be??
+    public void shootProjectile(Zombie zombie) {
+        double projectileSpeed = Math.max(0.2, zombie.getData().getSpeed() / 20.0);
+        Projectile icyProjectile = new Projectile(zombie.getX(), zombie.getY(), projectileSpeed,
+                zombie.getData().getEatDPS(), true, false, null);
         GameManagerController.getInstance().getCurrentLevel().getActiveProjectiles().add(icyProjectile);
     }
 
     @Override
     public void onProjectileHit(Zombie zombie, Projectile projectile) {
         String zombieId = zombie.getData().getId();
+        Plant creator = projectile.getCreatorPlantCategory();
+        if (creator == null) return;
         if (zombieId.equalsIgnoreCase("ZombieLostCityJane")) {
-            if (projectile.getCreatorPlantCategory().getData().getCategory() == PlantCategory.LOBBER) {
+            if (creator.getData().getCategory() == PlantCategory.LOBBER) {
                 return;
             }
         }
         if (zombieId.equalsIgnoreCase("ZombieDarkImpDragon")) {
-            if (projectile.getCreatorPlantCategory().hasThisTag(PlantTag.FIRE)) {
+            if (creator.hasThisTag(PlantTag.FIRE)) {
                 return;
             }
         }
-        zombie.takeDamage(projectile.getDamage(), projectile.getCreatorPlantCategory());
+        zombie.takeDamage(projectile.getDamage(), creator);
     }
 }

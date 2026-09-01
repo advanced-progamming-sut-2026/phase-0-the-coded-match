@@ -9,6 +9,10 @@ public class BarrelRollerBehavior implements ZombieBehavior {
     @Override
     public void updateZombie(Zombie zombie, Plant targetPlant) {
         if (zombie.getCurrentState() == ZombieState.EATING) {
+            if (targetPlant == null) {
+                zombie.setCurrentState(ZombieState.WALKING);
+                return;
+            }
             zombie.attack(targetPlant);
             if (targetPlant == null || targetPlant.isDead()) {
                 zombie.setCurrentState(ZombieState.WALKING);

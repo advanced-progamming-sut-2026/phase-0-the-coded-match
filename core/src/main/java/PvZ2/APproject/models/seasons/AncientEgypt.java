@@ -6,13 +6,16 @@ import PvZ2.APproject.models.Level;
 import PvZ2.APproject.models.plants.Plant;
 import PvZ2.APproject.models.zombies.Zombie;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 public final class AncientEgypt extends Season {
+    private static final int MAX_GRAVES = 6;
     public AncientEgypt(SeasonData data) {
         super(data);
         this.name = data.getName();
-        this.setUnlocked(true);
     }
 
     @Override
@@ -24,14 +27,22 @@ public final class AncientEgypt extends Season {
     public void LevelStarted(Level level) {
         int rows = level.getGameMap().getRows();
         int cols = level.getGameMap().getColumns();
+        List<Tile> graves = new ArrayList<>();
 
         for (int r = 1; r <= rows; r++) {
             for (int c = 1; c <= cols; c++) {
                 Tile tile = level.getGameMap().getTile(c, r);
-
-                if(tile != null && tile.getType() == TileType.GRAVE){
+                if (tile != null && tile.getType() == TileType.GRAVE) {
                     tile.setGrave(true, Tile.GraveReward.NONE);
+                    graves.add(tile);
                 }
+            }
+        }
+
+        if (graves.size() > MAX_GRAVES) {
+            Collections.shuffle(graves);
+            for (int i = MAX_GRAVES; i < graves.size(); i++) {
+                graves.get(i).setGrave(false, Tile.GraveReward.NONE);
             }
         }
     }

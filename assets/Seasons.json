@@ -13,9 +13,11 @@
     "levels": [
       {
         "id": "egypt_level_1",
-        "name": "Egypt Level 1",
+        "name": "Level 1",
         "levelNumber": 1,
         "levelType": "NORMAL",
+        "specialLevelType": "NORMAL",
+        "isUnlocked": true,
         "waveCount": 5,
         "baseWaveCost": 1000,
         "availablePlants": [
@@ -41,14 +43,16 @@
       },
       {
         "id": "egypt_level_2",
-        "name": "SAVE_OUR_SEEDS",
+        "name": "Save Our Seeds - Level 2",
         "levelNumber": 2,
         "levelType": "SPECIAL",
+        "specialLevelType": "SAVE_OUR_SEEDS",
+        "isUnlocked": true,
         "waveCount": 5,
         "baseWaveCost": 1000,
         "availablePlants": [],
         "lockedPlants": [],
-        "protectedPlants": [],
+        "protectedPlants": ["Sunflower"],
         "wavePatterns": [
           {
             "waveNumber": 1,
@@ -65,9 +69,11 @@
       },
       {
         "id": "egypt_level_3",
-        "name": "LOCKED_PLANTS_LEVEL",
+        "name": "Locked Plants - Level 3",
         "levelNumber": 3,
         "levelType": "SPECIAL",
+        "specialLevelType": "LOCKED_PLANTS_LEVEL",
+        "isUnlocked": true,
         "waveCount": 4,
         "baseWaveCost": 1000,
         "availablePlants": [
@@ -91,9 +97,11 @@
       },
       {
         "id": "egypt_level_4",
-        "name": "Egypt Level 4 (Boss Fight)",
+        "name": "Level 4 (Boss Fight)",
         "levelNumber": 4,
         "levelType": "BOSS",
+        "specialLevelType": "BOSS",
+        "isUnlocked": true,
         "waveCount": 1,
         "baseWaveCost": 100,
         "availablePlants": [],
@@ -122,9 +130,11 @@
     "levels": [
       {
         "id": "caves_level_1",
-        "name": "Caves Level 1",
+        "name": "Level 1",
         "levelNumber": 1,
         "levelType": "NORMAL",
+        "specialLevelType": "NORMAL",
+        "isUnlocked": true,
         "waveCount": 5,
         "baseWaveCost": 1000,
         "availablePlants": [
@@ -144,9 +154,11 @@
       },
       {
         "id": "caves_level_2",
-        "name": "Caves Level 2",
+        "name": "Level 2",
         "levelNumber": 2,
         "levelType": "NORMAL",
+        "specialLevelType": "NORMAL",
+        "isUnlocked": true,
         "waveCount": 4,
         "baseWaveCost": 1000,
         "availablePlants": [
@@ -166,9 +178,11 @@
       },
       {
         "id": "caves_level_3",
-        "name": "NIGHT_OPS",
+        "name": "Night Ops - Level 3",
         "levelNumber": 3,
         "levelType": "SPECIAL",
+        "specialLevelType": "NIGHT_OPS",
+        "isUnlocked": true,
         "waveCount": 5,
         "baseWaveCost": 1000,
         "availablePlants": [
@@ -190,9 +204,11 @@
       },
       {
         "id": "caves_level_4",
-        "name": "Caves Level 4 (Boss Fight)",
+        "name": "Level 4 (Boss Fight)",
         "levelNumber": 4,
         "levelType": "BOSS",
+        "specialLevelType": "BOSS",
+        "isUnlocked": true,
         "waveCount": 1,
         "baseWaveCost": 1000,
         "availablePlants": [
@@ -225,9 +241,11 @@
     "levels": [
       {
         "id": "beach_level_1",
-        "name": "Beach Level 1",
+        "name": "Level 1",
         "levelNumber": 1,
         "levelType": "NORMAL",
+        "specialLevelType": "NORMAL",
+        "isUnlocked": true,
         "waveCount": 5,
         "baseWaveCost": 1000,
         "availablePlants": [
@@ -247,9 +265,11 @@
       },
       {
         "id": "beach_level_2",
-        "name": "Beach Level 2",
+        "name": "Level 2",
         "levelNumber": 2,
         "levelType": "NORMAL",
+        "specialLevelType": "NORMAL",
+        "isUnlocked": true,
         "waveCount": 4,
         "baseWaveCost": 1000,
         "availablePlants": [
@@ -269,9 +289,11 @@
       },
       {
         "id": "beach_level_3",
-        "name": "DEAD_LINE",
+        "name": "Dead Line - Level 3",
         "levelNumber": 3,
         "levelType": "SPECIAL",
+        "specialLevelType": "DEAD_LINE",
+        "isUnlocked": true,
         "waveCount": 4,
         "baseWaveCost": 1000,
         "availablePlants": [
@@ -291,9 +313,11 @@
       },
       {
         "id": "beach_level_4",
-        "name": "Beach Level 4 (Boss Fight)",
+        "name": "Level 4 (Boss Fight)",
         "levelNumber": 4,
         "levelType": "BOSS",
+        "specialLevelType": "BOSS",
+        "isUnlocked": true,
         "waveCount": 1,
         "baseWaveCost": 150,
         "availablePlants": [
@@ -326,9 +350,11 @@
     "levels": [
       {
         "id": "dark_level_1",
-        "name": "Dark Ages Level 1",
+        "name": "Level 1",
         "levelNumber": 1,
         "levelType": "NORMAL",
+        "specialLevelType": "NORMAL",
+        "isUnlocked": true,
         "waveCount": 5,
         "baseWaveCost": 1000,
         "availablePlants": [
@@ -348,9 +374,11 @@
       },
       {
         "id": "dark_level_2",
-        "name": "LOVE_YOUR_PLANTS",
+        "name": "Love Your Plants - Level 2",
         "levelNumber": 2,
         "levelType": "SPECIAL",
+        "specialLevelType": "LOVE_YOUR_PLANTS",
+        "isUnlocked": true,
         "waveCount": 4,
         "baseWaveCost": 1000,
         "availablePlants": [
@@ -370,9 +398,11 @@
       },
       {
         "id": "dark_level_3",
-        "name": "Dark Ages Level 3",
+        "name": "Level 3",
         "levelNumber": 3,
         "levelType": "NORMAL",
+        "specialLevelType": "NORMAL",
+        "isUnlocked": true,
         "waveCount": 4,
         "baseWaveCost": 1000,
         "availablePlants": [
@@ -391,9 +421,11 @@
       },
       {
         "id": "dark_level_4",
-        "name": "Dark Ages Level 4 (Boss Fight)",
+        "name": "Level 4 (Boss Fight)",
         "levelNumber": 4,
         "levelType": "BOSS",
+        "specialLevelType": "BOSS",
+        "isUnlocked": true,
         "waveCount": 1,
         "baseWaveCost": 1000,
         "availablePlants": [

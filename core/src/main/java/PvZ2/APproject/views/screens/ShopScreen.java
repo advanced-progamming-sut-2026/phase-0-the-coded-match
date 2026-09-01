@@ -145,6 +145,7 @@ public class ShopScreen extends  BaseScreen{
             protected void result(Object object) {
                 if ((Boolean) object) {
                     String response = ShopController.addItemToProfile(item, chosenPlant, 1);
+                    updateCurrency();
                     showErrorDialog(response);
                 }
             }

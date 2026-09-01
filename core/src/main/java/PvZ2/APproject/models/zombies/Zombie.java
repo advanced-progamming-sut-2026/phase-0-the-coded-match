@@ -15,6 +15,7 @@ public class Zombie implements Update {
     private ZombieData data;
     private int difficultyLevel;
     private int currentHp;
+    private int maxHp;
     private int eatDPS;
     private ZombieState currentState;
     private double x;
@@ -38,11 +39,14 @@ public class Zombie implements Update {
     private boolean sunProduced;
     private boolean glowing;
     private int lastDamageTaken;
+    private boolean deathProcessed;
+    private float updateDelta = 0.1f;
 
     public Zombie(ZombieData data, double x, int y) {
         this.data = data;
         this.difficultyLevel = App.getCurrentUser() == null ? 3 : App.getCurrentUser().getDifficultyLevel();
-        this.currentHp = (int) (data.getHP() * (difficultyLevel / 3.0));
+        this.maxHp = Math.max(1, (int) (data.getHP() * (difficultyLevel / 3.0)));
+        this.currentHp = maxHp;
         this.eatDPS = (int) (data.getEatDPS() * (difficultyLevel / 3.0));
         this.currentState = data.getState();
         this.x = x;
@@ -60,6 +64,7 @@ public class Zombie implements Update {
         this.sunProduced = false;
         this.glowing = Math.random() < 0.05;
         this.lastDamageTaken = 0;
+        this.deathProcessed = false;
 
         this.armors = new ArrayList<>();
         if (data.getArmors() != null) {
@@ -73,6 +78,7 @@ public class Zombie implements Update {
 
     @Override
     public void update(float delta) {
+       updateDelta = delta > 0 ? delta : 0.1f;
        if(isFrozenInBlock){
            return;
        }
@@ -81,10 +87,12 @@ public class Zombie implements Update {
            if(chilledTimer <= 0){
                chilledTimer = 0;
                isChilled = false;
+               effects.remove(ZombieEffect.CHILLED);
            }
        }
 
-        Plant target = GameManagerController.getInstance().getCurrentLevel().getFrontMostPlantInRow(this.y);
+        double previousX = x;
+        Plant target = GameManagerController.getInstance().getCurrentLevel().getClosestPlantInFront(this);
         if (data.getId().equalsIgnoreCase("ZombieIceAgeDodo")) {
             target = GameManagerController.getInstance().getCurrentLevel().getPlantInFrontOfZombie(this);
         }
@@ -104,27 +112,35 @@ public class Zombie implements Update {
             behavior.updateZombie(this, target);
         }
 
+        if (target != null && !target.isDead() && this.y == target.getY()
+                && !data.getId().equalsIgnoreCase("ZombieIceAgeDodo")) {
+            double contactX = target.getX() + 0.58;
+            if (previousX > contactX && this.x < contactX) {
+                this.x = contactX;
+                this.currentState = ZombieState.EATING;
+            }
+        }
     }
 
     private boolean isAdjacentTo(Plant target){
-        if (this.x >= target.getX() - 0.5 && this.x <= target.getX() + 0.5 && this.y == target.getY()){ //TODO: Maybe later on change the condition to be more flexible
-            return true;
-        }
-        return false;
+        return this.x >= target.getX() - 0.1 && this.x <= target.getX() + 0.58 && this.y == target.getY();
     }
 
     public void walk() {
         if (currentState == ZombieState.EATING) {
             return;
         }
-        x -= data.getSpeed() / 100.0;
+        double multiplier = isChilled ? 0.5 : 1.0;
+        x -= data.getSpeed() * updateDelta * multiplier * 0.6;
     }
 
     public void run() {
-        x -= runningSpeed / 100.0;
+        double multiplier = isChilled ? 0.5 : 1.0;
+        x -= runningSpeed * updateDelta * multiplier * 0.6;
     }
 
     public void attack(Plant plant) {
+        if (plant == null) return;
         if (this.getData().getId().equalsIgnoreCase("ZombieArmZombieNewspaper")) {
             plant.takeDamage(Math.max(1, eatDPS / 5));
         } else {
@@ -133,7 +149,7 @@ public class Zombie implements Update {
     }
 
     public void destroyPlant(Plant plant) {
-        plant.setCurrentHp(0);
+        if (plant != null) plant.setCurrentHp(0);
     }
 
     public void takeDamage(int damage, Plant killerPlant) {
@@ -143,6 +159,7 @@ public class Zombie implements Update {
             if(blockIceHP <= 0){
                 isFrozenInBlock = false;
                 blockIceHP = 0;
+                effects.remove(ZombieEffect.FROZEN);
             }
         }
         else if (killerPlant != null && killerPlant.hasThisTag(PlantTag.POISON) &&
@@ -169,7 +186,8 @@ public class Zombie implements Update {
         } else {
             currentHp = Math.max(0, currentHp - damage);
         }
-        if (isDead()) {
+        if (isDead() && !deathProcessed) {
+            deathProcessed = true;
             Level level = GameManagerController.getInstance().getCurrentLevel();
             if (data.getId().matches("ZombieCrystalSkull")) {
                 level.setCollectedSunsAmount(level.getCollectedSunsAmount() + (stolenSuns / 2));
@@ -194,6 +212,10 @@ public class Zombie implements Update {
 
     public int getCurrentHp() {
         return currentHp;
+    }
+
+    public int getMaxHp() {
+        return maxHp;
     }
 
     public void setCurrentHp(int currentHp) {
@@ -233,9 +255,8 @@ public class Zombie implements Update {
     }
 
     public void addArmor(ArmorType type) {
-        armors = new ArrayList<>();
-        ZombieArmor armor = new ZombieArmor(new ZombieArmorData(type));
-        armors.add(armor);
+        if (armors == null) armors = new ArrayList<>();
+        armors.add(new ZombieArmor(new ZombieArmorData(type)));
     }
 
     public List<ZombieEffect> getEffects() {
@@ -308,6 +329,11 @@ public class Zombie implements Update {
 
     public void setFrozenInBlock(boolean frozen) {
         isFrozenInBlock = frozen;
+        if (frozen) {
+            if (!effects.contains(ZombieEffect.FROZEN)) effects.add(ZombieEffect.FROZEN);
+        } else {
+            effects.remove(ZombieEffect.FROZEN);
+        }
     }
 
     public void setBlockIceHP(int iceHP){
@@ -320,7 +346,12 @@ public class Zombie implements Update {
 
     public void setChilled(boolean chilled){
         isChilled = chilled;
-        chilledTimer = 10f;
+        chilledTimer = chilled ? 10f : 0f;
+        if (chilled) {
+            if (!effects.contains(ZombieEffect.CHILLED)) effects.add(ZombieEffect.CHILLED);
+        } else {
+            effects.remove(ZombieEffect.CHILLED);
+        }
     }
 
     public ZombieBehavior getBehavior() {

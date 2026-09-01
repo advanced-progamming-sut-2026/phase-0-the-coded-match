@@ -13,6 +13,7 @@ public class Sun implements Update {
     protected SunType type;
     protected int value;
     protected float timeToReachGround;
+    protected float fallDuration;
     protected boolean isFalling;
     protected boolean hasFallen;
 
@@ -21,6 +22,7 @@ public class Sun implements Update {
         this.y = y;
         this.value = value;
         this.timeToReachGround = timeToReachGround;
+        this.fallDuration = Math.max(0f, timeToReachGround);
         this.isFalling = isFalling;
         this.hasFallen = !isFalling;
         this.type = type;
@@ -99,6 +101,11 @@ public class Sun implements Update {
 
     public void setTimeToReachGround(int timeToReachGround) {
         this.timeToReachGround = timeToReachGround;
+        this.fallDuration = Math.max(0f, timeToReachGround);
+    }
+
+    public float getFallDuration() {
+        return fallDuration;
     }
 
     public boolean isFalling() {

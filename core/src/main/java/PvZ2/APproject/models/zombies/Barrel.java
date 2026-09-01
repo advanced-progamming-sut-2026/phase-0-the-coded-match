@@ -2,6 +2,7 @@ package PvZ2.APproject.models.zombies;
 
 import PvZ2.APproject.controllers.GameManagerController;
 import PvZ2.APproject.models.Projectile;
+import PvZ2.APproject.models.GameMapRelated.Tile;
 import PvZ2.APproject.models.Update;
 import PvZ2.APproject.models.plants.Plant;
 
@@ -32,15 +33,18 @@ public class Barrel implements Update {
     }
 
     public void destroyBarrel() {
-        GameManagerController.getInstance().getCurrentLevel().getBarrels().remove(this);
-        spawnImps();
+        if (GameManagerController.getInstance().getCurrentLevel() == null) return;
+        if (GameManagerController.getInstance().getCurrentLevel().getBarrels().remove(this)) {
+            spawnImps();
+        }
     }
 
     public void spawnImps() {
-        Zombie imp1 = new Zombie(ZombieRepository.getInstance().findById("ZombieImp"), x, y);
-        Zombie imp2 = new Zombie(ZombieRepository.getInstance().findById("ZombieImp"), x, y);
-        GameManagerController.getInstance().getCurrentLevel().getActiveZombies().add(imp1);
-        GameManagerController.getInstance().getCurrentLevel().getActiveZombies().add(imp2);
+        ZombieData impData = ZombieRepository.getInstance().findById("ZombieImp");
+        if (impData == null) impData = ZombieRepository.getInstance().findByDisplayName("Imp");
+        if (impData == null || GameManagerController.getInstance().getCurrentLevel() == null) return;
+        GameManagerController.getInstance().getCurrentLevel().getActiveZombies().add(new Zombie(impData, x, y));
+        GameManagerController.getInstance().getCurrentLevel().getActiveZombies().add(new Zombie(impData, x, y));
     }
 
     @Override
@@ -58,7 +62,13 @@ public class Barrel implements Update {
 
     public void destroyPlant(Plant plant) {
         plant.setCurrentHp(0);
-        GameManagerController.getInstance().getCurrentLevel().getActivePlants().remove(plant); // TODO: After plant dies we need to print "Plant <type> at (<x>, <y>) is destroyed."; but how do we send it to view?
+        if (GameManagerController.getInstance().getCurrentLevel() == null) return;
+        GameManagerController.getInstance().getCurrentLevel().getActivePlants().remove(plant);
+        Tile tile = GameManagerController.getInstance().getCurrentLevel().getGameMap().getTile(plant.getX(), plant.getY());
+        if (tile != null) {
+            if (tile.getPlant() == plant) tile.removePlant();
+            if (tile.getLilyPadPlant() == plant) tile.setLilyPadPlant(null);
+        }
     }
 
     public void onProjectileHit(Projectile projectile) {

@@ -14,14 +14,11 @@ public class LockedPlantsLevel implements SpecialLevelStrategy{
         Random random = new Random();
         List<String> allPlants = level.getData().getLockedPlants();
         if (allPlants == null || allPlants.isEmpty()) allPlants = level.getData().getAvailablePlants();
-        if (!allPlants.isEmpty()) {
-            int lockCount = Math.min(allPlants.size(), 2 + random.nextInt(2));
-            for (int i = 0; i < lockCount; i++) {
-                String nameToLock = allPlants.get(random.nextInt(allPlants.size()));
-                if (!lockedPlantNames.contains(nameToLock)) {
-                    lockedPlantNames.add(nameToLock);
-                }
-            }
+        if (allPlants != null && !allPlants.isEmpty()) {
+            List<String> candidates = new ArrayList<>(allPlants);
+            java.util.Collections.shuffle(candidates, random);
+            int lockCount = Math.min(candidates.size(), 2 + random.nextInt(2));
+            for (int i = 0; i < lockCount; i++) lockedPlantNames.add(candidates.get(i));
         }
     }
 
@@ -35,8 +32,15 @@ public class LockedPlantsLevel implements SpecialLevelStrategy{
 
     }
 
+    @Override
+    public List<Plant> getProtectedPlantsList() {
+        return List.of();
+    }
+
     public boolean isPlantLocked(String plantName) {
-        return lockedPlantNames.contains(plantName);
+        if (plantName == null) return false;
+        for (String locked : lockedPlantNames) if (plantName.equalsIgnoreCase(locked)) return true;
+        return false;
     }
 
     public List<String> getLockedPlantNames() {

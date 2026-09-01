@@ -28,8 +28,7 @@ public abstract class Season {
         this.allowedZombies = new ArrayList<>();
         if (data.getLevels() != null) {
             for (LevelData lData : data.getLevels()) {
-                if (lData.getLevelNumber() == 1) lData.setUnlocked(true);
-                Level lvl = new Level(lData);
+                 Level lvl = new Level(lData);
                 lvl.setCurrentSeason(this);
                 this.levels.add(lvl);
             }
@@ -77,8 +76,9 @@ public abstract class Season {
 
     public List<ZombieData> getAllowedZombies() {
         allowedZombies.clear();
+        if (type == null) return allowedZombies;
         for (ZombieData zombie : ZombieRepository.getInstance().getAllZombies()) {
-            if (zombie.getSeasons().contains(this.type)) {
+            if (zombie.getSeasons() != null && zombie.getSeasons().contains(this.type)) {
                 allowedZombies.add(zombie);
             }
         }

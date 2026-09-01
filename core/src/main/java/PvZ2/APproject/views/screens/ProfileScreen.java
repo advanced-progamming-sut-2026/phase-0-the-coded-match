@@ -168,9 +168,13 @@ public class ProfileScreen extends BaseScreen {
 
                 TextField currentPass = new TextField("", skin, "default");
                 currentPass.setMessageText("Current Password");
+                currentPass.setPasswordMode(true);
+                currentPass.setPasswordCharacter('*');
 
                 TextField newPass = new TextField("", skin, "default");
                 newPass.setMessageText("New Password");
+                newPass.setPasswordMode(true);
+                newPass.setPasswordCharacter('*');
 
                 TextButton confirm = new TextButton("Confirm", skin, "default");
 

@@ -13,10 +13,14 @@ public class DodoRiderBehavior implements ZombieBehavior {
         if (zombie.getCurrentState() == ZombieState.WALKING) {
             zombie.walk();
         } else if (zombie.getCurrentState() == ZombieState.EATING) {
+            if (targetPlant == null) {
+                zombie.setCurrentState(ZombieState.WALKING);
+                return;
+            }
             if (targetPlant.getData().getCategory() == PlantCategory.EXPLOSIVE ||
                     targetPlant.getData().getCategory() == PlantCategory.WALL_NUT ||
-                    targetPlant.getData().getTags().contains(PlantTag.EXPLOSIVE) ||
-                    targetPlant.getData().getTags().contains(PlantTag.MOVE_ZOMBIES)) {
+                    targetPlant.hasThisTag(PlantTag.EXPLOSIVE) ||
+                    targetPlant.hasThisTag(PlantTag.MOVE_ZOMBIES)) {
                 if (targetPlant.getData().getCategory() == PlantCategory.WALL_NUT &&
                         targetPlant.getData().getDisplayName().equalsIgnoreCase("Tall-nut")) {
                     zombie.attack(targetPlant);
@@ -31,7 +35,7 @@ public class DodoRiderBehavior implements ZombieBehavior {
     }
 
     public void fly(Plant target, Zombie zombie) {
-        zombie.setX(target.getX() + 1); // shifts the zombie by one tile
+        zombie.setX(Math.max(0, target.getX() - 1));
     }
 
     @Override

@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
 
 public class PlantController {
     private static Level currentLevel = null;
-    private static final int MAX_PLANT_FOOD = 3;
+    private static final int MAX_PLANT_FOOD = 4;
 
 
     public PlantController() {
@@ -40,7 +40,8 @@ public class PlantController {
         }
         if (tile.isGrave()) return false;
         if (tile.getType() == TileType.WATER) {
-            if (plant.getData().getName().equalsIgnoreCase("LilyPad") || plant.hasThisTag(PlantTag.WATER)) return tile.getPlant() == null;
+            if (plant.getData().getName().equalsIgnoreCase("LilyPad")) return tile.getLilyPadPlant() == null && tile.getPlant() == null;
+            if (plant.hasThisTag(PlantTag.WATER)) return tile.getPlant() == null;
             return tile.getLilyPadPlant() != null && tile.getPlant() == null;
         }
         if (!tile.getType().isCanPlant()) return false;
@@ -48,10 +49,14 @@ public class PlantController {
             return true;
         }
         Plant currentPlant = tile.getPlant();
-        return plant.hasThisTag(PlantTag.STACK) || currentPlant.hasThisTag(PlantTag.STACK);
+        return currentPlant != null && currentPlant.getData().getId().equalsIgnoreCase(plant.getData().getId())
+            && (plant.hasThisTag(PlantTag.STACK) || currentPlant.hasThisTag(PlantTag.STACK))
+            && currentPlant.getStackCount() < 5;
     }
 
     public static String plantPlant(String type, int x, int y) {
+        currentLevel = GameManagerController.getInstance().getCurrentLevel();
+        if (currentLevel == null) return "no active level";
 //        Matcher matcher = Pattern.compile(Commands.PLANT_PLANT.getPattern()).matcher(input);
 //        if (!matcher.matches()) {
 //            System.out.println("invalid command");
@@ -70,29 +75,42 @@ public class PlantController {
            return error;
         }
         PlantData data = PlantRepository.getInstance().findByName(type);
-        Plant plant = new Plant(data, x, y, 1);
-        if (currentLevel.getSpecialLevel() instanceof LockedPlantsLevel &&
-            ((LockedPlantsLevel) currentLevel.getSpecialLevel()).isPlantLocked(plant.getData().getName())) {
+        Plant plant = new Plant(data, x, y, getOwnedPlantLevel(data));
+        if (currentLevel.getSpecialLevelStrategy() instanceof LockedPlantsLevel &&
+            ((LockedPlantsLevel) currentLevel.getSpecialLevelStrategy()).isPlantLocked(plant.getData().getName())) {
             return "Plant is locked";
         }
-        currentLevel.getActivePlants().add(plant);
-        if (currentLevel.getCurrentSeason() != null) {
-            currentLevel.getCurrentSeason().PlantPlaced(currentLevel, plant, x, y);
+        Tile tile = currentLevel.getGameMap().getTile(x, y);
+        Plant existing = tile.getPlant();
+        if (existing != null) {
+            existing.incrementStackCount();
+        } else {
+            currentLevel.getActivePlants().add(plant);
+            if (currentLevel.getCurrentSeason() != null) {
+                currentLevel.getCurrentSeason().PlantPlaced(currentLevel, plant, x, y);
+            }
+            if (data.getName().equalsIgnoreCase("LilyPad") && tile.getType() == TileType.WATER) {
+                tile.setLilyPadPlant(plant);
+            } else {
+                tile.setPlant(plant);
+            }
+            if (GameManagerController.getInstance().isBoostedPlant(plant)) plant.activatePlantFood();
+            if (App.getCurrentUser() != null && App.getCurrentUser().getGreenHouse().storedBoosts.remove(data.getId().toLowerCase()) != null) {
+                plant.activatePlantFood();
+            }
+            QuestController.onPlantPlaced(plant);
         }
-        currentLevel.getGameMap().getTile(plant.getX(), plant.getY()).setPlant(plant);
-        currentLevel.setCollectedSunsAmount(currentLevel.getCollectedSunsAmount() - data.getSunCost());
+        currentLevel.setCollectedSunsAmount(currentLevel.getCollectedSunsAmount() - plant.getSunCost());
         if (!GameManagerController.getInstance().isCooldownRemoved()) {
-            GameManagerController.getInstance().setPlantCooldowns(data.getName().toLowerCase(), GameManagerController.getInstance().secondsToTicks(data.getRecharge()));
+            GameManagerController.getInstance().setPlantCooldowns(data.getName().toLowerCase(), GameManagerController.getInstance().secondsToTicks(plant.getRecharge()));
         }
-        if (GameManagerController.getInstance().isBoostedPlant(plant)) plant.activatePlantFood();
-        if (App.getCurrentUser().getGreenHouse().storedBoosts.remove(data.getName().toLowerCase()) != null)
-            plant.activatePlantFood();
-        QuestController.onPlantPlaced(plant);
 //        return "Plant " + data.getDisplayName() + " planted at (" + x + ", " + y + ")";
         return null;
     }
 
-    private static String getPlantingError(String type, int x, int y) {
+    public static String getPlantingError(String type, int x, int y) {
+        currentLevel = GameManagerController.getInstance().getCurrentLevel();
+        if (currentLevel == null) return "no active level";
         PlantData data = PlantRepository.getInstance().findByName(type);
         if (data == null) return "plant type does not exist";
         if (!currentLevel.getChosenPlants().isEmpty() &&
@@ -102,11 +120,11 @@ public class PlantController {
         if (tile == null) {
             return "location is out of map";
         }
-        Plant temp = new Plant(data, x, y, 1);
+        Plant temp = new Plant(data, x, y, getOwnedPlantLevel(data));
         if (!PlantController.canPlaceOnTile(temp, tile)) {
             return "cannot plant on this tile";
         }
-        if (currentLevel.getCollectedSunsAmount() < data.getSunCost()) {
+        if (currentLevel.getCollectedSunsAmount() < temp.getSunCost()) {
             return "not enough suns";
         }
         if (!GameManagerController.getInstance().isCooldownRemoved() && GameManagerController.getInstance().getPlantCooldowns().getOrDefault(data.getName().toLowerCase(), 0) > 0) {
@@ -121,7 +139,30 @@ public class PlantController {
         System.out.println("all plant cooldowns removed");
     }
 
+    public void pluckPlant(Tile tile) {
+        if (tile == null) return;
+        String error = removePlantAt(tile.getColumn(), tile.getRow());
+        if (error != null) System.out.println(error);
+    }
+
+    public static String removePlantAt(int x, int y) {
+        currentLevel = GameManagerController.getInstance().getCurrentLevel();
+        if (currentLevel == null) return "no active level";
+        Tile tile = currentLevel.getGameMap().getTile(x, y);
+        if (tile == null) return "location is out of map";
+        Plant plant = tile.getPlant() != null ? tile.getPlant() : tile.getLilyPadPlant();
+        if (plant == null) return "there is no plant at this location";
+        currentLevel.getActivePlants().remove(plant);
+        if (tile.getPlant() == plant) tile.removePlant();
+        if (tile.getLilyPadPlant() == plant) tile.setLilyPadPlant(null);
+        currentLevel.setRemovedPlantsCount(currentLevel.getRemovedPlantsCount() + 1);
+        if (currentLevel.getSpecialLevelStrategy() != null) currentLevel.getSpecialLevelStrategy().plantLost(currentLevel, plant);
+        return null;
+    }
+
     public void pluckPlant(String input) {
+        currentLevel = GameManagerController.getInstance().getCurrentLevel();
+        if (currentLevel == null) return;
         Matcher matcher = Pattern.compile(Commands.PLUCK_PLANT.getPattern()).matcher(input);
         if (!matcher.matches()) {
             System.out.println("invalid command");
@@ -130,19 +171,18 @@ public class PlantController {
         int x = Integer.parseInt(matcher.group("x"));
         int y = Integer.parseInt(matcher.group("y"));
         Plant plant = findPlant(x, y);
-        if (plant == null) {
-            System.out.println("there is no plant at this location");
+        String displayName = plant == null || plant.getData() == null ? null : plant.getData().getDisplayName();
+        String error = removePlantAt(x, y);
+        if (error != null) {
+            System.out.println(error);
             return;
         }
-        currentLevel.getActivePlants().remove(plant);
-        Tile tile = currentLevel.getGameMap().getTile(x, y);
-        if (tile != null) {
-            tile.removePlant();
-        }
-        System.out.println("Plant " + plant.getData().getDisplayName() + " at (" + x + ", " + y + ") removed");
+        System.out.println("Plant " + displayName + " at (" + x + ", " + y + ") removed");
     }
 
     public void feedPlant(String input) {
+        currentLevel = GameManagerController.getInstance().getCurrentLevel();
+        if (currentLevel == null) return;
         Matcher matcher = Pattern.compile(Commands.FEED_PLANT.getPattern()).matcher(input);
         if (!matcher.matches()) {
             System.out.println("invalid command");
@@ -165,16 +205,29 @@ public class PlantController {
             + currentLevel.getPlantFoodCount() + " plant foods now");
     }
 
-    public void cheatAddPlantFood() {
-        if (currentLevel.getPlantFoodCount() >= MAX_PLANT_FOOD) {
-            System.out.println("plant food storage is full");
+    public void cheatAddPlantFood(int count) {
+        if (currentLevel.getPlantFoodCount() >= MAX_PLANT_FOOD || count > 4 || count + currentLevel.getPlantFoodCount() > 4) {
+            System.out.println("plant food storage is full or will get full by this amount");
             return;
         }
-        currentLevel.setPlantFoodCount(currentLevel.getPlantFoodCount() + 1);
+        currentLevel.setPlantFoodCount(currentLevel.getPlantFoodCount() + count);
         System.out.println("you have " + currentLevel.getPlantFoodCount() + " plant foods now");
     }
 
+    private static int getOwnedPlantLevel(PlantData data) {
+        if (data == null || App.getCurrentUser() == null) return 1;
+        for (Plant owned : App.getCurrentUser().getCollection().getAvailablePlants()) {
+            if (owned != null && owned.getData() != null && owned.getData().getId().equalsIgnoreCase(data.getId())) {
+                return Math.max(1, owned.getLevel());
+            }
+        }
+        return 1;
+    }
+
     private Plant findPlant(int x, int y) {
+        Tile tile = currentLevel.getGameMap().getTile(x, y);
+        if (tile != null && tile.getPlant() != null) return tile.getPlant();
+        if (tile != null && tile.getLilyPadPlant() != null) return tile.getLilyPadPlant();
         for (Plant plant : currentLevel.getActivePlants()) {
             if (plant.getX() == x && plant.getY() == y) {
                 return plant;

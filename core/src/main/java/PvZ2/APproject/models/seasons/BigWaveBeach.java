@@ -19,7 +19,6 @@ public final class BigWaveBeach extends Season {
     public BigWaveBeach(SeasonData data) {
         super(data);
         this.name = data.getName();
-        this.setUnlocked(true);
     }
 
     @Override
@@ -29,6 +28,8 @@ public final class BigWaveBeach extends Season {
 
     @Override
     public void LevelStarted(Level level) {
+        int columns = level.getGameMap().getColumns();
+        currentTideColumn = Math.max(1, Math.min(columns, columns / 2 + 1));
         updateTideBoundary(level, currentTideColumn);
     }
 
@@ -72,6 +73,8 @@ public final class BigWaveBeach extends Season {
                     if (plant != null && !plant.hasThisTag(PlantTag.WATER) && tile.getLilyPadPlant() == null) {
                         level.getActivePlants().remove(plant);
                         tile.removePlant();
+                        level.setRemovedPlantsCount(level.getRemovedPlantsCount() + 1);
+                        if (level.getSpecialLevelStrategy() != null) level.getSpecialLevelStrategy().plantLost(level, plant);
                     }
                 }
             }
@@ -102,21 +105,26 @@ public final class BigWaveBeach extends Season {
         // Shift tide boundary by 1 column (left or right)
         if (waveNumber > 0) {
             int tideShift = random.nextBoolean() ? -1 : 1;
-            currentTideColumn = Math.max(3, Math.min(7, currentTideColumn + tideShift));
+            int minColumn = Math.max(1, Math.min(3, level.getGameMap().getColumns()));
+            int maxColumn = Math.max(minColumn, level.getGameMap().getColumns() - 2);
+            currentTideColumn = Math.max(minColumn, Math.min(maxColumn, currentTideColumn + tideShift));
             updateTideBoundary(level, currentTideColumn);
         }
     }
 
     private void triggerLowTideEvent(Level level){
         Random random = new Random();
-        int extraZombies = 3 + random.nextInt(3); // Spawn 3 to 5 zombies
+        int extraZombies = 3 + random.nextInt(3);
+        List<PvZ2.APproject.models.zombies.ZombieData> allowed = this.getAllowedZombies();
+        if (allowed.isEmpty()) return;
+        int columns = level.getGameMap().getColumns();
 
         for (int i = 0; i < extraZombies; i++) {
             int randomRow = 1 + random.nextInt(level.getGameMap().getRows());
-
-            int randomCol = currentTideColumn + random.nextInt(9 - currentTideColumn);
-            int randomZombie = random.nextInt(this.getAllowedZombies().size());
-            String name = this.getAllowedZombies().get(randomZombie).getId();
+            int startColumn = Math.max(1, Math.min(currentTideColumn, columns));
+            int randomCol = startColumn + random.nextInt(Math.max(1, columns - startColumn + 1));
+            int randomZombie = random.nextInt(allowed.size());
+            String name = allowed.get(randomZombie).getId();
             Zombie lowTideZombie = new Zombie (ZombieRepository.getInstance().findById(name), randomCol, randomRow);
             level.getActiveZombies().add(lowTideZombie);
         }

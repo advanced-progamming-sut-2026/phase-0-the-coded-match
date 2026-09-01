@@ -17,8 +17,9 @@ import java.io.Reader;
 import java.io.Writer;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.IdentityHashMap;
 import java.util.List;
-import java.util.Scanner;
+import java.util.Map;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 
@@ -31,10 +32,21 @@ public class App {
     private static List<Season> allSeasons = new ArrayList<>();
     private static List<ZombieData> allZombies = new ArrayList<>();
     private static List<Lawnmower> allLawnMowers = new ArrayList<>();
+    private static final Map<Season, Boolean> defaultSeasonUnlocks = new IdentityHashMap<>();
+    private static final Map<LevelData, Boolean> defaultLevelUnlocks = new IdentityHashMap<>();
 
     public static void initialize() {
         allSeasons = new ArrayList<>(SeasonController.getInstance().getActiveSeasons());
+        defaultSeasonUnlocks.clear();
+        defaultLevelUnlocks.clear();
+        for (Season season : allSeasons) {
+            defaultSeasonUnlocks.put(season, season.isUnlocked());
+            if (season.getLevels() != null) {
+                for (LevelData level : season.getLevels()) defaultLevelUnlocks.put(level, level.isUnlocked());
+            }
+        }
         for (User user : users) user.ensureDefaults();
+        if (currentUser != null) setCurrentUser(currentUser);
     }
 
     public static void addZombie(ZombieData zombieData) {
@@ -49,7 +61,25 @@ public class App {
         return currentUser;
     }
 
-    public static void setCurrentUser(User currentUser) { App.currentUser = currentUser; if (currentUser != null) currentUser.ensureDefaults(); }
+    public static void setCurrentUser(User currentUser) {
+        resetSeasonProgress();
+        App.currentUser = currentUser;
+        if (currentUser != null) {
+            currentUser.ensureDefaults();
+            currentUser.restoreProgress();
+        }
+    }
+
+    private static void resetSeasonProgress() {
+        for (Season season : allSeasons) {
+            season.setUnlocked(defaultSeasonUnlocks.getOrDefault(season, season.getData().isUnlocked()));
+            if (season.getLevels() != null) {
+                for (LevelData level : season.getLevels()) {
+                    level.setUnlocked(defaultLevelUnlocks.getOrDefault(level, level.isUnlocked()));
+                }
+            }
+        }
+    }
 
     public static void setUserUndergoingReset(User user){
         userUndergoingReset = user;
@@ -84,8 +114,9 @@ public class App {
     }
 
     public static boolean doesUsernameExists(String username) {
+        if (username == null) return false;
         for (User user : users) {
-            if (user.getUsername().equals(username)) {
+            if (user.getUsername() != null && user.getUsername().equalsIgnoreCase(username)) {
                 return true;
             }
         }
@@ -126,7 +157,10 @@ public class App {
         if (seasonName == null) return null;
         seasonName = seasonName.trim();
         for (Season season : allSeasons) {
-            if (season.getType().getName().equalsIgnoreCase(seasonName) || season.getName().equalsIgnoreCase(seasonName) || season.getType().name().equalsIgnoreCase(seasonName.replace(" ", "_"))) {
+            if (season == null) continue;
+            if ((season.getType() != null && (season.getType().getName().equalsIgnoreCase(seasonName) ||
+                season.getType().name().equalsIgnoreCase(seasonName.replace(" ", "_")))) ||
+                (season.getName() != null && season.getName().equalsIgnoreCase(seasonName))) {
                 return season;
             }
         }
