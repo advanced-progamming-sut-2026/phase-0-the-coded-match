@@ -66,6 +66,8 @@ public class BonusGame {
     public int nextLane(int rows) { return 1 + dailyRandom.nextInt(Math.max(1, rows)); }
     public boolean hasRemainingZombies() { return nextZombieIndex < dailyZombieOrder.size(); }
     public Random createDailyRandom() { return new Random(dailyGameZombies); }
+
+    public void addExternalPoints(int points) { totalMioPoints += Math.max(0, points); }
     public int getTotalMioPoints() { return totalMioPoints; }
     public long getDailyGameZombies() { return dailyGameZombies; }
     public List<ScoreStrategy> getActiveCases() { return Collections.unmodifiableList(activeCases); }

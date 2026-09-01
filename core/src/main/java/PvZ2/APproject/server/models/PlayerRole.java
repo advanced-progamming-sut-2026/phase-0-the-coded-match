@@ -1,4 +1,8 @@
 package PvZ2.APproject.server.models;
 
-public class PlayerRole {
+import java.io.Serializable;
+
+public enum PlayerRole implements Serializable {
+    PLANTS,
+    ZOMBIES
 }

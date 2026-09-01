@@ -1,6 +1,9 @@
 package PvZ2.APproject.controllers.menus;
 
 import PvZ2.APproject.Main;
+import PvZ2.APproject.client.MessageType;
+import PvZ2.APproject.client.Request;
+import PvZ2.APproject.client.Response;
 import PvZ2.APproject.enums.Commands;
 import PvZ2.APproject.enums.Menu;
 import PvZ2.APproject.models.App;
@@ -13,67 +16,109 @@ import java.util.regex.Pattern;
 public class ProfileMenuController {
 
     public String changeUsername(String username) {
+//        User user = App.getCurrentUser();
+//
+//        if (user == null) return "Error: No logged in user.";
+//        if (!SignupMenuController.validateUsername(username) && (username == null || !user.getUsername().equalsIgnoreCase(username))) {
+//            return "Error: Invalid username or username already exists.";
+//        } else if (user.getUsername().equals(username)) {
+//            return "Error: New username is the same as current username.";
+//        } else if (App.doesUsernameExists(username)) {
+//            return "Error: Username already exists.";
+//        } else {
+//            user.setUsername(username);
+//            if (user.isStayLoggedIn()) App.saveLoggedInUser(username);
+//            SignupMenuController.saveToJson();
+//            return "Username changed successfully!";
+//        }
         User user = App.getCurrentUser();
-
-        if (user == null) return "Error: No logged in user.";
-        if (!SignupMenuController.validateUsername(username) && (username == null || !user.getUsername().equalsIgnoreCase(username))) {
-            return "Error: Invalid username or username already exists.";
-        } else if (user.getUsername().equals(username)) {
-            return "Error: New username is the same as current username.";
-        } else if (App.doesUsernameExists(username)) {
-            return "Error: Username already exists.";
-        } else {
-            user.setUsername(username);
-            if (user.isStayLoggedIn()) App.saveLoggedInUser(username);
-            SignupMenuController.saveToJson();
-            return "Username changed successfully!";
-        }
+        if (user == null) return "Error: no user is logged in";
+        return update("username", username, null);
     }
 
     public String changeNickname(String nickname) {
+//        User user = App.getCurrentUser();
+//
+//        if (user.getNickname().equals(nickname)) {
+//            return "Error: New nickname is the same as current nickname.";
+//        } else if (!SignupMenuController.validateNickname(nickname)) {
+//            return "Error: Invalid nickname.";
+//        } else {
+//            user.setNickname(nickname);
+//            SignupMenuController.saveToJson();
+//            return "Nickname changed successfully!";
+//        }
         User user = App.getCurrentUser();
-
-        if (user.getNickname().equals(nickname)) {
-            return "Error: New nickname is the same as current nickname.";
-        } else if (!SignupMenuController.validateNickname(nickname)) {
-            return "Error: Invalid nickname.";
-        } else {
-            user.setNickname(nickname);
-            SignupMenuController.saveToJson();
-            return "Nickname changed successfully!";
-        }
+        if (user == null) return "Error: no user is logged in";
+        if (!SignupMenuController.validateNickname(nickname)) return "Error: Invalid nickname.";
+        return update("nickname", nickname, null);
     }
 
     public String changeEmail(String email) {
+//        User user = App.getCurrentUser();
+//
+//        if (user.getEmail().equals(email)) {
+//            return "Error: New email is the same as current email.";
+//        } else if (!SignupMenuController.validateEmail(email)) {
+//            return "Error: Invalid email.";
+//        } else {
+//            user.setEmail(email);
+//            SignupMenuController.saveToJson();
+//            return "Email changed successfully!";
+//        }
         User user = App.getCurrentUser();
-
-        if (user.getEmail().equals(email)) {
-            return "Error: New email is the same as current email.";
-        } else if (!SignupMenuController.validateEmail(email)) {
-            return "Error: Invalid email.";
-        } else {
-            user.setEmail(email);
-            SignupMenuController.saveToJson();
-            return "Email changed successfully!";
-        }
+        if (user == null) return "Error: no user is logged in";
+        if (!SignupMenuController.validateEmail(email)) return "Error: Invalid email.";
+        return update("email", email, null);
     }
 
     public String changePassword(String oldPassword, String newPassword) {
-        User user = App.getCurrentUser();
+//        User user = App.getCurrentUser();
+//
+//        String hashedNewPassword = SignupMenuController.hashPassword(newPassword);
+//        String hashedOldPassword = SignupMenuController.hashPassword(oldPassword);
+//
+//        if (!user.getPassword().equals(hashedOldPassword)) {
+//            return "Error: Current password is incorrect.";
+//        } else if (user.getPassword().equals(hashedNewPassword)) {
+//            return "Error: New password is the same as current password.";
+//        } else if (!SignupMenuController.validatePassword(newPassword)) {
+//            return "Error: Password is not strong enough.";
+//        } else {
+//            user.setPassword(hashedNewPassword);
+//            SignupMenuController.saveToJson();
+//            return "Password changed successfully!";
+//        }
+        if (!SignupMenuController.validatePassword(newPassword)) return "Error: Password is not strong enough.";
+        return update("password", newPassword, oldPassword);
+    }
 
-        String hashedNewPassword = SignupMenuController.hashPassword(newPassword);
-        String hashedOldPassword = SignupMenuController.hashPassword(oldPassword);
+    /// Phase 3 ///
 
-        if (!user.getPassword().equals(hashedOldPassword)) {
-            return "Error: Current password is incorrect.";
-        } else if (user.getPassword().equals(hashedNewPassword)) {
-            return "Error: New password is the same as current password.";
-        } else if (!SignupMenuController.validatePassword(newPassword)) {
-            return "Error: Password is not strong enough.";
-        } else {
-            user.setPassword(hashedNewPassword);
-            SignupMenuController.saveToJson();
-            return "Password changed successfully!";
+    private String update(String field, String value, String oldPassword) {
+        if (!App.getNetworkClient().isConnected()) return "Error: server is not connected";
+        try {
+            Request request = new Request(MessageType.UPDATE_PROFILE);
+            request.put("field", field);
+            request.put("value", value == null ? "" : value);
+            if (oldPassword != null) request.put("oldPassword", oldPassword);
+
+            Response response = App.getNetworkClient().sendAndWait(request);
+            if (!response.isSuccess()) return response.getMessage();
+
+            User user = App.getCurrentUser();
+            if (user != null) {
+                switch (field.toLowerCase()) {
+                    case "username" -> user.setUsername(response.get("username"));
+                    case "nickname" -> user.setNickname(response.get("nickname"));
+                    case "email" -> user.setEmail(response.get("email"));
+                    case "password" -> user.setPassword(SignupMenuController.hashPassword(value));
+                }
+                SignupMenuController.saveToJson();
+            }
+            return response.getMessage();
+        } catch (Exception e) {
+            return "Error: could not contact server";
         }
     }
 

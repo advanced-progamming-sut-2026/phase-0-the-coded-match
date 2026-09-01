@@ -8,6 +8,7 @@ import PvZ2.APproject.models.seasons.Season;
 
 import java.util.ArrayList;
 import java.util.*;
+import java.util.spi.ToolProvider;
 
 public class User {
 
@@ -354,5 +355,9 @@ public class User {
     public Shop getShop() {
         ensureDefaults();
         return shop;
+    }
+
+    public Gender getGender() {
+        return gender;
     }
 }

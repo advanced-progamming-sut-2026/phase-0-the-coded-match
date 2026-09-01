@@ -1,8 +1,14 @@
 package PvZ2.APproject.models;
 
+import PvZ2.APproject.client.MessageType;
+import PvZ2.APproject.client.NetworkClient;
+import PvZ2.APproject.client.Request;
+import PvZ2.APproject.client.Response;
 import PvZ2.APproject.controllers.GameManagerController;
 import PvZ2.APproject.controllers.QuestController;
 import PvZ2.APproject.controllers.SeasonController;
+import PvZ2.APproject.controllers.menus.SignupMenuController;
+import PvZ2.APproject.enums.Gender;
 import PvZ2.APproject.enums.Menu;
 import PvZ2.APproject.enums.Phases;
 import PvZ2.APproject.models.GameMapRelated.Lawnmower;
@@ -22,9 +28,14 @@ import java.util.List;
 import java.util.Map;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 public class App {
     private static User currentUser;
+    private static NetworkClient networkClient;
+    private static String resetToken;
+    private static String resetUsername;
     private static User userUndergoingReset;
     private static Menu currentMenu = Menu.SIGNUP_MENU;
     private static Phases currentPhase = Phases.NORMAL_GAMEPLAY;
@@ -34,6 +45,103 @@ public class App {
     private static List<Lawnmower> allLawnMowers = new ArrayList<>();
     private static final Map<Season, Boolean> defaultSeasonUnlocks = new IdentityHashMap<>();
     private static final Map<LevelData, Boolean> defaultLevelUnlocks = new IdentityHashMap<>();
+
+
+/// Phase 3 implementation ///
+    /** One shared TCP connection is used by all client controllers. */
+    public static synchronized NetworkClient getNetworkClient() {
+        if (networkClient == null) networkClient = new NetworkClient();
+        return networkClient;
+    }
+
+    public static synchronized void connectToServer() throws IOException {
+        NetworkClient client = getNetworkClient();
+        if (!client.isConnected()) client.connect();
+        client.setPushListener(PvZ2.APproject.controllers.MiniGameController::handleNetworkResponse);
+    }
+
+    public static synchronized void disconnectFromServer() {
+        if (networkClient != null) networkClient.disconnect();
+    }
+
+    /**
+     * Serializes the complete persistent User object, except for the password.
+     * The JSON file remains a local backup/migration source; the server copy is
+     * the persistent account source used after login.
+     */
+    public static String exportCurrentUserState() {
+        if (currentUser == null) return "";
+        Gson gson = new Gson();
+        JsonObject root = gson.toJsonTree(currentUser).getAsJsonObject();
+        root.remove("password");
+        root.remove("stayLoggedIn");
+        return gson.toJson(root);
+    }
+
+    public static String syncCurrentUserToServer() {
+        if (currentUser == null || networkClient == null || !networkClient.isConnected()) return "";
+        try {
+            Request request = new Request(MessageType.SYNC_USER_STATE);
+            request.put("stateJson", exportCurrentUserState());
+            Response response = networkClient.sendAndWait(request);
+            return response.getMessage();
+        } catch (Exception e) {
+            System.err.println("Could not synchronize user state: " + e.getMessage());
+            return "";
+        }
+    }
+
+    /** Applies the server copy after a successful login. */
+    public static void applyServerUserState(Map<String, String> data, String loginPassword) {
+        if (data == null) return;
+        String stateJson = data.get("stateJson");
+        if (stateJson != null && !stateJson.isBlank()) {
+            try {
+                User serverUser = new Gson().fromJson(stateJson, User.class);
+                if (serverUser != null) {
+                    serverUser.setPassword(PvZ2.APproject.controllers.menus.SignupMenuController.hashPassword(loginPassword));
+                    serverUser.setStayLoggedIn(currentUser != null && currentUser.isStayLoggedIn());
+                    setCurrentUser(serverUser);
+                    return;
+                }
+            } catch (Exception e) {
+                System.err.println("Could not restore server game state: " + e.getMessage());
+            }
+        }
+        if (currentUser == null) {
+            Gender gender = "female".equalsIgnoreCase(data.get("gender")) ? Gender.female : Gender.male;
+            setCurrentUser(new User(data.get("username"), SignupMenuController.hashPassword(loginPassword),
+                data.get("nickname"), data.get("email"), gender));
+        }
+        if (data.containsKey("username")) currentUser.setUsername(data.get("username"));
+        if (data.containsKey("nickname")) currentUser.setNickname(data.get("nickname"));
+        if (data.containsKey("email")) currentUser.setEmail(data.get("email"));
+        if (data.containsKey("coins")) currentUser.setCoinsCount(parseInt(data.get("coins"), currentUser.getCoinsCount()));
+        if (data.containsKey("gems")) currentUser.setGemsCount(parseInt(data.get("gems"), currentUser.getGemsCount()));
+        if (data.containsKey("minigamesWon")) currentUser.setMinigamesWonCount(parseInt(data.get("minigamesWon"), currentUser.getMinigamesWonCount()));
+        if (data.containsKey("highestPoint")) currentUser.setHighestPointAchieved(parseInt(data.get("highestPoint"), currentUser.getHighestPointAchieved()));
+    }
+
+    private static int parseInt(String value, int fallback) {
+        try { return Integer.parseInt(value); } catch (Exception e) { return fallback; }
+    }
+
+    public static void setResetToken(String token) { resetToken = token; }
+    public static String getResetToken() { return resetToken; }
+    public static void setResetUsername(String username) { resetUsername = username; }
+    public static String getResetUsername() { return resetUsername; }
+
+    /** Export any user for legacy-account migration without changing currentUser. */
+    public static String exportCurrentUserStateFor(User user) {
+        if (user == null) return "";
+        Gson gson = new Gson();
+        JsonObject root = gson.toJsonTree(user).getAsJsonObject();
+        root.remove("password");
+        root.remove("stayLoggedIn");
+        return gson.toJson(root);
+    }
+
+    /// Phase 3 implementation done ///
 
     public static void initialize() {
         allSeasons = new ArrayList<>(SeasonController.getInstance().getActiveSeasons());

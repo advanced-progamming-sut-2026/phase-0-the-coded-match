@@ -30,7 +30,9 @@ public class NetworkClient {
     }
 
     public void connect() throws IOException {
+        if (isConnected()) return;
         socket = new Socket(host, port);
+        socket.setTcpNoDelay(true);
         output = new ObjectOutputStream(socket.getOutputStream());
         output.flush();
         input = new ObjectInputStream(socket.getInputStream());
@@ -40,13 +42,23 @@ public class NetworkClient {
     }
 
     public CompletableFuture<Response> sendRequestAndGetResponse(Request request) throws IOException, ClassNotFoundException{
-        CompletableFuture<Response> f = new CompletableFuture<>();
-        pending.put(request.getRequestId(), f);
-        synchronized (this) {
-            output.writeObject(request);
-            output.flush();
+        if (request == null) throw new IllegalArgumentException("request cannot be null");
+        if (!isConnected()) throw new IOException("Not connected to server");
+
+        CompletableFuture<Response> future = new CompletableFuture<>();
+        pending.put(request.getRequestId(), future);
+        try {
+            synchronized (this) {
+                output.writeObject(request);
+                output.flush();
+                output.reset();
+            }
+        } catch (IOException e) {
+            pending.remove(request.getRequestId());
+            future.completeExceptionally(e);
+            throw e;
         }
-        return f;
+        return future;
     }
 
     public Response sendAndWait(Request r) throws Exception {
@@ -58,26 +70,35 @@ public class NetworkClient {
     }
 
     private void readLoop() {
+        Exception failure = new IOException("Connection to server closed");
         try {
-            while (!socket.isClosed()) {
-                Response r = (Response) input.readObject();
-                CompletableFuture<Response> f = pending.remove(r.getRequestId());
-                if (f != null) f.complete(r);
-                else if (pushListener != null) pushListener.accept(r);
+            while (isConnected()) {
+                Object object = input.readObject();
+                if (!(object instanceof Response response)) continue;
+                CompletableFuture<Response> future = pending.remove(response.getRequestId());
+                if (future != null) future.complete(response);
+                else if (pushListener != null) {
+                    try { pushListener.accept(response); }
+                    catch (RuntimeException callbackError) { callbackError.printStackTrace(); }
+                }
             }
         } catch (Exception e) {
-            pending.values().forEach(f -> f.completeExceptionally(e));
+            failure = e;
+        } finally {
+            final Exception finalFailure = failure;
+            pending.values().forEach(f -> f.completeExceptionally(finalFailure));
             pending.clear();
         }
     }
 
     public void disconnect(){
         try {
-            if (socket != null){
-                socket.close();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+            if (socket != null) socket.close();
+        } catch (IOException ignored) {
+        } finally {
+            socket = null;
+            input = null;
+            output = null;
         }
     }
 

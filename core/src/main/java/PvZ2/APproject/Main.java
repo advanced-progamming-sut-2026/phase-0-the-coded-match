@@ -22,6 +22,11 @@ public class Main extends Game {
         SignupMenuController.loadFromJson();
         App.initialize();
         App.loadLoggedInUser();
+        try {
+            App.connectToServer();
+        } catch (Exception e) {
+            System.err.println("Could not connect to server: " + e.getMessage());
+        }
         if (App.getCurrentUser() != null) {
             QuestController.generateAllQuests();
             QuestController.refreshDailyQuests();
@@ -59,7 +64,8 @@ public class Main extends Game {
 
     @Override
     public void dispose() {
-        super.dispose();
         SignupMenuController.saveToJson();
+        App.disconnectFromServer();
+        super.dispose();
     }
 }

@@ -1,5 +1,8 @@
 package PvZ2.APproject.controllers.menus;
 
+import PvZ2.APproject.client.MessageType;
+import PvZ2.APproject.client.Request;
+import PvZ2.APproject.client.Response;
 import PvZ2.APproject.enums.Commands;
 import PvZ2.APproject.enums.Gender;
 import PvZ2.APproject.enums.SecurityQuestions;
@@ -23,6 +26,8 @@ import static PvZ2.APproject.enums.Menu.LOGIN_MENU;
 
 public class SignupMenuController{
     private static User pendingUser;
+    private static String pendingRegistrationUsername;
+    private static String pendingRegistrationToken;
 
     public String register(String username, String password, String passwordConfirm, String nickname, String email,
                            String genderSt) {
@@ -40,12 +45,41 @@ public class SignupMenuController{
         } else if (genderSt == null || (!(genderSt.equalsIgnoreCase("male")) &&
             !(genderSt.equalsIgnoreCase("female")))) {
             return "Error: gender is not valid";
-        } else {
-            SignupScreen.registered = true;
+        }
+//        else {
+//            SignupScreen.registered = true;
+//            Gender gender = whichGender(genderSt);
+//            String hashedPassword = hashPassword(password);
+//            pendingUser = new User(username, hashedPassword, nickname, email, gender);
+//            return "Registered successfully";
+//        }
+        /// Phase 3 implementation ///
+
+        if (username == null || username.isBlank()) return "Error: username is required";
+        if (!App.getNetworkClient().isConnected()) return "Error: server is not connected";
+
+        try {
+            Request request = new Request(MessageType.REGISTER);
+            request.put("username", username.trim());
+            request.put("password", password);
+            request.put("passwordConfirm", passwordConfirm);
+            request.put("nickname", nickname.trim());
+            request.put("email", email.trim());
+            request.put("gender", genderSt.toLowerCase());
+
+            Response response = App.getNetworkClient().sendAndWait(request);
+            if (!response.isSuccess()) return response.getMessage();
+
             Gender gender = whichGender(genderSt);
-            String hashedPassword = hashPassword(password);
-            pendingUser = new User(username, hashedPassword, nickname, email, gender);
-            return "Registered successfully";
+            User user = new User(username.trim(), hashPassword(password), nickname.trim(), email.trim(), gender);
+            App.addUser(user);
+            pendingRegistrationUsername = username.trim();
+            pendingRegistrationToken = response.get("registrationToken");
+            SignupScreen.registered = true;
+            saveToJson();
+            return response.getMessage();
+        } catch (Exception e) {
+            return "Error: could not contact server (" + e.getMessage() + ")";
         }
     }
 
@@ -89,19 +123,49 @@ public class SignupMenuController{
         SecurityQuestions question = getQuestionByNumber(questionNum);
         if (question == null) {
             return "invalid question";
-        } else if (pendingUser == null) {
-            return "registration expired";
-        } else if (answer != null && answer.equals(answerConfirm)) {
-            pendingUser.addQuestion(question, answer);
-            App.addUser(pendingUser);
-            pendingUser = null;
-            SignupScreen.questionPicked = true;
-            saveToJson();
-            App.setCurrentMenu(LOGIN_MENU);
-             return "question picked successfully";
-        } else {
-            return "not confirmed";
         }
+//        else if (pendingUser == null) {
+//            return "registration expired";
+//        } else if (answer != null && answer.equals(answerConfirm)) {
+//            pendingUser.addQuestion(question, answer);
+//            App.addUser(pendingUser);
+//            pendingUser = null;
+//            SignupScreen.questionPicked = true;
+//            saveToJson();
+//            App.setCurrentMenu(LOGIN_MENU);
+//             return "question picked successfully";
+//        } else {
+//            return "not confirmed";
+//        }
+
+        /// Phase 3 implementation ///
+
+        if (answer == null || !answer.equals(answerConfirm)) return "not confirmed";
+        if (pendingRegistrationUsername == null) return "no pending registration";
+
+        try {
+            Request request = new Request(MessageType.SET_SECURITY_QUESTION);
+            request.put("question", question.getText());
+            request.put("answer", answer);
+            request.put("registrationToken", pendingRegistrationToken);
+            Response response = App.getNetworkClient().sendAndWait(request);
+            if (!response.isSuccess()) return response.getMessage();
+
+            User user = App.getUserByUsername(pendingRegistrationUsername);
+            if (user != null) {
+                user.addQuestion(question, answer);
+                saveToJson();
+            }
+            SignupScreen.questionPicked = true;
+            pendingRegistrationUsername = null;
+            pendingRegistrationToken = null;
+            App.setCurrentMenu(LOGIN_MENU);
+            return "question picked successfully";
+        } catch (Exception e) {
+            return "Error: could not save security question";
+        }
+
+
     }
 
     public SecurityQuestions getQuestionByNumber(int num) {
@@ -144,6 +208,8 @@ public class SignupMenuController{
         } catch (IOException e) {
             System.out.println("Error saving users: " + e.getMessage());
         }
+        /// Phase 3 ///
+        App.syncCurrentUserToServer();
     }
 
     public static void loadFromJson() {

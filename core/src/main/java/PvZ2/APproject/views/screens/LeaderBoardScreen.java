@@ -4,6 +4,7 @@ import PvZ2.APproject.Main;
 import PvZ2.APproject.controllers.LeaderBoardController;
 import PvZ2.APproject.enums.Menu;
 import PvZ2.APproject.models.App;
+import PvZ2.APproject.models.LeaderboardEntry;
 import PvZ2.APproject.models.User;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -58,17 +59,24 @@ public class LeaderBoardScreen extends BaseScreen {
         leaderboardTable = new BorderedTable();
         leaderboardTable.top().left();
 
-        ArrayList<User> users = App.getUsers();
-        buildLeaderBoard(users);
-
-        ScrollPane scrollPane = new ScrollPane(leaderboardTable, skin);
-        scrollPane.setScrollingDisabled(true, false);
-
         SelectBox<String> sort = new SelectBox<>(skin);
         sort.setItems("last level", "minigames", "daily quests", "non-daily quests", "score");
 
         SelectBox<String> ascendOrDescend = new SelectBox<>(skin);
         ascendOrDescend.setItems("ascending", "descending");
+
+//        ArrayList<User> users = App.getUsers();
+//        buildLeaderBoard(users);
+        buildLeaderBoard(controller.getLeaderboard(sort.getSelected(), ascendOrDescend.getSelected()));
+
+        ScrollPane scrollPane = new ScrollPane(leaderboardTable, skin);
+        scrollPane.setScrollingDisabled(true, false);
+
+//        SelectBox<String> sort = new SelectBox<>(skin);
+//        sort.setItems("last level", "minigames", "daily quests", "non-daily quests", "score");
+//
+//        SelectBox<String> ascendOrDescend = new SelectBox<>(skin);
+//        ascendOrDescend.setItems("ascending", "descending");
 
         mainTable.add(sort).width(250).row();
         mainTable.add(ascendOrDescend).width(250).row();
@@ -81,7 +89,8 @@ public class LeaderBoardScreen extends BaseScreen {
             public void changed(ChangeEvent event, Actor actor) {
                 String sortType = sort.getSelected();
 
-                List<User> sorted = controller.getSortedUsers(sortType, ascendOrDescend.getSelected());
+//                List<User> sorted = controller.getSortedUsers(sortType, ascendOrDescend.getSelected());
+                List<LeaderboardEntry> sorted = controller.getLeaderboard(sortType, ascendOrDescend.getSelected());
                 buildLeaderBoard(sorted);
             }
         });
@@ -91,7 +100,8 @@ public class LeaderBoardScreen extends BaseScreen {
             public void changed(ChangeEvent event, Actor actor) {
                 String text = ascendOrDescend.getSelected();
 
-                List<User> sorted = controller.getSortedUsers(sort.getSelected(), text);
+//                List<User> sorted = controller.getSortedUsers(sort.getSelected(), text);
+                List<LeaderboardEntry> sorted = controller.getLeaderboard(sort.getSelected(), ascendOrDescend.getSelected());
                 buildLeaderBoard(sorted);
             }
         });
@@ -102,24 +112,37 @@ public class LeaderBoardScreen extends BaseScreen {
         });
     }
 
-    public void buildLeaderBoard(List<User> users) {
+//    public void buildLeaderBoard(List<User> users) {
+//        leaderboardTable.clearChildren();
+//
+//        for (int i = 0; i < users.size(); i++) {
+//            User user = users.get(i);
+//
+//            leaderboardTable.add(new Label(user.getUsername() + ":", skin, "secondary")).width(250).row();
+//
+//            leaderboardTable.add(new Label("Season" + (user.getLastSeason() == null ? 0 :
+//                user.getLastSeason().getData().getId()) + " Level" + (user.getLastLevel() == null ? 0 :
+//                user.getLastLevel().getLevelNumber()), skin, "secondary")).width(150);
+//
+//            leaderboardTable.add(new Label("Mini games won: " + user.getMinigamesWonCount(), skin, "secondary")).width(150).row();
+//
+//            leaderboardTable.add(new Label("Quests done: " + user.getCompletedQuestsCount(), skin, "secondary")).width(150).row();
+//            //todo: separate daily and normal
+//            leaderboardTable.add(new Label("highest point: " + user.getHighestPointAchieved(), skin, "secondary")).width(150).row();
+//
+//            leaderboardTable.row();
+//        }
+//        leaderboardTable.pack();
+//    }
+
+    public void buildLeaderBoard(List<LeaderboardEntry> entries) {
         leaderboardTable.clearChildren();
-
-        for (int i = 0; i < users.size(); i++) {
-            User user = users.get(i);
-
-            leaderboardTable.add(new Label(user.getUsername() + ":", skin, "secondary")).width(250).row();
-
-            leaderboardTable.add(new Label("Season" + (user.getLastSeason() == null ? 0 :
-                user.getLastSeason().getData().getId()) + " Level" + (user.getLastLevel() == null ? 0 :
-                user.getLastLevel().getLevelNumber()), skin, "secondary")).width(150);
-
-            leaderboardTable.add(new Label("Mini games won: " + user.getMinigamesWonCount(), skin, "secondary")).width(150).row();
-
-            leaderboardTable.add(new Label("Quests done: " + user.getCompletedQuestsCount(), skin, "secondary")).width(150).row();
-            //todo: separate daily and normal
-            leaderboardTable.add(new Label("highest point: " + user.getHighestPointAchieved(), skin, "secondary")).width(150).row();
-
+        for (LeaderboardEntry entry : entries) {
+            leaderboardTable.add(new Label(entry.rank() + ". " + entry.username() + ":", skin, "secondary")).width(250).row();
+            leaderboardTable.add(new Label("Season " + entry.seasonId() + " Level " + entry.levelNumber(), skin, "secondary")).width(150);
+            leaderboardTable.add(new Label("Mini games won: " + entry.minigamesWon(), skin, "secondary")).width(150).row();
+            leaderboardTable.add(new Label("Quests done: " + entry.quests() + " - daily: " + entry.dailyQuests(), skin, "secondary")).width(250).row();
+            leaderboardTable.add(new Label("My Point: " + entry.score(), skin, "secondary")).width(150).row();
             leaderboardTable.row();
         }
         leaderboardTable.pack();

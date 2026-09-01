@@ -89,6 +89,12 @@ public class ClientHandler extends Thread{
             case LOGIN -> server.auth().login(request, this);
             case LOGOUT -> server.auth().logout(request, this);
             case GET_PROFILE -> server.auth().profile(request, this);
+            case UPDATE_PROFILE -> server.auth().updateProfile(request, this);
+            case SET_SECURITY_QUESTION -> server.auth().setSecurityQuestion(request, this);
+            case FORGOT_PASSWORD -> server.auth().forgotPassword(request);
+            case VERIFY_SECURITY_ANSWER -> server.auth().verifySecurityAnswer(request);
+            case RESET_PASSWORD -> server.auth().resetPassword(request);
+            case SYNC_USER_STATE -> server.auth().syncState(request, this);
             case FIND_RANDOM_MATCH -> server.matchmaking().random(request, this);
             case FIND_PLAYER -> server.matchmaking().findPlayer(request, this);
             case ACCEPT_MATCH -> server.matchmaking().accept(request, this);

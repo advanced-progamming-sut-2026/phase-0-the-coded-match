@@ -34,6 +34,7 @@ public class UserRepository {
     }
 
     public synchronized boolean save(ServerUser user) {
+        if (user == null || user.getUsername() == null || user.getUsername().isBlank()) return false;
         if (exists(user.getUsername())) return false;
         users.put(user.getUsername().toLowerCase(), user);
         persist();
@@ -45,8 +46,22 @@ public class UserRepository {
     }
 
     public synchronized void update(ServerUser user) {
+        if (user == null || user.getUsername() == null || user.getUsername().isBlank()) return;
         users.put(user.getUsername().toLowerCase(), user);
         persist();
+    }
+
+    public synchronized boolean rename(String oldUsername, String newUsername) {
+        if (oldUsername == null || newUsername == null || newUsername.isBlank()) return false;
+        String oldKey = normalize(oldUsername);
+        String newKey = normalize(newUsername);
+        if (!users.containsKey(oldKey) || (users.containsKey(newKey) && !oldKey.equals(newKey))) return false;
+
+        ServerUser user = users.remove(oldKey);
+        user.setUsername(newUsername);
+        users.put(newKey, user);
+        persist();
+        return true;
     }
 
     private void load() {
@@ -71,16 +86,9 @@ public class UserRepository {
         }
     }
 
-//    public static String hash(String value) {
-//        try {
-//            byte[] b = MessageDigest.getInstance("SHA-256").digest(value.getBytes(StandardCharsets.UTF_8));
-//            StringBuilder s = new StringBuilder();
-//            for (byte x : b) s.append(String.format("%02x", x));
-//            return s.toString();
-//        } catch (Exception e) {
-//            throw new IllegalStateException(e);
-//        }
-//    }
+    private static String normalize(String username) {
+        return username.trim().toLowerCase();
+    }
 
     public static String hashPassword(String password) {
         try {
