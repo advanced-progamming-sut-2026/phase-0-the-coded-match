@@ -4,8 +4,10 @@ import PvZ2.APproject.controllers.GameManagerController;
 import PvZ2.APproject.enums.SunType;
 import PvZ2.APproject.models.Sun;
 import PvZ2.APproject.views.screens.PlayScreen;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -29,13 +31,17 @@ public class SunActor extends Group {
         this.player = player;
         this.lastSunType = sun.getType();
         setSize(72f, 72f);
-        addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                collectSun();
-            }
-        });
         loadAnimation();
+    }
+
+    public boolean mouseIsTouching() {
+        Vector2 mouse = new Vector2(Gdx.input.getX(), Gdx.input.getY());
+        getStage().screenToStageCoordinates(mouse);
+
+        return mouse.x >= getX()
+            && mouse.x <= getX() + getWidth()
+            && mouse.y >= getY()
+            && mouse.y <= getY() + getHeight();
     }
 
     private void loadAnimation() {
@@ -83,6 +89,10 @@ public class SunActor extends Group {
     public void act(float delta) {
         super.act(delta);
         updatePosition();
+        if (mouseIsTouching()) {
+            collectSun();
+        }
+
         if (lastSunType != sun.getType()) {
             lastSunType = sun.getType();
             loadAnimation();

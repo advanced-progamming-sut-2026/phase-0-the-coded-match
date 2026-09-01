@@ -130,7 +130,7 @@ public class GameMapView extends Group {
         drawSeasonTiles(batch);
 
         if (currentLevel.getData().getSpecialLevelType() == SpecialLevelType.SAVE_OUR_SEEDS) {
-            drawDangerTiles();
+            drawDangerTiles(batch);
         } else if (currentLevel.getData().getSpecialLevelType() == SpecialLevelType.DEAD_LINE) {
             drawDeadLine(batch);
         } else if (currentLevel.getData().getSpecialLevelType() == SpecialLevelType.LOVE_YOUR_PLANTS) {
@@ -388,18 +388,18 @@ public class GameMapView extends Group {
         batch.begin();
     }
 
-    public void drawDangerTiles() {
+    public void drawDangerTiles(Batch batch) {
         for (Plant plant : currentLevel.getSpecialLevelStrategy().getProtectedPlantsList()) {
-            Image dangerTile = new Image(
-                new TextureRegionDrawable(
-                    textures.region("IMAGE_BACKGROUNDS_PROTECT_TILE_PROTECT_TILE_112X125")
-                )
-            );
-            dangerTile.setPosition(PlayScreen.BOARD_X + (plant.getX() - 1) * PlayScreen.TILE_WIDTH,
-                PlayScreen.BOARD_Y + (plant.getY() - 1) * PlayScreen.TILE_HEIGHT);
-            dangerTile.setSize(PlayScreen.TILE_WIDTH, PlayScreen.TILE_HEIGHT);
+            float x = PlayScreen.BOARD_X + (plant.getX() - 1) * PlayScreen.TILE_WIDTH;
+            float y = PlayScreen.BOARD_Y + (plant.getY() - 1) * PlayScreen.TILE_HEIGHT;
 
-            stage.addActor(dangerTile);
+            batch.draw(
+                textures.region("IMAGE_BACKGROUNDS_PROTECT_TILE_PROTECT_TILE_112X125"),
+                x,
+                y,
+                PlayScreen.TILE_WIDTH,
+                PlayScreen.TILE_HEIGHT
+            );
         }
     }
 

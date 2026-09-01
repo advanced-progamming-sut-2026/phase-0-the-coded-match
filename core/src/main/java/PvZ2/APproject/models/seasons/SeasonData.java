@@ -45,4 +45,8 @@ public class SeasonData {
     public boolean isUnlocked(){
         return isUnlocked;
     }
+
+    public void setUnlocked(boolean unlocked) {
+        isUnlocked = unlocked;
+    }
 }

@@ -2,6 +2,7 @@ package PvZ2.APproject.views.actors;
 
 import PvZ2.APproject.controllers.GameManagerController;
 import PvZ2.APproject.controllers.PlantSelectionController;
+import PvZ2.APproject.models.App;
 import PvZ2.APproject.models.Level;
 import PvZ2.APproject.models.plants.PlantData;
 import com.badlogic.gdx.graphics.Color;
@@ -26,10 +27,7 @@ public class PlantBox extends Group {
     private TextureRegion background;
     private TextureRegion plantImage;
     private boolean available = true;
-
-    public PlantBox(PlantData plantData, PlantSelectionController selectionController, TextureBank textures) {
-        this(plantData, selectionController, textures, PvzSkin.get());
-    }
+    private boolean boosted = false;
 
     public PlantBox(PlantData plantData, PlantSelectionController selectionController, TextureBank textures, Skin skin) {
         this.plantData = plantData;
@@ -63,14 +61,26 @@ public class PlantBox extends Group {
         if (level != null && level.getCurrentSeason() != null && level.getCurrentSeason().getData() != null) {
             seasonId = level.getCurrentSeason().getData().getId();
         }
-        background = switch (seasonId) {
-            case 1 -> textures.region("IMAGE_UI_PACKETS_EGYPT");
-            case 2 -> textures.region("IMAGE_UI_PACKETS_ICEAGE");
-            case 3 -> textures.region("IMAGE_UI_PACKETS_BEACH");
-            case 4 -> textures.region("IMAGE_UI_PACKETS_DARK");
-            default -> textures.region("IMAGE_UI_PACKETS_PIRATE");
-        };
-        plantImage = textures.region("IMAGE_UI_PACKETS_" + plantData.getId().toUpperCase());
+        for (String plantId : App.getCurrentUser().getGreenHouse().getStoredBoosts().keySet()) {
+            if (plantData.getId().equalsIgnoreCase(plantId)) {
+                background = textures.region("IMAGE_UI_PACKETS_BOOST");
+                boosted = true;
+            }
+        }
+        if (!boosted) {
+            background = switch (seasonId) {
+                case 1 -> textures.region("IMAGE_UI_PACKETS_EGYPT");
+                case 2 -> textures.region("IMAGE_UI_PACKETS_ICEAGE");
+                case 3 -> textures.region("IMAGE_UI_PACKETS_BEACH");
+                case 4 -> textures.region("IMAGE_UI_PACKETS_DARK");
+                default -> textures.region("IMAGE_UI_PACKETS_PIRATE");
+            };
+        }
+        if (plantData.getId().equalsIgnoreCase("sunflower_twin")) {
+            plantImage = textures.region("IMAGE_UI_PACKETS_TWINSUNFLOWER");
+        } else {
+            plantImage = textures.region("IMAGE_UI_PACKETS_" + plantData.getId().toUpperCase());
+        }
     }
 
     @Override

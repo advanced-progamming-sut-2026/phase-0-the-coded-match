@@ -4,6 +4,8 @@ import PvZ2.APproject.Main;
 import PvZ2.APproject.controllers.menus.GameMenuController;
 import PvZ2.APproject.enums.Menu;
 import PvZ2.APproject.models.App;
+import PvZ2.APproject.models.GameSettings;
+import PvZ2.APproject.models.Level;
 import PvZ2.APproject.models.LevelData;
 import PvZ2.APproject.models.seasons.SeasonData;
 import PvZ2.APproject.models.seasons.SeasonRepository;
@@ -30,9 +32,11 @@ public class GameMenuScreen extends BaseScreen{
     private final Main game;
     private Table containerTable;
     private int currentSelectedIndex = 1;
+    private GameSettings settings;
 
     public GameMenuScreen(Main game) {
         this.game = game;
+        this.settings = GameSettings.getInstance();
     }
 
     @Override
@@ -108,6 +112,13 @@ public class GameMenuScreen extends BaseScreen{
     private void showChaptersList(){
         containerTable.clearChildren();
 
+        if (settings.isDebugMode()) {
+            for (SeasonData seasonData : SeasonRepository.getInstance().getAllSeasons()) {
+                seasonData.setUnlocked(true);
+                App.getSeason(seasonData.getName()).setUnlocked(true);
+            }
+        }
+
         Label title = new Label("Select Chapter", skin, "default");
         containerTable.add(title).padBottom(20).row();
 
@@ -135,8 +146,7 @@ public class GameMenuScreen extends BaseScreen{
             float width = isCenter ? 420f : 300f;
             float height = isCenter ? 440f : 320f;
 
-            boolean unlocked = App.getSeason(szn.getName()) != null && App.getSeason(szn.getName()).isUnlocked();
-
+            boolean unlocked = App.getSeasonData(szn.getName()) != null && App.getSeasonData(szn.getName()).isUnlocked();
 
             Table card = new Table();
             Label nameLabel = new Label(szn.getDisplayName(), skin, "default");
@@ -165,7 +175,6 @@ public class GameMenuScreen extends BaseScreen{
                         @Override
                         public void clicked(InputEvent event, float x, float y) {
                             GameMenuController.enterSeason(szn.getName());
-                            currentSelectedIndex = 1;
                             showListGrid(szn.getId());
                         }
                     });
@@ -203,6 +212,11 @@ public class GameMenuScreen extends BaseScreen{
     private void showListGrid(int seasonId){
         containerTable.clearChildren();
 
+        if (settings.isDebugMode()) {
+            for (LevelData levelData : SeasonRepository.getInstance().findById(seasonId).getLevels()) {
+                levelData.setUnlocked(true);
+            }
+        }
 
         Label title = new Label("Select Level", skin, "big");
         containerTable.add(title).padLeft(500).row();

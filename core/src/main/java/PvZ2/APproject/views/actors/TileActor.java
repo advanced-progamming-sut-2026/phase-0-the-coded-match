@@ -50,13 +50,17 @@ public class TileActor extends Group {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 if (screen.getHarvestMode()) {
                     String error = PlantController.removePlantAt(tile.getColumn(), tile.getRow());
-                    if (error != null) screen.showMessage(error);
+                    if (error != null) {
+                        screen.showMessage(error);
+                    }
                     return;
                 }
                 if (!selectionController.hasSelectedPlant()) return;
                 selectionController.setHoveredTile(tile);
                 String error = selectionController.tryPlaceSelectedPlant();
-                if (error != null) screen.showMessage(error);
+                if (error != null) {
+                    screen.showMessage(error);
+                }
             }
         });
     }
