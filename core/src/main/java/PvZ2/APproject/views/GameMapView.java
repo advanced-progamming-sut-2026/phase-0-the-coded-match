@@ -10,6 +10,7 @@ import PvZ2.APproject.models.GameMapRelated.Tile;
 import PvZ2.APproject.models.GameSettings;
 import PvZ2.APproject.models.Level;
 import PvZ2.APproject.models.plants.Plant;
+import PvZ2.APproject.models.seasons.BigWaveBeach;
 import PvZ2.APproject.models.specialLevels.LoveYourPlantsStrategy;
 import PvZ2.APproject.models.specialLevels.SpecialLevelStrategy;
 import PvZ2.APproject.views.actors.TileActor;
@@ -176,6 +177,28 @@ public class GameMapView extends Group {
         int rows = map.getRows();
         int columns = map.getColumns();
 
+        if (currentLevel.getCurrentSeason().getType() == SeasonType.BIG_WAVE_BEACH) {
+            batch.end();
+
+            shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+            shapeRenderer.setTransformMatrix(batch.getTransformMatrix());
+
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(Color.BLUE);
+
+            BigWaveBeach bigWaveBeach = (BigWaveBeach) currentLevel.getCurrentSeason();
+            int maxColumn = bigWaveBeach.getMaxTideColumn();
+
+            float x = PlayScreen.BOARD_X + (maxColumn * PlayScreen.TILE_WIDTH);
+            float y1 = PlayScreen.BOARD_Y;
+            float y2 = PlayScreen.BOARD_Y + 4 * PlayScreen.TILE_HEIGHT;
+
+            shapeRenderer.rect(x, y1, 2, y2);
+
+            shapeRenderer.end();
+            batch.begin();
+        }
+
         for(int row = 1; row <= rows; row++){
             for(int col = 1; col <= columns; col++){
                 Tile tile = map.getTile(col, row);
@@ -232,8 +255,16 @@ public class GameMapView extends Group {
                     }
                     switch(tile.getGraveReward()){
                         case NONE:
-                            if(currentLevel.getCurrentSeason() != null && currentLevel.getCurrentSeason().getData() != null && currentLevel.getCurrentSeason().getData().getId() == 1){
-                                batch.draw(textures.region("IMAGE_GRAVESTONES_EGYPT_HIEROGLYPH_EGYPT_HIEROGLYPH_118X148"), x, y, PlayScreen.TILE_WIDTH, PlayScreen.TILE_HEIGHT);
+                            if(currentLevel.getCurrentSeason() != null &&
+                                currentLevel.getCurrentSeason().getData() != null &&
+                                currentLevel.getCurrentSeason().getData().getId() == 1){
+                                batch.draw(
+                                    textures.region("IMAGE_GRAVESTONES_EGYPT_HIEROGLYPH_EGYPT_HIEROGLYPH_118X148"),
+                                    x,
+                                    y,
+                                    PlayScreen.TILE_WIDTH,
+                                    PlayScreen.TILE_HEIGHT
+                                );
                             }else {
                                 batch.draw(
                                     textures.region("IMAGE_GRAVESTONES_DARK_NOOP_DARK_NOOP_132X160"),

@@ -14,7 +14,8 @@ import java.util.Random;
 
 public final class BigWaveBeach extends Season {
 
-    private int currentTideColumn = 5;
+    private int currentTideColumn = 9;
+    private int maxTideColumn = 3;
 
     public BigWaveBeach(SeasonData data) {
         super(data);
@@ -28,8 +29,7 @@ public final class BigWaveBeach extends Season {
 
     @Override
     public void LevelStarted(Level level) {
-        int columns = level.getGameMap().getColumns();
-        currentTideColumn = Math.max(1, Math.min(columns, columns / 2 + 1));
+
         updateTideBoundary(level, currentTideColumn);
     }
 
@@ -74,7 +74,8 @@ public final class BigWaveBeach extends Season {
                         level.getActivePlants().remove(plant);
                         tile.removePlant();
                         level.setRemovedPlantsCount(level.getRemovedPlantsCount() + 1);
-                        if (level.getSpecialLevelStrategy() != null) level.getSpecialLevelStrategy().plantLost(level, plant);
+                        if (level.getSpecialLevelStrategy() != null)
+                            level.getSpecialLevelStrategy().plantLost(level, plant);
                     }
                 }
             }
@@ -144,4 +145,8 @@ public final class BigWaveBeach extends Season {
         }
     }
 
+
+    public int getMaxTideColumn() {
+        return maxTideColumn;
+    }
 }

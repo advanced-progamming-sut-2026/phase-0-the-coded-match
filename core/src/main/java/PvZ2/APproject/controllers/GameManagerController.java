@@ -230,6 +230,7 @@ public class GameManagerController {
             if (currentLevel.getZombieWave().isLastWave()) {
                 message = "The final wave has come.\n";
                 currentLevel.getZombieWave().setLastWave(false);
+                currentLevel.getZombieWave().setNewWaveStarted(false);
             } else if (currentLevel.getZombieWave().isNewWaveStarted()){
                 message = "Wave " + (currentLevel.getZombieWave().getCurrentWave() + 1) + " started.\n";
                 currentLevel.getZombieWave().setNewWaveStarted(false);
