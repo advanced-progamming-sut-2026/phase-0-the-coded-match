@@ -7,6 +7,7 @@ import PvZ2.APproject.controllers.menus.SignupMenuController;
 import PvZ2.APproject.enums.Commands;
 import PvZ2.APproject.enums.Menu;
 import PvZ2.APproject.models.App;
+import PvZ2.APproject.models.GameMapRelated.Tile;
 import PvZ2.APproject.models.Level;
 import PvZ2.APproject.models.MiniGameRelated.Beghouled;
 import PvZ2.APproject.models.MiniGameRelated.IZombie;
@@ -14,6 +15,7 @@ import PvZ2.APproject.models.MiniGameRelated.MiniGame;
 import PvZ2.APproject.models.MiniGameRelated.VaseBreaker;
 import PvZ2.APproject.models.MiniGameRelated.WallNutBowling;
 import PvZ2.APproject.models.MiniGameRelated.Zombotany;
+import PvZ2.APproject.models.plants.PlantData;
 import PvZ2.APproject.views.MiniGameView;
 import com.badlogic.gdx.Gdx;
 
@@ -106,25 +108,81 @@ public class MiniGameController {
     public static void setMatchFoundListener(Consumer<Response> listener) { matchFoundListener = listener; }
     public static void clearMatchFoundListener() { matchFoundListener = null; }
 
-    public static String placeZombie(String input) {
+    public static String placeZombie(String zombieName, int col, int row) {
         if (!(miniGame instanceof IZombie game)) return "not an I, Zombie game";
-        if (!isNetworkedIZombie()) return game.placeZombie(input);
+        if (!isNetworkedIZombie()) return game.placeZombie(zombieName, col, row);
 
-        Matcher matcher = Pattern.compile(Commands.PLACE_ZOMBIE.getPattern()).matcher(input);
-        if (!matcher.matches()) return "invalid command";
         try {
             Request request = new Request(MessageType.GAME_ACTION);
             request.put("action", "PLACE_ZOMBIE");
             request.put("role", "ZOMBIES");
-            request.put("entityType", matcher.group("name"));
-            request.put("x", matcher.group("x"));
-            request.put("y", matcher.group("y"));
+            request.put("entityType", zombieName);
+            request.put("x", String.valueOf(col));
+            request.put("y", String.valueOf(row));
             Response response = App.getNetworkClient().sendAndWait(request);
             return response.getMessage();
         } catch (Exception e) {
             return "Error: could not send game action";
         }
     }
+
+
+    public static String placePlant(PlantSelectionController selectionController) {
+        if (!(miniGame instanceof IZombie)) {
+            return "Not an I, Zombie game.";
+        }
+        if (!isNetworkedIZombie()) {
+            return "This is not a networked game.";
+        }
+        if (!isPlantsPlayer()) {
+            return "Only the plants player can place plants.";
+        }
+        if (selectionController == null ||
+            !selectionController.hasSelectedPlant()) {
+            return "Select a plant first";
+        }
+        Tile tile = selectionController.getHoveredTile();
+        if (tile == null) {
+            return "No tile selected";
+        }
+        PlantData plant = selectionController.getSelectedPlant();
+        String error = PlantController.getPlantingError(
+            plant.getName(),
+            tile.getColumn(),
+            tile.getRow()
+        );
+        if (error != null) {
+            return error;
+        }
+        try {
+            Request request =
+                new Request(MessageType.GAME_ACTION);
+            request.put("action", "PLACE_PLANT");
+            request.put("entityType", plant.getName());
+            request.put("x", String.valueOf(tile.getColumn()));
+            request.put("y", String.valueOf(tile.getRow()));
+            Response response = App.getNetworkClient().sendAndWait(request);
+            System.out.println(
+                "CLIENT PLACE PLANT: " +
+                    plant.getName() +
+                    " at " +
+                    tile.getColumn() +
+                    "," +
+                    tile.getRow()
+            );
+            if (!response.isSuccess()) {
+                return response.getMessage();
+            }
+
+            selectionController.cancelSelection();
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Could not send plant action.";
+        }
+    }
+
+
 
     public static void pollNetworkState() {
         if (!isNetworkedIZombie() || !App.getNetworkClient().isConnected()) return;
@@ -161,6 +219,7 @@ public class MiniGameController {
     /** Called by the shared NetworkClient reader for unsolicited server messages. */
     public static void handleNetworkResponse(Response response) {
         if (response == null) return;
+        System.out.println( "[NETWORK PUSH] type=" + response.getType() );
         Runnable action = switch (response.getType()) {
             case MATCH_FOUND -> () -> handleMatchFound(response);
             case MATCH_INVITATION -> () -> handleInvitation(response);
@@ -198,8 +257,12 @@ public class MiniGameController {
     private static void handleGameState(Response response) {
         if (!isNetworkedIZombie()) return;
         String actions = response.get("actions");
+        System.out.println( "[GAME STATE] actions = " + actions );
         if (actions == null || actions.isBlank()) return;
-        for (String line : actions.split("\\n")) applyActionLine(line);
+        for (String line : actions.split("\\n")) {
+            System.out.println( "[GAME STATE] applying: " + line );
+            applyActionLine(line);
+        }
     }
 
     private static void applyActionLine(String line) {
@@ -210,9 +273,20 @@ public class MiniGameController {
         String action = unescape(p[2]);
         if ("PLACE_ZOMBIE".equalsIgnoreCase(action) && miniGame instanceof IZombie game) {
             String name = unescape(p[4]);
-            int x = parseInt(p[5], 6);
-            int y = parseInt(p[6], 1);
+            int x = parseCoordinate(p[5]);
+            int y = parseCoordinate(p[6]);
             game.placeZombie("place zombie " + name + " at (" + x + ", " + y + ")");
+        }
+        if ("PLACE_PLANT".equalsIgnoreCase(action) && miniGame instanceof IZombie game) {
+            String name = unescape(p[4]);
+            int x = parseCoordinate(p[5]);
+            int y = parseCoordinate(p[6]);
+            String error = PlantController.plantPlant(name, x, y);
+            if (error != null) {
+                System.err.println("[GAME STATE] Failed to place plant " + name + " at (" + x + ", " + y + "): " + error);
+            } else {
+                System.out.println("[GAME STATE] Placed plant " + name + " at (" + x + ", " + y + ")");
+            }
         }
     }
 
@@ -290,7 +364,24 @@ public class MiniGameController {
         try { return Integer.parseInt(value); } catch (Exception e) { return fallback; }
     }
 
+    private static int parseCoordinate(String value) {
+        try {
+            return (int) Double.parseDouble(value);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Invalid coordinate: " + value);
+        }
+    }
+
     private static String unescape(String value) {
         return value.replace("\\|", "|").replace("\\n", "\n").replace("\\=", "=").replace("\\\\", "\\");
     }
+
+    public static boolean isZombiePlayer() {
+        return "ZOMBIES".equalsIgnoreCase(networkRole);
+    }
+
+    public static boolean isPlantsPlayer() {
+        return "PLANTS".equalsIgnoreCase(networkRole);
+    }
+
 }

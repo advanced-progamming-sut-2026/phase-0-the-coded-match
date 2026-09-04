@@ -56,6 +56,10 @@ public class MiniGamesScreen extends BaseScreen {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     if (MiniGameController.startMinigame(key, stage)) {
+                        if (key.equals("IZombie")) {;
+                            game.setScreen(new MatchmakingScreen(game));
+                            return;
+                        }
                         App.setCurrentMenu(Menu.GAME_MANAGER);
                         game.setScreen(new PlayScreen(game));
                     }

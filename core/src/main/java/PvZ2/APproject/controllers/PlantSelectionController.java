@@ -2,6 +2,7 @@ package PvZ2.APproject.controllers;
 
 import PvZ2.APproject.models.GameMapRelated.Tile;
 import PvZ2.APproject.models.Level;
+import PvZ2.APproject.models.MiniGameRelated.IZombie;
 import PvZ2.APproject.models.plants.PlantData;
 
 public class PlantSelectionController {
@@ -17,7 +18,14 @@ public class PlantSelectionController {
     }
 
     public String selectPlant(PlantData plantData) {
-        if (plantData.getSunCost() > level.getCollectedSunsAmount()) {
+        if (plantData == null) {
+            return "Plant not found";
+        }
+        if (level instanceof IZombie gameMode) {
+            if (plantData.getSunCost() > gameMode.getSunAmount()) {
+                return "You don't have enough suns";
+            }
+        } else if (plantData.getSunCost() > level.getCollectedSunsAmount()) {
             return "You don't have enough suns";
         }
         selectedPlant = plantData;

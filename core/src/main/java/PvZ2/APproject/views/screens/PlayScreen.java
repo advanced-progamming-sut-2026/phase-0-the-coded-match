@@ -1,14 +1,14 @@
 package PvZ2.APproject.views.screens;
 
 import PvZ2.APproject.Main;
+import PvZ2.APproject.client.Response;
 import PvZ2.APproject.controllers.GameManagerController;
 import PvZ2.APproject.controllers.MiniGameController;
 import PvZ2.APproject.controllers.PlantSelectionController;
-import PvZ2.APproject.controllers.menus.GameMenuController;
+import PvZ2.APproject.controllers.ReactionController;
 import PvZ2.APproject.enums.BowlingNutType;
 import PvZ2.APproject.enums.Menu;
 import PvZ2.APproject.enums.ScreenRelated.GameState;
-import PvZ2.APproject.enums.SpecialLevelType;
 import PvZ2.APproject.models.*;
 import PvZ2.APproject.models.GameMapRelated.Lawnmower;
 import PvZ2.APproject.models.GameMapRelated.Tile;
@@ -53,6 +53,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 public class PlayScreen extends BaseScreen {
     private final Main game;
@@ -70,6 +71,20 @@ public class PlayScreen extends BaseScreen {
 
     private Label messageNotif;
     private Label missionNotif;
+    private Table multiplayerChatPanel;
+    private Label multiplayerIncomingNotif;
+    private static final String[] QUICK_MESSAGES = {
+        "Good luck!",
+        "Nice move!",
+        "Well played!"
+    };
+
+    private static final String[] QUICK_EMOJIS = {
+        "😀",
+        "😎",
+        "😂"
+    };
+    private final Consumer<Response> reactionListener = this::handleIncomingReaction;
     private Label sunAmountLabel;
     private Label waveLabel;
     private Image shovelCursor;
@@ -100,10 +115,14 @@ public class PlayScreen extends BaseScreen {
     private Table miniGamePanel;
     private Label miniGameStatusLabel;
     private String selectedMiniZombie;
+    private String selectedMiniPlant;
     private Tile selectedBeghouledTile;
     private String vaseSeedSignature = "";
     private String bowlingSignature = "";
     private final List<BowlingNutType> bowlingUiSnapshot = new ArrayList<>();
+
+    private float networkPollTimer = 0f;
+    private static final float NETWORK_POLL_INTERVAL = 0.1f;
 
     public PlayScreen(Main game) {
         this.game = game;
@@ -129,6 +148,10 @@ public class PlayScreen extends BaseScreen {
         stage.addActor(environmentView);
         createPlantBoxes();
         createMiniGameUi();
+        createMultiplayerCommunicationUi();
+        ReactionController.setIncomingListener(
+            reactionListener
+        );
 
         messageNotif = new Label("", skin, "promo_ribbon");
         messageNotif.setVisible(false);
@@ -139,6 +162,11 @@ public class PlayScreen extends BaseScreen {
         missionNotif.setVisible(false);
         missionNotif.setPosition(265, VIRTUAL_HEIGHT - missionNotif.getHeight() - 50);
         stage.addActor(missionNotif);
+
+        multiplayerIncomingNotif = new Label("", skin, "promo_ribbon");
+        multiplayerIncomingNotif.setVisible(false);
+        multiplayerIncomingNotif.setPosition(VIRTUAL_WIDTH / 2f - 150f, VIRTUAL_HEIGHT - 150f);
+        stage.addActor(multiplayerIncomingNotif);
 
         Table mainPauseTable = new Table(skin);
         mainPauseTable.setFillParent(true);
@@ -450,6 +478,13 @@ public class PlayScreen extends BaseScreen {
             } else {
                 finishDelay = 0f;
             }
+//            if (MiniGameController.isNetworkedIZombie()) {
+//                networkPollTimer += delta;
+//                if (networkPollTimer >= NETWORK_POLL_INTERVAL) {
+//                    networkPollTimer = 0f;
+//                    MiniGameController.pollNetworkState();
+//                }
+//            }
         }
 
         if (state == GameState.PAUSED && pauseStage != null) {
@@ -582,14 +617,110 @@ public class PlayScreen extends BaseScreen {
         }
     }
 
+    private void createMultiplayerCommunicationUi() {
+        if (!MiniGameController.isNetworkedIZombie()) {
+            return;
+        }
+        multiplayerChatPanel = new BorderedTable();
+        multiplayerChatPanel.top().center();
+        Label title = new Label("REACTIONS", skin, "default");
+        title.setFontScale(0.75f);
+        multiplayerChatPanel.add(title).padBottom(5f).row();
+        for (String message : QUICK_MESSAGES) {
+            TextButton button = new TextButton(message, skin);
+            button.addListener(
+                new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        ReactionController.send("TEXT", message);
+                    }
+                }
+            );
+            multiplayerChatPanel.add(button).width(140f).height(35f).pad(2f).row();
+        }
+        Table emojiTable = new Table(skin);
+        for (String emoji : QUICK_EMOJIS) {
+            TextButton button = new TextButton(emoji, skin);
+            button.addListener(
+                new ClickListener() {
+                    @Override
+                    public void clicked(InputEvent event, float x, float y) {
+                        ReactionController.send("EMOJI", emoji);
+                    }
+                }
+            );
+            emojiTable.add(button).size(42f).pad(2f);
+        }
+        multiplayerChatPanel.add(emojiTable).padTop(5f).row();
+        multiplayerChatPanel.pack();
+        multiplayerChatPanel.setPosition(15f, VIRTUAL_HEIGHT / 2f - multiplayerChatPanel.getHeight() / 2f);
+        stage.addActor(multiplayerChatPanel);
+    }
+
+    public void handleIncomingReaction(Response response){
+        String from = response.get("from");
+        String kind = response.get("kind");
+        String value = response.get("value");
+        if (from == null) {
+            from = "Opponent";
+        }
+        if (value == null) {
+            return;
+        }
+        showIncomingReaction(from, kind, value);
+    }
+
+    public void showIncomingReaction(String username, String kind, String content) {
+        if (multiplayerIncomingNotif == null) {
+            return;
+        }
+        String text;
+        if ("EMOJI".equalsIgnoreCase(kind)) {
+            text = username + ": " + content;
+        } else {text = username + ": " + content;}
+
+        multiplayerIncomingNotif.clearActions();
+        multiplayerIncomingNotif.setText(text);
+        multiplayerIncomingNotif.pack();
+        multiplayerIncomingNotif.setVisible(true);
+        multiplayerIncomingNotif.getColor().a = 1f;
+        multiplayerIncomingNotif.addAction(Actions.sequence(Actions.delay(3f), Actions.fadeOut(0.5f), Actions.hide()));
+    }
+
     private void createIZombieUi(IZombie gameMode) {
         miniGamePanel.clearChildren();
         miniZombieCooldownLabels.clear();
 
-        Label title = new Label("I, ZOMBIE", skin, "default");
+//        Label title = new Label("I, ZOMBIE", skin, "default");
+//        title.setFontScale(0.9f);
+        Label title;
+        if (MiniGameController.isPlantsPlayer()) {
+            title = new Label("I, ZOMBIE - PLANTS", skin, "default");
+        } else {
+            title = new Label("I, ZOMBIE - ZOMBIES", skin, "default");
+        }
         title.setFontScale(0.9f);
         miniGamePanel.add(title).padLeft(8f).padRight(8f);
+        if (MiniGameController.isPlantsPlayer()) {
+            createIZombiePlantSelection(gameMode);
+        }
+        else {
+            createIZombieZombieSelection(gameMode);
+        }
+        miniGamePanel.pack();
+        miniGamePanel.setPosition(BOARD_X, BOARD_Y + TILE_HEIGHT * 5f + 8f);
+        stage.addActor(miniGamePanel);
+        if (MiniGameController.isPlantsPlayer()) {
+            miniGameStatusLabel.setText("Select a plant");
+        } else {
+            miniGameStatusLabel.setText("Select a zombie");
+        }
+        miniGameStatusLabel.pack();
+        miniGameStatusLabel.setPosition(BOARD_X, BOARD_Y + TILE_HEIGHT * 5f - 18f);
+        stage.addActor(miniGameStatusLabel);
+    }
 
+    public void createIZombieZombieSelection(IZombie gameMode){
         for (String zombieName : gameMode.getAvailableZombies()) {
             ZombieData data = gameMode.getAvailableZombieData(zombieName);
             BorderedTable packet = new BorderedTable();
@@ -619,7 +750,6 @@ public class PlayScreen extends BaseScreen {
             bottom.add(sun).size(15f, 15f).padRight(2f);
             bottom.add(cost).padRight(5f);
             bottom.add(cooldown);
-
             packet.add(icon).size(72f, 68f).row();
             packet.add(name).width(105f).center().row();
             packet.add(bottom).width(105f).center();
@@ -628,21 +758,62 @@ public class PlayScreen extends BaseScreen {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     selectedMiniZombie = zombieName;
-                    if (miniGameStatusLabel != null) miniGameStatusLabel.setText("Selected: " + displayName);
+                    selectedMiniPlant = null;
+                    if (miniGameStatusLabel != null) {
+                        miniGameStatusLabel.setText(
+                            "Selected: " + displayName
+                        );
+                    }
                 }
             });
-
             miniGamePanel.add(packet).width(116f).height(106f).pad(3f);
         }
+    }
 
-        miniGamePanel.pack();
-        miniGamePanel.setPosition(BOARD_X, BOARD_Y + TILE_HEIGHT * 5f + 8f);
-        stage.addActor(miniGamePanel);
+    private void createIZombiePlantSelection(IZombie gameMode) {
+        for (String plantName : gameMode.getAvailablePlants()) {
+            PlantData data = PlantRepository.getInstance().findByName(plantName);
+            if (data == null) {
+                continue;
+            }
+            BorderedTable packet = new BorderedTable();
+            packet.top().center();
+            packet.setTouchable(Touchable.enabled);
 
-        miniGameStatusLabel.setText("Select a zombie packet");
-        miniGameStatusLabel.pack();
-        miniGameStatusLabel.setPosition(BOARD_X, BOARD_Y + TILE_HEIGHT * 5f - 18f);
-        stage.addActor(miniGameStatusLabel);
+            PamActor icon = new PamActor(game, PamActor.Kind.PLANT, "idle", data.getId(), data.getName(), data.getDisplayName());
+            icon.setSize(72f, 68f);
+            Label name = new Label(data.getDisplayName(), skin, "default");
+            name.setFontScale(0.68f);
+            Table bottom = new Table(skin);
+
+            Image sun = new Image(new TextureRegionDrawable(textures.region("IMAGE_UI_SEASONS_UNCOMPRESSED_PVZ2_SEASONS_UIASSET_ICON_SUN")));
+            sun.setSize(15f, 15f);
+//            Label cost = new Label(Integer.toString(data.getCost()), skin, "default");
+//            cost.setFontScale(0.72f);
+            bottom.add(sun).size(15f, 15f).padRight(2f);
+//            bottom.add(cost);
+            packet.add(icon).size(72f, 68f).row();
+            packet.add(name).width(105f).center().row();
+            packet.add(bottom).width(105f).center();
+
+            packet.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    String error = plantSelectionController.selectPlant(data);
+                    if (error != null && !error.isEmpty()) {
+                        showMessage(error);
+                        return;
+                    }
+                    selectedMiniPlant = plantName;
+                    selectedMiniZombie = null;
+                    if (miniGameStatusLabel != null) {
+                        miniGameStatusLabel.setText("Selected: " + data.getDisplayName());
+                        }
+                    }
+                }
+            );
+            miniGamePanel.add(packet).width(116f).height(106f).pad(3f);
+        }
     }
 
     private void createBrainActors(IZombie gameMode) {
@@ -989,14 +1160,38 @@ public class PlayScreen extends BaseScreen {
             return;
         }
         if (currentLevel instanceof IZombie gameMode) {
-            if (selectedMiniZombie == null) {
-                showMessage("Select a zombie first");
+            if (MiniGameController.isPlantsPlayer()) {
+                if (!plantSelectionController.hasSelectedPlant()) {
+                    showMessage("Select a plant first");
+                    return;
+                }
+                plantSelectionController.setHoveredTile(tile);
+                String error = MiniGameController.placePlant(plantSelectionController);
+                if (error != null) {
+                    showMessage(error);
+                }
                 return;
             }
-            String error = gameMode.placeZombie(selectedMiniZombie, tile.getColumn(), tile.getRow());
-            if (error != null) showMessage(error);
-            else selectedMiniZombie = null;
+            if (MiniGameController.isZombiePlayer()) {
+                if (selectedMiniZombie == null) {
+                    showMessage("Select a zombie first");
+                    return;
+                }
+                String error = MiniGameController.placeZombie(selectedMiniZombie, tile.getColumn(), tile.getRow());
+                if (error != null) {
+                    showMessage(error);
+
+                } else {
+                    selectedMiniZombie = null;
+                }
+                return;
+            }
+            showMessage(
+                "Your multiplayer role could not be determined."
+            );
+
             return;
+//            String error = gameMode.placeZombie(selectedMiniZombie, tile.getColumn(), tile.getRow());
         }
         if (currentLevel instanceof Beghouled gameMode) {
             if (selectedBeghouledTile == null) {

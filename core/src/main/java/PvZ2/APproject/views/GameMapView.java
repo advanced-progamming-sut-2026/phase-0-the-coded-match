@@ -188,26 +188,28 @@ public class GameMapView extends Group {
         int rows = map.getRows();
         int columns = map.getColumns();
 
-        if (currentLevel.getCurrentSeason().getType() == SeasonType.BIG_WAVE_BEACH) {
-            batch.end();
+        if(currentLevel.getCurrentSeason() != null) {
+            if (currentLevel.getCurrentSeason().getData().getId() == 3) {
+                batch.end();
 
-            shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
-            shapeRenderer.setTransformMatrix(batch.getTransformMatrix());
+                shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+                shapeRenderer.setTransformMatrix(batch.getTransformMatrix());
 
-            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-            shapeRenderer.setColor(Color.BLUE);
+                shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+                shapeRenderer.setColor(Color.BLUE);
 
-            BigWaveBeach bigWaveBeach = (BigWaveBeach) currentLevel.getCurrentSeason();
-            int maxColumn = bigWaveBeach.getMaxTideColumn();
+                BigWaveBeach bigWaveBeach = (BigWaveBeach) currentLevel.getCurrentSeason();
+                int maxColumn = bigWaveBeach.getMaxTideColumn();
 
-            float x = PlayScreen.BOARD_X + (maxColumn * PlayScreen.TILE_WIDTH);
-            float y1 = PlayScreen.BOARD_Y;
-            float y2 = PlayScreen.BOARD_Y + 4 * PlayScreen.TILE_HEIGHT;
+                float x = PlayScreen.BOARD_X + (maxColumn * PlayScreen.TILE_WIDTH);
+                float y1 = PlayScreen.BOARD_Y;
+                float y2 = PlayScreen.BOARD_Y + 4 * PlayScreen.TILE_HEIGHT;
 
-            shapeRenderer.rect(x, y1, 2, y2);
+                shapeRenderer.rect(x, y1, 2, y2);
 
-            shapeRenderer.end();
-            batch.begin();
+                shapeRenderer.end();
+                batch.begin();
+            }
         }
 
         for(int row = 1; row <= rows; row++){

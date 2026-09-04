@@ -1,12 +1,14 @@
 package PvZ2.APproject.models.MiniGameRelated;
 
 import PvZ2.APproject.controllers.MiniGameController;
+import PvZ2.APproject.controllers.PlantController;
 import PvZ2.APproject.enums.Commands;
 import PvZ2.APproject.enums.LevelType;
 import PvZ2.APproject.models.GameMapRelated.GameMap;
 import PvZ2.APproject.models.GameMapRelated.Tile;
 import PvZ2.APproject.models.LevelData;
 import PvZ2.APproject.models.plants.Plant;
+import PvZ2.APproject.models.plants.PlantData;
 import PvZ2.APproject.models.plants.PlantRepository;
 import PvZ2.APproject.models.zombies.Zombie;
 import PvZ2.APproject.models.zombies.ZombieData;
@@ -27,12 +29,14 @@ public final class IZombie extends MiniGame {
     private final Boolean[] brainsEatenInLane;
     private final double redLineCoordinateX = 6;
     private final List<String> availableZombies;
+    private final List<String> availablePlants;
     private final Map<String, Integer> zombieCooldowns;
 
     public IZombie(int stageNumber) {
         super(createIZombieLevelData(stageNumber));
         this.stageNumber = stageNumber;
         this.sunAmount = 350 + stageNumber * 150;
+        this.availablePlants = new ArrayList<>();
         this.brainsEatenInLane = new Boolean[5];
         java.util.Arrays.fill(this.brainsEatenInLane, false);
         this.availableZombies = new ArrayList<>();
@@ -71,13 +75,17 @@ public final class IZombie extends MiniGame {
         availableZombies.add("Buckethead Zombie");
         availableZombies.add("Knight Zombie");
         availableZombies.add("Brickhead Zombie");
-        for (int row = 1; row <= 5; row++) {
-            setPlant(plants, "Peashooter", 2, row);
-            setPlant(plants, "Wall-nut", 5, row);
-        }
-        setPlant(plants, "Cabbage-pult", 3, 2);
-        setPlant(plants, "Cabbage-pult", 3, 4);
-        setPlant(plants, "Cabbage-pult", 4, 3);
+
+        availablePlants.add("Peashooter");
+        availablePlants.add("Wall-nut");
+        availablePlants.add("Cabbage-pult");
+//        for (int row = 1; row <= 5; row++) {
+//            setPlant(plants, "Peashooter", 2, row);
+//            setPlant(plants, "Wall-nut", 5, row);
+//        }
+//        setPlant(plants, "Cabbage-pult", 3, 2);
+//        setPlant(plants, "Cabbage-pult", 3, 4);
+//        setPlant(plants, "Cabbage-pult", 4, 3);
     }
 
     public void setUpStage2(PlantRepository plants) {
@@ -86,13 +94,18 @@ public final class IZombie extends MiniGame {
         availableZombies.add("AllStar");
         availableZombies.add("Arcade");
         availableZombies.add("Parasol Zombie");
-        for (int row = 1; row <= 5; row++) {
-            setPlant(plants, "Peashooter", 2, row);
-            setPlant(plants, "Cabbage-pult", 3, row);
-            setPlant(plants, "Wall-nut", 5, row);
-        }
-        setPlant(plants, "Bonk Choy", 4, 2);
-        setPlant(plants, "Bonk Choy", 4, 4);
+
+        availablePlants.add("Peashooter");
+        availablePlants.add("Wall-nut");
+        availablePlants.add("Cabbage-pult");
+        availablePlants.add("Bonk Choy");
+//        for (int row = 1; row <= 5; row++) {
+//            setPlant(plants, "Peashooter", 2, row);
+//            setPlant(plants, "Cabbage-pult", 3, row);
+//            setPlant(plants, "Wall-nut", 5, row);
+//        }
+//        setPlant(plants, "Bonk Choy", 4, 2);
+//        setPlant(plants, "Bonk Choy", 4, 4);
     }
 
     public void setUpStage3(PlantRepository plants) {
@@ -101,17 +114,21 @@ public final class IZombie extends MiniGame {
         availableZombies.add("AllStar");
         availableZombies.add("Parasol Zombie");
         availableZombies.add("Buckethead Zombie");
-        for (int row = 1; row <= 5; row++) {
-            setPlant(plants, "Peashooter", 2, row);
-            setPlant(plants, "Cabbage-pult", 3, row);
-            setPlant(plants, "Cabbage-pult", 4, row);
-            setPlant(plants, "Wall-nut", 5, row);
-        }
+
+        availablePlants.add("Peashooter");
+        availablePlants.add("Wall-nut");
+        availablePlants.add("Cabbage-pult");
+//        for (int row = 1; row <= 5; row++) {
+//            setPlant(plants, "Peashooter", 2, row);
+//            setPlant(plants, "Cabbage-pult", 3, row);
+//            setPlant(plants, "Cabbage-pult", 4, row);
+//            setPlant(plants, "Wall-nut", 5, row);
+//        }
     }
 
-    private void setPlant(PlantRepository repository, String name, int column, int row) {
-        if (repository.findByName(name) == null) return;
-        getGameMap().getTile(column, row).setPlant(new Plant(repository.findByName(name), column, row, 1));
+    private void setPlant( String name, int column, int row) {
+        if (PlantRepository.getInstance().findByName(name) == null) return;
+        getGameMap().getTile(column, row).setPlant(new Plant(PlantRepository.getInstance().findByName(name), column, row, 1));
     }
 
     public void Update() {
@@ -155,6 +172,27 @@ public final class IZombie extends MiniGame {
         return null;
     }
 
+    public String placePlant(String plantName, int col, int row){
+        if (row < 1 || row > 5 || col < 1 || col > 9) return "invalid location";
+        if (col >= redLineCoordinateX) return "place plants on the left side of the red line";
+        PlantData plantData = getPlantDataFromAvailable(plantName);
+        if(plantData == null) return "this plant is not available";
+        Tile tile = getGameMap().getTile(col, row);
+        if (tile == null) {
+            return "invalid location";
+        }
+        Plant newPlant = new Plant(plantData, col, row, stageNumber);
+
+        if (!tile.isPlantable(newPlant)) {
+            return "cannot plant on this tile";
+        }
+
+        tile.setPlant(newPlant);
+        addActivePlants(newPlant);
+        sunAmount -= plantData.getSunCost();
+        return  null;
+    }
+
     public void eatBrainAtRow(int row) {
         if (row >= 1 && row <= brainsEatenInLane.length) brainsEatenInLane[row - 1] = true;
     }
@@ -173,6 +211,30 @@ public final class IZombie extends MiniGame {
         if (direct != null) return direct;
         String wanted = normalize(name);
         for (ZombieData data : repository.getAllZombies()) {
+            if (data == null) continue;
+            String display = normalize(data.getDisplayName());
+            String id = normalize(data.getId());
+            if (display.equals(wanted) || id.equals(wanted) || id.endsWith(wanted) || display.endsWith(wanted)) {
+                return data;
+            }
+        }
+        return null;
+    }
+
+    private PlantData getPlantDataFromAvailable(String name) {
+        boolean available = false;
+        for (String p : availablePlants) {
+            if (p.equalsIgnoreCase(name)) {
+                available = true;
+                break;
+            }
+        }
+        if (!available) return null;
+        PlantRepository repository = PlantRepository.getInstance();
+        PlantData direct = repository.findByName(name);
+        if (direct != null) return direct;
+        String wanted = normalize(name);
+        for (PlantData data : repository.getAllPlants()) {
             if (data == null) continue;
             String display = normalize(data.getDisplayName());
             String id = normalize(data.getId());
@@ -206,6 +268,8 @@ public final class IZombie extends MiniGame {
         return Collections.unmodifiableList(availableZombies);
     }
 
+    public List<String> getAvailablePlants(){return  Collections.unmodifiableList(availablePlants);}
+
     public boolean isBrainEaten(int row) {
         return row >= 1 && row <= brainsEatenInLane.length && Boolean.TRUE.equals(brainsEatenInLane[row - 1]);
     }
@@ -216,6 +280,9 @@ public final class IZombie extends MiniGame {
     }
 
     public int getSunAmount() { return sunAmount; }
+    public void setSunAmount(int sunAmount){
+        this.sunAmount = sunAmount;
+    }
     public void addSun() { this.sunAmount += 50; }
     public int getStageNumber() { return stageNumber; }
     public double getRedLineCoordinateX() { return redLineCoordinateX; }
