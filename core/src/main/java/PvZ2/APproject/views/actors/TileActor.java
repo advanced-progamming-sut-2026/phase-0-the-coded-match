@@ -43,7 +43,7 @@ public class TileActor extends Group {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                return screen.getHarvestMode() || selectionController.hasSelectedPlant();
+                return screen.getHarvestMode() || selectionController.hasSelectedPlant() || screen.isMiniGameTileInteractive();
             }
 
             @Override
@@ -53,6 +53,10 @@ public class TileActor extends Group {
                     if (error != null) {
                         screen.showMessage(error);
                     }
+                    return;
+                }
+                if (screen.isMiniGameTileInteractive()) {
+                    screen.handleMiniGameTileClick(tile);
                     return;
                 }
                 if (!selectionController.hasSelectedPlant()) return;

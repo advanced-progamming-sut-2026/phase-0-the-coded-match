@@ -72,6 +72,11 @@ public final class Zombotany extends MiniGame {
         this.plantZombieStates = new IdentityHashMap<>();
         this.activePeas = new ArrayList<>();
         this.isGameOver = false;
+        addChosenPlant("peashooter");
+        addChosenPlant("sunflower");
+        addChosenPlant("wall-nut");
+        if (stageNumber >= 2) addChosenPlant("cabbage-pult");
+        if (stageNumber >= 3) addChosenPlant("squash");
         initializeStage();
     }
 

@@ -26,21 +26,38 @@ public class LeaderboardService {
         }
         boolean ascending = "ascending".equalsIgnoreCase(request.get("order"));
         List<ServerUser> list = new ArrayList<>(users.all());
-        Comparator<ServerUser> c = switch (sort.toLowerCase()) {
+        Comparator<ServerUser> comparator = switch (sort.toLowerCase()) {
+            case "last level" -> Comparator.comparingInt(ServerUser::getLastSeasonId)
+                .thenComparingInt(ServerUser::getLastLevelNumber);
             case "minigames" -> Comparator.comparingInt(ServerUser::getMinigamesWon);
+            case "daily quests" -> Comparator.comparingInt(ServerUser::getCompletedDailyQuests);
+            case "quests", "non-daily quests" -> Comparator.comparingInt(ServerUser::getCompletedQuests);
             case "games" -> Comparator.comparingInt(ServerUser::getGamesPlayed);
             default -> Comparator.comparingInt(ServerUser::getHighestPoint);
         };
+        comparator = comparator.thenComparing(ServerUser::getUsername, String.CASE_INSENSITIVE_ORDER);
         if (!ascending) {
-            c = c.reversed();
+            comparator = comparator.reversed();
         }
-        list.sort(c);
+        list.sort(comparator);
         StringBuilder b = new StringBuilder();
         int rank = 1;
         for (ServerUser user : list) {
-            b.append(rank++).append("|").append(user.getUsername()).append("|").append(user.getHighestPoint()).append("|").append(user.getMinigamesWon()).append("|").append(user.getGamesPlayed()).append("\n");
+            b.append(rank++).append('|')
+                .append(escape(user.getUsername())).append('|')
+                .append(user.getLastSeasonId()).append('|')
+                .append(user.getLastLevelNumber()).append('|')
+                .append(user.getMinigamesWon()).append('|')
+                .append(user.getCompletedDailyQuests()).append('|')
+                .append(user.getCompletedQuests()).append('|')
+                .append(user.getHighestPoint()).append('|')
+                .append(user.getGamesPlayed()).append('\n');
         }
         return new Response(request.getRequestId(), MessageType.GET_LEADERBOARD, true, "Leaderboard", Map.of("entries", b.toString()));
+    }
+
+    private String escape(String value) {
+        return value.replace("\\", "\\\\").replace("|", "\\|").replace("\n", "\\n");
     }
 
 }

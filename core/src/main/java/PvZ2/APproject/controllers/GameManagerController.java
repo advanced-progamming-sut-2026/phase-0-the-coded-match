@@ -195,15 +195,15 @@ public class GameManagerController {
         for (Zombie zombie : currentLevel.getActiveZombies().toArray(new Zombie[0])) {
             if (!currentLevel.getActiveZombies().contains(zombie)) continue;
             zombie.update(delta);
-            if (zombie.getX() <= 0.25) {
+            if (!(currentLevel instanceof MiniGame) && zombie.getX() <= 0.25) {
                 currentLevel.getGameMap().handleLawnMower(zombie);
                 if (gameFinished) break;
             }
             if (zombie.isDead() && currentLevel.getActiveZombies().remove(zombie)) {
                 killedThisTick++;
                 damageThisTick += zombie.getLastDamageTaken();
-                dropMessage = handleZombieDrop(zombie) + "\n";
                 if (!(currentLevel instanceof MiniGame)) {
+                    dropMessage = handleZombieDrop(zombie) + "\n";
                     QuestController.notifyZombieKilled(zombie);
                     if (currentLevel.getCurrentSeason() != null) {
                         QuestController.notifyZombieKilled(currentLevel.getCurrentSeason());
@@ -527,6 +527,19 @@ public class GameManagerController {
         return builder;
     }
 
+    public void finishMiniGame(boolean won) {
+        if (gameFinished) return;
+        gameFinished = true;
+        isGameEnded = true;
+        User user = App.getCurrentUser();
+        if (user != null) user.setVictroy(won);
+        try {
+            SignupMenuController.saveToJson();
+        } catch (RuntimeException e) {
+            System.err.println("Could not save minigame state: " + e.getMessage());
+        }
+    }
+
     public void gameOver() {
         if (gameFinished) return;
         gameFinished = true;
@@ -720,25 +733,16 @@ public class GameManagerController {
 
     }
 
-    public void plantVasebreakerSeed(VaseBreaker level, String plantName, int x, int y) {
+    public String plantVasebreakerSeed(VaseBreaker level, String plantName, int x, int y) {
         PlantData data = PlantRepository.getInstance().findByName(plantName);
         Tile tile = level.getGameMap().getTile(x, y);
-        if (data == null) {
-            System.out.println("plant type does not exist");
-            return;
-        }
-        if (tile == null || tile.getPlant() != null || level.hasUnbrokenVaseAt(x, y)) {
-            System.out.println("cannot plant on this tile");
-            return;
-        }
-        if (!level.consumeSeedPacket(plantName)) {
-            System.out.println("You do not have a " + plantName + " seed packet!");
-            return;
-        }
+        if (data == null) return "plant type does not exist";
+        if (tile == null || tile.getPlant() != null || level.hasUnbrokenVaseAt(x, y)) return "cannot plant on this tile";
+        if (!level.consumeSeedPacket(plantName)) return "seed packet is not available";
         Plant plant = new Plant(data, x, y, 1);
         level.getActivePlants().add(plant);
         tile.setPlant(plant);
-        System.out.println("Planted " + plantName + " at (" + x + ", " + y + ")");
+        return null;
     }
 
     public boolean isIsGameEnded() {

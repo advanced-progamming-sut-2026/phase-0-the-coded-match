@@ -58,9 +58,8 @@ public final class WallNutBowling extends MiniGame {
     public final void initializeStage() {
         conveyorBelt.clear();
         activeRollingNuts.clear();
-        for (int i = 0; i < 3; i++) {
-            conveyorBelt.offer(createRandomNutType());
-        }
+        conveyorBelt.offer(createRandomNutType());
+        currentCooldownTimer = conveyorSpawnCooldownTicks;
         createStageZombies();
     }
 
@@ -69,9 +68,9 @@ public final class WallNutBowling extends MiniGame {
         ZombieRepository repository = ZombieRepository.getInstance();
         int count = 4 + stageNumber * 3;
         for (int i = 0; i < count; i++) {
-            String type = "default";
-            if (stageNumber >= 2 && i % 3 == 0) type = "conehead";
-            if (stageNumber >= 3 && i % 5 == 0) type = "buckethead";
+            String type = "Default";
+            if (stageNumber >= 2 && i % 3 == 0) type = "Conehead Zombie";
+            if (stageNumber >= 3 && i % 5 == 0) type = "Buckethead Zombie";
             ZombieData data = repository.findByDisplayName(type);
             if (data != null) {
                 addActiveZombie(new Zombie(data, 7 + random.nextInt(3), 1 + random.nextInt(ROWS)));

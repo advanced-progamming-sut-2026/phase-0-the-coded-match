@@ -66,11 +66,13 @@ public class GameMenuScreen extends BaseScreen{
         ImageButton greenhouseButton = new ImageButton(skin, "hud_zg");
         TextButton leaderboardButton = new TextButton("Leaderboard", skin, "brown");
         TextButton shopButton = new TextButton("Shop", skin, "purple");
+        TextButton miniGamesButton = new TextButton("Mini Games", skin, "default");
 
         screensTable.add(collectionButton);
         screensTable.add(greenhouseButton);
         screensTable.add(leaderboardButton);
         screensTable.add(shopButton);
+        screensTable.add(miniGamesButton);
         screensTable.pack();
         screensTable.setPosition(100, VIRTUAL_HEIGHT - 80);
 
@@ -97,6 +99,14 @@ public class GameMenuScreen extends BaseScreen{
             public void clicked(InputEvent event, float x, float y) {
                 game.setScreen(new LeaderBoardScreen(game));
                 App.setCurrentMenu(Menu.LEADERBOARD);
+            }
+        });
+
+        miniGamesButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                App.setCurrentMenu(Menu.MINIGAMES);
+                game.setScreen(new MiniGamesScreen(game));
             }
         });
 
@@ -160,7 +170,7 @@ public class GameMenuScreen extends BaseScreen{
             }
 
             Label progressLabel = null;
-            if(unlocked) {
+            if(unlocked ) {
                 progressLabel = new Label(lvlNum + "/ 4  Completed", skin, "default");
             }else{
                 progressLabel = new Label(  "0 / 4  Completed", skin, "default");

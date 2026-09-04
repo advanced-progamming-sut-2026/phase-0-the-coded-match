@@ -94,7 +94,7 @@ public final class VaseBreaker extends MiniGame {
                 // stage 1 (easy) 15 vases col 6-8
                 startCol = 6;
                 addVasesToPool(pool, 2, VaseType.BASIC_VASE, null, null);
-                addVasesToPool(pool, 4, VaseType.BASIC_VASE, null, zombies.findByDisplayName("default"));
+                addVasesToPool(pool, 4, VaseType.BASIC_VASE, null, zombies.findByDisplayName("Default"));
                 addVasesToPool(pool, 3, VaseType.PLANT_VASE, plants.findByName("squash"), null);
                 addVasesToPool(pool, 5, VaseType.BASIC_VASE, plants.findByName("peashooter"), null);
                 addVasesToPool(pool, 1, VaseType.GARGANTUAR_VASE, null, zombies.findByDisplayName("gargantuar"));
@@ -106,9 +106,9 @@ public final class VaseBreaker extends MiniGame {
                 addVasesToPool(pool, 3, VaseType.BASIC_VASE, plants.findByName("cactus"), null);
                 addVasesToPool(pool, 5, VaseType.BASIC_VASE, plants.findByName("peashooter") , null);
                 addVasesToPool(pool, 3, VaseType.PLANT_VASE, plants.findByName("cabbage-pult"), null);
-                addVasesToPool(pool, 4, VaseType.BASIC_VASE, null, zombies.findByDisplayName("normal"));
-                addVasesToPool(pool, 3, VaseType.BASIC_VASE, null, zombies.findByDisplayName("conehead"));
-                addVasesToPool(pool, 1, VaseType.BASIC_VASE, null, zombies.findByDisplayName("buckethead"));
+                addVasesToPool(pool, 4, VaseType.BASIC_VASE, null, zombies.findByDisplayName("Default"));
+                addVasesToPool(pool, 3, VaseType.BASIC_VASE, null, zombies.findByDisplayName("Conehead Zombie"));
+                addVasesToPool(pool, 1, VaseType.BASIC_VASE, null, zombies.findByDisplayName("Buckethead Zombie"));
                 addVasesToPool(pool, 1, VaseType.GARGANTUAR_VASE, null, zombies.findByDisplayName("gargantuar"));
                 break;
 
@@ -117,8 +117,8 @@ public final class VaseBreaker extends MiniGame {
                 startCol = 4;
                 addVasesToPool(pool, 10, VaseType.BASIC_VASE, plants.findByName("peashooter"), null);
                 addVasesToPool(pool, 4, VaseType.PLANT_VASE, plants.findByName("squash"), null);
-                addVasesToPool(pool, 5, VaseType.BASIC_VASE, null, zombies.findByDisplayName("conehead"));
-                addVasesToPool(pool, 4, VaseType.BASIC_VASE, null, zombies.findByDisplayName("buckethead"));
+                addVasesToPool(pool, 5, VaseType.BASIC_VASE, null, zombies.findByDisplayName("Conehead Zombie"));
+                addVasesToPool(pool, 4, VaseType.BASIC_VASE, null, zombies.findByDisplayName("Buckethead Zombie"));
                 addVasesToPool(pool, 2, VaseType.GARGANTUAR_VASE, null, zombies.findByDisplayName("gargantuar"));
                 break;
 
@@ -175,7 +175,7 @@ public final class VaseBreaker extends MiniGame {
 
         if (targetVase.getPlantContent() != null) {
             String plantName = targetVase.getPlantContent().getDisplayName();
-            groundSeeds.add(new DroppedSeedPacket(plantName, x, y , 5));
+            collected.add(plantName.toLowerCase());
             return "Vase broken! You obtained a " + plantName + " seed packet!";
         }
 
@@ -243,6 +243,23 @@ public final class VaseBreaker extends MiniGame {
         boolean allZombiesDead = getActiveZombies().isEmpty();
 
         return allVasesBroken && allZombiesDead;
+    }
+
+
+    public boolean hasCollectedSeed(String plantName) {
+        if (plantName == null) return false;
+        return collected.contains(plantName.toLowerCase());
+    }
+
+    public List<String> getCollectedSeedPackets() {
+        return Collections.unmodifiableList(new ArrayList<>(collected));
+    }
+
+    public boolean hasZombieReachedHouse() {
+        for (Zombie zombie : getActiveZombies()) {
+            if (!zombie.isDead() && zombie.getX() <= 0) return true;
+        }
+        return false;
     }
 
     public int getStageNumber() {

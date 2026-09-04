@@ -169,9 +169,9 @@ public final class Beghouled extends MiniGame {
     private void spawnZombie() {
         ZombieRepository repository = ZombieRepository.getInstance();
         List<String> types = new ArrayList<>();
-        types.add("default");
-        if (stageNumber >= 2) types.add("conehead");
-        if (stageNumber >= 3) types.add("buckethead");
+        types.add("Default");
+        if (stageNumber >= 2) types.add("Conehead Zombie");
+        if (stageNumber >= 3) types.add("Buckethead Zombie");
         ZombieData data = repository.findByDisplayName(types.get(random.nextInt(types.size())));
         if (data != null) {
             addActiveZombie(new Zombie(data, COLUMNS, 1 + random.nextInt(ROWS)));
@@ -386,6 +386,10 @@ public final class Beghouled extends MiniGame {
 
     public boolean hasWon() {
         return isGameOver && won;
+    }
+
+    public int getStageNumber() {
+        return stageNumber;
     }
 
     public int getMatchCount() {
