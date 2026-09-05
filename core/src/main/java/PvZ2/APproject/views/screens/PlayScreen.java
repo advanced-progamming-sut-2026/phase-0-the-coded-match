@@ -35,6 +35,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -46,6 +47,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import PvZ2.APproject.models.zombies.ZombieData;
+import com.badlogic.gdx.utils.Scaling;
 import pvz.skin.BorderedTable;
 
 import java.util.ArrayList;
@@ -80,10 +82,12 @@ public class PlayScreen extends BaseScreen {
     };
 
     private static final String[] QUICK_EMOJIS = {
-        "😀",
-        "😎",
-        "😂"
+        "bruh",
+        "mashti",
+        "yummy"
     };
+    private final Map<String, TextureRegion> emojiTextures = new HashMap<>();
+    private Image multiplayerIncomingEmoji;
     private final Consumer<Response> reactionListener = this::handleIncomingReaction;
     private Label sunAmountLabel;
     private Label waveLabel;
@@ -148,6 +152,11 @@ public class PlayScreen extends BaseScreen {
         stage.addActor(environmentView);
         createPlantBoxes();
         createMiniGameUi();
+        System.out.println("LOADING EMOJIS...");
+        emojiTextures.put("mashti", new TextureRegion(new Texture(Gdx.files.internal("emoji/mashti.jpeg"))));
+        emojiTextures.put("bruh", new TextureRegion(new Texture(Gdx.files.internal("emoji/bruh.png"))));
+        emojiTextures.put("yummy", new TextureRegion(new Texture(Gdx.files.internal("emoji/yummy.jpeg"))));
+        System.out.println("Loaded emojis: " + emojiTextures.keySet());
         createMultiplayerCommunicationUi();
         ReactionController.setIncomingListener(
             reactionListener
@@ -167,6 +176,15 @@ public class PlayScreen extends BaseScreen {
         multiplayerIncomingNotif.setVisible(false);
         multiplayerIncomingNotif.setPosition(VIRTUAL_WIDTH / 2f - 150f, VIRTUAL_HEIGHT - 150f);
         stage.addActor(multiplayerIncomingNotif);
+
+        multiplayerIncomingEmoji = new Image();
+        multiplayerIncomingEmoji.setVisible(false);
+        multiplayerIncomingEmoji.setSize(80f, 80f);
+        multiplayerIncomingEmoji.setPosition(
+            VIRTUAL_WIDTH / 2f - 40f,
+            VIRTUAL_HEIGHT - 230f
+        );
+        stage.addActor(multiplayerIncomingEmoji);
 
         Table mainPauseTable = new Table(skin);
         mainPauseTable.setFillParent(true);
@@ -639,8 +657,16 @@ public class PlayScreen extends BaseScreen {
             multiplayerChatPanel.add(button).width(140f).height(35f).pad(2f).row();
         }
         Table emojiTable = new Table(skin);
+
         for (String emoji : QUICK_EMOJIS) {
-            TextButton button = new TextButton(emoji, skin);
+            TextureRegion region = emojiTextures.get(emoji);
+            if (region == null) {
+                System.out.println("Missing texture for: " + emoji);
+                continue;
+            }
+            TextureRegionDrawable drawable = new TextureRegionDrawable(region);
+            ImageButton button = new ImageButton(drawable);
+            button.getImage().setScaling(Scaling.fit);
             button.addListener(
                 new ClickListener() {
                     @Override
@@ -676,14 +702,45 @@ public class PlayScreen extends BaseScreen {
         }
         String text;
         if ("EMOJI".equalsIgnoreCase(kind)) {
-            text = username + ": " + content;
-        } else {text = username + ": " + content;}
+            showIncomingEmoji(username, content);
+        } else {
+            showIncomingText(username, content);
+        }
+//
+//        multiplayerIncomingNotif.clearActions();
+//        multiplayerIncomingNotif.setText(username +": "+ co);
+//        multiplayerIncomingNotif.pack();
+//        multiplayerIncomingNotif.setVisible(true);
+//        multiplayerIncomingNotif.getColor().a = 1f;
+//        multiplayerIncomingNotif.addAction(Actions.sequence(Actions.delay(3f), Actions.fadeOut(0.5f), Actions.hide()));
+    }
 
+    private void showIncomingText(String username, String text){
         multiplayerIncomingNotif.clearActions();
-        multiplayerIncomingNotif.setText(text);
+        multiplayerIncomingNotif.setText(username + " :"+ text);
         multiplayerIncomingNotif.pack();
         multiplayerIncomingNotif.setVisible(true);
         multiplayerIncomingNotif.getColor().a = 1f;
+        multiplayerIncomingNotif.addAction(Actions.sequence(Actions.delay(3f), Actions.fadeOut(0.5f), Actions.hide()));
+    }
+
+    private void showIncomingEmoji(String username, String emojiId){
+        TextureRegion region = emojiTextures.get(emojiId);
+
+        if (region == null) {
+            return;
+        }
+        multiplayerIncomingNotif.setText(username + ":");
+        multiplayerIncomingNotif.pack();
+        multiplayerIncomingNotif.setVisible(true);
+        multiplayerIncomingNotif.getColor().a = 1f;
+
+        multiplayerIncomingEmoji.setDrawable(new TextureRegionDrawable(region));
+        multiplayerIncomingEmoji.setVisible(true);
+        multiplayerIncomingEmoji.getColor().a = 1f;
+        multiplayerIncomingEmoji.clearActions();
+        multiplayerIncomingEmoji.addAction(Actions.sequence(Actions.delay(3f), Actions.fadeOut(0.5f), Actions.hide()));
+        multiplayerIncomingNotif.clearActions();
         multiplayerIncomingNotif.addAction(Actions.sequence(Actions.delay(3f), Actions.fadeOut(0.5f), Actions.hide()));
     }
 

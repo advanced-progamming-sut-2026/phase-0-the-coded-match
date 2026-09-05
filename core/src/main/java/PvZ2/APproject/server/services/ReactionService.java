@@ -11,7 +11,7 @@ import java.util.Set;
 
 public class ReactionService {
     private static final Set<String> TEXT = Set.of("Good luck!", "Nice move!", "Well played!");
-    private static final Set<String> EMOJI = Set.of("😀", "😎", "😂");
+    private static final Set<String> EMOJI = Set.of("mashti", "bruh", "yummy");
     private static final Set<String> STICKER = Set.of("sticker1", "sticker2", "sticker3");
     private final MatchmakingService matchmaking;
 
