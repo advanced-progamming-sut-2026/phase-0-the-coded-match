@@ -317,6 +317,43 @@ public class GameMapView extends Group {
 
             }
         }
+        drawBurningTiles(batch);
+    }
+
+    private void drawBurningTiles(Batch batch) {
+        boolean hasBurning = false;
+        for (int row = 1; row <= currentLevel.getGameMap().getRows() && !hasBurning; row++) {
+            for (int col = 1; col <= currentLevel.getGameMap().getColumns(); col++) {
+                Tile tile = currentLevel.getGameMap().getTile(col, row);
+                if (tile != null && tile.isBurning()) {
+                    hasBurning = true;
+                    break;
+                }
+            }
+        }
+        if (!hasBurning || shapeRenderer == null) return;
+        batch.end();
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
+        shapeRenderer.setTransformMatrix(batch.getTransformMatrix());
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(1f, 0.24f, 0.02f, 0.42f);
+        for (int row = 1; row <= currentLevel.getGameMap().getRows(); row++) {
+            for (int col = 1; col <= currentLevel.getGameMap().getColumns(); col++) {
+                Tile tile = currentLevel.getGameMap().getTile(col, row);
+                if (tile == null || !tile.isBurning()) continue;
+                shapeRenderer.rect(
+                    PlayScreen.BOARD_X + (col - 1) * PlayScreen.TILE_WIDTH,
+                    PlayScreen.BOARD_Y + (row - 1) * PlayScreen.TILE_HEIGHT,
+                    PlayScreen.TILE_WIDTH,
+                    PlayScreen.TILE_HEIGHT
+                );
+            }
+        }
+        shapeRenderer.end();
+        Gdx.gl.glDisable(GL20.GL_BLEND);
+        batch.begin();
     }
 
     private void drawRedLinesOnGrid(Batch batch){

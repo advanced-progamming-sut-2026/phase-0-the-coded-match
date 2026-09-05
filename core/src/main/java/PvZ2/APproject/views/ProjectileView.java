@@ -2,6 +2,8 @@ package PvZ2.APproject.views;
 
 import PvZ2.APproject.enums.PlantTag;
 import PvZ2.APproject.models.Projectile;
+import PvZ2.APproject.models.plants.Plant;
+import PvZ2.APproject.views.screens.PamActor;
 import PvZ2.APproject.views.screens.PlayScreen;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -22,12 +24,29 @@ public class ProjectileView extends Actor {
         this.projectile = projectile;
         this.playScreen = playScreen;
         this.player = player;
-        if (projectile.getCreatorPlantCategory() == null) {
+        Plant creator = projectile.getCreatorPlantCategory();
+        if (creator == null) {
             pamPath = "768/FULL/EFFECTS/ZOMBIE_OCTOPUS_PROJECTILE/ZOMBIE_OCTOPUS_PROJECTILE.PAM";
-        } else if (projectile.getCreatorPlantCategory().hasThisTag(PlantTag.ICE)) {
-            pamPath = "768/INITIAL/EFFECTS/T_SNOW_PEA/T_SNOW_PEA.PAM";
         } else {
-            pamPath = "768/INITIAL/EFFECTS/T_PEA_PROJECTILE/T_PEA_PROJECTILE.PAM";
+            String id = creator.getData().getId();
+            String name = creator.getData().getName();
+            String displayName = creator.getData().getDisplayName();
+            String resolved = PamActor.resolveEffectPam(
+                "T_" + id + "_PROJECTILE",
+                id + "_PROJECTILE",
+                "T_" + id + "_PROJECTILES",
+                id + "_PROJECTILES",
+                "T_" + name + "_PROJECTILE",
+                name + "_PROJECTILE",
+                "T_" + displayName + "_PROJECTILE",
+                displayName + "_PROJECTILE"
+            );
+            if (resolved != null) pamPath = resolved;
+            else if (creator.hasThisTag(PlantTag.ICE)) {
+                pamPath = "768/INITIAL/EFFECTS/T_SNOW_PEA/T_SNOW_PEA.PAM";
+            } else {
+                pamPath = "768/INITIAL/EFFECTS/T_PEA_PROJECTILE/T_PEA_PROJECTILE.PAM";
+            }
         }
         setTouchable(Touchable.disabled);
         try {
@@ -47,7 +66,7 @@ public class ProjectileView extends Actor {
         super.act(delta);
         setPosition(
             PlayScreen.BOARD_X + ((float) projectile.getxCoordinate() - 1f) * PlayScreen.TILE_WIDTH + PlayScreen.TILE_WIDTH * 0.5f,
-            PlayScreen.BOARD_Y + ((float) projectile.getyCoordinate() - 1f) * PlayScreen.TILE_HEIGHT + PlayScreen.TILE_HEIGHT * 0.67f
+            PlayScreen.BOARD_Y + ((float) projectile.getyCoordinate() - 1f) * PlayScreen.TILE_HEIGHT + PlayScreen.TILE_HEIGHT * 0.57f
         );
     }
 

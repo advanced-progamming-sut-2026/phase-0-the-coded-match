@@ -474,7 +474,8 @@ public class GameManagerController {
                 for (Zombie zombie : currentLevel.getActiveZombies().toArray(new Zombie[0])) {
                     if (projectile.checkZombieCollision(zombie)) {
                         if (creator.hasThisTag(PlantTag.ICE)) zombie.setChilled(true);
-                        if (zombie.getBehavior() != null) zombie.getBehavior().onProjectileHit(zombie, projectile);
+                        if (zombie instanceof Zomboss) zombie.takeDamage(projectile.getDamage(), creator);
+                        else if (zombie.getBehavior() != null) zombie.getBehavior().onProjectileHit(zombie, projectile);
                         projectile.destroy();
                         hit = true;
                         break;

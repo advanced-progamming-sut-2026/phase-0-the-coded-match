@@ -167,26 +167,30 @@ public class GameMenuScreen extends BaseScreen{
             float width = isCenter ? 420f : 300f;
             float height = isCenter ? 440f : 320f;
 
-            boolean unlocked = App.getSeasonData(szn.getName()) != null && App.getSeasonData(szn.getName()).isUnlocked();
+            boolean unlocked = App.getSeason(szn.getName()) != null && App.getSeason(szn.getName()).isUnlocked();
 
             Table card = new Table();
             Label nameLabel = new Label(szn.getDisplayName(), skin, "default");
             nameLabel.setFontScale(isCenter ? 1.5f : 1.0f);
             card.add(nameLabel).padTop(10).padBottom(5).row();
             int lvlNum = 0;
-            if(App.getCurrentUser().getLastLevel() == null){
-                lvlNum = 0;
-            }else {
-                lvlNum = App.getCurrentUser().getLastLevel().getLevelNumber();
+            int levelCount = szn.getLevels() == null ? 0 : szn.getLevels().size();
+            if (App.getCurrentUser() != null && App.getCurrentUser().getLastSeason() != null) {
+                int lastSeasonId = App.getCurrentUser().getLastSeason().getData().getId();
+                if (szn.getId() < lastSeasonId) {
+                    lvlNum = levelCount;
+                } else if (szn.getId() == lastSeasonId && App.getCurrentUser().getLastLevel() != null) {
+                    lvlNum = Math.min(levelCount, App.getCurrentUser().getLastLevel().getLevelNumber());
+                }
             }
 
-            Label progressLabel = null;
-            if(unlocked ) {
-                progressLabel = new Label(lvlNum + "/ 4  Completed", skin, "default");
+            Label progressLabel;
+            if(unlocked) {
+                progressLabel = new Label(lvlNum + "/ " + levelCount + "  Completed", skin, "default");
             }else{
-                progressLabel = new Label(  "0 / 4  Completed", skin, "default");
+                progressLabel = new Label("0 / " + levelCount + "  Completed", skin, "default");
             }
-            card.add(progressLabel).padBottom(10).row();//todo: this is for all seasons all at once
+            card.add(progressLabel).padBottom(10).row();
 
             if (!isCenter) {
                 chapterImage.setColor(1, 1, 1, 0.5f);

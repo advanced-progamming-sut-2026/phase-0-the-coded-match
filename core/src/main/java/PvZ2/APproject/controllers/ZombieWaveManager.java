@@ -1,5 +1,7 @@
 package PvZ2.APproject.controllers;
 
+import PvZ2.APproject.enums.LevelType;
+import PvZ2.APproject.enums.SpecialLevelType;
 import PvZ2.APproject.models.App;
 import PvZ2.APproject.models.Level;
 import PvZ2.APproject.models.Update;
@@ -7,6 +9,8 @@ import PvZ2.APproject.models.WavePatternData;
 import PvZ2.APproject.models.zombies.Barrel;
 import PvZ2.APproject.models.zombies.Zombie;
 import PvZ2.APproject.models.zombies.ZombieData;
+import PvZ2.APproject.models.zombies.Zomboss;
+import PvZ2.APproject.models.zombies.ZombossData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +25,7 @@ public class ZombieWaveManager implements Update {
     private final List<WavePatternData> wavePattern = new ArrayList<>();
     private boolean isLastWave;
     private boolean newWaveStarted;
+    private boolean bossSpawned;
 
     public ZombieWaveManager(Level level) {
         currentLevel = level;
@@ -77,15 +82,25 @@ public class ZombieWaveManager implements Update {
         }
     }
 
-
-    private boolean canFill(int amount, List<ZombieData> allowed) {
-        boolean[] possible = new boolean[amount + 1];
-        possible[0] = true;
-        for (int i = 1; i <= amount; i++) for (ZombieData data : allowed) {
-            int cost = data.getWaveCost();
-            if (cost > 0 && cost <= i && possible[i - cost]) { possible[i] = true; break; }
+    private boolean isBossLevel() {
+        if (currentLevel.getLevelType() == LevelType.BOSS ||
+            currentLevel.getData().getSpecialLevelType() == SpecialLevelType.BOSS) return true;
+        if (currentLevel.getCurrentSeason() == null || currentLevel.getCurrentSeason().getLevels() == null) return false;
+        int lastLevel = 0;
+        for (PvZ2.APproject.models.LevelData data : currentLevel.getCurrentSeason().getLevels()) {
+            if (data != null) lastLevel = Math.max(lastLevel, data.getLevelNumber());
         }
-        return possible[amount];
+        return lastLevel > 0 && currentLevel.getLevelNumber() == lastLevel;
+    }
+
+    private void spawnBoss() {
+        int rows = Math.max(1, currentLevel.getGameMap().getRows());
+        int lane = Math.max(1, rows / 2);
+        double x = Math.max(1.0, currentLevel.getGameMap().getColumns() - 0.55);
+        ZombossData data = new ZombossData(currentLevel.getCurrentSeason() == null
+            ? null : currentLevel.getCurrentSeason().getType());
+        currentLevel.addActiveZombie(new Zomboss(data, x, lane));
+        bossSpawned = true;
     }
 
     public boolean shouldNextWaveStart() {
@@ -110,7 +125,11 @@ public class ZombieWaveManager implements Update {
     public void update(float delta) {
         if (currentWave == wavePattern.size() - 1) {
             if (currentLevel.getActiveZombies().isEmpty()) {
-                GameManagerController.getInstance().gameWon();
+                if (isBossLevel() && !bossSpawned) {
+                    spawnBoss();
+                } else {
+                    GameManagerController.getInstance().gameWon();
+                }
             }
             return;
         }

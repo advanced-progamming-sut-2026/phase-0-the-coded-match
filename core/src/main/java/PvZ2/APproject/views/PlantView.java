@@ -27,6 +27,10 @@ public class PlantView extends Actor {
     private List<String> clips;
     private float scale = 0.56f;
     private Rectangle anchorBounds;
+    private String explosionPam;
+    private String explosionClip;
+    private float explosionScale = 0.56f;
+    private boolean explosionLoaded;
     private boolean removing;
     private int lastHealth;
     private float damageFlash;
@@ -45,6 +49,7 @@ public class PlantView extends Actor {
         setSize(PlayScreen.TILE_WIDTH, PlayScreen.TILE_HEIGHT);
         setTouchable(Touchable.disabled);
         loadAnimation();
+        loadExplosion();
     }
 
     private void loadAnimation() {
@@ -53,15 +58,63 @@ public class PlantView extends Actor {
             game.getPlayer().loadSync(pamPath);
             clips = game.getPlayer().clips(pamPath);
             String fitClip = resolveClip("idle");
-            Rectangle bounds = fitClip == null ? null : game.getPlayer().bounds(pamPath, fitClip);
-            anchorBounds = bounds;
-            if (bounds != null && bounds.width > 0f && bounds.height > 0f) {
-                scale = Math.min(PlayScreen.TILE_WIDTH * 0.82f / bounds.width,
-                    PlayScreen.TILE_HEIGHT * 0.90f / bounds.height);
+            anchorBounds = fitClip == null ? null : game.getPlayer().bounds(pamPath, fitClip);
+            if (anchorBounds != null && anchorBounds.width > 0f && anchorBounds.height > 0f) {
+                scale = Math.min(PlayScreen.TILE_WIDTH * 0.82f / anchorBounds.width,
+                    PlayScreen.TILE_HEIGHT * 0.90f / anchorBounds.height);
             }
         } catch (RuntimeException ignored) {
             clips = null;
+            anchorBounds = null;
             scale = 0.56f;
+        }
+    }
+
+    private void loadExplosion() {
+        boolean explosive = false;
+        if (plant.getAbilities() != null) {
+            for (String ability : plant.getAbilities()) {
+                if (ability != null && ability.toUpperCase(Locale.ROOT).contains("EXPLODE")) {
+                    explosive = true;
+                    break;
+                }
+            }
+        }
+        if (!explosive) return;
+        String id = plant.getData().getId();
+        String name = plant.getData().getName();
+        String displayName = plant.getData().getDisplayName();
+        explosionPam = PamActor.resolveEffectPam(
+            "T_" + id + "_EXPLOSION",
+            id + "_EXPLOSION",
+            id + "_EXPLOSION_TOP",
+            id + "_EXPLOSION_FRONT",
+            id + "_EXPLOSION_REAR",
+            "T_" + name + "_EXPLOSION",
+            name + "_EXPLOSION",
+            displayName + "_EXPLOSION"
+        );
+        if (explosionPam == null) return;
+        try {
+            game.getPlayer().loadSync(explosionPam);
+            List<String> effectClips = game.getPlayer().clips(explosionPam);
+            if (effectClips == null || effectClips.isEmpty()) return;
+            explosionClip = effectClips.get(0);
+            for (String candidate : effectClips) {
+                String lower = candidate.toLowerCase(Locale.ROOT);
+                if (lower.contains("explode") || lower.contains("animation")) {
+                    explosionClip = candidate;
+                    break;
+                }
+            }
+            Rectangle bounds = game.getPlayer().bounds(explosionPam, explosionClip);
+            if (bounds != null && bounds.width > 0f && bounds.height > 0f) {
+                explosionScale = Math.min(PlayScreen.TILE_WIDTH * 1.45f / bounds.width,
+                    PlayScreen.TILE_HEIGHT * 1.45f / bounds.height);
+            }
+            explosionLoaded = true;
+        } catch (RuntimeException ignored) {
+            explosionLoaded = false;
         }
     }
 
@@ -123,7 +176,8 @@ public class PlantView extends Actor {
         if (plant.getData().getName().equalsIgnoreCase("squash")) state = PlantState.ATTACKING;
         else if (state != PlantState.EXPLODING && state != PlantState.DEATH && state != PlantState.ATTACKING) state = PlantState.DEATH;
         stateTime = 0f;
-        addAction(Actions.sequence(Actions.delay(state == PlantState.DEATH ? 0.55f : 0.85f), Actions.removeActor()));
+        float delay = state == PlantState.EXPLODING ? 1.05f : state == PlantState.DEATH ? 0.55f : 0.85f;
+        addAction(Actions.sequence(Actions.delay(delay), Actions.removeActor()));
     }
 
     public boolean isRemovalComplete() {
@@ -142,30 +196,42 @@ public class PlantView extends Actor {
         else if (state == PlantState.PRODUCING) preferred = "produce";
         else if (state == PlantState.HURT) preferred = "hurt";
 
-        String clipName = switch (state) {
-            case SHOOTING -> resolveClip(preferred, "shoot", "action");
-            case ATTACKING -> resolveClip(preferred, "action", "shoot");
-            case EXPLODING -> resolveClip(preferred, "explosion", "attack");
-            case DEATH -> resolveClip(preferred, "die");
-            case PRODUCING -> resolveClip(preferred, "sun", "attack");
-            case HURT -> resolveClip(preferred, "hit", "damage");
-            default -> resolveClip(preferred);
-        };
-        if (clipName != null) {
-            if (damageFlash > 0f) batch.setColor(1f, 0.2f, 0.2f, getColor().a * parentAlpha);
+        if (state == PlantState.EXPLODING && explosionLoaded && explosionPam != null && explosionClip != null) {
             try {
-                float centerX = getX() + getWidth() * 0.5f;
-                float groundY = getY() + getHeight() * 0.08f;
-                float drawX = centerX;
-                float drawY = groundY;
-                if (anchorBounds != null) {
-                    drawX -= (anchorBounds.x + anchorBounds.width * 0.5f) * scale;
-                    drawY -= anchorBounds.y * scale;
+                Rectangle bounds = game.getPlayer().bounds(explosionPam, explosionClip);
+                float drawX = getX() + getWidth() * 0.5f;
+                float drawY = getY() + getHeight() * 0.5f;
+                if (bounds != null) {
+                    drawX -= (bounds.x + bounds.width * 0.5f) * explosionScale;
+                    drawY -= (bounds.y + bounds.height * 0.5f) * explosionScale;
                 }
-                game.getPlayer().draw(batch, pamPath, clipName, stateTime, drawX, drawY, scale, scale, true);
+                game.getPlayer().draw(batch, explosionPam, explosionClip, stateTime, drawX, drawY, explosionScale, explosionScale, true);
             } catch (RuntimeException ignored) {
             }
-            batch.setColor(Color.WHITE);
+        } else {
+            String clipName = switch (state) {
+                case SHOOTING -> resolveClip(preferred, "shoot", "action");
+                case ATTACKING -> resolveClip(preferred, "action", "shoot");
+                case EXPLODING -> resolveClip(preferred, "explosion", "attack");
+                case DEATH -> resolveClip(preferred, "die");
+                case PRODUCING -> resolveClip(preferred, "sun", "attack");
+                case HURT -> resolveClip(preferred, "hit", "damage");
+                default -> resolveClip(preferred);
+            };
+            if (clipName != null) {
+                if (damageFlash > 0f) batch.setColor(1f, 0.2f, 0.2f, getColor().a * parentAlpha);
+                try {
+                    float drawX = getX() + getWidth() * 0.5f;
+                    float drawY = getY() + getHeight() * 0.08f;
+                    if (anchorBounds != null) {
+                        drawX -= (anchorBounds.x + anchorBounds.width * 0.5f) * scale;
+                        drawY -= anchorBounds.y * scale;
+                    }
+                    game.getPlayer().draw(batch, pamPath, clipName, stateTime, drawX, drawY, scale, scale, true);
+                } catch (RuntimeException ignored) {
+                }
+                batch.setColor(Color.WHITE);
+            }
         }
 
         if (plant.getFreezeLevel() > 0) {

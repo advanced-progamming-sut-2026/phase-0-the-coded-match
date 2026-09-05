@@ -4,6 +4,7 @@ import PvZ2.APproject.Main;
 import PvZ2.APproject.audio.MusicManager;
 import PvZ2.APproject.client.Response;
 import PvZ2.APproject.controllers.GameManagerController;
+import PvZ2.APproject.controllers.BonusGameController;
 import PvZ2.APproject.controllers.MiniGameController;
 import PvZ2.APproject.controllers.PlantSelectionController;
 import PvZ2.APproject.controllers.ReactionController;
@@ -23,6 +24,7 @@ import PvZ2.APproject.models.plants.Plant;
 import PvZ2.APproject.models.plants.PlantData;
 import PvZ2.APproject.models.plants.PlantRepository;
 import PvZ2.APproject.models.zombies.Zombie;
+import PvZ2.APproject.models.zombies.Zomboss;
 import PvZ2.APproject.views.GameMapView;
 import PvZ2.APproject.views.PlantView;
 import PvZ2.APproject.views.ProjectileView;
@@ -30,6 +32,7 @@ import PvZ2.APproject.views.actors.EnvironmentView;
 import PvZ2.APproject.views.actors.LawnmowerActor;
 import PvZ2.APproject.views.actors.MiniGamePamActor;
 import PvZ2.APproject.views.ZombieView;
+import PvZ2.APproject.views.ZombossView;
 import PvZ2.APproject.views.actors.PlantBox;
 import PvZ2.APproject.views.actors.SunActor;
 import com.badlogic.gdx.Gdx;
@@ -62,6 +65,7 @@ public class PlayScreen extends BaseScreen {
     private final Main game;
     private GameState state = GameState.RUNNING;
     private Stage pauseStage;
+    private Stage notificationStage;
     private Level currentLevel = GameManagerController.getInstance().getCurrentLevel();
     private GameMapView gameMapView;
     private PlantSelectionController plantSelectionController;
@@ -74,6 +78,7 @@ public class PlayScreen extends BaseScreen {
 
     private Label messageNotif;
     private Label missionNotif;
+    private Label bonusPointNotif;
     private Table multiplayerChatPanel;
     private Label multiplayerIncomingNotif;
     private static final String[] QUICK_MESSAGES = {
@@ -105,6 +110,9 @@ public class PlayScreen extends BaseScreen {
     private Label sunLabel;
     private Label plantFoodLabel;
     private ProgressBar waveProgressBar;
+    private Table zombossPanel;
+    private Label zombossLabel;
+    private final List<ProgressBar> zombossHealthSegments = new ArrayList<>();
 
     private Map<Sun, SunActor> renderedSuns = new HashMap<>();
     private Map<Lawnmower, LawnmowerActor> renderedLawnmowers = new HashMap<>();
@@ -139,6 +147,7 @@ public class PlayScreen extends BaseScreen {
         super.show();
         MusicManager.playForLevel(currentLevel);
         pauseStage = new Stage(viewport);
+        notificationStage = new Stage(viewport);
 
         if (currentLevel.getSpecialLevelStrategy() != null) {
             currentLevel.getSpecialLevelStrategy().levelStart(currentLevel);
@@ -168,17 +177,21 @@ public class PlayScreen extends BaseScreen {
         messageNotif = new Label("", skin, "promo_ribbon");
         messageNotif.setVisible(false);
         messageNotif.setPosition(265, 50);
-        stage.addActor(messageNotif);
+        notificationStage.addActor(messageNotif);
 
         missionNotif = new Label("", skin, "bundle_reward_multiplier");
         missionNotif.setVisible(false);
         missionNotif.setPosition(265, VIRTUAL_HEIGHT - missionNotif.getHeight() - 50);
-        stage.addActor(missionNotif);
+        notificationStage.addActor(missionNotif);
+
+        bonusPointNotif = new Label("", skin, "bundle_reward_multiplier");
+        bonusPointNotif.setVisible(false);
+        notificationStage.addActor(bonusPointNotif);
 
         multiplayerIncomingNotif = new Label("", skin, "promo_ribbon");
         multiplayerIncomingNotif.setVisible(false);
         multiplayerIncomingNotif.setPosition(VIRTUAL_WIDTH / 2f - 150f, VIRTUAL_HEIGHT - 150f);
-        stage.addActor(multiplayerIncomingNotif);
+        notificationStage.addActor(multiplayerIncomingNotif);
 
         multiplayerIncomingEmoji = new Image();
         multiplayerIncomingEmoji.setVisible(false);
@@ -260,6 +273,7 @@ public class PlayScreen extends BaseScreen {
         addCurrencyBar();
 
         addSunAndPlantFoodTables();
+        createZombossUi();
 
         if (!(currentLevel instanceof MiniGame)) {
             Group waveProgressGroup = new Group();
@@ -452,6 +466,7 @@ public class PlayScreen extends BaseScreen {
                 pauseStage.act(delta);
                 pauseStage.draw();
             }
+            renderNotifications(delta);
             return;
         }
 
@@ -486,6 +501,7 @@ public class PlayScreen extends BaseScreen {
 
             updatePlantActors();
             updateZombieActors();
+            updateZombossUi();
             updateProjectileActors();
             updateSunActors();
             updateLawnmowerActors();
@@ -516,6 +532,33 @@ public class PlayScreen extends BaseScreen {
             pauseStage.act(delta);
             pauseStage.draw();
         }
+        updateBonusPointNotification();
+        renderNotifications(delta);
+    }
+
+    private void updateBonusPointNotification() {
+        if (bonusPointNotif == null || bonusPointNotif.isVisible()) return;
+        String notification = BonusGameController.consumePointNotification();
+        if (notification == null || notification.isEmpty()) return;
+        bonusPointNotif.clearActions();
+        bonusPointNotif.setText(notification);
+        bonusPointNotif.pack();
+        bonusPointNotif.setPosition((VIRTUAL_WIDTH - bonusPointNotif.getWidth()) / 2f, VIRTUAL_HEIGHT - 165f);
+        bonusPointNotif.getColor().a = 0f;
+        bonusPointNotif.setVisible(true);
+        bonusPointNotif.toFront();
+        bonusPointNotif.addAction(Actions.sequence(
+            Actions.fadeIn(0.12f),
+            Actions.delay(1.65f),
+            Actions.fadeOut(0.35f),
+            Actions.hide()
+        ));
+    }
+
+    private void renderNotifications(float delta) {
+        if (notificationStage == null) return;
+        notificationStage.act(delta);
+        notificationStage.draw();
     }
 
     public void createPauseButton() {
@@ -545,7 +588,7 @@ public class PlayScreen extends BaseScreen {
             if(plantData == null){
                 continue;
             }
-            PlantBox plantBox = new PlantBox(plantData, plantSelectionController, textures, skin, stage);
+            PlantBox plantBox = new PlantBox(plantData, plantSelectionController, textures, skin, notificationStage);
             plantBox.setPosition(x, y);
             plantBox.setSize(width, height);
             stage.addActor(plantBox);
@@ -566,8 +609,13 @@ public class PlayScreen extends BaseScreen {
         while (iterator.hasNext()) {
             Map.Entry<Plant, PlantView> entry = iterator.next();
             if (!currentLevel.getActivePlants().contains(entry.getKey())) {
-                entry.getValue().remove();
-                iterator.remove();
+                if (entry.getKey().isDead()) {
+                    entry.getValue().beginRemoval();
+                    if (entry.getValue().isRemovalComplete()) iterator.remove();
+                } else {
+                    entry.getValue().remove();
+                    iterator.remove();
+                }
             }
         }
     }
@@ -594,7 +642,9 @@ public class PlayScreen extends BaseScreen {
     public void updateZombieActors(){
         for(Zombie zombie : currentLevel.getActiveZombies()){
             if(!renderedZombies.containsKey(zombie)){
-                ZombieView zombieView = new ZombieView(zombie, game);
+                ZombieView zombieView = zombie instanceof Zomboss
+                    ? new ZombossView((Zomboss) zombie, game)
+                    : new ZombieView(zombie, game);
 
                 renderedZombies.put(zombie, zombieView);
 
@@ -617,6 +667,47 @@ public class PlayScreen extends BaseScreen {
         }
     }
 
+
+    private void createZombossUi() {
+        zombossPanel = new Table(skin);
+        zombossLabel = new Label("ZOMBOSS", skin, "default");
+        zombossPanel.add(zombossLabel).colspan(3).padBottom(2f).row();
+        for (int i = 0; i < 3; i++) {
+            ProgressBar segment = new ProgressBar(0f, 1f, 0.01f, false, skin, "ingame_progress");
+            segment.setValue(1f);
+            segment.setAnimateDuration(0.12f);
+            zombossHealthSegments.add(segment);
+            zombossPanel.add(segment).width(88f).height(18f).pad(2f);
+        }
+        zombossPanel.pack();
+        zombossPanel.setPosition(BOARD_X + 250f, VIRTUAL_HEIGHT - 72f);
+        zombossPanel.setVisible(false);
+        stage.addActor(zombossPanel);
+    }
+
+    private void updateZombossUi() {
+        if (zombossPanel == null) return;
+        Zomboss boss = null;
+        for (Zombie zombie : currentLevel.getActiveZombies()) {
+            if (zombie instanceof Zomboss) {
+                boss = (Zomboss) zombie;
+                break;
+            }
+        }
+        if (boss == null) {
+            zombossPanel.setVisible(false);
+            return;
+        }
+        float hp = Math.max(0f, boss.getCurrentHp());
+        float max = Math.max(1f, boss.getMaxHp());
+        float scaled = hp / max * 3f;
+        for (int i = 0; i < zombossHealthSegments.size(); i++) {
+            zombossHealthSegments.get(i).setValue(Math.max(0f, Math.min(1f, scaled - i)));
+        }
+        zombossLabel.setText(boss.isStunned() ? "ZOMBOSS  STUNNED" : "ZOMBOSS");
+        zombossPanel.setVisible(true);
+        zombossPanel.toFront();
+    }
 
     private void createMiniGameUi() {
         if (!(currentLevel instanceof MiniGame)) return;
@@ -729,6 +820,7 @@ public class PlayScreen extends BaseScreen {
         multiplayerIncomingNotif.pack();
         multiplayerIncomingNotif.setVisible(true);
         multiplayerIncomingNotif.getColor().a = 1f;
+        multiplayerIncomingNotif.toFront();
         multiplayerIncomingNotif.addAction(Actions.sequence(Actions.delay(3f), Actions.fadeOut(0.5f), Actions.hide()));
     }
 
@@ -1301,6 +1393,7 @@ public class PlayScreen extends BaseScreen {
         messageNotif.setVisible(true);
         messageNotif.pack();
         messageNotif.getColor().a = 1f;
+        messageNotif.toFront();
 
         messageNotif.addAction(
             Actions.sequence(
@@ -1318,6 +1411,7 @@ public class PlayScreen extends BaseScreen {
         missionNotif.setVisible(true);
         missionNotif.pack();
         missionNotif.getColor().a = 1f;
+        missionNotif.toFront();
 
         missionNotif.addAction(
             Actions.sequence(
@@ -1649,6 +1743,10 @@ public class PlayScreen extends BaseScreen {
             pauseStage.dispose();
             pauseStage = null;
         }
+        if (notificationStage != null) {
+            notificationStage.dispose();
+            notificationStage = null;
+        }
         disposeResultShade();
     }
 
@@ -1659,6 +1757,10 @@ public class PlayScreen extends BaseScreen {
         if (pauseStage != null) {
             pauseStage.dispose();
             pauseStage = null;
+        }
+        if (notificationStage != null) {
+            notificationStage.dispose();
+            notificationStage = null;
         }
         disposeResultShade();
     }

@@ -112,10 +112,7 @@ public class SignupScreen extends BaseScreen {
 //            }
 //        });
 
-        messageNotif = new Label("", skin, "promo_ribbon");
-        messageNotif.setVisible(false);
-        messageNotif.setPosition(265, 50);
-        stage.addActor(messageNotif);
+        messageNotif = addMessageLabel();
 
         registered = false;
         questionPicked = false;
@@ -208,7 +205,9 @@ public class SignupScreen extends BaseScreen {
         messageNotif.setText(message);
         messageNotif.setVisible(true);
         messageNotif.pack();
+        messageNotif.setPosition((VIRTUAL_WIDTH - messageNotif.getWidth()) * 0.5f, 35f);
         messageNotif.getColor().a = 1f;
+        messageNotif.toFront();
 
         messageNotif.addAction(
             Actions.sequence(

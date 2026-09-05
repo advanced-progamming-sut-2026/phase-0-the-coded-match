@@ -10,6 +10,12 @@ import PvZ2.APproject.models.Level;
 import PvZ2.APproject.models.LevelData;
 import PvZ2.APproject.models.BonusGameRelated.BonusGame;
 import PvZ2.APproject.models.BonusGameRelated.KillContext;
+import PvZ2.APproject.models.BonusGameRelated.ScoreStrategy;
+
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.List;
 import PvZ2.APproject.models.seasons.Season;
 import PvZ2.APproject.models.zombies.Zombie;
 import PvZ2.APproject.models.zombies.ZombieData;
@@ -18,6 +24,7 @@ import PvZ2.APproject.models.zombies.ZombieRepository;
 public class BonusGameController {
     private static BonusGame game;
     private static double lastKillTick = -1;
+    private static final Deque<String> pendingPointNotifications = new ArrayDeque<>();
 
     public static String startGame() {
         if (App.getCurrentUser() == null) return "no logged in user";
@@ -45,6 +52,7 @@ public class BonusGameController {
         GameManagerController.getInstance().setCurrentLevel(level);
         game = new BonusGame();
         lastKillTick = -1;
+        pendingPointNotifications.clear();
         App.setCurrentMenu(Menu.CHOOSEPLANTS_MENU);
         return "bonus game started with daily seed " + game.getDailyGameZombies();
     }
@@ -77,7 +85,15 @@ public class BonusGameController {
 
     public static String handleZombiesKilled(KillContext context) {
         if (game == null) return "no bonus game is active";
+        List<String> triggered = new ArrayList<>();
+        for (ScoreStrategy strategy : game.getActiveCases()) {
+            int points = Math.max(0, strategy.calculatePoints(context));
+            if (points > 0) triggered.add(strategy.getName() + " +" + points);
+        }
         int gained = game.score(context);
+        if (gained > 0) {
+            pendingPointNotifications.addLast("MEOW +" + gained + "   " + String.join("   ", triggered) + "   TOTAL " + game.getTotalMioPoints());
+        }
         return "gained " + gained + " mio points; total " + game.getTotalMioPoints();
     }
 
@@ -105,6 +121,7 @@ public class BonusGameController {
         }
         game = null;
         lastKillTick = -1;
+        pendingPointNotifications.clear();
         GameManagerController.getInstance().setCurrentLevel(null);
         App.setCurrentMenu(Menu.MAIN_MENU);
         return "bonus game ended with " + score + " mio points";
@@ -113,7 +130,12 @@ public class BonusGameController {
     public static void addStickerPoints(String sticker) {
         if (game != null && sticker != null && sticker.toLowerCase().startsWith("sticker")) {
             game.addExternalPoints(100);
+            pendingPointNotifications.addLast("MEOW +100   sticker bonus +100   TOTAL " + game.getTotalMioPoints());
         }
+    }
+
+    public static String consumePointNotification() {
+        return pendingPointNotifications.pollFirst();
     }
 
     public static boolean isActive() { return game != null; }

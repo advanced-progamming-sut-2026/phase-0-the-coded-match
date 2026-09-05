@@ -30,6 +30,7 @@ public class Tile implements Update {
     private GraveReward graveReward = GraveReward.NONE;
     private boolean holdsNecromancyPotential = false;
     private boolean slippery;
+    private float burningTimer;
 
     public Tile(int row, int column, TileType type) {
         this.row = row;
@@ -48,6 +49,7 @@ public class Tile implements Update {
         this.graveReward = source.graveReward;
         this.holdsNecromancyPotential = source.holdsNecromancyPotential;
         this.slippery = source.slippery;
+        this.burningTimer = source.burningTimer;
         this.zombies = new ArrayList<>();
     }
 
@@ -109,6 +111,7 @@ public class Tile implements Update {
         return false;
     }
     public boolean isPlantable(Plant plant) {
+        if (isBurning()) return false;
         if (!this.getType().isCanPlant()) {
             return false;
         }
@@ -144,6 +147,7 @@ public class Tile implements Update {
     public void update(float delta) {
         startTakingDamage();
         stopTakingDamage();
+        if (burningTimer > 0f) burningTimer = Math.max(0f, burningTimer - delta);
     }
 
     public int getRow() {
@@ -229,5 +233,17 @@ public class Tile implements Update {
 
     public void setSlippery(boolean slippery) {
         this.slippery = slippery;
+    }
+
+    public void setBurning(float duration) {
+        burningTimer = Math.max(burningTimer, Math.max(0f, duration));
+    }
+
+    public boolean isBurning() {
+        return burningTimer > 0f;
+    }
+
+    public float getBurningTimer() {
+        return burningTimer;
     }
 }

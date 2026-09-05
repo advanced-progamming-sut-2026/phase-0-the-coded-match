@@ -18,13 +18,16 @@ import java.util.Map;
 public class PamActor extends Actor {
     public enum Kind {
         PLANT,
-        ZOMBIE
+        ZOMBIE,
+        EFFECT
     }
 
     private static final Map<String, String> PLANT_PATHS = new HashMap<>();
     private static final Map<String, String> ZOMBIE_PATHS = new HashMap<>();
+    private static final Map<String, String> EFFECT_PATHS = new HashMap<>();
     private static boolean plantsIndexed = false;
     private static boolean zombiesIndexed = false;
+    private static boolean effectsIndexed = false;
 
     private final PamPlayer player;
     private final String pamPath;
@@ -136,9 +139,13 @@ public class PamActor extends Actor {
         return findPam(Kind.PLANT, keys);
     }
 
+    public static String resolveEffectPam(String... keys) {
+        return findPam(Kind.EFFECT, keys);
+    }
+
     private static String findPam(Kind kind, String... keys) {
         //System.out.println("NOT FOUND " + kind + " : " + java.util.Arrays.toString(keys));
-        Map<String, String> index = kind == Kind.PLANT ? PLANT_PATHS : ZOMBIE_PATHS;
+        Map<String, String> index = kind == Kind.PLANT ? PLANT_PATHS : kind == Kind.ZOMBIE ? ZOMBIE_PATHS : EFFECT_PATHS;
         ensureIndexed(kind);
 
         for (String key : keys) {
@@ -154,6 +161,8 @@ public class PamActor extends Actor {
             }
         }
 
+        String best = null;
+        int bestExtra = Integer.MAX_VALUE;
         for (String key : keys) {
             String normalized = normalize(key);
             if (normalized.equals("PIERCEMINT")) normalized = "SPEARMINT";
@@ -163,11 +172,16 @@ public class PamActor extends Actor {
             }
             for (Map.Entry<String, String> entry : index.entrySet()) {
                 if (entry.getKey().contains(normalized) || normalized.contains(entry.getKey())) {
-                    return entry.getValue();
+                    if (kind != Kind.EFFECT) return entry.getValue();
+                    int extra = Math.abs(entry.getKey().length() - normalized.length());
+                    if (extra < bestExtra) {
+                        bestExtra = extra;
+                        best = entry.getValue();
+                    }
                 }
             }
         }
-        return null;
+        return best;
     }
 
     private static void ensureIndexed(Kind kind) {
@@ -177,9 +191,11 @@ public class PamActor extends Actor {
         if (kind == Kind.ZOMBIE && zombiesIndexed) {
             return;
         }
+        if (kind == Kind.EFFECT && effectsIndexed) {
+            return;
+        }
 
-        Map<String, String> index = kind == Kind.PLANT ? PLANT_PATHS : ZOMBIE_PATHS;
-        String type = kind == Kind.PLANT ? "PLANT" : "ZOMBIE";
+        Map<String, String> index = kind == Kind.PLANT ? PLANT_PATHS : kind == Kind.ZOMBIE ? ZOMBIE_PATHS : EFFECT_PATHS;
 
         String[] roots;
 
@@ -189,10 +205,15 @@ public class PamActor extends Actor {
                 "IMAGES/768/FULL/PLANT",
                 "IMAGES/768/INITIAL/EMPOWERMINTS/PLANT"
             };
-        } else {
+        } else if (kind == Kind.ZOMBIE) {
             roots = new String[] {
                 "IMAGES/768/INITIAL/ZOMBIE",
                 "IMAGES/768/FULL/ZOMBIE"
+            };
+        } else {
+            roots = new String[] {
+                "IMAGES/768/INITIAL/EFFECTS",
+                "IMAGES/768/FULL/EFFECTS"
             };
         }
 
@@ -223,8 +244,10 @@ public class PamActor extends Actor {
 
         if (kind == Kind.PLANT) {
             plantsIndexed = true;
-        } else {
+        } else if (kind == Kind.ZOMBIE) {
             zombiesIndexed = true;
+        } else {
+            effectsIndexed = true;
         }
     }
 

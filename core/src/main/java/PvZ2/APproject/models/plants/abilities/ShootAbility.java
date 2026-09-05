@@ -6,6 +6,7 @@ import PvZ2.APproject.models.Projectile;
 import PvZ2.APproject.models.plants.Plant;
 import PvZ2.APproject.enums.PlantState;
 import PvZ2.APproject.models.zombies.Zombie;
+import PvZ2.APproject.models.zombies.Zomboss;
 
 public class ShootAbility implements PlantAbilityHandler {
     private static final double DEFAULT_PROJECTILE_SPEED = 0.5;
@@ -43,9 +44,14 @@ public class ShootAbility implements PlantAbilityHandler {
 
     protected boolean hasZombieInLane(Level level, int lane, int plantX) {
         for (Zombie zombie : level.getActiveZombies()) {
-            if (zombie.getY() == lane && zombie.getX() >= plantX && !zombie.isDead()) {
-                return true;
-            }
+            if (zombie.isDead()) continue;
+            boolean inLane = zombie instanceof Zomboss
+                ? ((Zomboss) zombie).occupiesLane(lane)
+                : zombie.getY() == lane;
+            double distance = zombie instanceof Zomboss
+                ? ((Zomboss) zombie).horizontalDistanceTo(plantX)
+                : zombie.getX() - plantX;
+            if (inLane && distance >= 0) return true;
         }
         for (int col = plantX; col <= level.getGameMap().getColumns(); col++) {
             if (level.getGameMap().getTile(col, lane).isGrave()) {

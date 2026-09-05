@@ -1,13 +1,17 @@
 package PvZ2.APproject.views.actors;
 
+import PvZ2.APproject.Main;
 import PvZ2.APproject.controllers.GameManagerController;
 import PvZ2.APproject.controllers.PlantSelectionController;
 import PvZ2.APproject.models.App;
 import PvZ2.APproject.models.Level;
 import PvZ2.APproject.models.plants.PlantData;
+import PvZ2.APproject.views.screens.PamActor;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -18,7 +22,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import pvz.libpvz.pam.PamPlayer;
 import pvz.libpvz.textures.TextureBank;
+
+import java.util.List;
+import java.util.Locale;
 import pvz.skin.PvzSkin;
 
 public class PlantBox extends Group {
@@ -28,6 +36,10 @@ public class PlantBox extends Group {
     private final Label cooldownLabel;
     private TextureRegion background;
     private TextureRegion plantImage;
+    private PamPlayer fallbackPlayer;
+    private String fallbackPam;
+    private String fallbackClip;
+    private float fallbackTime;
     private boolean available = true;
     private boolean boosted = false;
     private Skin skin;
@@ -42,6 +54,7 @@ public class PlantBox extends Group {
         setSize(100, 120);
         setTouchable(Touchable.enabled);
         createVisuals(textures);
+        createFallback();
 
         costLabel = new Label(Integer.toString(plantData.getSunCost()), skin, "default");
         costLabel.setFontScale(0.92f);
@@ -90,9 +103,41 @@ public class PlantBox extends Group {
         }
     }
 
+
+    private void createFallback() {
+        if (plantImage != null) return;
+        fallbackPam = PamActor.resolvePlantPam(plantData.getId(), plantData.getName(), plantData.getDisplayName());
+        if (fallbackPam == null) return;
+        try {
+            Main game = (Main) Gdx.app.getApplicationListener();
+            fallbackPlayer = game.getPlayer();
+            fallbackPlayer.loadSync(fallbackPam);
+            List<String> clips = fallbackPlayer.clips(fallbackPam);
+            if (clips == null || clips.isEmpty()) return;
+            for (String candidate : clips) {
+                if (candidate.equalsIgnoreCase("idle")) {
+                    fallbackClip = candidate;
+                    return;
+                }
+            }
+            for (String candidate : clips) {
+                if (candidate.toLowerCase(Locale.ROOT).contains("idle")) {
+                    fallbackClip = candidate;
+                    return;
+                }
+            }
+            fallbackClip = clips.get(0);
+        } catch (RuntimeException ignored) {
+            fallbackPlayer = null;
+            fallbackPam = null;
+            fallbackClip = null;
+        }
+    }
+
     @Override
     public void act(float delta) {
         super.act(delta);
+        fallbackTime += delta;
         Level level = GameManagerController.getInstance().getCurrentLevel();
         int cooldown = GameManagerController.getInstance().getPlantCooldowns()
             .getOrDefault(plantData.getName().toLowerCase(), 0);
@@ -157,6 +202,21 @@ public class PlantBox extends Group {
         float plantY = getY() + getHeight() * 0.27f;
         if (plantImage != null) {
             batch.draw(plantImage, plantX, plantY, plantSize, plantSize);
+        } else if (fallbackPlayer != null && fallbackPam != null && fallbackClip != null) {
+            try {
+                Rectangle bounds = fallbackPlayer.bounds(fallbackPam, fallbackClip);
+                if (bounds != null && bounds.width > 0f && bounds.height > 0f) {
+                    float areaWidth = getWidth() * 0.62f;
+                    float areaHeight = getHeight() * 0.60f;
+                    float scale = Math.min(areaWidth / bounds.width, areaHeight / bounds.height) * 0.88f;
+                    float centerX = getX() + getWidth() * 0.5f;
+                    float centerY = getY() + getHeight() * 0.58f;
+                    float drawX = centerX - (bounds.x + bounds.width * 0.5f) * scale;
+                    float drawY = centerY - (bounds.y + bounds.height * 0.5f) * scale;
+                    fallbackPlayer.draw(batch, fallbackPam, fallbackClip, fallbackTime, drawX, drawY, scale, scale, true);
+                }
+            } catch (RuntimeException ignored) {
+            }
         }
         batch.setColor(Color.WHITE);
         super.draw(batch, parentAlpha);

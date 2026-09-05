@@ -33,6 +33,7 @@ public abstract class BaseScreen implements Screen {
     OrthographicCamera camera = new OrthographicCamera();
     protected Viewport viewport = new StretchViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, camera);
     protected Stage stage;
+    protected Stage overlayStage;
     protected TextureBank textures;
     protected PamPlayer player;
     protected TextureRegion background;
@@ -50,6 +51,7 @@ public abstract class BaseScreen implements Screen {
         skin = PvzSkin.get();
         addDialogStyleToSkin();
         stage = new Stage(viewport);
+        overlayStage = new Stage(viewport);
         Gdx.input.setInputProcessor(stage);
         textures = ((Main) Gdx.app.getApplicationListener()).getTextures();
         player = ((Main) Gdx.app.getApplicationListener()).getPlayer();
@@ -222,7 +224,7 @@ public abstract class BaseScreen implements Screen {
         Label label = new Label("", skin, "promo_ribbon");
         label.setVisible(false);
         label.setPosition(260, 28);
-        stage.addActor(label);
+        overlayStage.addActor(label);
         return label;
     }
 
@@ -236,6 +238,7 @@ public abstract class BaseScreen implements Screen {
         label.setPosition((VIRTUAL_WIDTH - label.getWidth()) / 2f, 28);
         label.setVisible(true);
         label.getColor().a = 1f;
+        label.toFront();
         label.addAction(Actions.sequence(
             Actions.delay(2f),
             Actions.fadeOut(0.4f),
@@ -267,6 +270,10 @@ public abstract class BaseScreen implements Screen {
         stage.getBatch().setProjectionMatrix(stage.getCamera().combined);
         stage.act(delta);
         stage.draw();
+        if (overlayStage != null) {
+            overlayStage.act(delta);
+            overlayStage.draw();
+        }
     }
 
     private void addDialogStyleToSkin(){
@@ -295,6 +302,10 @@ public abstract class BaseScreen implements Screen {
             stage.dispose();
             stage = null;
         }
+        if (overlayStage != null) {
+            overlayStage.dispose();
+            overlayStage = null;
+        }
         if (externalBackgroundTexture != null) {
             externalBackgroundTexture.dispose();
             externalBackgroundTexture = null;
@@ -306,6 +317,10 @@ public abstract class BaseScreen implements Screen {
         if (stage != null) {
             stage.dispose();
             stage = null;
+        }
+        if (overlayStage != null) {
+            overlayStage.dispose();
+            overlayStage = null;
         }
         if (externalBackgroundTexture != null) {
             externalBackgroundTexture.dispose();
