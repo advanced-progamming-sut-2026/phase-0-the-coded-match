@@ -104,9 +104,9 @@ public class LoginMenuController{
 //        return "Please enter your new password";
 
         /// Phase 3 implementaion ///
-        Pattern pattern = Pattern.compile(Commands.ANSWER.getPattern());
-        Matcher matcher = pattern.matcher(input == null ? "" : input);
-        if (!matcher.matches()) return "invalid command";
+//        Pattern pattern = Pattern.compile(Commands.ANSWER.getPattern());
+//        Matcher matcher = pattern.matcher(input == null ? "" : input);
+//        if (!matcher.matches()) return "invalid command";
         String username = App.getResetUsername();
         if (username == null || username.isBlank()) {
             App.setCurrentMenu(Menu.SIGNUP_MENU);
@@ -115,7 +115,7 @@ public class LoginMenuController{
         try {
             Request request = new Request(MessageType.VERIFY_SECURITY_ANSWER);
             request.put("username", username);
-            request.put("answer", matcher.group("answer"));
+            request.put("answer", input);
             Response response = App.getNetworkClient().sendAndWait(request);
             if (!response.isSuccess()) {
                 App.setCurrentMenu(Menu.SIGNUP_MENU);
@@ -129,7 +129,7 @@ public class LoginMenuController{
         }
     }
 
-    public static String resetPassword(String input) {
+    public static String resetPassword(String newPassword) {
 //        if (input == null) return "invalid password";
 //        String newPassword = input.trim();
 //        Matcher matcher = Pattern.compile(Commands.NEW_PASSWORD.getPattern()).matcher(input);
@@ -147,10 +147,10 @@ public class LoginMenuController{
 //        return "Password reset successfully";
 
         /// Phase 3 implementation ///
-        Pattern pattern = Pattern.compile(Commands.NEW_PASSWORD.getPattern());
-        Matcher matcher = pattern.matcher(input == null ? "" : input);
-        if (!matcher.matches()) return "invalid command";
-        String newPassword = matcher.group("password");
+//        Pattern pattern = Pattern.compile(Commands.NEW_PASSWORD.getPattern());
+//        Matcher matcher = pattern.matcher(input == null ? "" : input);
+//        if (!matcher.matches()) return "invalid command";
+//        String newPassword = matcher.group("password");
         if (!SignupMenuController.validatePassword(newPassword)) return "invalid password";
         if (App.getResetToken() == null) return "No password reset request";
 

@@ -8,6 +8,7 @@ import PvZ2.APproject.controllers.BonusGameController;
 import PvZ2.APproject.controllers.MiniGameController;
 import PvZ2.APproject.controllers.PlantSelectionController;
 import PvZ2.APproject.controllers.ReactionController;
+import PvZ2.APproject.controllers.*;
 import PvZ2.APproject.enums.BowlingNutType;
 import PvZ2.APproject.enums.Menu;
 import PvZ2.APproject.enums.ScreenRelated.GameState;
@@ -25,14 +26,8 @@ import PvZ2.APproject.models.plants.PlantData;
 import PvZ2.APproject.models.plants.PlantRepository;
 import PvZ2.APproject.models.zombies.Zombie;
 import PvZ2.APproject.models.zombies.Zomboss;
-import PvZ2.APproject.views.GameMapView;
-import PvZ2.APproject.views.PlantView;
-import PvZ2.APproject.views.ProjectileView;
-import PvZ2.APproject.views.actors.EnvironmentView;
-import PvZ2.APproject.views.actors.LawnmowerActor;
-import PvZ2.APproject.views.actors.MiniGamePamActor;
-import PvZ2.APproject.views.ZombieView;
-import PvZ2.APproject.views.ZombossView;
+import PvZ2.APproject.views.*;
+import PvZ2.APproject.views.actors.*;
 import PvZ2.APproject.views.actors.PlantBox;
 import PvZ2.APproject.views.actors.SunActor;
 import com.badlogic.gdx.Gdx;
@@ -94,6 +89,7 @@ public class PlayScreen extends BaseScreen {
     };
     private final Map<String, TextureRegion> emojiTextures = new HashMap<>();
     private Image multiplayerIncomingEmoji;
+    private AnimatedStickerActor multiplayerIncomingSticker;
     private final Consumer<Response> reactionListener = this::handleIncomingReaction;
     private Label sunAmountLabel;
     private Label waveLabel;
@@ -136,6 +132,9 @@ public class PlayScreen extends BaseScreen {
 
     private float networkPollTimer = 0f;
     private static final float NETWORK_POLL_INTERVAL = 0.1f;
+    private int couchZombieCursorColumn = 6;
+    private int couchZombieCursorRow = 1;
+    private int couchZombieSelection = 0;
     private boolean finalWaveMusic;
 
     public PlayScreen(Main game) {
@@ -166,7 +165,7 @@ public class PlayScreen extends BaseScreen {
         createMiniGameUi();
         System.out.println("LOADING EMOJIS...");
         emojiTextures.put("mashti", new TextureRegion(new Texture(Gdx.files.internal("emoji/mashti.jpeg"))));
-        emojiTextures.put("bruh", new TextureRegion(new Texture(Gdx.files.internal("emoji/bruh.png"))));
+        emojiTextures.put("bruh", new TextureRegion(new Texture(Gdx.files.internal("emoji/bruh.jpeg"))));
         emojiTextures.put("yummy", new TextureRegion(new Texture(Gdx.files.internal("emoji/yummy.jpeg"))));
         System.out.println("Loaded emojis: " + emojiTextures.keySet());
         createMultiplayerCommunicationUi();
@@ -200,6 +199,7 @@ public class PlayScreen extends BaseScreen {
             VIRTUAL_WIDTH / 2f - 40f,
             VIRTUAL_HEIGHT - 230f
         );
+        multiplayerIncomingSticker = null;
         stage.addActor(multiplayerIncomingEmoji);
 
         Table mainPauseTable = new Table(skin);
@@ -471,15 +471,20 @@ public class PlayScreen extends BaseScreen {
             renderNotifications(delta);
             return;
         }
+
         if (state == GameState.RUNNING) {
             int speedMultiplier = GameSettings.getInstance().getGameSpeed();
             float adjustedSpeed = delta * speedMultiplier;
             super.render(adjustedSpeed);
             stateTime += adjustedSpeed;
+
+            handleCouchZombieKeyboard();
+
             if (harvestMode) {
                 updateShovelCursor();
                 gameMapView.updateTile();
             }
+
             simulationAccumulator += adjustedSpeed;
             String message = "";
             int steps = 0;
@@ -507,13 +512,15 @@ public class PlayScreen extends BaseScreen {
             updateMiniGameUi();
             if (sunLabel != null) sunLabel.setText(Integer.toString(getDisplayedSunAmount()));
             if (plantFoodLabel != null) plantFoodLabel.setText(currentLevel.getPlantFoodCount() + "/4");
+
             if (GameManagerController.getInstance().isGameFinished()) {
                 finishDelay += adjustedSpeed;
                 if (!resultShown && finishDelay >= 0.65f && !hasRunningLawnmower()) {showResultOverlay();}
             } else {finishDelay = 0f;}
         }
         if (state == GameState.PAUSED && pauseStage != null) {
-            pauseStage.act(delta);pauseStage.draw();
+            pauseStage.act(delta);
+            pauseStage.draw();
         }
         updateBonusPointNotification();
         renderNotifications(delta);
@@ -760,6 +767,19 @@ public class PlayScreen extends BaseScreen {
             emojiTable.add(button).size(42f).pad(2f);
         }
         multiplayerChatPanel.add(emojiTable).padTop(5f).row();
+        Table stickerTable = new Table(skin);
+        for (int i = 1; i <= 3; i++) {
+            final String sticker = "sticker" + i;
+            TextButton button = new TextButton("Sticker " + i, skin);
+            button.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    ReactionController.sendSticker(sticker);
+                }
+            });
+            stickerTable.add(button).width(110f).height(35f).pad(2f);
+        }
+        multiplayerChatPanel.add(stickerTable).padTop(5f).row();
         multiplayerChatPanel.pack();
         multiplayerChatPanel.setPosition(15f, VIRTUAL_HEIGHT / 2f - multiplayerChatPanel.getHeight() / 2f);
         stage.addActor(multiplayerChatPanel);
@@ -785,17 +805,21 @@ public class PlayScreen extends BaseScreen {
         String text;
         if ("EMOJI".equalsIgnoreCase(kind)) {
             showIncomingEmoji(username, content);
+        } else if ("STICKER".equalsIgnoreCase(kind)) {
+            showIncomingSticker(username, content);
         } else {
             showIncomingText(username, content);
         }
-//
-//        multiplayerIncomingNotif.clearActions();
-//        multiplayerIncomingNotif.setText(username +": "+ co);
-//        multiplayerIncomingNotif.pack();
-//        multiplayerIncomingNotif.setVisible(true);
-//        multiplayerIncomingNotif.getColor().a = 1f;
-//        multiplayerIncomingNotif.addAction(Actions.sequence(Actions.delay(3f), Actions.fadeOut(0.5f), Actions.hide())
-//        );
+    }
+    private void showIncomingSticker(String username, String stickerId) {
+        if (multiplayerIncomingSticker != null) {
+            multiplayerIncomingSticker.remove();
+        }
+        String folder = "stickers/" + stickerId;
+        multiplayerIncomingSticker = new AnimatedStickerActor(folder);
+        multiplayerIncomingSticker.setPosition(VIRTUAL_WIDTH / 2f - 70f, VIRTUAL_HEIGHT / 2f - 70f);
+        stage.addActor(multiplayerIncomingSticker);
+        multiplayerIncomingSticker.addAction(Actions.sequence(Actions.delay(3f), Actions.removeActor()));
     }
 
     private void showIncomingText(String username, String text){
@@ -831,18 +855,22 @@ public class PlayScreen extends BaseScreen {
     private void createIZombieUi(IZombie gameMode) {
         miniGamePanel.clearChildren();
         miniZombieCooldownLabels.clear();
-
-//        Label title = new Label("I, ZOMBIE", skin, "default");
-//        title.setFontScale(0.9f);
+        boolean couchMode = MiniGameController.isCouchIZombie();
         Label title;
-        if (MiniGameController.isPlantsPlayer()) {
+        if (couchMode) {
+            title = new Label("I, ZOMBIE - COUCH MODE", skin, "default");
+        } else if (MiniGameController.isPlantsPlayer()) {
             title = new Label("I, ZOMBIE - PLANTS", skin, "default");
         } else {
             title = new Label("I, ZOMBIE - ZOMBIES", skin, "default");
         }
         title.setFontScale(0.9f);
         miniGamePanel.add(title).padLeft(8f).padRight(8f);
-        if (MiniGameController.isPlantsPlayer()) {
+        if (couchMode) {
+            createIZombiePlantSelection(gameMode);
+            createIZombieZombieSelection(gameMode);
+            miniGameStatusLabel = new Label("COUCH MODE: MOUSE = PLANTS | KEYBOARD = ZOMBIES", skin, "default");
+        }else if (MiniGameController.isPlantsPlayer()) {
             createIZombiePlantSelection(gameMode);
         }
         else {
@@ -898,6 +926,10 @@ public class PlayScreen extends BaseScreen {
             packet.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
+                    if (MiniGameController.isCouchIZombie()) {
+                        showMessage("Use the keyboard to control zombies.");
+                        return;
+                    }
                     selectedMiniZombie = zombieName;
                     selectedMiniPlant = null;
                     if (miniGameStatusLabel != null) {
@@ -1066,16 +1098,21 @@ public class PlayScreen extends BaseScreen {
 
     private void refreshBowlingPanel(boolean force) {
         if (!(currentLevel instanceof WallNutBowling gameMode) || miniGamePanel == null) return;
+
         List<BowlingNutType> belt = new ArrayList<>(gameMode.getConveyorBelt());
         String signature = belt.toString();
         if (!force && signature.equals(bowlingSignature)) return;
+
         boolean appended = !bowlingUiSnapshot.isEmpty()
             && belt.size() == bowlingUiSnapshot.size() + 1
             && belt.subList(0, bowlingUiSnapshot.size()).equals(bowlingUiSnapshot);
+
         bowlingSignature = signature;
         bowlingUiSnapshot.clear();
         bowlingUiSnapshot.addAll(belt);
+
         miniGamePanel.clearChildren();
+
         Label title = new Label("WALL-NUT BOWLING", skin, "default");
         title.setFontScale(0.85f);
         miniGamePanel.add(title).padLeft(8f).padRight(8f);
@@ -1285,6 +1322,26 @@ public class PlayScreen extends BaseScreen {
                 showMessage("Place nuts in the first two columns");return;}
             showMessage(gameMode.executePlaceNutFromBelt(tile.getRow()));return;}
         if (currentLevel instanceof IZombie gameMode) {
+            if (MiniGameController.isCouchIZombie()) {
+//                showMessage("Zombie player: use keyboard controls");
+                if (!plantSelectionController.hasSelectedPlant()) {
+                    showMessage("Select a plant first");
+                    return;
+                }
+                plantSelectionController.setHoveredTile(tile);
+                String error = PlantController.getPlantingError(plantSelectionController.getSelectedPlant().getName(), tile.getColumn(), tile.getRow());
+                if (error != null) {
+                    showMessage(error);
+                    return;
+                }
+                String plantError = PlantController.plantPlant(plantSelectionController.getSelectedPlant().getName(), tile.getColumn(), tile.getRow());
+                if (plantError != null) {
+                    showMessage(plantError);
+                } else {
+                    plantSelectionController.cancelSelection();
+                }
+                return;
+            }
             if (MiniGameController.isPlantsPlayer()) {
                 if (!plantSelectionController.hasSelectedPlant()) {
                     showMessage("Select a plant first");
@@ -1310,7 +1367,10 @@ public class PlayScreen extends BaseScreen {
                     selectedMiniZombie = null;
                 }
                 return;
-            }showMessage("Your multiplayer role could not be determined.");return;
+            }
+            showMessage("Your multiplayer role could not be determined.");
+            return;
+//            String error = gameMode.placeZombie(selectedMiniZombie, tile.getColumn(), tile.getRow());
         }
         if (currentLevel instanceof Beghouled gameMode) {
             if (selectedBeghouledTile == null) {
@@ -1544,6 +1604,67 @@ public class PlayScreen extends BaseScreen {
         if (lawnmowerActor != null) {
             lawnmowerActor.remove();
         }
+    }
+
+    private void handleCouchZombieKeyboard() {
+        if (!MiniGameController.isCouchIZombie()) {
+            return;
+        }
+        if (!(currentLevel instanceof IZombie gameMode)) {
+            return;
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_1)) {
+            couchZombieSelection = 0;
+            selectedMiniZombie = getCouchZombieName(gameMode, 0);
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_2)) {
+            couchZombieSelection = 1;
+            selectedMiniZombie = getCouchZombieName(gameMode, 1);
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_3)) {
+            couchZombieSelection = 2;
+            selectedMiniZombie = getCouchZombieName(gameMode, 2);
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_4)) {
+            couchZombieSelection = 3;
+            selectedMiniZombie = getCouchZombieName(gameMode, 3);
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.NUM_5)) {
+            couchZombieSelection = 4;
+            selectedMiniZombie = getCouchZombieName(gameMode, 4);
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
+            couchZombieCursorRow = Math.min(5, couchZombieCursorRow + 1);
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
+            couchZombieCursorRow = Math.max(1, couchZombieCursorRow - 1);
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
+            couchZombieCursorColumn = Math.max(6, couchZombieCursorColumn - 1);
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
+            couchZombieCursorColumn = Math.min(9, couchZombieCursorColumn + 1);
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+            if (selectedMiniZombie == null) {
+                return;
+            }
+            String error = gameMode.placeZombie(
+                selectedMiniZombie,
+                couchZombieCursorColumn,
+                couchZombieCursorRow
+            );
+            if (error != null) {
+                showMessage(error);
+            }
+        }
+    }
+
+    private String getCouchZombieName(IZombie gameMode, int index) {
+        if (index < 0 || index >= gameMode.getAvailableZombies().size()) {
+            return null;
+        }
+        return gameMode.getAvailableZombies().get(index);
     }
 
     public void pauseGame() {

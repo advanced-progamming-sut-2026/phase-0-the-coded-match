@@ -248,10 +248,10 @@ public class GameMapView extends Group {
                 if(tile.holdsNecromancyPotential()){
                     batch.draw(
                         textures.region("IMAGE_NPC_GHOSTPEPPER_GHOSTPEPPER_277X309"),
-                        x,
+                        x +25,
                         y,
-                        50,
-                        70
+                        40,
+                        60
                     );
                 } // TODO : when it holds the necromancy potential maybe it should show on the tile otherwise theres
                 // no need

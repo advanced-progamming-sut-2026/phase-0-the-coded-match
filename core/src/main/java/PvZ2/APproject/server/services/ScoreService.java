@@ -28,10 +28,13 @@ public class ScoreService {
             return Response.error(request.getRequestId(), "Score cannot be negative");
         }
         ServerUser user = users.find(handler.getUsername());
+        if (user == null) {return Response.error(request.getRequestId(), "User not found");}
+        boolean firstGame = !user.hasPlayedBonusGame();
         int old = user.getHighestPoint();
-        user.setHighestPoint(score);
+        if (firstGame || score > old) {user.setHighestPoint(score);}
+        user.setBonusGamePlayed(true);
         users.update(user);
-        return Response.ok(request.getRequestId(), MessageType.SUBMIT_SCORE, score > old ?
-            "New record" : "Score recorded");
+        boolean newRecord = firstGame || score > old;
+        return Response.ok(request.getRequestId(), MessageType.SUBMIT_SCORE, newRecord ? "New record" : "Score recorded");
     }
 }

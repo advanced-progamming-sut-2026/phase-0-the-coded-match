@@ -8,6 +8,6 @@ public record LeaderboardEntry(
     int minigamesWon,
     int dailyQuests,
     int quests,
-    int score,
+    Integer score,
     int gamesPlayed) {
 }

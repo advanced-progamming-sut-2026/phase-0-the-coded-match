@@ -50,7 +50,7 @@ public class LeaderboardService {
                 .append(user.getMinigamesWon()).append('|')
                 .append(user.getCompletedDailyQuests()).append('|')
                 .append(user.getCompletedQuests()).append('|')
-                .append(user.getHighestPoint()).append('|')
+                .append(user.hasPlayedBonusGame() ? user.getHighestPoint() : "").append('|')
                 .append(user.getGamesPlayed()).append('\n');
         }
         return new Response(request.getRequestId(), MessageType.GET_LEADERBOARD, true,

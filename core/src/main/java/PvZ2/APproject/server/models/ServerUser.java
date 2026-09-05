@@ -25,6 +25,7 @@ public class ServerUser implements Serializable {
     private int lastLevelNumber;
     private int completedQuests;
     private int completedDailyQuests;
+    private boolean bonusGamePlayed;
 
     private String gameStateJson = "";
 
@@ -124,6 +125,14 @@ public class ServerUser implements Serializable {
     }
     public void setSecurityQuestions(Map<String, String> questions) {
         securityQuestions = questions == null ? new HashMap<>() : new HashMap<>(questions);
+    }
+
+    public boolean hasPlayedBonusGame() {
+        return bonusGamePlayed;
+    }
+
+    public void setBonusGamePlayed(boolean value) {
+        bonusGamePlayed = value;
     }
 }
 
