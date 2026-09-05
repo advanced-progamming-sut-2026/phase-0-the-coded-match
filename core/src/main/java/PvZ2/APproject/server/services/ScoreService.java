@@ -31,6 +31,7 @@ public class ScoreService {
         int old = user.getHighestPoint();
         user.setHighestPoint(score);
         users.update(user);
-        return Response.ok(request.getRequestId(), MessageType.SUBMIT_SCORE, score > old ? "New record" : "Score recorded");
+        return Response.ok(request.getRequestId(), MessageType.SUBMIT_SCORE, score > old ?
+            "New record" : "Score recorded");
     }
 }

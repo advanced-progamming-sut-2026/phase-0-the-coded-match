@@ -39,7 +39,8 @@ public class ReactionService {
             return Response.error(request.getRequestId(), "Invalid reaction");
         }
         ClientHandler opponent = s.opponentOf(handler.getUsername());
-        opponent.push(new Response(request.getRequestId(), MessageType.REACTION_RECEIVED, true, "Reaction received", Map.of("kind", kind, "value", value, "from", handler.getUsername())));
+        opponent.push(new Response(request.getRequestId(), MessageType.REACTION_RECEIVED, true,
+            "Reaction received", Map.of("kind", kind, "value", value, "from", handler.getUsername())));
         return Response.ok(request.getRequestId(), MessageType.SEND_REACTION, "Reaction sent");
     }
 }

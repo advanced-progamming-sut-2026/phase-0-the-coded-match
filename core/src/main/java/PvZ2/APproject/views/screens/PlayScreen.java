@@ -245,7 +245,8 @@ public class PlayScreen extends BaseScreen {
         ImageButton harvestBtn = new ImageButton(skin, "ingame_shovel");
 
         harvestBtn.setPosition(VIRTUAL_WIDTH - harvestBtn.getWidth(), harvestBtn.getHeight() - 60);
-        harvestBtn.setVisible(!(currentLevel instanceof IZombie) && !(currentLevel instanceof WallNutBowling) && !(currentLevel instanceof Beghouled));
+        harvestBtn.setVisible(!(currentLevel instanceof IZombie) &&
+            !(currentLevel instanceof WallNutBowling) && !(currentLevel instanceof Beghouled));
         stage.addActor(harvestBtn);
 
         harvestBtn.addListener(new ClickListener() {
@@ -300,7 +301,8 @@ public class PlayScreen extends BaseScreen {
         }
 
         TextButton releaseTheNuke = new TextButton("Release the Nuke", skin, "default");
-        releaseTheNuke.setPosition(VIRTUAL_WIDTH - releaseTheNuke.getWidth() - 100, VIRTUAL_HEIGHT - releaseTheNuke.getHeight() - 60);
+        releaseTheNuke.setPosition(VIRTUAL_WIDTH - releaseTheNuke.getWidth() - 100,
+            VIRTUAL_HEIGHT - releaseTheNuke.getHeight() - 60);
         releaseTheNuke.setVisible(false);
 
         if (gameSettings.isDebugMode()) {
@@ -454,18 +456,15 @@ public class PlayScreen extends BaseScreen {
             }
             return;
         }
-
         if (state == GameState.RUNNING) {
             int speedMultiplier = GameSettings.getInstance().getGameSpeed();
             float adjustedSpeed = delta * speedMultiplier;
             super.render(adjustedSpeed);
             stateTime += adjustedSpeed;
-
             if (harvestMode) {
                 updateShovelCursor();
                 gameMapView.updateTile();
             }
-
             simulationAccumulator += adjustedSpeed;
             String message = "";
             int steps = 0;
@@ -476,45 +475,21 @@ public class PlayScreen extends BaseScreen {
                 steps++;
                 if (GameManagerController.getInstance().isGameFinished()) break;
             }
-            if (!message.isEmpty()) {
-                showMessage(message);
-            }
+            if (!message.isEmpty()) {showMessage(message);}
             if (!(currentLevel instanceof MiniGame) && currentLevel.getZombieWave().isLastWave() && !finalWaveMusic) {
                 MusicManager.playFinalWave();
-                finalWaveMusic = true;
-            }
-
-            updatePlantActors();
-            updateZombieActors();
-            updateProjectileActors();
-            updateSunActors();
-            updateLawnmowerActors();
-            updateWaveProgressBar();
-            updateMiniGameActors();
-            updateMiniGameUi();
+                finalWaveMusic = true;}
+            updatePlantActors();updateZombieActors();updateProjectileActors();
+            updateSunActors();updateLawnmowerActors();updateWaveProgressBar();updateMiniGameActors();updateMiniGameUi();
             if (sunLabel != null) sunLabel.setText(Integer.toString(getDisplayedSunAmount()));
             if (plantFoodLabel != null) plantFoodLabel.setText(currentLevel.getPlantFoodCount() + "/4");
-
             if (GameManagerController.getInstance().isGameFinished()) {
                 finishDelay += adjustedSpeed;
-                if (!resultShown && finishDelay >= 0.65f && !hasRunningLawnmower()) {
-                    showResultOverlay();
-                }
-            } else {
-                finishDelay = 0f;
-            }
-//            if (MiniGameController.isNetworkedIZombie()) {
-//                networkPollTimer += delta;
-//                if (networkPollTimer >= NETWORK_POLL_INTERVAL) {
-//                    networkPollTimer = 0f;
-//                    MiniGameController.pollNetworkState();
-//                }
-//            }
+                if (!resultShown && finishDelay >= 0.65f && !hasRunningLawnmower()) {showResultOverlay();}
+            } else {finishDelay = 0f;}
         }
-
         if (state == GameState.PAUSED && pauseStage != null) {
-            pauseStage.act(delta);
-            pauseStage.draw();
+            pauseStage.act(delta);pauseStage.draw();
         }
     }
 
@@ -533,7 +508,8 @@ public class PlayScreen extends BaseScreen {
     }
 
     public void createPlantBoxes() {
-        if (currentLevel instanceof VaseBreaker || currentLevel instanceof IZombie || currentLevel instanceof WallNutBowling || currentLevel instanceof Beghouled) return;
+        if (currentLevel instanceof VaseBreaker || currentLevel instanceof IZombie ||
+            currentLevel instanceof WallNutBowling || currentLevel instanceof Beghouled) return;
         float x = 14f;
         float width = 96f;
         float gap = 3f;
@@ -720,7 +696,8 @@ public class PlayScreen extends BaseScreen {
 //        multiplayerIncomingNotif.pack();
 //        multiplayerIncomingNotif.setVisible(true);
 //        multiplayerIncomingNotif.getColor().a = 1f;
-//        multiplayerIncomingNotif.addAction(Actions.sequence(Actions.delay(3f), Actions.fadeOut(0.5f), Actions.hide()));
+//        multiplayerIncomingNotif.addAction(Actions.sequence(Actions.delay(3f), Actions.fadeOut(0.5f), Actions.hide())
+//        );
     }
 
     private void showIncomingText(String username, String text){
@@ -845,13 +822,15 @@ public class PlayScreen extends BaseScreen {
             packet.top().center();
             packet.setTouchable(Touchable.enabled);
 
-            PamActor icon = new PamActor(game, PamActor.Kind.PLANT, "idle", data.getId(), data.getName(), data.getDisplayName());
+            PamActor icon = new PamActor(game, PamActor.Kind.PLANT, "idle",
+                data.getId(), data.getName(), data.getDisplayName());
             icon.setSize(72f, 68f);
             Label name = new Label(data.getDisplayName(), skin, "default");
             name.setFontScale(0.68f);
             Table bottom = new Table(skin);
 
-            Image sun = new Image(new TextureRegionDrawable(textures.region("IMAGE_UI_SEASONS_UNCOMPRESSED_PVZ2_SEASONS_UIASSET_ICON_SUN")));
+            Image sun = new Image(new TextureRegionDrawable(textures.region(
+                "IMAGE_UI_SEASONS_UNCOMPRESSED_PVZ2_SEASONS_UIASSET_ICON_SUN")));
             sun.setSize(15f, 15f);
 //            Label cost = new Label(Integer.toString(data.getCost()), skin, "default");
 //            cost.setFontScale(0.72f);
@@ -965,9 +944,11 @@ public class PlayScreen extends BaseScreen {
                 PlantData data = PlantRepository.getInstance().findByName(entry.getKey());
                 if (data == null) continue;
                 Table row = new Table(skin);
-                PamActor icon = new PamActor(game, PamActor.Kind.PLANT, "idle", data.getId(), data.getName(), data.getDisplayName());
+                PamActor icon = new PamActor(game, PamActor.Kind.PLANT, "idle",
+                    data.getId(), data.getName(), data.getDisplayName());
                 icon.setSize(50f, 58f);
-                TextButton button = new TextButton(data.getDisplayName() + " x" + entry.getValue(), skin, "default");
+                TextButton button = new TextButton(data.getDisplayName() + " x" + entry.getValue(),
+                    skin, "default");
                 button.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
@@ -986,41 +967,31 @@ public class PlayScreen extends BaseScreen {
 
     private void refreshBowlingPanel(boolean force) {
         if (!(currentLevel instanceof WallNutBowling gameMode) || miniGamePanel == null) return;
-
         List<BowlingNutType> belt = new ArrayList<>(gameMode.getConveyorBelt());
         String signature = belt.toString();
         if (!force && signature.equals(bowlingSignature)) return;
-
         boolean appended = !bowlingUiSnapshot.isEmpty()
             && belt.size() == bowlingUiSnapshot.size() + 1
             && belt.subList(0, bowlingUiSnapshot.size()).equals(bowlingUiSnapshot);
-
         bowlingSignature = signature;
         bowlingUiSnapshot.clear();
         bowlingUiSnapshot.addAll(belt);
-
         miniGamePanel.clearChildren();
-
         Label title = new Label("WALL-NUT BOWLING", skin, "default");
         title.setFontScale(0.85f);
         miniGamePanel.add(title).padLeft(8f).padRight(8f);
-
         int index = 0;
         for (BowlingNutType type : belt) {
             if (index >= 5) break;
-
             BorderedTable packet = new BorderedTable();
             String key = type == BowlingNutType.EXPLODE_O_NUT ? "explodeonut" : "wallnut";
             PamActor icon = new PamActor(game, PamActor.Kind.PLANT, "idle", key);
             float iconSize = type == BowlingNutType.GIANT_WALLNUT ? 65f : 56f;
             icon.setSize(iconSize, iconSize);
-
             Label name = new Label(formatNutName(type), skin, "default");
             name.setFontScale(0.58f);
-
             packet.add(icon).size(iconSize, iconSize).row();
             packet.add(name).width(92f).center();
-
             if (force) {
                 packet.getColor().a = 0f;
                 packet.addAction(Actions.sequence(
@@ -1037,11 +1008,9 @@ public class PlayScreen extends BaseScreen {
                     Actions.sequence(Actions.moveBy(70f, 0f), Actions.moveBy(-70f, 0f, 0.42f))
                 ));
             }
-
             miniGamePanel.add(packet).width(102f).height(92f).pad(2f);
             index++;
         }
-
         miniGamePanel.pack();
         miniGamePanel.setPosition(BOARD_X, BOARD_Y + TILE_HEIGHT * 5f + 8f);
     }
@@ -1206,24 +1175,15 @@ public class PlayScreen extends BaseScreen {
         if (currentLevel instanceof VaseBreaker gameMode) {
             if (gameMode.hasUnbrokenVaseAt(tile.getColumn(), tile.getRow())) {
                 showMessage(gameMode.breakVaseAt(tile.getColumn(), tile.getRow()));
-                plantSelectionController.cancelSelection();
-                return;
-            }
+                plantSelectionController.cancelSelection();return;}
             if (plantSelectionController.hasSelectedPlant()) {
                 plantSelectionController.setHoveredTile(tile);
-                String error = plantSelectionController.tryPlaceSelectedPlant();
-                if (error != null) showMessage(error);
-            }
-            return;
-        }
+                String error = plantSelectionController.tryPlaceSelectedPlant();if (error != null) showMessage(error);}
+            return;}
         if (currentLevel instanceof WallNutBowling gameMode) {
             if (tile.getColumn() > gameMode.getRedLineCoordinateX() - 1) {
-                showMessage("Place nuts in the first two columns");
-                return;
-            }
-            showMessage(gameMode.executePlaceNutFromBelt(tile.getRow()));
-            return;
-        }
+                showMessage("Place nuts in the first two columns");return;}
+            showMessage(gameMode.executePlaceNutFromBelt(tile.getRow()));return;}
         if (currentLevel instanceof IZombie gameMode) {
             if (MiniGameController.isPlantsPlayer()) {
                 if (!plantSelectionController.hasSelectedPlant()) {
@@ -1250,24 +1210,14 @@ public class PlayScreen extends BaseScreen {
                     selectedMiniZombie = null;
                 }
                 return;
-            }
-            showMessage(
-                "Your multiplayer role could not be determined."
-            );
-
-            return;
-//            String error = gameMode.placeZombie(selectedMiniZombie, tile.getColumn(), tile.getRow());
+            }showMessage("Your multiplayer role could not be determined.");return;
         }
         if (currentLevel instanceof Beghouled gameMode) {
             if (selectedBeghouledTile == null) {
-                selectedBeghouledTile = tile;
-                showMessage("Select an adjacent tile");
-                return;
-            }
+                selectedBeghouledTile = tile;showMessage("Select an adjacent tile");return;}
             boolean swapped = gameMode.swapPlants(selectedBeghouledTile.getRow() - 1,
                 selectedBeghouledTile.getColumn() - 1, tile.getRow() - 1, tile.getColumn() - 1);
-            selectedBeghouledTile = null;
-            showMessage(swapped ? "Match!" : "Invalid swap");
+            selectedBeghouledTile = null;showMessage(swapped ? "Match!" : "Invalid swap");
         }
     }
 
@@ -1364,28 +1314,19 @@ public class PlayScreen extends BaseScreen {
     private void showResultOverlay() {
         if (resultShown || stage == null) return;
         resultShown = true;
-
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(0f, 0f, 0f, 0.68f);
         pixmap.fill();
         resultShadeTexture = new Texture(pixmap);
         pixmap.dispose();
-
         resultShade = new Image(resultShadeTexture);
         resultShade.setFillParent(true);
         resultShade.setTouchable(Touchable.disabled);
         stage.addActor(resultShade);
-
-        resultOverlay = new Table();
-        resultOverlay.setFillParent(true);
-        resultOverlay.setTouchable(Touchable.enabled);
-        resultOverlay.addListener(new InputListener() {
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                return true;
-            }
+        resultOverlay = new Table();resultOverlay.setFillParent(true);resultOverlay.setTouchable(Touchable.enabled);
+        resultOverlay.addListener(new InputListener() {@Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {return true;}
         });
-
         boolean won = App.getCurrentUser() != null && App.getCurrentUser().isVictroy();
         BorderedTable panel = new BorderedTable();
         boolean miniGame = currentLevel instanceof MiniGame;
@@ -1395,7 +1336,6 @@ public class PlayScreen extends BaseScreen {
         TextButton primary = new TextButton(won ? "CONTINUE" : "RETRY", skin);
         TextButton replay = new TextButton("REPLAY", skin);
         TextButton exit = new TextButton(miniGame ? "MENU" : "EXIT", skin);
-
         panel.add(title).pad(10f).row();
         panel.add(text).pad(8f).row();
         panel.add(primary).width(180f).pad(6f).row();
@@ -1403,13 +1343,10 @@ public class PlayScreen extends BaseScreen {
         panel.add(exit).width(180f).pad(6f).row();
         resultOverlay.add(panel);
         stage.addActor(resultOverlay);
-
         primary.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (won) exitGame();
-                else restartGame();
-            }
+                if (won) exitGame();else restartGame();}
         });
         replay.addListener(new ClickListener() {
             @Override
@@ -1441,7 +1378,7 @@ public class PlayScreen extends BaseScreen {
     private boolean hasRunningLawnmower() {
         if (currentLevel instanceof MiniGame) return false;
         for (Lawnmower lawnmower : currentLevel.getGameMap().getLawnmowers()) {
-            if (lawnmower.isTriggered() && !lawnmower.HasBeenUsed()) {
+            if (lawnmower.isTriggered() && !lawnmower.hasBeenUsed()) {
                 return true;
             }
         }
@@ -1452,7 +1389,7 @@ public class PlayScreen extends BaseScreen {
         if (currentLevel instanceof MiniGame) return;
         for (Lawnmower lawnmower : currentLevel.getGameMap().getLawnmowers()) {
 
-            if (lawnmower.HasBeenUsed()) {
+            if (lawnmower.hasBeenUsed()) {
                 removeLawnmowerActor(lawnmower);
                 continue;
             }
@@ -1532,7 +1469,7 @@ public class PlayScreen extends BaseScreen {
         newLevel.setCurrentSeason(currentLevel.getCurrentSeason());
         for (String plant : chosenPlants) newLevel.addChosenPlant(plant);
         GameManagerController.getInstance().setCurrentLevel(newLevel);
-        if (newLevel.getCurrentSeason() != null) newLevel.getCurrentSeason().LevelStarted(newLevel);
+        if (newLevel.getCurrentSeason() != null) newLevel.getCurrentSeason().levelStarted(newLevel);
         App.setCurrentMenu(Menu.GAME_MANAGER);
         state = GameState.RUNNING;
         game.setScreen(new PlayScreen(game));

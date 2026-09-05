@@ -43,7 +43,7 @@ public class SeasonController {
         if (season != null && level != null) {
             this.currentSeason = season;
             level.setCurrentSeason(season);
-            season.LevelStarted(level);
+            season.levelStarted(level);
         }
     }
 

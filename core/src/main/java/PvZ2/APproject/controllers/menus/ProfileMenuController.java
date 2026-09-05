@@ -19,7 +19,8 @@ public class ProfileMenuController {
 //        User user = App.getCurrentUser();
 //
 //        if (user == null) return "Error: No logged in user.";
-//        if (!SignupMenuController.validateUsername(username) && (username == null || !user.getUsername().equalsIgnoreCase(username))) {
+//        if (!SignupMenuController.validateUsername(username) && (username == null ||
+//        !user.getUsername().equalsIgnoreCase(username))) {
 //            return "Error: Invalid username or username already exists.";
 //        } else if (user.getUsername().equals(username)) {
 //            return "Error: New username is the same as current username.";

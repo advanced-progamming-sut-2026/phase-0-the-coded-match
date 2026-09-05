@@ -83,7 +83,8 @@ public class ClientHandler extends Thread{
     }
 
     private Response assignRequest(Request request){
-        if (request == null || request.getType() == null) return Response.error(request == null ? "" : "", "Invalid request");
+        if (request == null || request.getType() == null) return Response.error(request == null ? "" : "",
+            "Invalid request");
         return switch (request.getType()){
             case REGISTER -> server.auth().register(request);
             case LOGIN -> server.auth().login(request, this);

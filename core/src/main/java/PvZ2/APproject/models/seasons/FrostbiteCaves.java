@@ -28,7 +28,7 @@ public final class FrostbiteCaves extends Season {
     }
 
     @Override
-    public void LevelStarted(Level level) {
+    public void levelStarted(Level level) {
         initializeSlipperyTiles(level);
         for(Zombie zombie : level.getActiveZombies()){
             if(zombieShouldBeFrozen(zombie)){
@@ -67,7 +67,7 @@ public final class FrostbiteCaves extends Season {
     }
 
     @Override
-    public void Update(Level level, float delta) {
+    public void update(Level level, float delta) {
 
         for(Projectile projectile : level.getActiveProjectiles()){
             int x = (int) projectile.getxCoordinate();
@@ -75,7 +75,8 @@ public final class FrostbiteCaves extends Season {
 
             Plant plant = level.getPlantAt(x, y);
             if(plant != null && plant.isFullyFrozen()){
-                if(projectile.getCreatorPlantCategory() != null && projectile.getCreatorPlantCategory().hasThisTag(PlantTag.FIRE)){
+                if(projectile.getCreatorPlantCategory() != null && projectile.getCreatorPlantCategory().
+                    hasThisTag(PlantTag.FIRE)){
                     plant.decreaseIceHP(plant.getIceHP());
                 }else{
                     plant.decreaseIceHP(projectile.getDamage());
@@ -108,7 +109,7 @@ public final class FrostbiteCaves extends Season {
     }
 
     @Override
-    public void WaveStarted(Level level, int waveNumber) {
+    public void waveStarted(Level level, int waveNumber) {
         for (Zombie zombie : level.getActiveZombies()) {
             if (zombieShouldBeFrozen(zombie) && !zombie.isFrozenInBlock()) {
                 zombie.setFrozenInBlock(true);
@@ -134,7 +135,7 @@ public final class FrostbiteCaves extends Season {
     }
 
     @Override
-    public void PlantPlaced(Level level, Plant plant, int x, int y) {
+    public void plantPlaced(Level level, Plant plant, int x, int y) {
         //check with game manager; may switch planting plants here later on
     }
 }

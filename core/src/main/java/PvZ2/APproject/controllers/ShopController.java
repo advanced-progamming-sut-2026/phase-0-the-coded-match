@@ -72,7 +72,8 @@ public class ShopController {
             plantChosen = shop.getRandomSpecialSeedPack();
         } else if (item == ShopItemData.SEED_PACKET_BY_CHOICE) {
             plantChosen = PlantRepository.getInstance().findByName(plantSelected);
-            if (plantChosen == null || !App.getCurrentUser().getCollection().getAvailablePlantsIds().contains(plantChosen.getId())) {
+            if (plantChosen == null || !App.getCurrentUser().getCollection().
+                getAvailablePlantsIds().contains(plantChosen.getId())) {
                 return "ERROR: you don't have access to plant";
             }
         }
@@ -114,70 +115,50 @@ public class ShopController {
         String validation = buyItem(item, plantChosen);
         if (validation.startsWith("ERROR:")) return validation;
         if (plantChosen == null || plantChosen.isBlank()) plantChosen = validation;
-        PlantData plant = plantChosen == null || plantChosen.isBlank() ? null : PlantRepository.getInstance().findByName(plantChosen);
+        PlantData plant = plantChosen == null || plantChosen.isBlank() ? null :
+            PlantRepository.getInstance().findByName(plantChosen);
         int price = item.getPrice() * count;
         if (item.getPaymentType() == PaymentType.COIN) {
             if (App.getCurrentUser().getCoinsCount() < price) return "ERROR: not enough coins to buy this item";
             App.getCurrentUser().setCoinsCount(App.getCurrentUser().getCoinsCount() - price);
-        } else {
-            if (App.getCurrentUser().getGemsCount() < price) return "ERROR: not enough gems to buy this item";
-            App.getCurrentUser().setGemsCount(App.getCurrentUser().getGemsCount() - price);
-        }
-        Shop shop = App.getCurrentUser().getShop();
-        String result;
-        switch (item) {
+        } else {if (App.getCurrentUser().getGemsCount() < price) return "ERROR: not enough gems to buy this item";
+            App.getCurrentUser().setGemsCount(App.getCurrentUser().getGemsCount() - price);}
+        Shop shop = App.getCurrentUser().getShop();String result;switch (item) {
             case POT -> {
                 GreenHouse greenHouse = App.getCurrentUser().getGreenHouse();
                 if (greenHouse.getPotsCount() + count > greenHouse.getCapacity()) {
-                    refund(item, price);
-                    return "ERROR: greenhouse is full";
-                }
-                int unlocked = greenHouse.unlockPots(count);
-                if (unlocked != count) {
-                    refund(item, price);
-                    return "ERROR: greenhouse is full";
-                }
+                    refund(item, price);return "ERROR: greenhouse is full";}
+                int unlocked = greenHouse.unlockPots(count);if (unlocked != count) {
+                    refund(item, price);return "ERROR: greenhouse is full";}
                 result = unlocked + " pot bought successfully";
             }
             case PLANT_FOOD -> {
                 if (App.getCurrentUser().getPlantFoodBoughtCount() + count > 3) {
-                    refund(item, price);
-                    return "ERROR: plant food count is maximum";
-                }
-                App.getCurrentUser().setPlantFoodBoughtCount(App.getCurrentUser().getPlantFoodBoughtCount() + count * item.getUnitBought());
+                    refund(item, price);return "ERROR: plant food count is maximum";}
+                App.getCurrentUser().setPlantFoodBoughtCount(App.getCurrentUser().getPlantFoodBoughtCount() +
+                    count * item.getUnitBought());
                 result = count + " plant food(s) bought successfully";
             }
             case SEED_PACKET_BY_CHANCE, SEED_PACKET_BY_CHOICE -> {
                 if (plant == null) {
-                    refund(item, price);
-                    return "ERROR: invalid plant";
+                    refund(item, price);return "ERROR: invalid plant";
                 }
                 int amount = count * item.getUnitBought();
                 App.getCurrentUser().addSeedPackets(plant.getId(), amount);
                 result = amount + " seed packets bought successfully";
-            }
-            case EXCHANGE_CURRENCY -> {
+            }case EXCHANGE_CURRENCY -> {
                 int amount = count * item.getUnitBought();
                 App.getCurrentUser().setCoinsCount(App.getCurrentUser().getCoinsCount() + amount);
                 result = amount + " coins were exchanged with gems";
-            }
-            case SEED_PACKET_DAILY -> {
-                if (plant == null) {
-                    refund(item, price);
-                    return "ERROR: invalid plant";
-                }
+            }case SEED_PACKET_DAILY -> {
+                if (plant == null) {refund(item, price);return "ERROR: invalid plant";}
                 int amount = count * item.getUnitBought();
                 App.getCurrentUser().addSeedPackets(plant.getId(), amount);
-                shop.setDailyItemSoldOut(true);
-                result = amount + " daily seed packets bought successfully";
+                shop.setDailyItemSoldOut(true);result = amount + " daily seed packets bought successfully";
             }
             default -> {
-                refund(item, price);
-                return "ERROR: invalid purchase";
-            }
-        }
-        SignupMenuController.saveToJson();
-        return result;
+                refund(item, price);return "ERROR: invalid purchase";}}
+        SignupMenuController.saveToJson();return result;
     }
 
     private static void refund(ShopItemData item, int price) {

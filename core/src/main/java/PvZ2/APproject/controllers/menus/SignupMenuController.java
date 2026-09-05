@@ -31,7 +31,6 @@ public class SignupMenuController{
 
     public String register(String username, String password, String passwordConfirm, String nickname, String email,
                            String genderSt) {
-
         if (!validateUsername(username)) {
             return "Error: username is invalid or already exists.";
         } else if (!validatePassword(password)) {
@@ -54,7 +53,6 @@ public class SignupMenuController{
 //            return "Registered successfully";
 //        }
         /// Phase 3 implementation ///
-
         if (username == null || username.isBlank()) return "Error: username is required";
         if (!App.getNetworkClient().isConnected()) return "Error: server is not connected";
 

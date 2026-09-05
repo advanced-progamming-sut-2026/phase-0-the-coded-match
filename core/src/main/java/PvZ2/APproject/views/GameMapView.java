@@ -78,7 +78,8 @@ public class GameMapView extends Group {
     }
 
     public String getPath() {
-        if (currentLevel == null || currentLevel.getCurrentSeason() == null || currentLevel.getCurrentSeason().getData() == null) {
+        if (currentLevel == null || currentLevel.getCurrentSeason() == null ||
+            currentLevel.getCurrentSeason().getData() == null) {
             return "IMAGE_BACKGROUNDS_EGYPT_TEXTURE";
         }
         switch (currentLevel.getCurrentSeason().getData().getId()) {
@@ -188,7 +189,8 @@ public class GameMapView extends Group {
         int rows = map.getRows();
         int columns = map.getColumns();
 
-        if (currentLevel.getCurrentSeason() != null && currentLevel.getCurrentSeason().getType() == SeasonType.BIG_WAVE_BEACH) {
+        if (currentLevel.getCurrentSeason() != null && currentLevel.getCurrentSeason().getType()
+            == SeasonType.BIG_WAVE_BEACH) {
             batch.end();
 
             shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
@@ -251,7 +253,8 @@ public class GameMapView extends Group {
                         50,
                         70
                     );
-                } // TODO : when it holds the necromancy potential maybe it should show on the tile otherwise theres no need
+                } // TODO : when it holds the necromancy potential maybe it should show on the tile otherwise theres
+                // no need
 
                 if(tile.isGrave() && tile.getType() == TileType.GRAVE){
                     if(tile.holdsNecromancyPotential()){
@@ -385,7 +388,8 @@ public class GameMapView extends Group {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(1f, 0.2f, 0.2f, 0.75f);
         float x = PlayScreen.BOARD_X + ((float) column - 1f) * PlayScreen.TILE_WIDTH;
-        shapeRenderer.rect(x - 2f, PlayScreen.BOARD_Y, 4f, currentLevel.getGameMap().getRows() * PlayScreen.TILE_HEIGHT);
+        shapeRenderer.rect(x - 2f, PlayScreen.BOARD_Y, 4f,
+            currentLevel.getGameMap().getRows() * PlayScreen.TILE_HEIGHT);
         shapeRenderer.end();
         Gdx.gl.glDisable(GL20.GL_BLEND);
         batch.begin();

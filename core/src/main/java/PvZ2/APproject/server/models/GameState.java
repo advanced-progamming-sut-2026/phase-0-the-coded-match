@@ -49,7 +49,8 @@ public class GameState {
         m.put("zombiePlayer", zombiePlayer);
         m.put("stage", String.valueOf(stage));
         m.put("elapsedMillis", String.valueOf(System.currentTimeMillis() - startedAt));
-        m.put("remainingMillis", String.valueOf(Math.max(0, durationMillis - (System.currentTimeMillis() - startedAt))));
+        m.put("remainingMillis", String.valueOf(Math.max(0, durationMillis -
+            (System.currentTimeMillis() - startedAt))));
         m.put("finished", String.valueOf(isFinished()));
         m.put("winner", winner == null ? "" : winner);
         m.put("actions", encodeActions());

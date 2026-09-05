@@ -68,11 +68,13 @@ public class Tile implements Update {
     private void destroyGrave(){
         switch (this.getGraveReward()) {
             case SUN_50:
-                GameManagerController.getInstance().getCurrentLevel().setCollectedSunsAmount(GameManagerController.getInstance().getCurrentLevel().getCollectedSunsAmount()+50);
+                GameManagerController.getInstance().getCurrentLevel().setCollectedSunsAmount
+                    (GameManagerController.getInstance().getCurrentLevel().getCollectedSunsAmount()+50);
                 break;
 
             case PLANT_FOOD:
-                GameManagerController.getInstance().getCurrentLevel().setPlantFoodCount(GameManagerController.getInstance().getCurrentLevel().getPlantFoodCount()+1);
+                GameManagerController.getInstance().getCurrentLevel().setPlantFoodCount
+                    (GameManagerController.getInstance().getCurrentLevel().getPlantFoodCount()+1);
                 System.out.println("Grave dropped 1 Plant Food!");
                 break;
 

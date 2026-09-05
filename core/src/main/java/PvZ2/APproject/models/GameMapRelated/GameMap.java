@@ -85,7 +85,7 @@ public final class GameMap {
     public void handleLawnMower(Zombie zombie){
         int row = zombie.getY();
         Lawnmower mower = findLawnMower(row);
-        if (mower == null || mower.HasBeenUsed()) {
+        if (mower == null || mower.hasBeenUsed()) {
             GameManagerController.getInstance().gameOver();
             return;
         }
@@ -110,7 +110,7 @@ public final class GameMap {
 
     public Lawnmower lawnMowerUsed(int row){
         Lawnmower mower = findLawnMower(row);
-        if (mower == null || mower.HasBeenUsed() || mower.isTriggered()) {
+        if (mower == null || mower.hasBeenUsed() || mower.isTriggered()) {
             return null;
         }
         return mower;

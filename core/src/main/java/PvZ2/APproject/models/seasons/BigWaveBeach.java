@@ -28,7 +28,7 @@ public final class BigWaveBeach extends Season {
     }
 
     @Override
-    public void LevelStarted(Level level) {
+    public void levelStarted(Level level) {
 
         updateTideBoundary(level, currentTideColumn);
     }
@@ -58,7 +58,7 @@ public final class BigWaveBeach extends Season {
     }
 
     @Override
-    public void Update(Level level, float delta) {
+    public void update(Level level, float delta) {
         int rows = level.getGameMap().getRows();
         int cols = level.getGameMap().getColumns();
 
@@ -87,7 +87,8 @@ public final class BigWaveBeach extends Season {
                 int zombieRow = zombie.getY();
 
                 Tile tile = level.getGameMap().getTile(zombieCol, zombieRow);
-                if (tile != null && tile.getType() == TileType.WATER && zombie.getCurrentState() != ZombieState.EATING) {
+                if (tile != null && tile.getType() == TileType.WATER &&
+                    zombie.getCurrentState() != ZombieState.EATING) {
                     zombie.setSubmerged(true);
                 } else {
                     zombie.setSubmerged(false);
@@ -97,7 +98,7 @@ public final class BigWaveBeach extends Season {
     }
 
     @Override
-    public void WaveStarted(Level level, int waveNumber) {
+    public void waveStarted(Level level, int waveNumber) {
         Random random = new Random();
         if (waveNumber == 2 || waveNumber == level.getData().getWaveCount() - 1) {
             triggerLowTideEvent(level);
@@ -136,7 +137,7 @@ public final class BigWaveBeach extends Season {
     }
 
     @Override
-    public void PlantPlaced(Level level, Plant plant, int x, int y) {
+    public void plantPlaced(Level level, Plant plant, int x, int y) {
         Tile tile = level.getGameMap().getTile(x, y);
         if (tile == null) return;
 

@@ -4,7 +4,7 @@ public class PlantUpgrade {
 
     private int level;
     private int requiredCoins;
-    private int RequiredSeedPackets;
+    private int requiredSeedPackets;
 
     public void upgrade () {
 

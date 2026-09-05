@@ -33,7 +33,7 @@ public class MiniGameController {
     private static String networkRole;
     private static String networkSessionId;
     private static String networkOpponent;
-    private static final Set<String> appliedNetworkActions = new HashSet<>();
+    private static final Set<String> APPLIED_NETWORK_ACTIONS = new HashSet<>();
     private static Consumer<Response> matchFoundListener;
 
     public static String enterMinigame(String input) {
@@ -96,7 +96,7 @@ public class MiniGameController {
 
     public void loadMiniGame() { currentLevel = miniGame; }
 
-    public void StartGame() {
+    public void startGame() {
         loadMiniGame();
         if (currentLevel != null) GameManagerController.getInstance().setCurrentLevel(currentLevel);
     }
@@ -163,11 +163,7 @@ public class MiniGameController {
             request.put("y", String.valueOf(tile.getRow()));
             Response response = App.getNetworkClient().sendAndWait(request);
             System.out.println(
-                "CLIENT PLACE PLANT: " +
-                    plant.getName() +
-                    " at " +
-                    tile.getColumn() +
-                    "," +
+                "CLIENT PLACE PLANT: " + plant.getName() + " at " + tile.getColumn() + "," +
                     tile.getRow()
             );
             if (!response.isSuccess()) {
@@ -242,7 +238,7 @@ public class MiniGameController {
         networkSessionId = response.get("sessionId");
         networkRole = response.get("role");
         networkOpponent = response.get("opponent");
-        appliedNetworkActions.clear();
+        APPLIED_NETWORK_ACTIONS.clear();
         resultRecorded = false;
         GameManagerController.getInstance().setCurrentLevel(miniGame);
         App.setCurrentMenu(Menu.CHOOSEPLANTS_MENU);
@@ -269,7 +265,7 @@ public class MiniGameController {
         String[] p = line.split("\\|", -1);
         if (p.length < 8) return;
         String key = p[7];
-        if (!appliedNetworkActions.add(key)) return;
+        if (!APPLIED_NETWORK_ACTIONS.add(key)) return;
         String action = unescape(p[2]);
         if ("PLACE_ZOMBIE".equalsIgnoreCase(action) && miniGame instanceof IZombie game) {
             String name = unescape(p[4]);
@@ -283,7 +279,8 @@ public class MiniGameController {
             int y = parseCoordinate(p[6]);
             String error = PlantController.plantPlant(name, x, y);
             if (error != null) {
-                System.err.println("[GAME STATE] Failed to place plant " + name + " at (" + x + ", " + y + "): " + error);
+                System.err.println("[GAME STATE] Failed to place plant " + name + " at (" + x + ", " + y + "): " +
+                    error);
             } else {
                 System.out.println("[GAME STATE] Placed plant " + name + " at (" + x + ", " + y + ")");
             }
@@ -313,37 +310,38 @@ public class MiniGameController {
         if (miniGame instanceof IZombie game) {
             boolean allBrainsEaten = game.allBrainsEaten();
             int cheapest = game.getCheapestAvailableZombieCost();
-            boolean outOfSunAndZombies = cheapest > 0 && game.getSunAmount() < cheapest && miniGame.getActiveZombies().isEmpty();
+            boolean outOfSunAndZombies = cheapest > 0 && game.getSunAmount() <
+                cheapest && miniGame.getActiveZombies().isEmpty();
             if (isNetworkedIZombie()) {
                 if (allBrainsEaten && "ZOMBIES".equalsIgnoreCase(networkRole)) finishNetworkGame(true);
                 else if (outOfSunAndZombies && "PLANTS".equalsIgnoreCase(networkRole)) finishNetworkGame(false);
                 return;
             }
 
-            if (allBrainsEaten) EndGame(true);
-            else if (outOfSunAndZombies) EndGame(false);
+            if (allBrainsEaten) endGame(true);
+            else if (outOfSunAndZombies) endGame(false);
             return;
         }
         if (miniGame instanceof VaseBreaker game) {
-            if (game.winConditionsChecked()) EndGame(true);
-            else if (game.hasZombieReachedHouse()) EndGame(false);
+            if (game.winConditionsChecked()) endGame(true);
+            else if (game.hasZombieReachedHouse()) endGame(false);
             return;
         }
         if (miniGame instanceof WallNutBowling game && game.isGameOver) {
-            EndGame(game.hasWon());
+            endGame(game.hasWon());
             return;
         }
         if (miniGame instanceof Zombotany game && game.isGameOver) {
-            EndGame(game.hasWon());
+            endGame(game.hasWon());
             return;
         }
         if (miniGame instanceof Beghouled game) {
             game.checkRules();
-            if (game.isGameOver) EndGame(game.hasWon());
+            if (game.isGameOver) endGame(game.hasWon());
         }
     }
 
-    public static void EndGame(Boolean won) {
+    public static void endGame(Boolean won) {
         if (resultRecorded) return;
         resultRecorded = true;
         if (miniGame != null) miniGame.isGameOver = true;

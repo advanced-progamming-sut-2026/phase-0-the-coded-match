@@ -56,7 +56,8 @@ public class GameService {
         GameSession session = requireSession(handler, request);
         if (session == null) return Response.error(request.getRequestId(), "Game session not found");
         if (session.getState().isFinished()) finishByTimeout(session);
-        return new Response(request.getRequestId(), MessageType.GAME_STATE, true, "Game state", session.getState().snapshot());
+        return new Response(request.getRequestId(), MessageType.GAME_STATE, true,
+            "Game state", session.getState().snapshot());
     }
 
     public Response finish(Request request, ClientHandler handler) {
@@ -65,7 +66,8 @@ public class GameService {
         if (!session.contains(handler.getUsername())) return Response.error(request.getRequestId(), "Not a player");
         if (session.getState().isFinished()) {
             finishByTimeout(session);
-            return new Response(request.getRequestId(), MessageType.GAME_OVER, true, "Game already finished", session.getState().snapshot());
+            return new Response(request.getRequestId(), MessageType.GAME_OVER, true,
+                "Game already finished", session.getState().snapshot());
         }
 
         String reason = request.get("reason");
@@ -85,7 +87,8 @@ public class GameService {
 
         session.getState().finish(winner);
         broadcastGameOver(session);
-        return new Response(request.getRequestId(), MessageType.GAME_OVER, true, "Game finished", session.getState().snapshot());
+        return new Response(request.getRequestId(), MessageType.GAME_OVER, true,
+            "Game finished", session.getState().snapshot());
     }
 
     private boolean isAllowed(String action, PlayerRole role, Request request) {
@@ -118,21 +121,26 @@ public class GameService {
 
     private void finishByTimeout(GameSession session) {
         if (session.getState().getWinner() != null) return;
-        if (System.currentTimeMillis() - session.getState().getStartedAt() < session.getState().getDurationMillis()) return;
+        if (System.currentTimeMillis() - session.getState().getStartedAt() < session.getState().getDurationMillis())
+            return;
         session.getState().finish(session.getState().getPlantPlayer());
         broadcastGameOver(session);
     }
 
     private void broadcastState(GameSession session) {
         Map<String, String> data = session.getState().snapshot();
-        session.handlerFor(session.getPlayerA()).push(new Response(session.getId(), MessageType.GAME_STATE, true, "Game state", data));
-        session.handlerFor(session.getPlayerB()).push(new Response(session.getId(), MessageType.GAME_STATE, true, "Game state", data));
+        session.handlerFor(session.getPlayerA()).push(new Response(session.getId(), MessageType.GAME_STATE,
+            true, "Game state", data));
+        session.handlerFor(session.getPlayerB()).push(new Response(session.getId(), MessageType.GAME_STATE,
+            true, "Game state", data));
     }
 
     private void broadcastGameOver(GameSession session) {
         Map<String, String> data = session.getState().snapshot();
-        session.handlerFor(session.getPlayerA()).push(new Response(session.getId(), MessageType.GAME_OVER, true, "Game over", data));
-        session.handlerFor(session.getPlayerB()).push(new Response(session.getId(), MessageType.GAME_OVER, true, "Game over", data));
+        session.handlerFor(session.getPlayerA()).push(new Response(session.getId(), MessageType.GAME_OVER,
+            true, "Game over", data));
+        session.handlerFor(session.getPlayerB()).push(new Response(session.getId(), MessageType.GAME_OVER,
+            true, "Game over", data));
     }
 
     private double parseDouble(String value, double fallback) {

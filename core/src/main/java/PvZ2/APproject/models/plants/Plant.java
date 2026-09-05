@@ -50,7 +50,8 @@ public class Plant implements Update {
 
     @Override
     public void update(float delta) {
-        if (currentState == PlantState.HURT || currentState == PlantState.SHOOTING || currentState == PlantState.PRODUCING) {
+        if (currentState == PlantState.HURT || currentState == PlantState.SHOOTING ||
+            currentState == PlantState.PRODUCING) {
             currentState = PlantState.IDLE;
         }
         if (disabled) {

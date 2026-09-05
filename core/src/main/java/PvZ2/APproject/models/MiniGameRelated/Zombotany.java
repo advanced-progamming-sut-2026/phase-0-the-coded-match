@@ -103,7 +103,8 @@ public final class Zombotany extends MiniGame {
         }
         PlantZombieType[] types = switch (stageNumber) {
             case 1 -> new PlantZombieType[]{PlantZombieType.PEASHOOTER, PlantZombieType.WALL_NUT};
-            case 2 -> new PlantZombieType[]{PlantZombieType.PEASHOOTER, PlantZombieType.WALL_NUT, PlantZombieType.JALAPENO};
+            case 2 -> new PlantZombieType[]{PlantZombieType.PEASHOOTER, PlantZombieType.WALL_NUT,
+                PlantZombieType.JALAPENO};
             default -> PlantZombieType.values();
         };
         int count = stageNumber + 3;

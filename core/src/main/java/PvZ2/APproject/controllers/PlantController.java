@@ -41,7 +41,8 @@ public class PlantController {
         }
         if (tile.isGrave()) return false;
         if (tile.getType() == TileType.WATER) {
-            if (plant.getData().getName().equalsIgnoreCase("LilyPad")) return tile.getLilyPadPlant() == null && tile.getPlant() == null;
+            if (plant.getData().getName().equalsIgnoreCase("LilyPad"))
+                return tile.getLilyPadPlant() == null && tile.getPlant() == null;
             if (plant.hasThisTag(PlantTag.WATER)) return tile.getPlant() == null;
             return tile.getLilyPadPlant() != null && tile.getPlant() == null;
         }
@@ -78,7 +79,7 @@ public class PlantController {
         } else {
             currentLevel.getActivePlants().add(plant);
             if (currentLevel.getCurrentSeason() != null) {
-                currentLevel.getCurrentSeason().PlantPlaced(currentLevel, plant, x, y);
+                currentLevel.getCurrentSeason().plantPlaced(currentLevel, plant, x, y);
             }
             if (data.getName().equalsIgnoreCase("LilyPad") && tile.getType() == TileType.WATER) {
                 tile.setLilyPadPlant(plant);
@@ -86,7 +87,8 @@ public class PlantController {
                 tile.setPlant(plant);
             }
             if (GameManagerController.getInstance().isBoostedPlant(plant)) plant.activatePlantFood();
-            if (App.getCurrentUser() != null && App.getCurrentUser().getGreenHouse().storedBoosts.remove(data.getId().toLowerCase()) != null) {
+            if (App.getCurrentUser() != null && App.getCurrentUser().getGreenHouse().storedBoosts.
+                remove(data.getId().toLowerCase()) != null) {
                 plant.activatePlantFood();
             }
             QuestController.onPlantPlaced(plant);
@@ -97,7 +99,8 @@ public class PlantController {
             currentLevel.setCollectedSunsAmount(currentLevel.getCollectedSunsAmount() - plant.getSunCost());
         }
         if (!GameManagerController.getInstance().isCooldownRemoved()) {
-            GameManagerController.getInstance().setPlantCooldowns(data.getName().toLowerCase(), GameManagerController.getInstance().secondsToTicks(plant.getRecharge()));
+            GameManagerController.getInstance().setPlantCooldowns(data.getName().toLowerCase(),
+                GameManagerController.getInstance().secondsToTicks(plant.getRecharge()));
         }
 //        return "Plant " + data.getDisplayName() + " planted at (" + x + ", " + y + ")";
         return null;
@@ -111,7 +114,8 @@ public class PlantController {
         if (currentLevel instanceof VaseBreaker level) {
             Tile tile = currentLevel.getGameMap().getTile(x, y);
             if (tile == null) return "location is out of map";
-            if (tile.getPlant() != null || tile.getLilyPadPlant() != null || level.hasUnbrokenVaseAt(x, y)) return "cannot plant on this tile";
+            if (tile.getPlant() != null || tile.getLilyPadPlant() != null || level.hasUnbrokenVaseAt(x, y))
+                return "cannot plant on this tile";
             if (!level.hasCollectedSeed(type)) return "seed packet is not available";
             return null;
         }
@@ -129,7 +133,9 @@ public class PlantController {
         if (getAvailableSun(currentLevel) < temp.getSunCost()) {
             return "not enough suns";
         }
-        if (!GameManagerController.getInstance().isCooldownRemoved() && GameManagerController.getInstance().getPlantCooldowns().getOrDefault(data.getName().toLowerCase(), 0) > 0) {
+        if (!GameManagerController.getInstance().isCooldownRemoved() &&
+            GameManagerController.getInstance().getPlantCooldowns().getOrDefault(data.getName().toLowerCase(),
+                0) > 0) {
             return "plant is on cooldown";
         }
         return null;
@@ -158,7 +164,8 @@ public class PlantController {
         if (tile.getPlant() == plant) tile.removePlant();
         if (tile.getLilyPadPlant() == plant) tile.setLilyPadPlant(null);
         currentLevel.setRemovedPlantsCount(currentLevel.getRemovedPlantsCount() + 1);
-        if (currentLevel.getSpecialLevelStrategy() != null) currentLevel.getSpecialLevelStrategy().plantLost(currentLevel, plant);
+        if (currentLevel.getSpecialLevelStrategy() != null) currentLevel.getSpecialLevelStrategy().
+            plantLost(currentLevel, plant);
         return null;
     }
 
@@ -208,7 +215,8 @@ public class PlantController {
     }
 
     public void cheatAddPlantFood(int count) {
-        if (currentLevel.getPlantFoodCount() >= MAX_PLANT_FOOD || count > 4 || count + currentLevel.getPlantFoodCount() > 4) {
+        if (currentLevel.getPlantFoodCount() >= MAX_PLANT_FOOD || count > 4 || count +
+            currentLevel.getPlantFoodCount() > 4) {
             System.out.println("plant food storage is full or will get full by this amount");
             return;
         }

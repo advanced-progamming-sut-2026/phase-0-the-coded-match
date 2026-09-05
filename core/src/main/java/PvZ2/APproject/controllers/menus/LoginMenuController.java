@@ -20,24 +20,8 @@ public class LoginMenuController{
     private static SecurityQuestions resetQuestion;
 
     public static String login(String username, String password, boolean stayLoggedIn) {
-//        User target = App.getUserByUsername(username);
-//        if(target == null){
-//            return "User does not exist";
-//        }
-//        String hashedPassword = SignupMenuController.hashPassword(password);
-//        if(!target.getPassword().equals(hashedPassword)){
-//            return "Incorrect password";
-//        }
-//        App.setCurrentUser(target);
-//        target.setStayLoggedIn(stayLoggedIn);
-//        if (stayLoggedIn) App.saveLoggedInUser(username);
-//        else App.clearLoggedInUser();
-//        App.setCurrentMenu(Menu.MAIN_MENU);
-//        QuestController.generateAllQuests();
-//        QuestController.refreshDailyQuests();
-//        return "Logged in successfully";
 
-        /// Phase 3 implementation ///
+
         if (username == null || username.isBlank() || password == null) return "Username and password are required";
         if (!App.getNetworkClient().isConnected()) return "Error: server is not connected";
 
@@ -46,8 +30,6 @@ public class LoginMenuController{
             request.put("username", username.trim());
             request.put("password", password);
 
-            // If this is an old account that only exists in Users.json, the
-            // server can import its saved progression on this first login.
             User local = App.getUserByUsername(username);
             if (local != null) {
                 request.put("nickname", local.getNickname());

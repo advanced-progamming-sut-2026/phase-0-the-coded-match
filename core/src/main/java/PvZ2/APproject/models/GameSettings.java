@@ -28,7 +28,8 @@ public class GameSettings {
     public void setMusicVolume(int musicVolume) { this.musicVolume = Math.max(0, Math.min(100, musicVolume)); }
 
     public int getSoundEffectsVolume() { return soundEffectsVolume; }
-    public void setSoundEffectsVolume(int soundEffectsVolume) { this.soundEffectsVolume = Math.max(0, Math.min(100, soundEffectsVolume)); }
+    public void setSoundEffectsVolume(int soundEffectsVolume) { this.soundEffectsVolume =
+        Math.max(0, Math.min(100, soundEffectsVolume)); }
 
     public int getGameDifficulty(){return App.getCurrentUser().getDifficultyLevel();}
     public String setGameDifficulty(int difficulty){
