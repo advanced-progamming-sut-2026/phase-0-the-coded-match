@@ -23,11 +23,11 @@ public class ShootAbility implements PlantAbilityHandler {
 
     @Override
     public void execute(Plant plant) {
-        plant.setState(PlantState.SHOOTING);
         Level level = GameManagerController.getInstance().getCurrentLevel();
         if (level == null || !hasZombieInLane(level, plant.getY(), plant.getX())) {
             return;
         }
+        plant.setState(PlantState.SHOOTING);
         int count = Math.max(projectileCount, plant.getData().getProjectileCount()) * Math.max(1, plant.getStackCount());
         for (int i = 0; i < count; i++) {
             level.getActiveProjectiles().add(createProjectile(plant, plant.getY(), i));
@@ -44,6 +44,11 @@ public class ShootAbility implements PlantAbilityHandler {
     protected boolean hasZombieInLane(Level level, int lane, int plantX) {
         for (Zombie zombie : level.getActiveZombies()) {
             if (zombie.getY() == lane && zombie.getX() >= plantX && !zombie.isDead()) {
+                return true;
+            }
+        }
+        for (int col = plantX; col <= level.getGameMap().getColumns(); col++) {
+            if (level.getGameMap().getTile(col, lane).isGrave()) {
                 return true;
             }
         }

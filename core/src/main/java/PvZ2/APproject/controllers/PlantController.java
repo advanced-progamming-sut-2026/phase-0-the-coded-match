@@ -6,6 +6,7 @@ import PvZ2.APproject.enums.SunType;
 import PvZ2.APproject.enums.TileType;
 import PvZ2.APproject.models.App;
 import PvZ2.APproject.models.Level;
+import PvZ2.APproject.models.MiniGameRelated.IZombie;
 import PvZ2.APproject.models.MiniGameRelated.VaseBreaker;
 import PvZ2.APproject.models.Sun;
 import PvZ2.APproject.models.GameMapRelated.Tile;
@@ -57,14 +58,6 @@ public class PlantController {
     public static String plantPlant(String type, int x, int y) {
         currentLevel = GameManagerController.getInstance().getCurrentLevel();
         if (currentLevel == null) return "no active level";
-//        Matcher matcher = Pattern.compile(Commands.PLANT_PLANT.getPattern()).matcher(input);
-//        if (!matcher.matches()) {
-//            System.out.println("invalid command");
-//            return;
-//        }
-//        String type = matcher.group("type").trim();
-//        int x = Integer.parseInt(matcher.group("x"));
-//        int y = Integer.parseInt(matcher.group("y"));
         String error = getPlantingError(type, x, y);
         if (error != null) {
             return error;
@@ -98,7 +91,11 @@ public class PlantController {
             }
             QuestController.onPlantPlaced(plant);
         }
-        currentLevel.setCollectedSunsAmount(currentLevel.getCollectedSunsAmount() - plant.getSunCost());
+        if (currentLevel instanceof IZombie game) {
+            game.setSunAmount(game.getSunAmount() - plant.getSunCost());
+        } else {
+            currentLevel.setCollectedSunsAmount(currentLevel.getCollectedSunsAmount() - plant.getSunCost());
+        }
         if (!GameManagerController.getInstance().isCooldownRemoved()) {
             GameManagerController.getInstance().setPlantCooldowns(data.getName().toLowerCase(), GameManagerController.getInstance().secondsToTicks(plant.getRecharge()));
         }
@@ -129,7 +126,7 @@ public class PlantController {
         if (!PlantController.canPlaceOnTile(temp, tile)) {
             return "cannot plant on this tile";
         }
-        if (currentLevel.getCollectedSunsAmount() < temp.getSunCost()) {
+        if (getAvailableSun(currentLevel) < temp.getSunCost()) {
             return "not enough suns";
         }
         if (!GameManagerController.getInstance().isCooldownRemoved() && GameManagerController.getInstance().getPlantCooldowns().getOrDefault(data.getName().toLowerCase(), 0) > 0) {
@@ -239,5 +236,12 @@ public class PlantController {
             }
         }
         return null;
+    }
+
+    private static int getAvailableSun(Level level) {
+        if (level instanceof IZombie game) {
+            return game.getSunAmount();
+        }
+        return level.getCollectedSunsAmount();
     }
 }

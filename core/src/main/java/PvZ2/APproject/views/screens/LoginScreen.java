@@ -82,15 +82,15 @@ public class LoginScreen extends BaseScreen {
             }
         });
 
-        ImageButton exitButton = new ImageButton(skin, "generic_close_circle");
-        exitButton.setPosition(10, 700);
+        TextButton exitButton = new TextButton("Back", skin, "default");
+        exitButton.setBounds(18, 652, 110, 48);
 
         stage.addActor(exitButton);
 
         exitButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                LoginMenuController.exit(game);
+                game.setScreen(new AuthScreen(game));
             }
         });
     }
@@ -120,9 +120,8 @@ public class LoginScreen extends BaseScreen {
                     String response = LoginMenuController.forgotPassword(usernameField.getText(), emailField.getText());
 
                     if (response.equals("User does not exist") || response.equals("Incorrect email")) {
+                        dialog.hide();
                         showMessage(response);
-                        content.clearChildren();
-                        dialog.clearChildren();
                     } else {
                         step[0] = 2;
                         content.clearChildren();

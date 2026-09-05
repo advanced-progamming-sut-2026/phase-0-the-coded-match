@@ -188,7 +188,7 @@ public class GameMapView extends Group {
         int rows = map.getRows();
         int columns = map.getColumns();
 
-        if (currentLevel.getCurrentSeason().getType() == SeasonType.BIG_WAVE_BEACH) {
+        if (currentLevel.getCurrentSeason() != null && currentLevel.getCurrentSeason().getType() == SeasonType.BIG_WAVE_BEACH) {
             batch.end();
 
             shapeRenderer.setProjectionMatrix(batch.getProjectionMatrix());
@@ -204,7 +204,7 @@ public class GameMapView extends Group {
             float y1 = PlayScreen.BOARD_Y;
             float y2 = PlayScreen.BOARD_Y + 4 * PlayScreen.TILE_HEIGHT;
 
-            shapeRenderer.rect(x, y1, 2, y2);
+            shapeRenderer.rect(x, y1, 2, 5 * PlayScreen.TILE_HEIGHT);
 
             shapeRenderer.end();
             batch.begin();
@@ -326,20 +326,15 @@ public class GameMapView extends Group {
             shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
             shapeRenderer.setColor(Color.RED);
 
-            int startX = 260;
-            int startY = 80;
-            int spacingX = 80;
-            int spacingY = 100;
-
             GameMap gameMap = currentLevel.getGameMap();
 
             for (int i = 1; i <= gameMap.getRows(); i++) {
                 for (int j = 1; j <= gameMap.getColumns(); j++) {
                     shapeRenderer.rect(
-                        startX + (j - 1) * spacingX,
-                        startY + (i - 1) * spacingY,
-                        spacingX,
-                        spacingY
+                        PlayScreen.BOARD_X + (j - 1) * PlayScreen.TILE_WIDTH,
+                        PlayScreen.BOARD_Y + (i - 1) * PlayScreen.TILE_HEIGHT,
+                        PlayScreen.TILE_WIDTH,
+                        PlayScreen.TILE_HEIGHT
                     );
                 }
             }
@@ -474,7 +469,7 @@ public class GameMapView extends Group {
         float y1 = PlayScreen.BOARD_Y;
         float y2 = PlayScreen.BOARD_Y + 4 * PlayScreen.TILE_HEIGHT;
 
-        shapeRenderer.rect(x, y1, 5, y2);
+        shapeRenderer.rect(x, y1, 5, 5 * PlayScreen.TILE_HEIGHT);
 
         shapeRenderer.end();
         batch.begin();

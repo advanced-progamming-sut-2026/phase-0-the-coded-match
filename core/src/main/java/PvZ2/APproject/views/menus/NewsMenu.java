@@ -10,7 +10,7 @@ import PvZ2.APproject.views.screens.BaseScreen;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import pvz.skin.BorderedTable;
+import com.badlogic.gdx.utils.Align;
 
 import java.util.List;
 
@@ -34,53 +34,53 @@ public class NewsMenu extends BaseScreen {
     @Override
     public void show() {
         super.show();
-        addMainBackground();
+        addAssetBackground("OUR_ASSETS/menus/news_menu.png");
         addCurrencyBar();
         addBackButton(() -> {
             App.setCurrentMenu(Menu.MAIN_MENU);
             game.setScreen(new MainMenu(game));
         });
 
-        Table root = new Table();
-        root.setFillParent(true);
-        root.top().padTop(72).padLeft(80).padRight(80).padBottom(35);
-
-        Label title = new Label("NEWS & UPDATES", skin, "medium_outline");
-        root.add(title).padBottom(20).row();
-
-        Table newsList = new Table(skin);
-        newsList.top();
-
+        Table newsList = new Table();
+        newsList.top().left();
         List<News> items = NewsMenuController.getAllNewsForUi();
+
         if (items.isEmpty()) {
-            BorderedTable empty = new BorderedTable();
-            empty.add(new Label("No news yet", skin, "medium_outline")).pad(40);
-            newsList.add(empty).width(760).pad(8).row();
+            Label empty = new Label("No news yet", skin, "medium_outline");
+            empty.setAlignment(Align.center);
+            newsList.add(empty).width(640).height(100).center();
         } else {
             int index = items.size();
             for (int i = items.size() - 1; i >= 0; i--) {
                 News item = items.get(i);
-                BorderedTable card = new BorderedTable();
                 String text = item.getNewsText() == null ? "" : item.getNewsText().trim();
                 String[] parts = text.split("\\R", 2);
                 String heading = parts.length > 1 && !parts[0].isBlank() ? parts[0] : "News #" + index;
                 String bodyText = parts.length > 1 ? parts[1] : text;
                 Label headingLabel = new Label((item.isUnread() ? "NEW   " : "") + heading, skin, "medium_outline");
                 Label body = new Label(bodyText, skin, "default");
+                headingLabel.setAlignment(Align.left);
                 body.setWrap(true);
-                card.add(headingLabel).left().pad(12).row();
-                card.add(body).width(700).left().padLeft(12).padRight(12).padBottom(14);
-                newsList.add(card).width(760).padBottom(10).row();
+                body.setAlignment(Align.topLeft);
+                newsList.add(headingLabel).width(620).left().padTop(10).padBottom(5).row();
+                newsList.add(body).width(620).left().padBottom(10).row();
+                if (i > 0) {
+                    Label separator = new Label("------------------------------------------------------------", skin, "default");
+                    newsList.add(separator).width(620).center().padBottom(4).row();
+                }
                 index--;
             }
         }
 
-        ScrollPane scrollPane = new ScrollPane(newsList, skin);
+        ScrollPane.ScrollPaneStyle scrollStyle = new ScrollPane.ScrollPaneStyle(
+            skin.get("default", ScrollPane.ScrollPaneStyle.class)
+        );
+        scrollStyle.background = null;
+        ScrollPane scrollPane = new ScrollPane(newsList, scrollStyle);
         scrollPane.setFadeScrollBars(false);
         scrollPane.setScrollingDisabled(true, false);
-        root.add(scrollPane).width(800).height(585);
-        stage.addActor(root);
-
+        scrollPane.setBounds(330, 145, 650, 425);
+        stage.addActor(scrollPane);
         NewsMenuController.markAllAsReadForUi();
     }
 }

@@ -27,25 +27,6 @@ public class GameService {
             finishByTimeout(session);
             return Response.error(request.getRequestId(), "Game is already over");
         }
-//        GameSession s = matchmaking.session(handler.getSessionId());
-//        if (s == null) {
-//            return Response.error(request.getRequestId(), "Game session not found");
-//        }
-//        if (s.getState().isFinished()) {
-//            return Response.error(request.getRequestId(), "Game is already over");
-//        }
-//        String action = request.get("action");
-//        if (action == null || action.isBlank()) {
-//            return Response.error(request.getRequestId(), "Missing action");
-//        }
-//        String role = handler.getUsername().equalsIgnoreCase(s.getPlayerA()) ? "PLANTS" : "ZOMBIES";
-//        String requestedRole = request.get("role");
-//        if (requestedRole != null && !requestedRole.equalsIgnoreCase(role)) {
-//            return Response.error(request.getRequestId(), "You cannot control the opponent");
-//        }
-//        s.getState().addAction(handler.getUsername() + "|" + role + "|" + action + "|" + request.get("x") + "|" + request.get("y") + "|" + request.get("entity"));
-//        broadcastState(s);
-//        return Response.ok(request.getRequestId(), MessageType.GAME_ACTION, "Action accepted");
         String actionName = request.get("action");
         if (actionName == null || actionName.isBlank()) return Response.error(request.getRequestId(), "Missing action");
 
@@ -79,17 +60,6 @@ public class GameService {
     }
 
     public Response finish(Request request, ClientHandler handler) {
-//        GameSession s = matchmaking.session(handler.getSessionId());
-//        if (s == null) {
-//            return Response.error(request.getRequestId(), "Game session not found");
-//        }
-//        String winner = request.get("winner");
-//        if (!handler.getUsername().equalsIgnoreCase(s.getPlayerA()) && !handler.getUsername().equalsIgnoreCase(s.getPlayerB())) {
-//            return Response.error(request.getRequestId(), "Not a player");
-//        }
-//        s.getState().finish(winner);
-//        broadcastState(s);
-//        return new Response(request.getRequestId(), MessageType.GAME_OVER, true, "Game finished", s.getState().snapshot());
         GameSession session = requireSession(handler, request);
         if (session == null) return Response.error(request.getRequestId(), "Game session not found");
         if (!session.contains(handler.getUsername())) return Response.error(request.getRequestId(), "Not a player");
@@ -101,10 +71,6 @@ public class GameService {
         String reason = request.get("reason");
         String requestedWinner = request.get("winner");
         String winner;
-
-        // The two-minute rule is server authoritative. Before the timer ends,
-        // only an explicit "brains_eaten" result may declare the zombie side
-        // the winner; all other requests are rejected.
         if (System.currentTimeMillis() - session.getState().getStartedAt() >= 120_000) {
             winner = session.getState().getPlantPlayer();
         } else if ("brains_eaten".equalsIgnoreCase(reason)

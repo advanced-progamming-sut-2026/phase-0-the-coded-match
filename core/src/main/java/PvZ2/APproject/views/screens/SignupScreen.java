@@ -51,8 +51,8 @@ public class SignupScreen extends BaseScreen {
         nicknameField.setMessageText("Nickname");
         TextField emailField = new TextField("", skin, "default");
         emailField.setMessageText("Email");
-        TextField genderField = new TextField("", skin, "default");
-        genderField.setMessageText("Gender");
+        SelectBox<String> genderField = new SelectBox<>(skin);
+        genderField.setItems("Female", "Male");
 
         TextButton register = new TextButton("Register", skin, "default");
         TextButton login = new TextButton("Already Have an Account?  Log In", skin, "default");
@@ -74,8 +74,8 @@ public class SignupScreen extends BaseScreen {
         );
         stage.addActor(wrapper);
 
-        ImageButton exitButton = new ImageButton(skin, "generic_close_circle");
-        exitButton.setPosition(10, 700);
+        TextButton exitButton = new TextButton("Back", skin, "default");
+        exitButton.setBounds(18, 652, 110, 48);
 
         stage.addActor(exitButton);
 
@@ -136,7 +136,7 @@ public class SignupScreen extends BaseScreen {
                 String passwordConfirm = passwordConfirmField.getText();
                 String nickname = nicknameField.getText();
                 String email = emailField.getText();
-                String gender = genderField.getText();
+                String gender = genderField.getSelected();
                 String message = controller.register(username, password, passwordConfirm, nickname, email, gender);
                 showMessage(message);
 
@@ -197,7 +197,7 @@ public class SignupScreen extends BaseScreen {
         exitButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                controller.exit();
+                game.setScreen(new AuthScreen(game));
             }
         });
     }
