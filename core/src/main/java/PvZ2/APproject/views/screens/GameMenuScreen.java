@@ -245,10 +245,10 @@ public class GameMenuScreen extends BaseScreen{
             if(seasonId == 1) {
                 switch (ld.getLevelNumber()) {
                     case 1:
-                        levelImage = new Image(textures.region("IMAGE_WORLDMAP_EGYPT_ISLAND14"));
+                        levelImage = new Image(textures.region("IMAGE_WORLDMAP_EGYPT_ISLAND1"));
                         break;
                     case 2:
-                        levelImage = new Image(textures.region("IMAGE_WORLDMAP_EGYPT_ISLAND16"));
+                        levelImage = new Image(textures.region("IMAGE_WORLDMAP_DANGER_NODE_LOSTCITY_DANGER_NODE_LOSTCITY_261X503"));
                         break;
                     case 3:
                         levelImage = new Image(textures.region("IMAGE_WORLDMAP_ZOMBOSS_NODE_EGYPT_ZOMBOSS_NODE_EGYPT_914X994"));
@@ -260,46 +260,46 @@ public class GameMenuScreen extends BaseScreen{
             } else if(seasonId == 2){
                 switch(ld.getLevelNumber()){
                     case 1:
-                        levelImage = new Image(textures.region("IMAGE_WORLDMAP_EGYPT_ISLAND1"));
+                        levelImage = new Image(textures.region("IMAGE_WORLDMAP_ICEAGE_ANIM3_ANIM3_1307X1318"));
                         break;
                     case 2:
-                        levelImage = new Image(textures.region("IMAGE_WORLDMAP_EGYPT_ISLAND16"));
+                        levelImage = new Image(textures.region("IMAGE_WORLDMAP_ICEAGE_ANIM27_ANIM27_301X288"));
                         break;
                     case 3:
-                        levelImage = new Image(textures.region("IMAGE_WORLDMAP_ZOMBOSS_NODE_EGYPT_ZOMBOSS_NODE_EGYPT_914X994"));
+                        levelImage = new Image(textures.region("IMAGE_WORLDMAP_DANGER_NODE_ICEAGE_DANGER_NODE_ICEAGE_471X471"));
                         break;
                     case 4:
-                        levelImage = new Image(textures.region("IMAGE_WORLDMAP_EGYPT_ISLAND3"));
+                        levelImage = new Image(textures.region("IMAGE_WORLDMAP_ZOMBOSS_NODE_ICEAGE_ZOMBOSS_NODE_ICEAGE_1055X1280"));
                         break;
                 }
             }else if(seasonId == 3){
                 switch(ld.getLevelNumber()){
                     case 1:
-                        levelImage = new Image(textures.region("IMAGE_WORLDMAP_EGYPT_ISLAND1"));
+                        levelImage = new Image(textures.region("IMAGE_WORLDMAP_BEACH_ANIM27_ANIM27_334X622"));
                         break;
                     case 2:
-                        levelImage = new Image(textures.region("IMAGE_WORLDMAP_EGYPT_ISLAND16"));
+                        levelImage = new Image(textures.region("IMAGE_WORLDMAP_BEACH_ANIM14_ANIM14_358X512"));
                         break;
                     case 3:
-                        levelImage = new Image(textures.region("IMAGE_WORLDMAP_ZOMBOSS_NODE_EGYPT_ZOMBOSS_NODE_EGYPT_914X994"));
+                        levelImage = new Image(textures.region("IMAGE_WORLDMAP_BEACH_ANIM15_ANIM15_325X443"));
                         break;
                     case 4:
-                        levelImage = new Image(textures.region("IMAGE_WORLDMAP_EGYPT_ISLAND3"));
+                        levelImage = new Image(textures.region("IMAGE_WORLDMAP_ZOMBOSS_NODE_BEACH_ZOMBOSS_NODE_BEACH_905X1096"));
                         break;
                 }
             }else if(seasonId == 4){
                 switch(ld.getLevelNumber()){
                     case 1:
-                        levelImage = new Image(textures.region("IMAGE_WORLDMAP_EGYPT_ISLAND1"));
+                        levelImage = new Image(textures.region("IMAGE_WORLDMAP_DARK_ANIM1_ANIM1_1201X1413"));
                         break;
                     case 2:
-                        levelImage = new Image(textures.region("IMAGE_WORLDMAP_EGYPT_ISLAND16"));
+                        levelImage = new Image(textures.region("IMAGE_WORLDMAP_DANGER_NODE_DARK_DANGER_NODE_DARK_384X459"));
                         break;
                     case 3:
-                        levelImage = new Image(textures.region("IMAGE_WORLDMAP_ZOMBOSS_NODE_EGYPT_ZOMBOSS_NODE_EGYPT_914X994"));
+                        levelImage = new Image(textures.region("IMAGE_WORLDMAP_DARK_ANIM9_ANIM9_373X659"));
                         break;
                     case 4:
-                        levelImage = new Image(textures.region("IMAGE_WORLDMAP_EGYPT_ISLAND3"));
+                        levelImage = new Image(textures.region("IMAGE_WORLDMAP_ZOMBOSS_NODE_DARK_ZOMBOSS_NODE_DARK_905X1096"));
                         break;
                 }
             }
