@@ -93,6 +93,7 @@ public class BonusGameController {
                 request.put("score", String.valueOf(score));
                 Response response = App.getNetworkClient().sendAndWait(request);
                 if (response.isSuccess()) {
+                    App.getCurrentUser().setBonusGamePlayed(true);
                     App.getCurrentUser().addMeowPoints(score);
                     App.getCurrentUser().setHighestPointAchieved(Math.max(App.getCurrentUser().getHighestPointAchieved(), score));
                 } else {

@@ -42,6 +42,7 @@ public class User {
     private QuestsModel questsModel;
     private int plantFoodBoughtCount = 0;
     private String lastDailyQuestRefreshDate;
+    private boolean bonusGamePlayed;
 
     public User(String username, String password, String nickname, String email, Gender gender) {
         this.username = username;
@@ -359,5 +360,12 @@ public class User {
 
     public Gender getGender() {
         return gender;
+    }
+    public boolean hasPlayedBonusGame() {
+        return bonusGamePlayed;
+    }
+
+    public void setBonusGamePlayed(boolean value) {
+        bonusGamePlayed = value;
     }
 }

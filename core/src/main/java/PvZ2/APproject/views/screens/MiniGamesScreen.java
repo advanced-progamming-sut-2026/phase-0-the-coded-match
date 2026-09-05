@@ -35,6 +35,7 @@ public class MiniGamesScreen extends BaseScreen {
         addGameRow(panel, "Vasebreaker", "Vasebreaker");
         addGameRow(panel, "Wall-nut Bowling", "WallNutBowling");
         addGameRow(panel, "I, Zombie", "IZombie");
+        addCouchIZombieRow(panel);
         addGameRow(panel, "Beghouled", "Beghouled");
         addGameRow(panel, "Zombotany", "Zombotany");
         root.add(panel).padTop(8f);
@@ -56,6 +57,30 @@ public class MiniGamesScreen extends BaseScreen {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     if (MiniGameController.startMinigame(key, stage)) {
+                        if (key.equals("IZombie")) {;
+                            game.setScreen(new MatchmakingScreen(game));
+                            return;
+                        }
+                        App.setCurrentMenu(Menu.GAME_MANAGER);
+                        game.setScreen(new PlayScreen(game));
+                    }
+                }
+            });
+            panel.add(button).width(120f).height(44f).pad(6f);
+        }
+        panel.row();
+    }
+
+    private void addCouchIZombieRow(Table panel) {
+        Label name = new Label("Couch I, Zombie", skin, "default");
+        panel.add(name).width(190f).left().pad(8f);
+        for (int stageNumber = 1; stageNumber <= 3; stageNumber++) {
+            final int stage = stageNumber;
+            TextButton button = new TextButton("Stage " + stage, skin, "default");
+            button.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    if (MiniGameController.startCouchIZombie(stage)) {
                         App.setCurrentMenu(Menu.GAME_MANAGER);
                         game.setScreen(new PlayScreen(game));
                     }

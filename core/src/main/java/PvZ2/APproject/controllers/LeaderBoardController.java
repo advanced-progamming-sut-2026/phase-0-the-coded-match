@@ -92,7 +92,7 @@ public class LeaderBoardController {
                 if (p.length < 9) continue;
                 result.add(new LeaderboardEntry(
                     parse(p[0], 0), unescape(p[1]), parse(p[2], 0), parse(p[3], 0),
-                    parse(p[4], 0), parse(p[5], 0), parse(p[6], 0), parse(p[7], 0), parse(p[8], 0)));
+                    parse(p[4], 0), parse(p[5], 0), parse(p[6], 0), parseNullable(p[7]), parse(p[8], 0)));
             }
         } catch (Exception e) {
             System.err.println("Could not load leaderboard: " + e.getMessage());
@@ -102,4 +102,14 @@ public class LeaderBoardController {
 
     private int parse(String s, int fallback) { try { return Integer.parseInt(s); } catch (Exception e) { return fallback; } }
     private String unescape(String s) { return s.replace("\\n", "\n").replace("\\|", "|").replace("\\\\", "\\"); }
+    private Integer parseNullable(String s) {
+        if (s == null || s.isBlank()) {
+            return null;
+        }
+        try {
+            return Integer.parseInt(s);
+        } catch (Exception e) {
+            return null;
+        }
+    }
 }

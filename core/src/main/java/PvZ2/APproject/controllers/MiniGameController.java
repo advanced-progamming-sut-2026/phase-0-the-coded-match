@@ -29,6 +29,7 @@ public class MiniGameController {
     private static MiniGame miniGame;
     private static boolean resultRecorded;
     private static Level currentLevel;
+    private static boolean couchIZombie;
     private static boolean networkedIZombie;
     private static String networkRole;
     private static String networkSessionId;
@@ -58,6 +59,7 @@ public class MiniGameController {
 
     public static boolean startMinigame(String name, int stage) {
         if (name == null || stage < 1 || stage > 3) return false;
+        couchIZombie = false;
         String key = name.toLowerCase().replace("-", "").replace(" ", "").replace(",", "");
         switch (key) {
             case "izombie" -> miniGame = new IZombie(stage);
@@ -376,12 +378,32 @@ public class MiniGameController {
         return value.replace("\\|", "|").replace("\\n", "\n").replace("\\=", "=").replace("\\\\", "\\");
     }
 
+    public static boolean startCouchIZombie(int stage) {
+        if (stage < 1 || stage > 3) {
+            return false;
+        }
+        networkedIZombie = false;
+        couchIZombie = true;
+        networkRole = null;
+        networkSessionId = null;
+        networkOpponent = null;
+        miniGame = new IZombie(stage);
+        currentLevel = miniGame;
+        resultRecorded = false;
+        GameManagerController.getInstance().setCurrentLevel(miniGame);
+        return true;
+    }
+
     public static boolean isZombiePlayer() {
         return "ZOMBIES".equalsIgnoreCase(networkRole);
     }
 
     public static boolean isPlantsPlayer() {
         return "PLANTS".equalsIgnoreCase(networkRole);
+    }
+
+    public static boolean isCouchIZombie() {
+        return couchIZombie;
     }
 
 }

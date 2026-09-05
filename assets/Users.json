@@ -373,6 +373,7 @@
     "questsModel": {
       "availableQuests": []
     },
-    "plantFoodBoughtCount": 0
+    "plantFoodBoughtCount": 0,
+    "bonusGamePlayed": false
   }
 ]
