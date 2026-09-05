@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import pvz.libpvz.textures.TextureBank;
 
 import java.util.List;
@@ -25,12 +26,17 @@ public class PlantView extends Actor {
     private final String pamPath;
     private List<String> clips;
     private float scale = 0.56f;
+    private Rectangle anchorBounds;
+    private boolean removing;
+    private int lastHealth;
+    private float damageFlash;
 
     public PlantView(Plant plant, Main game) {
         this.plant = plant;
         this.game = game;
         this.textures = game.getTextures();
         this.state = plant.getCurrentState();
+        this.lastHealth = visualHealth();
         this.pamPath = PamActor.resolvePlantPam(
             plant.getData().getId(),
             plant.getData().getName(),
@@ -46,6 +52,13 @@ public class PlantView extends Actor {
         try {
             game.getPlayer().loadSync(pamPath);
             clips = game.getPlayer().clips(pamPath);
+            String fitClip = resolveClip("idle");
+            Rectangle bounds = fitClip == null ? null : game.getPlayer().bounds(pamPath, fitClip);
+            anchorBounds = bounds;
+            if (bounds != null && bounds.width > 0f && bounds.height > 0f) {
+                scale = Math.min(PlayScreen.TILE_WIDTH * 0.82f / bounds.width,
+                    PlayScreen.TILE_HEIGHT * 0.90f / bounds.height);
+            }
         } catch (RuntimeException ignored) {
             clips = null;
             scale = 0.56f;
@@ -69,11 +82,31 @@ public class PlantView extends Actor {
         return clips.get(0);
     }
 
+    private String resolveClip(String preferred, String... alternatives) {
+        if (clips != null) {
+            for (String candidate : clips) if (candidate.equalsIgnoreCase(preferred)) return candidate;
+            for (String candidate : clips) if (candidate.toLowerCase(Locale.ROOT).contains(preferred.toLowerCase(Locale.ROOT))) return candidate;
+            for (String alternative : alternatives) for (String candidate : clips)
+                if (candidate.toLowerCase(Locale.ROOT).contains(alternative.toLowerCase(Locale.ROOT))) return candidate;
+            if (!preferred.equalsIgnoreCase("idle")) for (String candidate : clips)
+                if (!candidate.toLowerCase(Locale.ROOT).contains("idle")) return candidate;
+        }
+        return resolveClip(preferred);
+    }
+
+    private int visualHealth() {
+        return Math.max(0, plant.getCurrentHp()) + Math.max(0, plant.getCoverHp()) + Math.max(0, plant.getIceHP());
+    }
+
     @Override
     public void act(float delta) {
         super.act(delta);
         stateTime += delta;
-        if (state != plant.getCurrentState()) {
+        int health = visualHealth();
+        if (health < lastHealth) damageFlash = 0.14f;
+        lastHealth = health;
+        if (damageFlash > 0f) damageFlash = Math.max(0f, damageFlash - delta);
+        if (!removing && state != plant.getCurrentState()) {
             state = plant.getCurrentState();
             stateTime = 0f;
         }
@@ -81,6 +114,20 @@ public class PlantView extends Actor {
             PlayScreen.BOARD_X + (plant.getX() - 1) * PlayScreen.TILE_WIDTH,
             PlayScreen.BOARD_Y + (plant.getY() - 1) * PlayScreen.TILE_HEIGHT
         );
+    }
+
+    public void beginRemoval() {
+        if (removing) return;
+        removing = true;
+        state = plant.getCurrentState();
+        if (plant.getData().getName().equalsIgnoreCase("squash")) state = PlantState.ATTACKING;
+        else if (state != PlantState.EXPLODING && state != PlantState.DEATH && state != PlantState.ATTACKING) state = PlantState.DEATH;
+        stateTime = 0f;
+        addAction(Actions.sequence(Actions.delay(state == PlantState.DEATH ? 0.55f : 0.85f), Actions.removeActor()));
+    }
+
+    public boolean isRemovalComplete() {
+        return removing && getStage() == null;
     }
 
     @Override
@@ -93,22 +140,32 @@ public class PlantView extends Actor {
         else if (state == PlantState.EXPLODING) preferred = "explode";
         else if (state == PlantState.DEATH) preferred = "death";
         else if (state == PlantState.PRODUCING) preferred = "produce";
+        else if (state == PlantState.HURT) preferred = "hurt";
 
-        String clipName = resolveClip(preferred);
+        String clipName = switch (state) {
+            case SHOOTING -> resolveClip(preferred, "shoot", "action");
+            case ATTACKING -> resolveClip(preferred, "action", "shoot");
+            case EXPLODING -> resolveClip(preferred, "explosion", "attack");
+            case DEATH -> resolveClip(preferred, "die");
+            case PRODUCING -> resolveClip(preferred, "sun", "attack");
+            case HURT -> resolveClip(preferred, "hit", "damage");
+            default -> resolveClip(preferred);
+        };
         if (clipName != null) {
+            if (damageFlash > 0f) batch.setColor(1f, 0.2f, 0.2f, getColor().a * parentAlpha);
             try {
                 float centerX = getX() + getWidth() * 0.5f;
-                float centerY = getY() + getHeight() * 0.5f;
-                Rectangle bounds = game.getPlayer().bounds(pamPath, clipName);
+                float groundY = getY() + getHeight() * 0.08f;
                 float drawX = centerX;
-                float drawY = centerY;
-                if (bounds != null) {
-                    drawX -= (bounds.x + bounds.width * 0.5f) * scale;
-                    drawY -= (bounds.y + bounds.height * 0.5f) * scale;
+                float drawY = groundY;
+                if (anchorBounds != null) {
+                    drawX -= (anchorBounds.x + anchorBounds.width * 0.5f) * scale;
+                    drawY -= anchorBounds.y * scale;
                 }
                 game.getPlayer().draw(batch, pamPath, clipName, stateTime, drawX, drawY, scale, scale, true);
             } catch (RuntimeException ignored) {
             }
+            batch.setColor(Color.WHITE);
         }
 
         if (plant.getFreezeLevel() > 0) {

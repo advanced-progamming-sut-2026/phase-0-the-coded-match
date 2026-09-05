@@ -80,15 +80,15 @@ public class EnvironmentView extends Actor {
 
     private void drawSandstorm(Batch batch){
         batch.setColor(1f, 1f, 1f, 0.5f);
-        game.getPlayer().draw(batch, "768/INITIAL/EFFECTS/SANDSTORM_TOP/SANDSTORM_TOP.PAM", "loop", stateTime, 950 , 500,  2.0f, 2.8f, true);
+        game.getPlayer().draw(batch, "768/INITIAL/EFFECTS/SANDSTORM_TOP/SANDSTORM_TOP.PAM", "loop", stateTime, 1185f, 470f, 2.0f, 2.8f, true);
         batch.setColor(Color.WHITE);
     }
 
     private void drawIceWind(Batch batch){
-        game.getPlayer().draw(batch, "768/FULL/EFFECTS/FROSTBITE_CHILL_WIND/FROSTBITE_CHILL_WIND.PAM", "animation", stateTime, 920 , 500, 2.0f, 2.8f, true);
+        game.getPlayer().draw(batch, "768/FULL/EFFECTS/FROSTBITE_CHILL_WIND/FROSTBITE_CHILL_WIND.PAM", "animation", stateTime, 1150f, 470f, 2.0f, 2.8f, true);
     }
 
     private void drawTide(Batch batch){
-        game.getPlayer().draw(batch, "768/FULL/BACKGROUNDS/WAVE_UPPERLAYER/WAVE_UPPERLAYER.PAM", "water", stateTime, 950 , 345,  0.5f, 0.4f,true);
+        game.getPlayer().draw(batch, "768/FULL/BACKGROUNDS/WAVE_UPPERLAYER/WAVE_UPPERLAYER.PAM", "water", stateTime, 1185f, 323f, 0.5f, 0.4f,true);
     }
 }

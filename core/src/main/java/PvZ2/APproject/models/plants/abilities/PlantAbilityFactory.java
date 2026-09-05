@@ -12,6 +12,7 @@ public class PlantAbilityFactory {
         PlantAbilityHandler singleShot = new ShootAbility(1);
         HANDLERS.put(PlantAbility.SHOOT, singleShot);
         HANDLERS.put(PlantAbility.SHOOT_FORWARD, singleShot);
+        HANDLERS.put(PlantAbility.DAMAGE_FIRST_ZOMBIE_IN_LANE, singleShot);
         HANDLERS.put(PlantAbility.DOUBLE_SHOT, new ShootAbility(2));
         HANDLERS.put(PlantAbility.QUAD_SHOT, new ShootAbility(4));
         HANDLERS.put(PlantAbility.TRIPLE_LANE_SHOT, new MultiLaneShootAbility());

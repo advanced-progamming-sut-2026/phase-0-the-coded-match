@@ -1,12 +1,14 @@
 package PvZ2.APproject;
 
 import PvZ2.APproject.controllers.QuestController;
+import PvZ2.APproject.audio.MusicManager;
 import PvZ2.APproject.controllers.menus.SignupMenuController;
 import PvZ2.APproject.enums.Menu;
 import PvZ2.APproject.models.App;
 import PvZ2.APproject.views.menus.MainMenu;
 import PvZ2.APproject.views.screens.GameMenuScreen;
 import PvZ2.APproject.views.screens.SignupScreen;
+import PvZ2.APproject.views.screens.AuthScreen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -36,13 +38,7 @@ public class Main extends Game {
         textures = new TextureBank("768", assetsFolder);
         player = new PamPlayer(textures, assetsFolder);
 
-        if (App.getCurrentMenu() == Menu.MAIN_MENU && App.getCurrentUser() != null) {
-            setScreen(new MainMenu(this));
-        } else if (App.getCurrentMenu() == Menu.GAME_MENU) {
-            setScreen(new GameMenuScreen(this));
-        } else {
-            setScreen(new SignupScreen(this));
-        }
+        setScreen(new AuthScreen(this));
     }
 
     public TextureBank getTextures() {
@@ -66,6 +62,7 @@ public class Main extends Game {
     public void dispose() {
         SignupMenuController.saveToJson();
         App.disconnectFromServer();
+        MusicManager.dispose();
         super.dispose();
     }
 }
