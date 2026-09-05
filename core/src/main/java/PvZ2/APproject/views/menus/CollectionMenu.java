@@ -376,7 +376,7 @@ public class CollectionMenu extends BaseScreen {
                     game,
                     PamActor.Kind.ZOMBIE,
                     "idle",
-                    zombie.getId(),
+                    zombie.getPath(),
                     zombie.getDisplayName()
                 );
                 card.add(preview).size(105, 92).row();
@@ -416,7 +416,7 @@ public class CollectionMenu extends BaseScreen {
             game,
             PamActor.Kind.ZOMBIE,
             "idle",
-            zombie.getId(),
+            zombie.getPath(),
             zombie.getDisplayName()
         );
         String infoText =

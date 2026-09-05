@@ -9,6 +9,7 @@ import PvZ2.APproject.models.Level;
 import PvZ2.APproject.models.LevelData;
 import PvZ2.APproject.models.seasons.SeasonData;
 import PvZ2.APproject.models.seasons.SeasonRepository;
+import PvZ2.APproject.views.QuestScreen;
 import PvZ2.APproject.views.menus.ChoosePlantsMenu;
 import PvZ2.APproject.views.menus.CollectionMenu;
 import PvZ2.APproject.views.menus.ChoosePlantsMenu;
@@ -64,12 +65,14 @@ public class GameMenuScreen extends BaseScreen{
 
         ImageButton collectionButton = new ImageButton(skin, "almanac");
         ImageButton greenhouseButton = new ImageButton(skin, "hud_zg");
+        ImageButton questsButton = new ImageButton(skin, "hud_quests");
         TextButton leaderboardButton = new TextButton("Leaderboard", skin, "brown");
         TextButton shopButton = new TextButton("Shop", skin, "purple");
         TextButton miniGamesButton = new TextButton("Mini Games", skin, "default");
 
         screensTable.add(collectionButton);
         screensTable.add(greenhouseButton);
+        screensTable.add(questsButton);
         screensTable.add(leaderboardButton);
         screensTable.add(shopButton);
         screensTable.add(miniGamesButton);
@@ -91,6 +94,14 @@ public class GameMenuScreen extends BaseScreen{
             public void clicked(InputEvent event, float x, float y) {
                 game.setScreen(new GreenHouseScreen(game));
                 App.setCurrentMenu(Menu.GREEN_HOUSE);
+            }
+        });
+
+        questsButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                game.setScreen(new QuestScreen(game));
+                App.setCurrentMenu(Menu.QUESTS);
             }
         });
 
