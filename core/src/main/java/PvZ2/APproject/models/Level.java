@@ -102,7 +102,8 @@ public class Level {
 
     public Zombie getAdjacentZombie(Zombie zombie) {
         for (Zombie adjacentZombie : activeZombies) {
-            if (adjacentZombie != zombie && zombie.getX() == adjacentZombie.getX() && zombie.getY() == adjacentZombie.getY()) {
+            if (adjacentZombie != zombie && zombie.getX() == adjacentZombie.getX() && zombie.getY() ==
+                adjacentZombie.getY()) {
                 return adjacentZombie;
             }
         }

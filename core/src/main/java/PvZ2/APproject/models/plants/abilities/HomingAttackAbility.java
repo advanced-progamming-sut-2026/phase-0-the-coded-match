@@ -23,8 +23,10 @@ public class HomingAttackAbility implements PlantAbilityHandler {
         for (int i = 0; i < hitCount; i++) {
             Zombie target = findClosestZombie(level, plant);
             Tile grave = findClosestGrave(level, plant);
-            double zombieDistance = target == null ? Double.MAX_VALUE : Math.abs(target.getX() - plant.getX()) + Math.abs(target.getY() - plant.getY());
-            double graveDistance = grave == null ? Double.MAX_VALUE : Math.abs(grave.getColumn() - plant.getX()) + Math.abs(grave.getRow() - plant.getY());
+            double zombieDistance = target == null ? Double.MAX_VALUE : Math.abs(target.getX() - plant.getX())
+                + Math.abs(target.getY() - plant.getY());
+            double graveDistance = grave == null ? Double.MAX_VALUE : Math.abs(grave.getColumn() - plant.getX())
+                + Math.abs(grave.getRow() - plant.getY());
             if (target == null && grave == null) {
                 return;
             }

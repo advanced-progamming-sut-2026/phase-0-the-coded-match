@@ -53,7 +53,8 @@ public class LeaderboardService {
                 .append(user.hasPlayedBonusGame() ? user.getHighestPoint() : "").append('|')
                 .append(user.getGamesPlayed()).append('\n');
         }
-        return new Response(request.getRequestId(), MessageType.GET_LEADERBOARD, true, "Leaderboard", Map.of("entries", b.toString()));
+        return new Response(request.getRequestId(), MessageType.GET_LEADERBOARD, true,
+            "Leaderboard", Map.of("entries", b.toString()));
     }
 
     private String escape(String value) {

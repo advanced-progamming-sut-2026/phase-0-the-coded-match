@@ -19,11 +19,9 @@ public class TileActor extends Group {
         this.tile = tile;
         this.screen = screen;
         this.selectionController = plantSelectionController;
-
         float pixelX = PlayScreen.BOARD_X + (tile.getColumn() - 1) * PlayScreen.TILE_WIDTH;
         float pixelY = PlayScreen.BOARD_Y + (tile.getRow() - 1) * PlayScreen.TILE_HEIGHT;
         setBounds(pixelX, pixelY, PlayScreen.TILE_WIDTH, PlayScreen.TILE_HEIGHT);
-
         addListener(new InputListener() {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
@@ -32,7 +30,6 @@ public class TileActor extends Group {
                     selectionController.setHoveredTile(tile);
                 }
             }
-
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
                 inTile = false;
@@ -43,9 +40,9 @@ public class TileActor extends Group {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                return screen.getHarvestMode() || selectionController.hasSelectedPlant() || screen.isMiniGameTileInteractive();
+                return screen.getHarvestMode() || selectionController.hasSelectedPlant() ||
+                    screen.isMiniGameTileInteractive();
             }
-
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 if (screen.getHarvestMode()) {

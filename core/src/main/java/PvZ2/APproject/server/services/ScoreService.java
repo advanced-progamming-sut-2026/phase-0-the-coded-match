@@ -32,7 +32,6 @@ public class ScoreService {
         boolean firstGame = !user.hasPlayedBonusGame();
         int old = user.getHighestPoint();
         if (firstGame || score > old) {user.setHighestPoint(score);}
-//        user.setHighestPoint(score);
         user.setBonusGamePlayed(true);
         users.update(user);
         boolean newRecord = firstGame || score > old;

@@ -25,7 +25,6 @@ public class MatchmakingScreen extends BaseScreen {
         backgroundImage = new Image(new TextureRegionDrawable(background));
         backgroundImage.setFillParent(true);
         stage.addActor(backgroundImage);
-
         BorderedTable table = new BorderedTable();
         Label title = new Label("Online I-Zombie", skin, "big");
         SelectBox<String> stageBox = new SelectBox<>(skin);
@@ -53,12 +52,15 @@ public class MatchmakingScreen extends BaseScreen {
         });
         invite.addListener(new ClickListener() {
             @Override public void clicked(InputEvent event, float x, float y) {
-                message.setText(MatchmakingController.findPlayer(username.getText(), Integer.parseInt(stageBox.getSelected())));
+                message.setText(MatchmakingController.findPlayer(username.getText(),
+                    Integer.parseInt(stageBox.getSelected())));
             }
         });
 
-        MatchmakingController.setInvitationListener(response -> Gdx.app.postRunnable(() -> showInvitation(response)));
-        PvZ2.APproject.controllers.MiniGameController.setMatchFoundListener(response -> game.setScreen(new PlayScreen(game)));
+        MatchmakingController.setInvitationListener(response -> Gdx.app.postRunnable(()
+            -> showInvitation(response)));
+        PvZ2.APproject.controllers.MiniGameController.setMatchFoundListener(response ->
+            game.setScreen(new PlayScreen(game)));
 
         addBackButton(() -> {
             MatchmakingController.clearInvitationListener();
@@ -74,7 +76,8 @@ public class MatchmakingScreen extends BaseScreen {
             protected void result(Object object) {
                 boolean accepted = Boolean.TRUE.equals(object);
                 String invitationId = response.get("invitationId");
-                String result = accepted ? MatchmakingController.accept(invitationId) : MatchmakingController.reject(invitationId);
+                String result = accepted ? MatchmakingController.accept(invitationId) :
+                    MatchmakingController.reject(invitationId);
                 message.setText(result);
             }
         };

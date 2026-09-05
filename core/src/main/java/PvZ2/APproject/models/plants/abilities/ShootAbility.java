@@ -28,7 +28,8 @@ public class ShootAbility implements PlantAbilityHandler {
             return;
         }
         plant.setState(PlantState.SHOOTING);
-        int count = Math.max(projectileCount, plant.getData().getProjectileCount()) * Math.max(1, plant.getStackCount());
+        int count = Math.max(projectileCount, plant.getData().getProjectileCount()) *
+            Math.max(1, plant.getStackCount());
         for (int i = 0; i < count; i++) {
             level.getActiveProjectiles().add(createProjectile(plant, plant.getY(), i));
         }
@@ -36,7 +37,8 @@ public class ShootAbility implements PlantAbilityHandler {
 
     protected Projectile createProjectile(Plant plant, int lane, int offset) {
         double startX = plant.getX() + 0.15 + (offset * 0.08);
-        double speed = plant.getData().getProjectileSpeed() > 0 ? plant.getData().getProjectileSpeed() : DEFAULT_PROJECTILE_SPEED;
+        double speed = plant.getData().getProjectileSpeed() > 0 ? plant.getData().getProjectileSpeed() :
+            DEFAULT_PROJECTILE_SPEED;
         int damage = Math.max(0, plant.getDamage() * damageMultiplier);
         return new Projectile(startX, lane, speed, damage, false, false, plant);
     }

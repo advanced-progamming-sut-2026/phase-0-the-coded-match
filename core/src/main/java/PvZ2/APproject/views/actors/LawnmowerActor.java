@@ -29,7 +29,8 @@ public class LawnmowerActor extends Actor {
         loadAnimation();
         setPosition(
             PlayScreen.BOARD_X - getWidth() + 8f,
-            PlayScreen.BOARD_Y + (lawnmower.getRow() - 1) * PlayScreen.TILE_HEIGHT + (PlayScreen.TILE_HEIGHT - getHeight()) * 0.5f
+            PlayScreen.BOARD_Y + (lawnmower.getRow() - 1) * PlayScreen.TILE_HEIGHT +
+                (PlayScreen.TILE_HEIGHT - getHeight()) * 0.5f
         );
     }
 
@@ -71,9 +72,10 @@ public class LawnmowerActor extends Actor {
     public void act(float delta) {
         super.act(delta);
         stateTime += delta;
-        if (!lawnmower.isTriggered() || lawnmower.HasBeenUsed()) return;
+        if (!lawnmower.isTriggered() || lawnmower.hasBeenUsed()) return;
         moveBy(moveSpeed * delta, 0f);
-        float endX = PlayScreen.BOARD_X + playScreen.getCurrentLevel().getGameMap().getColumns() * PlayScreen.TILE_WIDTH + getWidth();
+        float endX = PlayScreen.BOARD_X + playScreen.getCurrentLevel().getGameMap().getColumns() *
+            PlayScreen.TILE_WIDTH + getWidth();
         if (getX() >= endX) {
             lawnmower.setHasBeenUsed(true);
             playScreen.removeLawnmowerActor(lawnmower);

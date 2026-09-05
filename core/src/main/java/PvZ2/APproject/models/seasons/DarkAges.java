@@ -26,7 +26,7 @@ public final class DarkAges extends Season {
     }
 
     @Override
-    public void LevelStarted(Level level) {
+    public void levelStarted(Level level) {
 
         level.setSkySunProducer(null);
         markNecromancyTiles(level);
@@ -54,10 +54,10 @@ public final class DarkAges extends Season {
 
 
     @Override
-    public void Update(Level level, float delta) {return;}
+    public void update(Level level, float delta) {return;}
 
     @Override
-    public void WaveStarted(Level level, int waveNumber) {
+    public void waveStarted(Level level, int waveNumber) {
         triggerNecromancy(level);
         spawnRandomWaveGraves(level);
     }
@@ -132,7 +132,7 @@ public final class DarkAges extends Season {
     }
 
     @Override
-    public void PlantPlaced(Level level, Plant plant, int x, int y) {
+    public void plantPlaced(Level level, Plant plant, int x, int y) {
 
     }
 

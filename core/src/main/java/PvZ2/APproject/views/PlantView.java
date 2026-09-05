@@ -85,7 +85,8 @@ public class PlantView extends Actor {
     private String resolveClip(String preferred, String... alternatives) {
         if (clips != null) {
             for (String candidate : clips) if (candidate.equalsIgnoreCase(preferred)) return candidate;
-            for (String candidate : clips) if (candidate.toLowerCase(Locale.ROOT).contains(preferred.toLowerCase(Locale.ROOT))) return candidate;
+            for (String candidate : clips) if (candidate.toLowerCase(Locale.ROOT).
+                contains(preferred.toLowerCase(Locale.ROOT))) return candidate;
             for (String alternative : alternatives) for (String candidate : clips)
                 if (candidate.toLowerCase(Locale.ROOT).contains(alternative.toLowerCase(Locale.ROOT))) return candidate;
             if (!preferred.equalsIgnoreCase("idle")) for (String candidate : clips)
@@ -121,7 +122,8 @@ public class PlantView extends Actor {
         removing = true;
         state = plant.getCurrentState();
         if (plant.getData().getName().equalsIgnoreCase("squash")) state = PlantState.ATTACKING;
-        else if (state != PlantState.EXPLODING && state != PlantState.DEATH && state != PlantState.ATTACKING) state = PlantState.DEATH;
+        else if (state != PlantState.EXPLODING && state != PlantState.DEATH && state != PlantState.ATTACKING)
+            state = PlantState.DEATH;
         stateTime = 0f;
         addAction(Actions.sequence(Actions.delay(state == PlantState.DEATH ? 0.55f : 0.85f), Actions.removeActor()));
     }
@@ -129,28 +131,22 @@ public class PlantView extends Actor {
     public boolean isRemovalComplete() {
         return removing && getStage() == null;
     }
-
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
-        if (pamPath == null || clips == null || clips.isEmpty()) return;
-
-        String preferred = "idle";
+        if (pamPath == null || clips == null || clips.isEmpty()) return;String preferred = "idle";
         if (state == PlantState.SHOOTING || state == PlantState.ATTACKING) preferred = "attack";
         else if (state == PlantState.EXPLODING) preferred = "explode";
         else if (state == PlantState.DEATH) preferred = "death";
         else if (state == PlantState.PRODUCING) preferred = "produce";
-        else if (state == PlantState.HURT) preferred = "hurt";
-
-        String clipName = switch (state) {
+        else if (state == PlantState.HURT) preferred = "hurt";String clipName = switch (state) {
             case SHOOTING -> resolveClip(preferred, "shoot", "action");
             case ATTACKING -> resolveClip(preferred, "action", "shoot");
             case EXPLODING -> resolveClip(preferred, "explosion", "attack");
             case DEATH -> resolveClip(preferred, "die");
             case PRODUCING -> resolveClip(preferred, "sun", "attack");
             case HURT -> resolveClip(preferred, "hit", "damage");
-            default -> resolveClip(preferred);
-        };
+            default -> resolveClip(preferred);};
         if (clipName != null) {
             if (damageFlash > 0f) batch.setColor(1f, 0.2f, 0.2f, getColor().a * parentAlpha);
             try {
@@ -167,16 +163,18 @@ public class PlantView extends Actor {
             }
             batch.setColor(Color.WHITE);
         }
-
         if (plant.getFreezeLevel() > 0) {
             batch.setColor(0.7f, 0.9f, 1f, 0.55f);
             TextureRegion iceTexture = null;
             if (plant.isFullyFrozen()) {
-                iceTexture = textures.region("IMAGE_EFFECTS_FROSTBITE_ICE_BLOCK_PLANT_FROSTBITE_ICE_BLOCK_PLANT_164X169");
+                iceTexture = textures.region(
+                    "IMAGE_EFFECTS_FROSTBITE_ICE_BLOCK_PLANT_FROSTBITE_ICE_BLOCK_PLANT_164X169");
             } else if (plant.getFreezeLevel() == 2) {
-                iceTexture = textures.region("IMAGE_EFFECTS_FROSTBITE_ICE_BLOCK_PLANT_FROSTBITE_ICE_BLOCK_PLANT_167X172_3");
+                iceTexture = textures.region(
+                    "IMAGE_EFFECTS_FROSTBITE_ICE_BLOCK_PLANT_FROSTBITE_ICE_BLOCK_PLANT_167X172_3");
             } else if (plant.getFreezeLevel() == 1) {
-                iceTexture = textures.region("IMAGE_EFFECTS_FROSTBITE_ICE_BLOCK_PLANT_FROSTBITE_ICE_BLOCK_PLANT_167X172");
+                iceTexture = textures.region(
+                    "IMAGE_EFFECTS_FROSTBITE_ICE_BLOCK_PLANT_FROSTBITE_ICE_BLOCK_PLANT_167X172");
             }
             if (iceTexture != null) {
                 batch.draw(iceTexture, getX(), getY(), getWidth(), getHeight());

@@ -161,12 +161,9 @@ public class PamActor extends Actor {
         if (kind == Kind.ZOMBIE && zombiesIndexed) {
             return;
         }
-
         Map<String, String> index = kind == Kind.PLANT ? PLANT_PATHS : ZOMBIE_PATHS;
         String type = kind == Kind.PLANT ? "PLANT" : "ZOMBIE";
-
         String[] roots;
-
         if (kind == Kind.PLANT) {
             roots = new String[] {
                 "IMAGES/768/INITIAL/PLANT",
@@ -179,19 +176,15 @@ public class PamActor extends Actor {
                 "IMAGES/768/FULL/ZOMBIE"
             };
         }
-
         for (String rootPath : roots) {
             FileHandle root = Gdx.files.internal(rootPath);
-
             if (!root.exists()) {
                 continue;
             }
-
             for (FileHandle folder : root.list()) {
                 if (!folder.isDirectory()) {
                     continue;
                 }
-
                 FileHandle[] files = folder.list(".PAM");
 
                 for (FileHandle pam : files) {

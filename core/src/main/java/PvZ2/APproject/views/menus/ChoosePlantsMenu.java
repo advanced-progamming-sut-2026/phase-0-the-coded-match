@@ -73,36 +73,29 @@ public class ChoosePlantsMenu extends BaseScreen {
             App.setCurrentMenu(Menu.MAIN_MENU);
             game.setScreen(new GameMenuScreen(game));
         });
-
         Table root = new Table();
         root.setFillParent(true);
         root.top().padTop(54).padLeft(28).padRight(28).padBottom(18);
-
         Label title = new Label("CHOOSE YOUR PLANTS", skin, "medium_outline");
         root.add(title).colspan(2).padBottom(8).row();
-
         BorderedTable selectedWrapper = new BorderedTable();
         selectedWrapper.top().padTop(4);
         selectedTable = new Table(skin);
         selectedWrapper.add(new Label("SELECTED", skin, "medium_outline")).padBottom(2).row();
         selectedWrapper.add(selectedTable).width(920).height(66);
         root.add(selectedWrapper).colspan(2).width(950).height(110).padBottom(8).row();
-
         plantGrid = new Table(skin);
         plantGrid.top().left();
         ScrollPane scrollPane = new ScrollPane(plantGrid, skin);
         scrollPane.setFadeScrollBars(false);
         scrollPane.setScrollingDisabled(true, false);
-
         detailsTable = new BorderedTable();
         detailsTable.top();
         ScrollPane detailsScroll = new ScrollPane(detailsTable, skin);
         detailsScroll.setFadeScrollBars(false);
         detailsScroll.setScrollingDisabled(true, false);
-
         root.add(scrollPane).width(665).height(465).padRight(12);
         root.add(detailsScroll).width(275).height(465).row();
-
         TextButton startButton = new TextButton("LET'S ROCK!", skin, "purple");
         root.add(startButton).colspan(2).width(240).height(48).padTop(6);
         stage.addActor(root);
@@ -168,12 +161,10 @@ public class ChoosePlantsMenu extends BaseScreen {
     private void rebuildGrid() {
         plantGrid.clearChildren();
         int column = 0;
-
         for (PlantData plant : ChoosePlantsMenuController.getAvailablePlantsForUi()) {
             boolean unlocked = ChoosePlantsMenuController.isPlantUnlockedForUi(plant.getDisplayName());
             boolean selected = ChoosePlantsMenuController.hasPlantBeenChosen(plant.getDisplayName());
             int level = CollectionMenuController.getPlantLevelForUi(plant);
-
             BorderedTable card = new BorderedTable();
             card.setTouchable(Touchable.enabled);
             PamActor preview = new PamActor(
@@ -195,87 +186,51 @@ public class ChoosePlantsMenu extends BaseScreen {
                     : "LOCKED",
                 skin,
                 "default"
-            );
-            state.setAlignment(Align.center);
-            state.setFontScale(0.64f);
-            state.setColor(Color.DARK_GRAY);
-
-            card.add(preview).size(150, 90).padTop(2).row();
-            card.add(name).width(185).height(28).row();
-            card.add(state).width(185).height(18).padBottom(4);
-            card.addListener(new ClickListener() {
+            );state.setAlignment(Align.center);state.setFontScale(0.64f);state.setColor(Color.DARK_GRAY);
+            card.add(preview).size(150, 90).padTop(2).row();card.add(name).width(185).height(28).row();
+            card.add(state).width(185).height(18).padBottom(4);card.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     showPlantDetails(plant);
-                    if (!unlocked) {
-                        showMessage(messageLabel, "Plant is locked");
-                        return;
-                    }
-                    if (!ChoosePlantsMenuController.hasCurrentLevel()) {
-                        return;
-                    }
+                    if (!unlocked) {showMessage(messageLabel, "Plant is locked");return;}
+                    if (!ChoosePlantsMenuController.hasCurrentLevel()) {return;}
                     String message;
                     if (ChoosePlantsMenuController.hasPlantBeenChosen(plant.getDisplayName())) {
                         message = ChoosePlantsMenuController.removePlant(plant.getDisplayName());
                     } else {
                         message = ChoosePlantsMenuController.addPlant(plant.getDisplayName());
                     }
-                    showMessage(messageLabel, message);
-                    rebuildSelected();
-                    rebuildGrid();
+                    showMessage(messageLabel, message);rebuildSelected();rebuildGrid();
                 }
             });
-
             plantGrid.add(card).width(205).height(150).pad(5);
             column++;
-            if (column == 3) {
-                plantGrid.row();
-                column = 0;
-            }
+            if (column == 3) {plantGrid.row();column = 0;}
         }
     }
 
     private void showPlantDetails(PlantData plant) {
         detailsTable.clearChildren();
         detailsTable.top().pad(10);
-
         boolean unlocked = ChoosePlantsMenuController.isPlantUnlockedForUi(plant.getDisplayName());
         boolean selected = ChoosePlantsMenuController.hasPlantBeenChosen(plant.getDisplayName());
         int level = CollectionMenuController.getPlantLevelForUi(plant);
         PlantUpgradeData next = CollectionMenuController.getNextUpgradeForUi(plant);
         int seeds = App.getCurrentUser() == null ? 0 : App.getCurrentUser().getSeedPacketCount(plant.getDisplayName());
-
         Label name = new Label(plant.getDisplayName(), skin, "medium_outline");
         name.setWrap(true);
-        PamActor preview = new PamActor(
-            game,
-            PamActor.Kind.PLANT,
-            "idle",
-            plant.getId(),
-            plant.getName(),
-            plant.getDisplayName()
-        );
+        PamActor preview = new PamActor(game, PamActor.Kind.PLANT, "idle", plant.getId(), plant.getName(),
+            plant.getDisplayName());
         String family = plant.getCategory() == null ? "Unknown" : plant.getCategory().getName();
         String seedInfo = next == null ? seeds + " / MAX" : seeds + " / " + next.getRequiredSeedPackets();
-        Label info = new Label(
-            "Level: " + (unlocked ? Math.max(level, 1) : "Locked") + "\n" +
-            "Sun cost: " + plant.getSunCost() + "\n" +
-            "Health: " + plant.getBaseHp() + "\n" +
-            "Damage: " + plant.getDamage() + "\n" +
-            "Recharge: " + plant.getRecharge() + "\n" +
-            "Family: " + family + "\n" +
-            "Seeds: " + seedInfo,
-            skin,
-            "default"
-        );
-        info.setWrap(true);
-        info.setFontScale(0.76f);
-        info.setColor(Color.DARK_GRAY);
-
+        Label info = new Label("Level: " + (unlocked ? Math.max(level, 1) : "Locked") + "\n" +
+            "Sun cost: " + plant.getSunCost() + "\n" + "Health: " + plant.getBaseHp() + "\n" +
+            "Damage: " + plant.getDamage() + "\n" + "Recharge: " + plant.getRecharge() + "\n" +
+            "Family: " + family + "\n" + "Seeds: " + seedInfo, skin, "default");
+        info.setWrap(true);info.setFontScale(0.76f);info.setColor(Color.DARK_GRAY);
         detailsTable.add(name).width(245).padBottom(4).row();
         detailsTable.add(preview).size(225, 150).padBottom(4).row();
         detailsTable.add(info).width(245).left().padBottom(6).row();
-
         if (unlocked && selected) {
             TextButton boost = new TextButton("BOOST - 2 GEMS", skin, "purple");
             detailsTable.add(boost).width(235).height(42).padBottom(6).row();
@@ -287,7 +242,6 @@ public class ChoosePlantsMenu extends BaseScreen {
                 }
             });
         }
-
         if (unlocked && next != null) {
             TextButton upgrade = new TextButton("UPGRADE", skin, "default");
             detailsTable.add(upgrade).width(235).height(42).padBottom(6).row();
@@ -295,13 +249,10 @@ public class ChoosePlantsMenu extends BaseScreen {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     String message = CollectionMenuController.upgradePlantByName(plant.getDisplayName());
-                    showMessage(messageLabel, message);
-                    rebuildGrid();
-                    showPlantDetails(plant);
+                    showMessage(messageLabel, message);rebuildGrid();showPlantDetails(plant);
                 }
             });
         }
-
         Label description = new Label(plant.getDescription() == null ? "" : plant.getDescription(), skin, "default");
         description.setWrap(true);
         description.setFontScale(0.72f);

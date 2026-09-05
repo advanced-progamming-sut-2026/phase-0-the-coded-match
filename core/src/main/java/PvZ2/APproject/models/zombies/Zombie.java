@@ -45,7 +45,7 @@ public class Zombie implements Update {
     public Zombie(ZombieData data, double x, int y) {
         this.data = data;
         this.difficultyLevel = App.getCurrentUser() == null ? 3 : App.getCurrentUser().getDifficultyLevel();
-        this.maxHp = Math.max(1, (int) (data.getHP() * (difficultyLevel / 3.0)));
+        this.maxHp = Math.max(1, (int) (data.getHp() * (difficultyLevel / 3.0)));
         this.currentHp = maxHp;
         this.eatDPS = (int) (data.getEatDPS() * (difficultyLevel / 3.0));
         this.currentState = data.getState();

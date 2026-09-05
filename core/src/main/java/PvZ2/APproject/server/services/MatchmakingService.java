@@ -60,26 +60,33 @@ public class MatchmakingService {
         int stage = parseStage(request.get("stage"));
         invites.put(id, new PendingInvite(handler, targetHandler, stage));
 //        Map<String, String> d = Map.of("invitationId", id, "from", handler.getUsername());
-//        targetHandler.push(new Response(id, MessageType.MATCH_INVITATION, true, "Game invitation from " + handler.getUsername(), d));
+//        targetHandler.push(new Response(id, MessageType.MATCH_INVITATION, true, "Game invitation from " +
+//        handler.getUsername(), d));
 //        return new Response(id, MessageType.FIND_PLAYER, true, "Invitation sent", Map.of("invitationId", id));
-        Map<String, String> data = Map.of("invitationId", id, "from", handler.getUsername(), "stage", String.valueOf(stage));
+        Map<String, String> data = Map.of("invitationId", id, "from", handler.getUsername(),
+            "stage", String.valueOf(stage));
         targetHandler.push(new Response(id, MessageType.MATCH_INVITATION, true,
             "Game invitation from " + handler.getUsername(), data));
-        return new Response(id, MessageType.FIND_PLAYER, true, "Invitation sent", Map.of("invitationId", id));
+        return new Response(id, MessageType.FIND_PLAYER, true, "Invitation sent",
+            Map.of("invitationId", id));
     }
 
     public Response accept(Request request, ClientHandler handler) {
         PendingInvite invite = invites.remove(request.get("invitationId"));
-        if (invite == null || invite.target != handler) return Response.error(request.getRequestId(), "Invitation not found");
-        if (invite.from.getUsername() == null) return Response.error(request.getRequestId(), "Inviter is no longer online");
+        if (invite == null || invite.target != handler) return Response.error(request.getRequestId(),
+            "Invitation not found");
+        if (invite.from.getUsername() == null) return Response.error(request.getRequestId(),
+            "Inviter is no longer online");
         createSession(invite.from, invite.target, invite.stage);
         return Response.ok(request.getRequestId(), MessageType.MATCH_FOUND, "Match accepted");
     }
 
     public Response reject(Request request, ClientHandler handler) {
         PendingInvite invite = invites.remove(request.get("invitationId"));
-        if (invite == null || invite.target != handler) return Response.error(request.getRequestId(), "Invitation not found");
-        invite.from.push(new Response(request.getRequestId(), MessageType.REJECT_MATCH, true, "Game invitation rejected"));
+        if (invite == null || invite.target != handler) return Response.error(request.getRequestId(),
+            "Invitation not found");
+        invite.from.push(new Response(request.getRequestId(), MessageType.REJECT_MATCH, true,
+            "Game invitation rejected"));
         return Response.ok(request.getRequestId(), MessageType.REJECT_MATCH, "Invitation rejected");
     }
 
@@ -115,7 +122,8 @@ public class MatchmakingService {
                 if (opponent != null && opponent.getUsername() != null) {
                     opponent.setSessionId(null);
                     opponent.push(new Response(session.getId(), MessageType.GAME_OVER, true,
-                        "Opponent disconnected", Map.of("winner", opponent.getUsername(), "reason", "opponent_disconnected")));
+                        "Opponent disconnected", Map.of("winner", opponent.getUsername(),
+                        "reason", "opponent_disconnected")));
                 }
             }
         }

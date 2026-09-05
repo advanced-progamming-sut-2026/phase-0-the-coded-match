@@ -65,6 +65,7 @@ public class ShopScreen extends  BaseScreen{
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     handleItemPurchase(item);
+                    updateCurrency();
                 }
             });
             card.add(buyBtn).width(100).height(40).padBottom(10);

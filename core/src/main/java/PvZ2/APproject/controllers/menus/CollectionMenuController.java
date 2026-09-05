@@ -108,7 +108,7 @@ public class CollectionMenuController {
         result.append("name: ").append(zombie.getDisplayName()).append("\n");
         result.append("id: ").append(zombie.getId()).append("\n");
         result.append("seasons: ").append(zombie.getSeasons()).append("\n");
-        result.append("health: ").append(zombie.getHP()).append("\n");
+        result.append("health: ").append(zombie.getHp()).append("\n");
         result.append("damage: ").append(zombie.getEatDPS()).append("\n");
         result.append("speed: ").append(zombie.getSpeed()).append("\n");
         result.append("wave cost: ").append(zombie.getWaveCost()).append("\n");
@@ -254,7 +254,8 @@ public class CollectionMenuController {
             }
         }
         PlantData data = PlantRepository.getInstance().findByName(name);
-        if (data != null && collection.getAvailablePlantsIds().stream().anyMatch(id -> id.equalsIgnoreCase(data.getId()))) {
+        if (data != null && collection.getAvailablePlantsIds().stream().anyMatch(id ->
+            id.equalsIgnoreCase(data.getId()))) {
             Plant plant = new Plant(data, 0, 0, 1);
             collection.getAvailablePlants().add(plant);
             return plant;

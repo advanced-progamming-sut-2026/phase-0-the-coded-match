@@ -280,7 +280,8 @@ public class QuestController {
             Quest speedExecution = questsModel.getQuestByName("Speed Execution");
 
             double currentTick = GameManagerController.getInstance().getCurrentLevel().getCurrentTick();
-            double timeWaveStarted = GameManagerController.getInstance().getCurrentLevel().getZombieWave().getTimeWaveStarted();
+            double timeWaveStarted = GameManagerController.getInstance().getCurrentLevel()
+                .getZombieWave().getTimeWaveStarted();
 
             if (currentTick - timeWaveStarted <= 300) {
                 speedExecution.setCurrentValue(speedExecution.getCurrentValue() + 1);
@@ -375,7 +376,8 @@ public class QuestController {
         }
 
         Quest winStreak = questsModel.getQuestByName("Win Streak");
-        if(App.getCurrentUser().isVictroy() && GameManagerController.getInstance().getCurrentLevel().getLevelDifficulty() == 5){
+        if(App.getCurrentUser().isVictroy() && GameManagerController.getInstance()
+            .getCurrentLevel().getLevelDifficulty() == 5){
             winCount += 1;
             if(winCount >= 5){
                 winCount = 0;

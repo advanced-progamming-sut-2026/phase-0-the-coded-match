@@ -1,8 +1,27 @@
+plugins {
+  id 'checkstyle'
+  id 'pmd'
+}
+
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 eclipse.project.name = appName + '-core'
 
 repositories {
   maven { url 'https://jitpack.io' }
+}
+
+checkstyle {
+  toolVersion = '10.26.1'
+}
+
+tasks.withType(Checkstyle).configureEach {
+  ignoreFailures = true
+}
+
+pmd {
+  toolVersion = '7.16.0'
+  consoleOutput = true
+  ignoreFailures = true
 }
 
 dependencies {

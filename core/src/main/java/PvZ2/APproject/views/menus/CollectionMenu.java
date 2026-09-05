@@ -75,71 +75,50 @@ public class CollectionMenu extends BaseScreen {
         addMainBackground();
         addCurrencyBar();
         messageLabel = addMessageLabel();
-        addBackButton(() -> {
-            App.setCurrentMenu(Menu.GAME_MENU);
-            game.setScreen(new GameMenuScreen(game));
-        });
-
-        Table root = new Table();
-        root.setFillParent(true);
-        root.top().padTop(54).padLeft(38).padRight(38).padBottom(18);
-
+        addBackButton(() -> {App.setCurrentMenu(Menu.GAME_MENU);game.setScreen(new GameMenuScreen(game));});
+        Table root = new Table();root.setFillParent(true);root.top().padTop(54).padLeft(38).padRight(38).padBottom(18);
         Label title = new Label("COLLECTION", skin, "medium_outline");
         root.add(title).colspan(2).padBottom(10).row();
-
         Table tabs = new Table(skin);
         TextButton plantsTab = new TextButton("PLANTS", skin, "purple");
         TextButton zombiesTab = new TextButton("ZOMBIES", skin, "default");
         tabs.add(plantsTab).width(180).height(44).padRight(8);
         tabs.add(zombiesTab).width(180).height(44);
         root.add(tabs).colspan(2).padBottom(8).row();
-
         filtersTable = new Table(skin);
         root.add(filtersTable).colspan(2).height(48).left().padBottom(8).row();
-
         listTable = new Table(skin);
         listTable.top().left();
         listScroll = new ScrollPane(listTable, skin);
         listScroll.setFadeScrollBars(false);
         listScroll.setScrollingDisabled(true, false);
-
         detailsTable = new BorderedTable();
         detailsTable.top();
         ScrollPane detailsScroll = new ScrollPane(detailsTable, skin);
         detailsScroll.setFadeScrollBars(false);
         detailsScroll.setScrollingDisabled(true, false);
-
         root.add(listScroll).width(630).height(500).padRight(14);
         root.add(detailsScroll).width(315).height(500);
         stage.addActor(root);
-
         plantsTab.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 showingPlants = true;
                 plantsTab.setStyle(skin.get("purple", TextButton.TextButtonStyle.class));
                 zombiesTab.setStyle(skin.get("default", TextButton.TextButtonStyle.class));
-                buildPlantFilters();
-                rebuildPlantList();
+                buildPlantFilters();rebuildPlantList();
                 showDefaultPlantDetails();
             }
         });
-
         zombiesTab.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 showingPlants = false;
                 zombiesTab.setStyle(skin.get("purple", TextButton.TextButtonStyle.class));
                 plantsTab.setStyle(skin.get("default", TextButton.TextButtonStyle.class));
-                filtersTable.clearChildren();
-                rebuildZombieList();
-                showDefaultZombieDetails();
+                filtersTable.clearChildren();rebuildZombieList();showDefaultZombieDetails();
             }
-        });
-
-        buildPlantFilters();
-        rebuildPlantList();
-        showDefaultPlantDetails();
+        });buildPlantFilters();rebuildPlantList();showDefaultPlantDetails();
     }
 
     private void buildPlantFilters() {
@@ -182,25 +161,17 @@ public class CollectionMenu extends BaseScreen {
     private void rebuildPlantList() {
         listTable.clearChildren();
         int column = 0;
-
         for (PlantData plant : PlantRepository.getInstance().getAllPlants()) {
-            if (!matchesPlantFilters(plant)) {
-                continue;
-            }
-
+            if (!matchesPlantFilters(plant)) {continue;}
             boolean unlocked = CollectionMenuController.isPlantUnlockedForUi(plant);
             int level = CollectionMenuController.getPlantLevelForUi(plant);
-            int seeds = App.getCurrentUser() == null ? 0 : App.getCurrentUser().getSeedPacketCount(plant.getDisplayName());
+            int seeds = App.getCurrentUser() == null ? 0 : App.getCurrentUser().getSeedPacketCount
+                (plant.getDisplayName());
             PlantUpgradeData next = CollectionMenuController.getNextUpgradeForUi(plant);
             String required = next == null ? "MAX" : Integer.toString(next.getRequiredSeedPackets());
-
             BorderedTable card = new BorderedTable();
             card.setTouchable(Touchable.enabled);
-            PamActor preview = new PamActor(
-                game,
-                PamActor.Kind.PLANT,
-                "idle",
-                plant.getId(),
+            PamActor preview = new PamActor(game, PamActor.Kind.PLANT, "idle", plant.getId(),
                 plant.getName(),
                 plant.getDisplayName()
             );
@@ -209,17 +180,13 @@ public class CollectionMenu extends BaseScreen {
             name.setAlignment(Align.center);
             name.setFontScale(0.72f);
             name.setColor(Color.DARK_GRAY);
-            Label state = new Label(
-                unlocked
-                    ? "Lv " + Math.max(level, 1) + "   Seeds " + seeds + "/" + required
+            Label state = new Label(unlocked ? "Lv " + Math.max(level, 1) + "   Seeds " + seeds + "/" + required
                     : "LOCKED   Seeds " + seeds + "/" + required,
                 skin,
-                "default"
-            );
+                "default");
             state.setAlignment(Align.center);
             state.setFontScale(0.62f);
             state.setColor(Color.DARK_GRAY);
-
             card.add(preview).size(140, 90).padTop(2).row();
             card.add(name).width(174).height(28).row();
             card.add(state).width(174).height(18).padBottom(4);
@@ -229,7 +196,6 @@ public class CollectionMenu extends BaseScreen {
                     showPlantDetails(plant);
                 }
             });
-
             listTable.add(card).width(190).height(150).pad(6);
             column++;
             if (column == 3) {
@@ -237,7 +203,6 @@ public class CollectionMenu extends BaseScreen {
                 column = 0;
             }
         }
-
         if (listTable.getChildren().size == 0) {
             listTable.add(new Label("No plants match these filters", skin, "medium_outline")).pad(35);
         }
@@ -277,79 +242,52 @@ public class CollectionMenu extends BaseScreen {
     private void showPlantDetails(PlantData plant) {
         detailsTable.clearChildren();
         detailsTable.top().pad(12);
-
         boolean unlocked = CollectionMenuController.isPlantUnlockedForUi(plant);
         int level = CollectionMenuController.getPlantLevelForUi(plant);
         int seeds = App.getCurrentUser() == null ? 0 : App.getCurrentUser().getSeedPacketCount(plant.getDisplayName());
         PlantUpgradeData next = CollectionMenuController.getNextUpgradeForUi(plant);
-
         Label name = new Label(plant.getDisplayName(), skin, "medium_outline");
         name.setWrap(true);
-        PamActor preview = new PamActor(
-            game,
-            PamActor.Kind.PLANT,
-            "idle",
-            plant.getId(),
-            plant.getName(),
-            plant.getDisplayName()
-        );
-
+        PamActor preview = new PamActor(game, PamActor.Kind.PLANT, "idle", plant.getId(), plant.getName(),
+            plant.getDisplayName());
         String seedInfo = next == null ? seeds + " / MAX" : seeds + " / " + next.getRequiredSeedPackets();
         String family = plant.getCategory() == null ? "Unknown" : plant.getCategory().getName();
-        String infoText =
-            "Level: " + (unlocked ? Math.max(level, 1) : "Locked") + "\n" +
-            "Seed packets: " + seedInfo + "\n" +
-            "Family: " + family + "\n" +
-            "Sun cost: " + plant.getSunCost() + "\n" +
-            "Health: " + plant.getBaseHp() + "\n" +
-            "Damage: " + plant.getDamage() + "\n" +
+        String infoText = "Level: " + (unlocked ? Math.max(level, 1) : "Locked") + "\n" +
+            "Seed packets: " + seedInfo + "\n" + "Family: " + family + "\n" + "Sun cost: " + plant.getSunCost() + "\n" +
+            "Health: " + plant.getBaseHp() + "\n" + "Damage: " + plant.getDamage() + "\n" +
             "Recharge: " + plant.getRecharge() + "\n" +
             "Tags: " + plant.getTags();
-        Label info = new Label(infoText, skin, "default");
-        info.setWrap(true);
-        info.setFontScale(0.74f);
+        Label info = new Label(infoText, skin, "default");info.setWrap(true);info.setFontScale(0.74f);
         info.setColor(Color.DARK_GRAY);
         Label description = new Label(plant.getDescription() == null ? "" : plant.getDescription(), skin, "default");
-        description.setWrap(true);
-        description.setFontScale(0.7f);
-        description.setColor(Color.DARK_GRAY);
-
+        description.setWrap(true);description.setFontScale(0.7f);description.setColor(Color.DARK_GRAY);
         detailsTable.add(name).width(275).padBottom(4).row();
         detailsTable.add(preview).size(245, 165).padBottom(4).row();
         detailsTable.add(info).width(275).left().padBottom(6).row();
         detailsTable.add(description).width(275).left().padBottom(8).row();
-
         if (!unlocked) {
-            TextButton purchase = new TextButton("PURCHASE - " + CollectionMenuController.getPlantPrice() + " COINS", skin, "purple");
+            TextButton purchase = new TextButton("PURCHASE - " + CollectionMenuController.getPlantPrice() +
+                " COINS", skin, "purple");
             detailsTable.add(purchase).width(265).height(48);
             purchase.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     String message = CollectionMenuController.purchasePlantByName(plant.getDisplayName());
-                    showMessage(messageLabel, message);
-                    rebuildPlantList();
-                    showPlantDetails(plant);
+                    showMessage(messageLabel, message);rebuildPlantList();showPlantDetails(plant);
+                    updateCurrency();
                 }
             });
         } else if (next != null) {
             TextButton upgrade = new TextButton(
                 "UPGRADE - " + next.getRequiredCoins() + " COINS / " + next.getRequiredSeedPackets() + " SEEDS",
-                skin,
-                "purple"
-            );
+                skin, "purple");
             detailsTable.add(upgrade).width(265).height(48);
             upgrade.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
                     String message = CollectionMenuController.upgradePlantByName(plant.getDisplayName());
-                    showMessage(messageLabel, message);
-                    rebuildPlantList();
-                    showPlantDetails(plant);
-                }
-            });
-        } else {
-            detailsTable.add(new Label("MAX LEVEL", skin, "medium_outline")).pad(10);
-        }
+                    showMessage(messageLabel, message);rebuildPlantList();showPlantDetails(plant);}});
+        } else {detailsTable.add(new Label("MAX LEVEL", skin, "medium_outline")).pad(10);}
     }
 
     private void showDefaultPlantDetails() {
@@ -374,7 +312,7 @@ public class CollectionMenu extends BaseScreen {
                     game,
                     PamActor.Kind.ZOMBIE,
                     "idle",
-                    zombie.getId(),
+                    zombie.getPath(),
                     zombie.getDisplayName()
                 );
                 card.add(preview).size(105, 92).row();
@@ -414,11 +352,11 @@ public class CollectionMenu extends BaseScreen {
             game,
             PamActor.Kind.ZOMBIE,
             "idle",
-            zombie.getId(),
+            zombie.getPath(),
             zombie.getDisplayName()
         );
         String infoText =
-            "Health: " + zombie.getHP() + "\n" +
+            "Health: " + zombie.getHp() + "\n" +
             "Damage: " + zombie.getEatDPS() + "\n" +
             "Speed: " + zombie.getSpeed() + "\n" +
             "Attack interval: " + zombie.getAttackInterval() + "\n" +

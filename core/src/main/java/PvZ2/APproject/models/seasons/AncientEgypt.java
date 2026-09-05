@@ -24,7 +24,7 @@ public final class AncientEgypt extends Season {
     }
 
     @Override
-    public void LevelStarted(Level level) {
+    public void levelStarted(Level level) {
         int rows = level.getGameMap().getRows();
         int cols = level.getGameMap().getColumns();
         List<Tile> graves = new ArrayList<>();
@@ -48,7 +48,7 @@ public final class AncientEgypt extends Season {
     }
 
     @Override
-    public void Update(Level level, float delta) {
+    public void update(Level level, float delta) {
 //        for(Projectile projectile : level.getActiveProjectiles()){
 //            int row = (int) projectile.getyCoordinate();
 //            int col = (int) projectile.getxCoordinate();
@@ -64,7 +64,7 @@ public final class AncientEgypt extends Season {
     }
 
     @Override
-    public void WaveStarted(Level level, int waveNumber) {
+    public void waveStarted(Level level, int waveNumber) {
         if(waveNumber == level.getData().getWaveCount() - 1){
             boolean sandstormOccurred = false;
             for(Zombie zombie : level.getActiveZombies()){
@@ -98,7 +98,7 @@ public final class AncientEgypt extends Season {
     }
 
     @Override
-    public void PlantPlaced(Level level, Plant plant, int x, int y) {
+    public void plantPlaced(Level level, Plant plant, int x, int y) {
         Tile tile = level.getGameMap().getTile(x, y);
         if(tile != null && tile.isGrave()){
             System.out.println("Cannot place a plant on top of a grave");

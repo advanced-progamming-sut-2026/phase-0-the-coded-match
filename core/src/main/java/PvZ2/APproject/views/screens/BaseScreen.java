@@ -80,113 +80,22 @@ public abstract class BaseScreen implements Screen {
         if (App.getCurrentUser() == null) {
             return;
         }
-
         if (currencyTable != null) {
             currencyTable.remove();
         }
-
         currencyTable = new Table(skin);
-
         Table coinTable = new Table(skin);
         Table gemTable = new Table(skin);
-
         Image gemImage = new Image(textures.region("IMAGE_UI_HUD_INGAME_GEM"));
         Image coinImage = new Image(textures.region("IMAGE_UI_HUD_INGAME_COIN"));
         gemLabel = new Label(Integer.toString(App.getCurrentUser().getGemsCount()), skin, "default");
         coinLabel = new Label(Integer.toString(App.getCurrentUser().getCoinsCount()), skin, "default");
-
         coinTable.add(coinImage).size(36, 36).padRight(4);
         coinTable.add(coinLabel).padRight(8);
         gemTable.add(gemImage).size(36, 36).padRight(4);
         gemTable.add(gemLabel).padRight(8);
-
         if (gameSettings.isDebugMode()) {
-            TextButton cheatAddCoin = new TextButton("+", skin, "default");
-            TextField coinAmount = new TextField("", skin, "default");
-
-            TextButton cheatAddGem = new TextButton("+", skin, "default");
-            TextField gemAmount = new TextField("", skin, "default");
-
-//            coinAmount.setVisible(false);
-//            gemAmount.setVisible(false);
-
-            coinTable.add(cheatAddCoin).size(25, 25);
-            coinTable.add(coinAmount).size(50, 25).padLeft(4);
-            gemTable.add(cheatAddGem).size(25, 25);
-            gemTable.add(gemAmount).size(50, 25).padLeft(4);
-
-            coinAmount.setVisible(false);
-            gemAmount.setVisible(false);
-
-            cheatAddCoin.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    cheatAddCoin.setVisible(false);
-                    coinAmount.setVisible(true);
-                    stage.setKeyboardFocus(coinAmount);
-                }
-            });
-
-            coinAmount.addListener(new InputListener() {
-                @Override
-                public boolean keyDown(InputEvent event, int keycode) {
-                    if (keycode == Input.Keys.ENTER) {
-                        try {
-                            int amount = Integer.parseInt(coinAmount.getText());
-
-                            GameMenuController.cheatAddCoinOrGem(amount, "coin");
-
-                            coinLabel.setText(Integer.toString(App.getCurrentUser().getCoinsCount()));
-
-                            coinAmount.setText("");
-                            coinAmount.setVisible(false);
-                            cheatAddCoin.setVisible(true);
-
-                            stage.setKeyboardFocus(null);
-
-                        } catch (NumberFormatException e) {
-                            coinAmount.setText("");
-                        }
-                        return true;
-                    }
-                    return false;
-                }
-            });
-
-            cheatAddGem.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    cheatAddGem.setVisible(false);
-                    gemAmount.setVisible(true);
-                    stage.setKeyboardFocus(gemAmount);
-                }
-            });
-
-            gemAmount.addListener(new InputListener() {
-                @Override
-                public boolean keyDown(InputEvent event, int keycode) {
-                    if (keycode == Input.Keys.ENTER) {
-                        try {
-                            int amount = Integer.parseInt(gemAmount.getText());
-
-                            GameMenuController.cheatAddCoinOrGem(amount, "gem");
-
-                            gemLabel.setText(Integer.toString(App.getCurrentUser().getGemsCount()));
-
-                            gemAmount.setText("");
-                            gemAmount.setVisible(false);
-                            cheatAddGem.setVisible(true);
-
-                            stage.setKeyboardFocus(null);
-
-                        } catch (NumberFormatException e) {
-                            gemAmount.setText("");
-                        }
-                        return true;
-                    }
-                    return false;
-                }
-            });
+            addCheatMode(coinTable, gemTable);
         }
 
         currencyTable.add(coinTable).padRight(15);
@@ -197,6 +106,87 @@ public abstract class BaseScreen implements Screen {
             VIRTUAL_HEIGHT - currencyTable.getHeight() - 18
         );
         stage.addActor(currencyTable);
+    }
+
+    protected void addCheatMode(Table coinTable, Table gemTable) {
+        TextButton cheatAddCoin = new TextButton("+", skin, "default");
+        TextField coinAmount = new TextField("", skin, "default");
+        TextButton cheatAddGem = new TextButton("+", skin, "default");
+        TextField gemAmount = new TextField("", skin, "default");
+        coinTable.add(cheatAddCoin).size(25, 25);
+        coinTable.add(coinAmount).size(50, 25).padLeft(4);
+        gemTable.add(cheatAddGem).size(25, 25);
+        gemTable.add(gemAmount).size(50, 25).padLeft(4);
+        coinAmount.setVisible(false);
+        gemAmount.setVisible(false);
+        cheatAddCoin.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                cheatAddCoin.setVisible(false);
+                coinAmount.setVisible(true);
+                stage.setKeyboardFocus(coinAmount);
+            }
+        });
+        coinAmount.addListener(new InputListener() {
+            @Override
+            public boolean keyDown(InputEvent event, int keycode) {
+                if (keycode == Input.Keys.ENTER) {
+                    try {
+                        int amount = Integer.parseInt(coinAmount.getText());
+                        GameMenuController.cheatAddCoinOrGem(amount, "coin");
+                        coinLabel.setText(Integer.toString(App.getCurrentUser().getCoinsCount()));
+                        coinAmount.setText("");
+                        coinAmount.setVisible(false);
+                        cheatAddCoin.setVisible(true);
+                        stage.setKeyboardFocus(null);
+                    } catch (NumberFormatException e) {
+                        coinAmount.setText("");
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
+
+        cheatGem(cheatAddGem, gemAmount);
+
+    }
+
+    protected void cheatGem(TextButton cheatAddGem, TextField gemAmount) {
+        cheatAddGem.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                cheatAddGem.setVisible(false);
+                gemAmount.setVisible(true);
+                stage.setKeyboardFocus(gemAmount);
+            }
+        });
+
+        gemAmount.addListener(new InputListener() {
+            @Override
+            public boolean keyDown(InputEvent event, int keycode) {
+                if (keycode == Input.Keys.ENTER) {
+                    try {
+                        int amount = Integer.parseInt(gemAmount.getText());
+
+                        GameMenuController.cheatAddCoinOrGem(amount, "gem");
+
+                        gemLabel.setText(Integer.toString(App.getCurrentUser().getGemsCount()));
+
+                        gemAmount.setText("");
+                        gemAmount.setVisible(false);
+                        cheatAddGem.setVisible(true);
+
+                        stage.setKeyboardFocus(null);
+
+                    } catch (NumberFormatException e) {
+                        gemAmount.setText("");
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     protected void updateCurrency() {

@@ -51,7 +51,8 @@ public class TravelLogController {
                 sb.append('/').append(quest.getTargetValue()[0]);
             }
             sb.append('\n');
-            sb.append("status: ").append(quest.isCompleted() ? (quest.isRewardClaimed() ? "claimed" : "completed") : "active").append('\n');
+            sb.append("status: ").append(quest.isCompleted() ? (quest.isRewardClaimed() ? "claimed" : "completed") :
+                "active").append('\n');
             sb.append("---------------------------\n");
         }
         return sb;
@@ -71,7 +72,8 @@ public class TravelLogController {
             condition = condition.replace("sun_amount", String.valueOf(targets[0]));
             condition = condition.replaceAll("\\bn\\b", String.valueOf(targets[0]));
         }
-        if (quest.getTargetPlant() != null) condition = condition.replace("family_type", quest.getTargetPlant().getCategory().name());
+        if (quest.getTargetPlant() != null) condition = condition.replace(
+            "family_type", quest.getTargetPlant().getCategory().name());
         return condition;
     }
 
@@ -79,7 +81,8 @@ public class TravelLogController {
         for (Quest quest : App.getCurrentUser().getQuestsModel().getAvailableQuests()) {
             if (quest.getQuestName().equalsIgnoreCase(name)) {
                 String status = quest.isCompleted() ? (quest.isRewardClaimed() ? "claimed" : "completed") : "active";
-                return "name: " + quest.getQuestName() + "\ncondition: " + formatCondition(quest) + "\nprogression: " + quest.getCurrentValue() + "\nstatus: " + status;
+                return "name: " + quest.getQuestName() + "\ncondition: " + formatCondition(quest) + "\nprogression: "
+                    + quest.getCurrentValue() + "\nstatus: " + status;
             }
         }
         return "quest not found";
@@ -95,6 +98,7 @@ public class TravelLogController {
     }
 
     public static StringBuilder showMinigames() {
-        return new StringBuilder("--- MiniGames ---\nVasebreaker - Wallnut Bowling - I, Zombie - Beghouled - Zombotany");
+        return new StringBuilder("--- MiniGames ---\nVasebreaker - Wallnut Bowling - I, Zombie - Beghouled" +
+            " - Zombotany");
     }
 }

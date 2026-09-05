@@ -6,8 +6,8 @@ public enum Commands {
     EXIT_MENU("^\\s*menu\\s+exit\\s*$"),
     REGISTER("^\\s*register\\s+-u\\s+(?<username>[A-Za-z0-9-]+)\\s+-p\\s+" +
             "(?<password>[A-Za-z0-9!#$%^&*()=+{}\\[\\]|\\/:;\\\"',<>?\\\\]+)\\s+" +
-            "(?<passwordConfirm>[A-Za-z0-9!#$%^&*()=+{}\\[\\]|\\/:;\\\"',<>?\\\\]+)\\s+-n\\s+(?<nickname>.*)\\s+-e\\s+" +
-            "(?<email>[A-Za-z0-9](?:[A-Za-z0-9_-]|(?<!\\.)\\.)*[A-Za-z0-9]@[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?\\." +
+            "(?<passwordConfirm>[A-Za-z0-9!#$%^&*()=+{}\\[\\]|\\/:;\\\"',<>?\\\\]+)\\s+-n\\s+(?<nickname>.*)\\s+-e\\s+"+
+            "(?<email>[A-Za-z0-9](?:[A-Za-z0-9_-]|(?<!\\.)\\.)*[A-Za-z0-9]@[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?\\."+
             "[A-Za-z]{2,})\\s+-g\\s+(?<gender>.*)\\s*$"),
     PASSWORD("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!#$%^&*()=+{}\\[\\]|\\/\\\\:;\\\"',<>?])" +
             "[A-Za-z0-9!#$%^&*()=+{}\\[\\]|\\/:;\\\"',<>?\\\\]{8,}$"),
@@ -75,7 +75,8 @@ public enum Commands {
     GREENHOUSE_COLLECT("^\\s*collect\\s+\\(\\s*(?<x>\\d+)\\s*,\\s*(?<y>\\d+)\\s*\\)\\s*$"),
     GREENHOUSE_GROW("^\\s*grow\\s+\\(\\s*(?<x>\\d+)\\s*,\\s*(?<y>\\d+)\\s*\\)\\s*$"),
     WALLNUT_PLACE("^\\s*place\\s+nut\\s+row\\s+(?<row>\\d+)\\s*$"),
-    BEGHOULDED_SWAP("^\\s*swap\\s+plants\\s*\\(\\s*(?<r1>\\d+)\\s*,\\s*(?<c1>\\d+)\\s*\\)\\s*\\(\\s*(?<r2>\\d+)\\s*,\\s*(?<c2>\\d+)\\s*\\)\\s*$"),
+    BEGHOULDED_SWAP("^\\s*swap\\s+plants\\s*\\(\\s*(?<r1>\\d+)\\s*,\\s*(?<c1>\\d+)\\s*\\)\\s*\\" +
+        "(\\s*(?<r2>\\d+)\\s*,\\s*(?<c2>\\d+)\\s*\\)\\s*$"),
     BEGHOULDED_UPGRADE("^\\s*upgrade\\s+plants?\\s+(?<from>.+?)\\s+to\\s+(?<to>.+?)\\s*$"),
     VASEBREAKER_BREAK_VASE("^\\s*break\\s+vase\\s+at\\s+\\(\\s*(?<x>\\d+)\\s*,\\s*(?<y>\\d+)\\s*\\)\\s*$"),
     VASEBREAKER_PICKUP_SEED("^\\s*pick\\s+up\\s+seed\\s+at\\s+\\(\\s*(?<x>\\d+)\\s*,\\s*(?<y>\\d+)\\s*\\)\\s*$");

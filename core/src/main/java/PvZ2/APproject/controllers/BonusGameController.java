@@ -86,7 +86,8 @@ public class BonusGameController {
         int score = game.getTotalMioPoints();
         if (App.getCurrentUser() != null) {
 //            App.getCurrentUser().addMeowPoints(score);
-//            App.getCurrentUser().setHighestPointAchieved(Math.max(App.getCurrentUser().getHighestPointAchieved(), score));
+//            App.getCurrentUser().setHighestPointAchieved(Math.max(App.getCurrentUser().getHighestPointAchieved(),
+//            score));
             /// PHASE 3///
             try {
                 Request request = new Request(MessageType.SUBMIT_SCORE);
@@ -95,7 +96,8 @@ public class BonusGameController {
                 if (response.isSuccess()) {
                     App.getCurrentUser().setBonusGamePlayed(true);
                     App.getCurrentUser().addMeowPoints(score);
-                    App.getCurrentUser().setHighestPointAchieved(Math.max(App.getCurrentUser().getHighestPointAchieved(), score));
+                    App.getCurrentUser().setHighestPointAchieved(Math.max
+                        (App.getCurrentUser().getHighestPointAchieved(), score));
                 } else {
                     return response.getMessage();
                 }

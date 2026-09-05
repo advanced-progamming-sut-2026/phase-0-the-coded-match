@@ -41,7 +41,8 @@ public class NetworkClient {
         reader.start();
     }
 
-    public CompletableFuture<Response> sendRequestAndGetResponse(Request request) throws IOException, ClassNotFoundException{
+    public CompletableFuture<Response> sendRequestAndGetResponse(Request request)
+        throws IOException, ClassNotFoundException{
         if (request == null) throw new IllegalArgumentException("request cannot be null");
         if (!isConnected()) throw new IOException("Not connected to server");
 

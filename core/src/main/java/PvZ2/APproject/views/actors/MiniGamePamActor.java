@@ -47,7 +47,8 @@ public class MiniGamePamActor extends Actor {
             }
         } catch (RuntimeException ignored) {
         }
-        player.draw(batch, pamPath, clip, stateTime, getX() + getWidth() / 2f, getY() + getHeight() / 2f, scale, scale, true);
+        player.draw(batch, pamPath, clip, stateTime, getX() + getWidth() / 2f, getY() +
+            getHeight() / 2f, scale, scale, true);
     }
 
     private void finishLoading() {

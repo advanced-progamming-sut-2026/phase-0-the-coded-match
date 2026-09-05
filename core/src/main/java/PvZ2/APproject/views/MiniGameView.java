@@ -20,23 +20,29 @@ public class MiniGameView {
             miniGame = MiniGameController.getMiniGame();
         } else if (input.matches(Commands.ADVANCE_TIME.getPattern())) {
 //            instance.advanceTime(input, message);
-            if (miniGame instanceof IZombie game) game.Update();
+            if (miniGame instanceof IZombie game) game.update();
             else if (miniGame instanceof WallNutBowling game) game.tick();
             else if (miniGame instanceof Zombotany game) game.tick();
             MiniGameController.verifyWinLossConditions();
             System.out.println(message[0]);
         } else if (input.matches(Commands.PLACE_ZOMBIE.getPattern())) {
-            if (miniGame instanceof IZombie game) System.out.println(game.placeZombie(input)); else System.out.println("not an I, Zombie game");
+            if (miniGame instanceof IZombie game) System.out.println(game.placeZombie(input));
+            else System.out.println("not an I, Zombie game");
         } else if ((matcher = getMatcher(input, Commands.VASEBREAKER_BREAK_VASE.getPattern())) != null) {
             int x = Integer.parseInt(matcher.group("x"));
             int y = Integer.parseInt(matcher.group("y"));
             instance.breakVaseCommand(x, y);
-        } else if ((matcher = getMatcher(input, Commands.WALLNUT_PLACE.getPattern())) != null && miniGame instanceof WallNutBowling game) {
+        } else if ((matcher = getMatcher(input, Commands.WALLNUT_PLACE.getPattern())) != null &&
+            miniGame instanceof WallNutBowling game) {
             System.out.println(game.executePlaceNutFromBelt(Integer.parseInt(matcher.group("row"))));
-        } else if ((matcher = getMatcher(input, Commands.BEGHOULDED_SWAP.getPattern())) != null && miniGame instanceof Beghouled game) {
-            System.out.println(game.swapPlants(Integer.parseInt(matcher.group("r1")) - 1, Integer.parseInt(matcher.group("c1")) - 1, Integer.parseInt(matcher.group("r2")) - 1, Integer.parseInt(matcher.group("c2")) - 1) ? "swap successful" : "invalid swap");
+        } else if ((matcher = getMatcher(input, Commands.BEGHOULDED_SWAP.getPattern())) != null &&
+            miniGame instanceof Beghouled game) {
+            System.out.println(game.swapPlants(Integer.parseInt(matcher.group("r1")) - 1,
+                Integer.parseInt(matcher.group("c1")) - 1, Integer.parseInt(matcher.group("r2")) - 1,
+                Integer.parseInt(matcher.group("c2")) - 1) ? "swap successful" : "invalid swap");
             MiniGameController.verifyWinLossConditions();
-        } else if ((matcher = getMatcher(input, Commands.BEGHOULDED_UPGRADE.getPattern())) != null && miniGame instanceof Beghouled game) {
+        } else if ((matcher = getMatcher(input, Commands.BEGHOULDED_UPGRADE.getPattern())) != null &&
+            miniGame instanceof Beghouled game) {
             System.out.println(game.upgradePlants(matcher.group("from").trim(), matcher.group("to").trim()));
         } else if ((matcher = getMatcher(input, Commands.VASEBREAKER_PICKUP_SEED.getPattern())) != null) {
             int x = Integer.parseInt(matcher.group("x"));

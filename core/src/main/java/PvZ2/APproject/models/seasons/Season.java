@@ -39,10 +39,10 @@ public abstract class Season {
 
     };
 
-    public abstract void LevelStarted(Level level);
-    public abstract void Update(Level level, float delta);
-    public abstract void WaveStarted(Level level, int waveNumber);
-    public abstract void PlantPlaced(Level level, Plant plant, int x, int y);
+    public abstract void levelStarted(Level level);
+    public abstract void update(Level level, float delta);
+    public abstract void waveStarted(Level level, int waveNumber);
+    public abstract void plantPlaced(Level level, Plant plant, int x, int y);
 
 //    public Tile getTile(int x, int y) {
 //        return null;
