@@ -29,6 +29,9 @@ public class ZombieView extends Actor {
     private List<String> clips;
     private float stateTime;
     private float scale = 0.62f;
+    private float visualY = Float.NaN;
+    private int lastHealth;
+    private float damageFlash;
 //    private static final float VISUAL_X_OFFSET_TILES = 0.18f;
     private boolean removing;
     private String deathClipName;
@@ -37,6 +40,7 @@ public class ZombieView extends Actor {
         this.game = game;
         this.zombie = zombie;
         this.currentState = zombie.getCurrentState();
+        this.lastHealth = visualHealth();
         this.currentClip = getCurrentClip();
         this.frozenClip = "768/FULL/EFFECTS/FROSTBITE_ICE_BLOCK_ZOMBIE/FROSTBITE_ICE_BLOCK_ZOMBIE.PAM";
         setSize(PlayScreen.TILE_WIDTH, PlayScreen.TILE_HEIGHT);
@@ -100,10 +104,24 @@ public class ZombieView extends Actor {
         return null;
     }
 
+    private int visualHealth() {
+        int health = Math.max(0, zombie.getCurrentHp());
+        if (zombie.getArmors() != null) {
+            for (ZombieArmor armor : zombie.getArmors()) {
+                if (armor != null) health += Math.max(0, armor.getCurrentHp());
+            }
+        }
+        return health;
+    }
+
     @Override
     public void act(float delta) {
         super.act(delta);
         stateTime += delta;
+        int health = visualHealth();
+        if (health < lastHealth) damageFlash = 0.14f;
+        lastHealth = health;
+        if (damageFlash > 0f) damageFlash = Math.max(0f, damageFlash - delta);
         if (zombie.getCurrentState() != currentState) {
             currentState = zombie.getCurrentState();
             stateTime = 0f;
@@ -118,9 +136,12 @@ public class ZombieView extends Actor {
             }
         }
 
+        float targetY = PlayScreen.BOARD_Y + (zombie.getY() - 1) * PlayScreen.TILE_HEIGHT;
+        if (Float.isNaN(visualY)) visualY = targetY;
+        visualY += (targetY - visualY) * Math.min(1f, delta * 5f);
         setPosition(
             PlayScreen.BOARD_X + (((float) zombie.getX() - 1f) * PlayScreen.TILE_WIDTH),
-            PlayScreen.BOARD_Y + (zombie.getY() - 1) * PlayScreen.TILE_HEIGHT
+            visualY
         );
     }
 
@@ -147,7 +168,8 @@ public class ZombieView extends Actor {
         if (currentClip == null || clips == null || clips.isEmpty()) return;
 
         float alpha = getColor().a * parentAlpha;
-        if (zombie.getIsChilled()) batch.setColor(0.75f, 0.88f, 1f, alpha);
+        if (damageFlash > 0f) batch.setColor(1f, 0.2f, 0.2f, alpha);
+        else if (zombie.getIsChilled()) batch.setColor(0.75f, 0.88f, 1f, alpha);
         else batch.setColor(1f, 1f, 1f, alpha);
 
         String preferred = "walk";

@@ -1,6 +1,7 @@
 package PvZ2.APproject.views.screens;
 
 import PvZ2.APproject.Main;
+import PvZ2.APproject.audio.MusicManager;
 import PvZ2.APproject.client.Response;
 import PvZ2.APproject.controllers.GameManagerController;
 import PvZ2.APproject.controllers.MiniGameController;
@@ -66,10 +67,10 @@ public class PlayScreen extends BaseScreen {
     private PlantSelectionController plantSelectionController;
     private EnvironmentView environmentView;
 
-    public static float TILE_WIDTH = 80;
-    public static float TILE_HEIGHT = 100;
-    public static float BOARD_X = 260;
-    public static float BOARD_Y = 80;
+    public static float TILE_WIDTH = 100f;
+    public static float TILE_HEIGHT = 93.75f;
+    public static float BOARD_X = 325f;
+    public static float BOARD_Y = 75f;
 
     private Label messageNotif;
     private Label missionNotif;
@@ -127,6 +128,7 @@ public class PlayScreen extends BaseScreen {
 
     private float networkPollTimer = 0f;
     private static final float NETWORK_POLL_INTERVAL = 0.1f;
+    private boolean finalWaveMusic;
 
     public PlayScreen(Main game) {
         this.game = game;
@@ -135,6 +137,7 @@ public class PlayScreen extends BaseScreen {
     @Override
     public void show() {
         super.show();
+        MusicManager.playForLevel(currentLevel);
         pauseStage = new Stage(viewport);
 
         if (currentLevel.getSpecialLevelStrategy() != null) {
@@ -329,7 +332,7 @@ public class PlayScreen extends BaseScreen {
         sunAmountTable.add(sunLabel);
         sunAmountTable.pack();
         sunAmountTable.setPosition(
-            sunAmountTable.getWidth() + 20, VIRTUAL_HEIGHT - sunAmountTable.getHeight() - 10);
+            124f, VIRTUAL_HEIGHT - sunAmountTable.getHeight() - 12f);
 
 
         Table plantFoodTable = new Table(skin);
@@ -345,7 +348,7 @@ public class PlayScreen extends BaseScreen {
         plantFoodTable.add(plantFoodLabel);
         plantFoodTable.pack();
         plantFoodTable.setPosition(
-            plantFoodTable.getWidth() + 20, VIRTUAL_HEIGHT - plantFoodTable.getHeight() - 50
+            124f, VIRTUAL_HEIGHT - plantFoodTable.getHeight() - 56f
         );
 
 
@@ -476,6 +479,10 @@ public class PlayScreen extends BaseScreen {
             if (!message.isEmpty()) {
                 showMessage(message);
             }
+            if (!(currentLevel instanceof MiniGame) && currentLevel.getZombieWave().isLastWave() && !finalWaveMusic) {
+                MusicManager.playFinalWave();
+                finalWaveMusic = true;
+            }
 
             updatePlantActors();
             updateZombieActors();
@@ -514,7 +521,7 @@ public class PlayScreen extends BaseScreen {
     public void createPauseButton() {
         ImageButton pauseButton = new ImageButton(skin, "ingame_pause");
         pauseButton.setPosition(
-            VIRTUAL_WIDTH - pauseButton.getWidth() - 20, VIRTUAL_HEIGHT - pauseButton.getHeight() - 50);
+            VIRTUAL_WIDTH - pauseButton.getWidth() - 18f, VIRTUAL_HEIGHT - pauseButton.getHeight() - 74f);
         stage.addActor(pauseButton);
 
         pauseButton.addListener(new ClickListener() {
@@ -527,11 +534,12 @@ public class PlayScreen extends BaseScreen {
 
     public void createPlantBoxes() {
         if (currentLevel instanceof VaseBreaker || currentLevel instanceof IZombie || currentLevel instanceof WallNutBowling || currentLevel instanceof Beghouled) return;
-        float x = 12f;
-        float y = VIRTUAL_HEIGHT - 160f;
-        float width = 104f;
-        float height = 112f;
-        float gap = 4f;
+        float x = 14f;
+        float width = 96f;
+        float gap = 3f;
+        int count = Math.max(1, currentLevel.getChosenPlants().size());
+        float height = Math.min(88f, (VIRTUAL_HEIGHT - 92f - gap * (count - 1)) / count);
+        float y = VIRTUAL_HEIGHT - height - 8f;
         for (String plantName : currentLevel.getChosenPlants()) {
             PlantData plantData = PlantRepository.getInstance().findByName(plantName);
             if(plantData == null){

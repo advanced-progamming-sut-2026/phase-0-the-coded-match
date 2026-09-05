@@ -1,6 +1,7 @@
 package PvZ2.APproject.views.screens;
 
 import PvZ2.APproject.Main;
+import PvZ2.APproject.audio.MusicManager;
 import PvZ2.APproject.controllers.menus.GameMenuController;
 import PvZ2.APproject.enums.Menu;
 import PvZ2.APproject.models.GameSettings;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -20,7 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import pvz.libpvz.pam.PamPlayer;
 import pvz.libpvz.textures.TextureBank;
@@ -29,14 +31,15 @@ import pvz.skin.PvzSkin;
 public abstract class BaseScreen implements Screen {
     protected Skin skin;
     OrthographicCamera camera = new OrthographicCamera();
-    protected Viewport viewport = new FitViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, camera);
+    protected Viewport viewport = new StretchViewport(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, camera);
     protected Stage stage;
     protected TextureBank textures;
     protected PamPlayer player;
     protected TextureRegion background;
     protected Image backgroundImage;
-    protected static final float VIRTUAL_WIDTH = 1024;
-    protected static final float VIRTUAL_HEIGHT = 768;
+    protected Texture externalBackgroundTexture;
+    protected static final float VIRTUAL_WIDTH = 1280;
+    protected static final float VIRTUAL_HEIGHT = 720;
     protected GameSettings gameSettings;
     protected Table currencyTable;
     protected Label coinLabel;
@@ -51,6 +54,7 @@ public abstract class BaseScreen implements Screen {
         textures = ((Main) Gdx.app.getApplicationListener()).getTextures();
         player = ((Main) Gdx.app.getApplicationListener()).getPlayer();
         gameSettings = GameSettings.getInstance();
+        MusicManager.playForScreen(this);
     }
 
     protected void addBackground(String regionName) {
@@ -62,6 +66,14 @@ public abstract class BaseScreen implements Screen {
 
     protected void addMainBackground() {
         addBackground("IMAGE_MAINMENU_BACKGROUND");
+    }
+
+    protected void addAssetBackground(String path) {
+        if (externalBackgroundTexture != null) externalBackgroundTexture.dispose();
+        externalBackgroundTexture = new Texture(Gdx.files.internal(path));
+        backgroundImage = new Image(externalBackgroundTexture);
+        backgroundImage.setFillParent(true);
+        stage.addActor(backgroundImage);
     }
 
     protected void addCurrencyBar() {
@@ -283,6 +295,10 @@ public abstract class BaseScreen implements Screen {
             stage.dispose();
             stage = null;
         }
+        if (externalBackgroundTexture != null) {
+            externalBackgroundTexture.dispose();
+            externalBackgroundTexture = null;
+        }
     }
 
     @Override
@@ -290,6 +306,10 @@ public abstract class BaseScreen implements Screen {
         if (stage != null) {
             stage.dispose();
             stage = null;
+        }
+        if (externalBackgroundTexture != null) {
+            externalBackgroundTexture.dispose();
+            externalBackgroundTexture = null;
         }
     }
 }
