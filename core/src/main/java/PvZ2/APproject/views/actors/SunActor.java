@@ -3,9 +3,11 @@ package PvZ2.APproject.views.actors;
 import PvZ2.APproject.controllers.GameManagerController;
 import PvZ2.APproject.enums.SunType;
 import PvZ2.APproject.models.Sun;
+import PvZ2.APproject.models.PlantFood;
 import PvZ2.APproject.views.screens.PlayScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Group;
@@ -24,11 +26,13 @@ public class SunActor extends Group {
     private String pamPath;
     private String clipName;
     private float scale = 0.78f;
+    private final TextureRegion plantFoodTexture;
 
-    public SunActor(Sun sun, PlayScreen playScreen, PamPlayer player) {
+    public SunActor(Sun sun, PlayScreen playScreen, PamPlayer player, TextureRegion plantFoodTexture) {
         this.sun = sun;
         this.playScreen = playScreen;
         this.player = player;
+        this.plantFoodTexture = plantFoodTexture;
         this.lastSunType = sun.getType();
         setSize(72f, 72f);
         loadAnimation();
@@ -45,6 +49,11 @@ public class SunActor extends Group {
     }
 
     private void loadAnimation() {
+        if (sun instanceof PlantFood) {
+            pamPath = null;
+            clipName = null;
+            return;
+        }
         pamPath = sun.getType() == SunType.RADIOACTIVE
             ? "768/FULL/EFFECTS/SUN_BOMB/SUN_BOMB.PAM"
             : "768/INITIAL/EFFECTS/SUN/SUN.PAM";
@@ -116,6 +125,10 @@ public class SunActor extends Group {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
+        if (sun instanceof PlantFood) {
+            if (plantFoodTexture != null) batch.draw(plantFoodTexture, getX() + 8f, getY() + 8f, 56f, 56f);
+            return;
+        }
         if (pamPath == null || clipName == null) return;
         float centerX = getX() + getWidth() * 0.5f;
         float centerY = getY() + getHeight() * 0.5f;

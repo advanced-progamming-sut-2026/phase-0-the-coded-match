@@ -4,6 +4,7 @@ import PvZ2.APproject.controllers.GameManagerController;
 import PvZ2.APproject.enums.PlantTag;
 import PvZ2.APproject.enums.TileType;
 import PvZ2.APproject.models.MiniGameRelated.VaseBreaker;
+import PvZ2.APproject.models.PlantFood;
 import PvZ2.APproject.models.Update;
 import PvZ2.APproject.models.plants.Plant;
 import PvZ2.APproject.models.zombies.Zombie;
@@ -75,8 +76,7 @@ public class Tile implements Update {
                 break;
 
             case PLANT_FOOD:
-                GameManagerController.getInstance().getCurrentLevel().setPlantFoodCount
-                    (GameManagerController.getInstance().getCurrentLevel().getPlantFoodCount()+1);
+                GameManagerController.getInstance().getCurrentLevel().getActiveSuns().add(new PlantFood(column, row));
                 System.out.println("Grave dropped 1 Plant Food!");
                 break;
 

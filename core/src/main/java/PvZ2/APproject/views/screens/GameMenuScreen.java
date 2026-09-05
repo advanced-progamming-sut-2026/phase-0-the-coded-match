@@ -2,6 +2,7 @@ package PvZ2.APproject.views.screens;
 
 import PvZ2.APproject.Main;
 import PvZ2.APproject.controllers.menus.GameMenuController;
+import PvZ2.APproject.controllers.BonusGameController;
 import PvZ2.APproject.enums.Menu;
 import PvZ2.APproject.models.App;
 import PvZ2.APproject.models.GameSettings;
@@ -56,8 +57,9 @@ public class GameMenuScreen extends BaseScreen{
         TextButton leaderboardButton = new TextButton("Leaderboard", skin, "brown");
         TextButton shopButton = new TextButton("Shop", skin, "purple");
         TextButton miniGamesButton = new TextButton("Mini Games", skin, "default");
+        TextButton bonusGameButton = new TextButton("Bonus Game", skin, "default");
         screensTable.add(collectionButton);screensTable.add(greenhouseButton);screensTable.add(questsButton);
-        screensTable.add(leaderboardButton);screensTable.add(shopButton);screensTable.add(miniGamesButton);
+        screensTable.add(leaderboardButton);screensTable.add(shopButton);screensTable.add(miniGamesButton);screensTable.add(bonusGameButton);
         screensTable.pack();screensTable.setPosition(100, VIRTUAL_HEIGHT - 80);stage.addActor(screensTable);
         collectionButton.addListener(new ClickListener() {
             @Override
@@ -81,6 +83,10 @@ public class GameMenuScreen extends BaseScreen{
         miniGamesButton.addListener(new ClickListener() {@Override
             public void clicked(InputEvent event, float x, float y) {
                 App.setCurrentMenu(Menu.MINIGAMES);game.setScreen(new MiniGamesScreen(game));}});
+        bonusGameButton.addListener(new ClickListener() {@Override
+            public void clicked(InputEvent event, float x, float y) {
+                BonusGameController.startGame();
+                if (BonusGameController.isActive()) game.setScreen(new ChoosePlantsMenu(game));}});
         shopButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {

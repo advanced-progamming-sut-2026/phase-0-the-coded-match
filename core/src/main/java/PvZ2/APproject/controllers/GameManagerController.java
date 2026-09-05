@@ -16,6 +16,7 @@ import PvZ2.APproject.models.MiniGameRelated.VaseBreaker;
 import PvZ2.APproject.models.MiniGameRelated.WallNutBowling;
 import PvZ2.APproject.models.MiniGameRelated.Zombotany;
 import PvZ2.APproject.models.Sun;
+import PvZ2.APproject.models.PlantFood;
 import PvZ2.APproject.models.User;
 import PvZ2.APproject.models.Projectile;
 import PvZ2.APproject.models.GameMapRelated.Tile;
@@ -33,7 +34,7 @@ import java.util.regex.Pattern;
 
 public class GameManagerController {
     private static GameManagerController instance;
-    private static final int MAX_PLANT_FOOD = 3;
+    private static final int MAX_PLANT_FOOD = 4;
     private static final int TICKS_PER_SECOND = 10;
     private Level currentLevel;
     private boolean gameFinished;
@@ -83,6 +84,7 @@ public class GameManagerController {
     public String updateObjects(float delta) {
         if (currentLevel == null || gameFinished) return "";
         currentLevel.setCurrentTick(currentLevel.getCurrentTick() + 1);
+        if (BonusGameController.isActive()) BonusGameController.update();
         String message = "";
 
         if (currentLevel.getLevelType() == LevelType.I_ZOMBIE) {
@@ -275,6 +277,10 @@ public class GameManagerController {
 
     public void collectSun(Sun sun) {
         sun.collect();
+        if (sun instanceof PlantFood) {
+            System.out.println("plant food collected; you have " + currentLevel.getPlantFoodCount() + " plant foods now");
+            return;
+        }
         Plant plant = findPlant((int) sun.getX(), (int) sun.getY());
         if (plant != null) {
             plant.setSunCollected(true);
@@ -530,9 +536,8 @@ public class GameManagerController {
 
     private String handleZombieDrop(Zombie zombie) {
         if (zombie.isGlowing() && currentLevel.getPlantFoodCount() < MAX_PLANT_FOOD) {
-            currentLevel.setPlantFoodCount(currentLevel.getPlantFoodCount() + 1);
-            return "The glowing zombie dropped a plant food; you have "
-                + currentLevel.getPlantFoodCount() + " plant foods now.";
+            currentLevel.getActiveSuns().add(new PlantFood(zombie.getX(), zombie.getY()));
+            return "The glowing zombie dropped a plant food.";
         }
         if (Math.random() >= 0.10 || App.getCurrentUser() == null) {
             return "";

@@ -74,6 +74,7 @@ public class PlayScreen extends BaseScreen {
     private Label messageNotif;
     private Label missionNotif;
     private Label bonusPointNotif;
+    private Label bonusScoreLabel;
     private Table multiplayerChatPanel;
     private Label multiplayerIncomingNotif;
     private static final String[] QUICK_MESSAGES = {
@@ -163,6 +164,7 @@ public class PlayScreen extends BaseScreen {
         stage.addActor(environmentView);
         createPlantBoxes();
         createMiniGameUi();
+        createBonusGameUi();
         System.out.println("LOADING EMOJIS...");
         emojiTextures.put("mashti", new TextureRegion(new Texture(Gdx.files.internal("emoji/mashti.jpeg"))));
         emojiTextures.put("bruh", new TextureRegion(new Texture(Gdx.files.internal("emoji/bruh.jpeg"))));
@@ -276,7 +278,7 @@ public class PlayScreen extends BaseScreen {
         addSunAndPlantFoodTables();
         createZombossUi();
 
-        if (!(currentLevel instanceof MiniGame)) {
+        if (!(currentLevel instanceof MiniGame) && currentLevel.getZombieWave() != null) {
             Group waveProgressGroup = new Group();
             waveProgressBar = new ProgressBar(0, currentLevel.getZombieWave().getWavePattern().size(), 0.01f,
                 false, skin, "ingame_progress");
@@ -301,7 +303,9 @@ public class PlayScreen extends BaseScreen {
             stage.addActor(waveProgressGroup);
         }
 
-        if (currentLevel instanceof MiniGame) {
+        if (BonusGameController.isActive()) {
+            showMission("Score game: trigger special kill conditions to earn Meow Points");
+        } else if (currentLevel instanceof MiniGame) {
             showMission(getMiniGameMission());
         } else if (currentLevel.getData().getSpecialLevelType() != null) {
             switch (currentLevel.getData().getSpecialLevelType()) {
@@ -496,7 +500,7 @@ public class PlayScreen extends BaseScreen {
                 if (GameManagerController.getInstance().isGameFinished()) break;
             }
             if (!message.isEmpty()) {showMessage(message);}
-            if (!(currentLevel instanceof MiniGame) && currentLevel.getZombieWave().isLastWave() && !finalWaveMusic) {
+            if (!(currentLevel instanceof MiniGame) && currentLevel.getZombieWave() != null && currentLevel.getZombieWave().isLastWave() && !finalWaveMusic) {
                 MusicManager.playFinalWave();
                 finalWaveMusic = true;
             }
@@ -512,6 +516,9 @@ public class PlayScreen extends BaseScreen {
             updateMiniGameUi();
             if (sunLabel != null) sunLabel.setText(Integer.toString(getDisplayedSunAmount()));
             if (plantFoodLabel != null) plantFoodLabel.setText(currentLevel.getPlantFoodCount() + "/4");
+            if (bonusScoreLabel != null && BonusGameController.getGame() != null) {
+                bonusScoreLabel.setText("MEOW POINTS: " + BonusGameController.getGame().getTotalMioPoints());
+            }
 
             if (GameManagerController.getInstance().isGameFinished()) {
                 finishDelay += adjustedSpeed;
@@ -524,6 +531,19 @@ public class PlayScreen extends BaseScreen {
         }
         updateBonusPointNotification();
         renderNotifications(delta);
+    }
+
+    private void createBonusGameUi() {
+        if (!BonusGameController.isActive()) return;
+        BorderedTable panel = new BorderedTable();
+        bonusScoreLabel = new Label("MEOW POINTS: 0", skin, "medium_outline");
+        Label rules = new Label("MULTI KILL +100/EXTRA   QUICK KILL +75   HIGH DAMAGE +10/100\nCLEAN SWEEP +500   SINGLE SHOT +25", skin, "default");
+        rules.setFontScale(0.65f);
+        panel.add(bonusScoreLabel).pad(6f).row();
+        panel.add(rules).pad(4f);
+        panel.pack();
+        panel.setPosition((VIRTUAL_WIDTH - panel.getWidth()) / 2f, VIRTUAL_HEIGHT - panel.getHeight() - 7f);
+        stage.addActor(panel);
     }
 
     private void updateBonusPointNotification() {
@@ -1442,7 +1462,8 @@ public class PlayScreen extends BaseScreen {
     public void updateSunActors() {
         for (Sun sun : currentLevel.getActiveSuns()) {
             if (!renderedSuns.containsKey(sun)) {
-                SunActor sunActor = new SunActor(sun, this, player);
+                SunActor sunActor = new SunActor(sun, this, player,
+                    textures.region("IMAGE_BACKGROUNDS_TILE_PLANTFOOD_TILE_PLANTFOOD_45X46"));
                 renderedSuns.put(sun, sunActor);
                 stage.addActor(sunActor);
             }
@@ -1700,6 +1721,12 @@ public class PlayScreen extends BaseScreen {
 
     public void exitGame() {
         Gdx.input.setInputProcessor(stage);
+        if (BonusGameController.isActive()) {
+            BonusGameController.endGame();
+            App.setCurrentMenu(Menu.GAME_MENU);
+            game.setScreen(new GameMenuScreen(game));
+            return;
+        }
         if (currentLevel instanceof MiniGame) {
             App.setCurrentMenu(Menu.MINIGAMES);
             game.setScreen(new MiniGamesScreen(game));

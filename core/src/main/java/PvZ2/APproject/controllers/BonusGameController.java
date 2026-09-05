@@ -57,6 +57,17 @@ public class BonusGameController {
         return "bonus game started with daily seed " + game.getDailyGameZombies();
     }
 
+
+    public static void update() {
+        if (game == null) return;
+        Level level = GameManagerController.getInstance().getCurrentLevel();
+        if (level == null || !game.hasRemainingZombies()) return;
+        double tick = level.getCurrentTick();
+        if ((tick == 1 || tick % 40 == 0) && level.getActiveZombies().size() < 4) {
+            spawnNextZombie();
+        }
+    }
+
     public static String spawnNextZombie() {
         if (game == null) return "no bonus game is active";
         Level level = GameManagerController.getInstance().getCurrentLevel();
