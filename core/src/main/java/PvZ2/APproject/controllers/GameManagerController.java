@@ -196,10 +196,21 @@ public class GameManagerController {
             }
         }
         if (killedThisTick > 0 && BonusGameController.isActive()) {
-            String result = BonusGameController.recordKills(killedThisTick, damageThisTick,
-                    !BonusGameController.getGame().hasRemainingZombies() && currentLevel.getActiveZombies().isEmpty(),
-                    currentLevel.getCurrentTick());
+            boolean allDead = !BonusGameController.getGame().hasRemainingZombies()
+                && currentLevel.getActiveZombies().isEmpty();
+
+            String result = BonusGameController.recordKills(
+                killedThisTick,
+                damageThisTick,
+                allDead,
+                currentLevel.getCurrentTick()
+            );
+
             if (!result.isEmpty()) System.out.println(result);
+
+            if (allDead) {
+                finishMiniGame(true);
+            }
         }
         return dropMessage;
     }
