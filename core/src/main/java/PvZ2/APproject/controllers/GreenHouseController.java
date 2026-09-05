@@ -7,7 +7,8 @@ import PvZ2.APproject.controllers.menus.SignupMenuController;
 public class GreenHouseController {
     public void plantSeed(int x, int y) {
         if (App.getCurrentUser() == null || App.getCurrentUser().getGreenHouse() == null) return;
-        App.getCurrentUser().getGreenHouse().plantPot(x, y, App.getCurrentUser().getCollection().getAvailablePlantsIds());
+        App.getCurrentUser().getGreenHouse().plantPot(x, y, App.getCurrentUser().
+            getCollection().getAvailablePlantsIds());
         SignupMenuController.saveToJson();
     }
 

@@ -51,14 +51,12 @@ public class GreenHouseScreen extends BaseScreen {
     public void createPots() {
         TextureRegion potTexture =
             textures.region("IMAGE_ZEN_GARDEN_GROWING_PLANT_SLOT_GROWING_PLANT_SLOT_184X161");
-
         TextureRegion lockTexture = textures.region("IMAGE_ZEN_GARDEN_LOCKED_POT_ICON");
 
         float startX = 200;
         float startY = 100;
         float spacingX = 170;
         float spacingY = 160;
-
         for (GreenHousePot[] pots : App.getCurrentUser().getGreenHouse().getGrid()) {
             for (GreenHousePot pot : pots) {
                 PotActor potActor = new PotActor(pot, potTexture, lockTexture, player, skin, controller);
@@ -80,7 +78,8 @@ public class GreenHouseScreen extends BaseScreen {
         }
 //        for (int i = 0; i < 3; i++) {
 //            for (int j = 0; j < 4; j++) {
-//                PotActor potActor = new PotActor(new GreenHousePot(j, i, i == 0), potTexture, lockTexture, player, skin);
+//                PotActor potActor = new PotActor(new GreenHousePot(j, i, i == 0), potTexture, lockTexture,
+//                player, skin);
 //                potActor.setPosition(startX, startY);
 //
 //                potActor.addListener(new ClickListener() {

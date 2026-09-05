@@ -198,7 +198,6 @@ public class PamActor extends Actor {
         Map<String, String> index = kind == Kind.PLANT ? PLANT_PATHS : kind == Kind.ZOMBIE ? ZOMBIE_PATHS : EFFECT_PATHS;
 
         String[] roots;
-
         if (kind == Kind.PLANT) {
             roots = new String[] {
                 "IMAGES/768/INITIAL/PLANT",
@@ -216,19 +215,15 @@ public class PamActor extends Actor {
                 "IMAGES/768/FULL/EFFECTS"
             };
         }
-
         for (String rootPath : roots) {
             FileHandle root = Gdx.files.internal(rootPath);
-
             if (!root.exists()) {
                 continue;
             }
-
             for (FileHandle folder : root.list()) {
                 if (!folder.isDirectory()) {
                     continue;
                 }
-
                 FileHandle[] files = folder.list(".PAM");
 
                 for (FileHandle pam : files) {

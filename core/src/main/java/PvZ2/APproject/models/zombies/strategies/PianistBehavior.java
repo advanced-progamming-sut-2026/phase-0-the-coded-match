@@ -30,7 +30,8 @@ public class PianistBehavior implements ZombieBehavior {
         int totalRows = GameManagerController.getInstance().getCurrentLevel().getGameMap().getRows();
         if (totalRows <= 1) return;
         Random random = new Random();
-        for (Zombie zombie : new java.util.ArrayList<>(GameManagerController.getInstance().getCurrentLevel().getActiveZombies())) {
+        for (Zombie zombie : new java.util.ArrayList<>(GameManagerController.getInstance().getCurrentLevel()
+            .getActiveZombies())) {
             if (zombie != pianist) {
                 int currentRow = zombie.getY();
                 int newRow = 1 + random.nextInt(totalRows - 1);

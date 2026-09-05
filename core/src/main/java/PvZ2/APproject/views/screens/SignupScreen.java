@@ -128,43 +128,33 @@ public class SignupScreen extends BaseScreen {
         register.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                String username = usernameField.getText();
-                String password = passwordField.getText();
+                String username = usernameField.getText();String password = passwordField.getText();
                 String passwordConfirm = passwordConfirmField.getText();
                 String nickname = nicknameField.getText();
                 String email = emailField.getText();
                 String gender = genderField.getSelected();
                 String message = controller.register(username, password, passwordConfirm, nickname, email, gender);
                 showMessage(message);
-
                 if (registered) {
                     wrapper.clearChildren();
                     String securityQuestions = controller.showQuestions();
-
                     Label.LabelStyle style = new Label.LabelStyle(
                         skin.get("default", Label.LabelStyle.class)
                     );
-
                     style.fontColor = Color.GREEN;
-
                     Label questions = new Label(securityQuestions, style);
-
                     TextField questionNumField = new TextField("", skin, "default");
                     questionNumField.setMessageText("Choose a security question");
                     TextField answerField = new TextField("", skin, "default");
                     answerField.setMessageText("Answer the security question");
                     TextField answerConfirmField = new TextField("", skin, "default");
                     answerConfirmField.setMessageText("Confirm answer");
-
                     TextButton confirm = new TextButton("Confirm", skin, "default");
-
                     wrapper.add(questions).width(200).height(50).row();
                     wrapper.add(questionNumField).width(200).height(50).row();
                     wrapper.add(answerField).width(200).height(50).row();
                     wrapper.add(answerConfirmField).width(200).height(50).row();
-
                     wrapper.add(confirm);
-
                     confirm.addListener(new ClickListener() {
                         @Override
                         public void clicked(InputEvent event, float x, float y) {
@@ -176,21 +166,15 @@ public class SignupScreen extends BaseScreen {
                             } catch (NumberFormatException e) {
                                 showMessage("Invalid question number");
                             }
-
                             if (questionPicked) {
                                 game.setScreen(new LoginScreen(game));
                                 App.setCurrentMenu(Menu.LOGIN_MENU);
                             }
                         }
                     });
-
-
                 }
             }
-
-
         });
-
         exitButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {

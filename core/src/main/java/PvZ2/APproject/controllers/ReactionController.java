@@ -16,7 +16,8 @@ public class ReactionController {
     public static String sendSticker(String value) { return send("STICKER", value); }
 
     public static String send(String kind, String value) {
-        if (App.getCurrentUser() == null || !App.getNetworkClient().isConnected()) return "Error: server is not connected";
+        if (App.getCurrentUser() == null || !App.getNetworkClient().isConnected())
+            return "Error: server is not connected";
         try {
             Request request = new Request(MessageType.SEND_REACTION);
             request.put("kind", kind);

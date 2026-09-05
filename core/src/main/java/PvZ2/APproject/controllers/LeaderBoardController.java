@@ -103,6 +103,8 @@ public class LeaderBoardController {
         return result;
     }
 
-    private int parse(String s, int fallback) { try { return Integer.parseInt(s); } catch (Exception e) { return fallback; } }
-    private String unescape(String s) { return s.replace("\\n", "\n").replace("\\|", "|").replace("\\\\", "\\"); }
+    private int parse(String s, int fallback) { try { return Integer.parseInt(s); }
+    catch (Exception e) { return fallback; } }
+    private String unescape(String s) { return s.replace("\\n", "\n").replace("\\|",
+        "|").replace("\\\\", "\\"); }
 }

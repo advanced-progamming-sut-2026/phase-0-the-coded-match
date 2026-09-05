@@ -115,7 +115,8 @@ public class ServerUser implements Serializable {
     public void setCompletedDailyQuests(int value) { completedDailyQuests = Math.max(0, value); }
 
     public String getGameStateJson() { return gameStateJson == null ? "" : gameStateJson; }
-    public void setGameStateJson(String gameStateJson) { this.gameStateJson = gameStateJson == null ? "" : gameStateJson; }
+    public void setGameStateJson(String gameStateJson) { this.gameStateJson = gameStateJson == null ?
+        "" : gameStateJson; }
 
     public Map<String, String> getSecurityQuestions() {
         if (securityQuestions == null) securityQuestions = new HashMap<>();

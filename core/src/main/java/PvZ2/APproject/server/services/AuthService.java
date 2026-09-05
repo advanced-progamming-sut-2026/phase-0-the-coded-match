@@ -60,7 +60,8 @@ public class AuthService {
 //        if (users.exists(username)) {
 //            return Response.error(request.getRequestId(), "Username already exists");
 //        }
-//        users.save(new ServerUser(username, UserRepository.hashPassword(password), nickname, email, gender == null ? "" : gender));
+//        users.save(new ServerUser(username, UserRepository.hashPassword(password), nickname, email, gender == null ?
+//        "" : gender));
 //        return Response.ok(request.getRequestId(), MessageType.REGISTER, "Registration successful");
 
         /// new and better hopefully ///
@@ -68,12 +69,14 @@ public class AuthService {
         if (error != null) return Response.error(request.getRequestId(), error);
         if (users.exists(username)) return Response.error(request.getRequestId(), "Username already exists");
 
-        ServerUser user = new ServerUser(username.trim(), UserRepository.hashPassword(password), nickname.trim(), email.trim(), gender.toLowerCase());
+        ServerUser user = new ServerUser(username.trim(), UserRepository.hashPassword(password), nickname.trim(),
+            email.trim(), gender.toLowerCase());
         String state = request.get("stateJson");
         if (state != null && !state.isBlank()) applyState(user, state);
         users.save(user);
         String registrationToken = UUID.randomUUID().toString();
-        registrationTokens.put(registrationToken, new RegistrationToken(user.getUsername(), System.currentTimeMillis() + RESET_TOKEN_LIFETIME_MS));
+        registrationTokens.put(registrationToken, new RegistrationToken(user.getUsername(),
+            System.currentTimeMillis() + RESET_TOKEN_LIFETIME_MS));
         Map<String, String> result = profile(user);
         result.put("registrationToken", registrationToken);
         return new Response(request.getRequestId(), MessageType.REGISTER, true,
@@ -99,7 +102,8 @@ public class AuthService {
             if (!validatePassword(password) || !validateNickname(nickname) || !validateEmail(email)) {
                 return Response.error(request.getRequestId(), "Legacy account data is invalid");
             }
-            user = new ServerUser(username.trim(), UserRepository.hashPassword(password), nickname.trim(), email.trim(), gender.toLowerCase());
+            user = new ServerUser(username.trim(), UserRepository.hashPassword(password), nickname.trim(),
+                email.trim(), gender.toLowerCase());
             applyState(user, legacyState);
             users.save(user);
         }
@@ -117,50 +121,52 @@ public class AuthService {
         }
         handler.setUsername(user.getUsername());
         Map<String, String> info = profile(user);
-        return new Response(request.getRequestId(), MessageType.LOGIN, true, "Logged in successfully", info);
+        return new Response(request.getRequestId(), MessageType.LOGIN, true, "Logged in successfully",
+            info);
 
     }
 
     public Response updateProfile(Request request, ClientHandler handler) {
         ServerUser user = loggedInUser(handler, request);
         if (user == null) return Response.error(request.getRequestId(), "Not logged in");
-
         String field = request.get("field");
         String value = request.get("value");
-        if (blank(field) || value == null) return Response.error(request.getRequestId(), "Missing profile field");
-
+        if (blank(field) || value == null) return Response.error(request.getRequestId(),
+            "Missing profile field");
         switch (field.toLowerCase()) {
             case "nickname" -> {
                 if (!validateNickname(value)) return Response.error(request.getRequestId(), "Invalid nickname");
-                if (value.equals(user.getNickname())) return Response.error(request.getRequestId(), "New nickname is the same as current nickname");
+                if (value.equals(user.getNickname())) return Response.error(request.getRequestId(),
+                    "New nickname is the same as current nickname");
                 user.setNickname(value.trim());
-            }
-            case "email" -> {
+            }case "email" -> {
                 if (!validateEmail(value)) return Response.error(request.getRequestId(), "Invalid email");
-                if (value.equalsIgnoreCase(user.getEmail())) return Response.error(request.getRequestId(), "New email is the same as current email");
+                if (value.equalsIgnoreCase(user.getEmail())) return Response.error(request.getRequestId(),
+                    "New email is the same as current email");
                 user.setEmail(value.trim());
-            }
-            case "password" -> {
+            }case "password" -> {
                 String oldPassword = request.get("oldPassword");
-                if (!user.getPasswordHash().equals(UserRepository.hashPassword(oldPassword == null ? "" : oldPassword))) {
+                if (!user.getPasswordHash().equals(UserRepository.hashPassword(oldPassword == null ?
+                    "" : oldPassword))) {
                     return Response.error(request.getRequestId(), "Current password is incorrect");
                 }
-                if (!validatePassword(value)) return Response.error(request.getRequestId(), "Password is not strong enough");
+                if (!validatePassword(value)) return Response.error(request.getRequestId(),
+                    "Password is not strong enough");
                 if (user.getPasswordHash().equals(UserRepository.hashPassword(value))) {
                     return Response.error(request.getRequestId(), "New password is the same as current password");
                 }
                 user.setPasswordHash(UserRepository.hashPassword(value));
-            }
-            case "username" -> {
+            }case "username" -> {
                 if (!validateUsername(value)) return Response.error(request.getRequestId(), "Invalid username");
-                if (value.equalsIgnoreCase(user.getUsername())) return Response.error(request.getRequestId(), "New username is the same as current username");
+                if (value.equalsIgnoreCase(user.getUsername())) return Response.error(request.getRequestId(),
+                    "New username is the same as current username");
                 if (users.exists(value)) return Response.error(request.getRequestId(), "Username already exists");
                 String old = user.getUsername();
-                if (!users.rename(old, value.trim())) return Response.error(request.getRequestId(), "Could not change username");
+                if (!users.rename(old, value.trim())) return Response.error(request.getRequestId(),
+                    "Could not change username");
                 handler.setUsername(value.trim());
                 user = users.find(value.trim());
-            }
-            default -> {
+            }default -> {
                 return Response.error(request.getRequestId(), "Unsupported profile field");
             }
         }
@@ -205,7 +211,8 @@ public class AuthService {
         if (user == null) return Response.error(request.getRequestId(), "Not logged in");
         String question = request.get("question");
         String answer = request.get("answer");
-        if (blank(question) || blank(answer)) return Response.error(request.getRequestId(), "Missing security question or answer");
+        if (blank(question) || blank(answer)) return Response.error(request.getRequestId(),
+            "Missing security question or answer");
         user.getSecurityQuestions().put(question, answer);
         users.update(user);
         return Response.ok(request.getRequestId(), MessageType.SET_SECURITY_QUESTION, "Security question saved");
@@ -226,7 +233,8 @@ public class AuthService {
         for (SecurityQuestions q : SecurityQuestions.values()) {
             if (q.name().equalsIgnoreCase(question)) { question = q.getText(); break; }
         }
-        return new Response(request.getRequestId(), MessageType.FORGOT_PASSWORD, true, "Security question", Map.of("question", question));
+        return new Response(request.getRequestId(), MessageType.FORGOT_PASSWORD, true,
+            "Security question", Map.of("question", question));
     }
 
     public Response verifySecurityAnswer(Request request) {
@@ -239,7 +247,8 @@ public class AuthService {
         if (!correct) return Response.error(request.getRequestId(), "Wrong answer");
 
         String token = UUID.randomUUID().toString();
-        resetTokens.put(token, new ResetToken(user.getUsername(), System.currentTimeMillis() + RESET_TOKEN_LIFETIME_MS));
+        resetTokens.put(token, new ResetToken(user.getUsername(), System.currentTimeMillis()
+            + RESET_TOKEN_LIFETIME_MS));
         return new Response(request.getRequestId(), MessageType.VERIFY_SECURITY_ANSWER, true,
             "Please enter your new password", Map.of("resetToken", token));
     }
@@ -268,7 +277,8 @@ public class AuthService {
 
         applyState(user, state);
         users.update(user);
-        return new Response(request.getRequestId(), MessageType.SYNC_USER_STATE, true, "User state synchronized", profile(user));
+        return new Response(request.getRequestId(), MessageType.SYNC_USER_STATE, true,
+            "User state synchronized", profile(user));
     }
 
     private void updateStoredProfileFields(ServerUser user) {
@@ -286,13 +296,15 @@ public class AuthService {
 
     private String validateRegistration(String username, String password, String passwordConfirm,
                                         String nickname, String email, String gender) {
-        if (blank(username) || blank(password) || blank(nickname) || blank(email) || blank(gender)) return "Missing registration field";
+        if (blank(username) || blank(password) || blank(nickname) || blank(email) || blank(gender))
+            return "Missing registration field";
         if (!validateUsername(username)) return "Error: username is not valid";
         if (!validatePassword(password)) return "Error: password is not strong enough.";
         if (!passwordIsConfirmed(password, passwordConfirm)) return "Error: password not confirmed.";
         if (!validateNickname(nickname)) return "Error: nickname is too short";
         if (!validateEmail(email)) return "Error: email pattern is not valid";
-        if (!(gender.equalsIgnoreCase("male") || gender.equalsIgnoreCase("female"))) return "Error: gender is not valid";
+        if (!(gender.equalsIgnoreCase("male") || gender.equalsIgnoreCase("female")))
+            return "Error: gender is not valid";
         return null;
     }
 
@@ -360,7 +372,8 @@ public class AuthService {
             if (root.has("questions") && root.get("questions").isJsonObject()) {
                 Map<String, String> questions = new HashMap<>();
                 for (var entry : root.getAsJsonObject("questions").entrySet()) {
-                    try { questions.put(entry.getKey(), entry.getValue().getAsString()); } catch (Exception ignoredQuestion) { }
+                    try { questions.put(entry.getKey(), entry.getValue().getAsString()); }
+                    catch (Exception ignoredQuestion) { }
                 }
                 user.setSecurityQuestions(questions);
             }
@@ -390,7 +403,8 @@ public class AuthService {
             JsonObject q = root.getAsJsonObject("questsModel");
             var list = q.getAsJsonArray("availableQuests");
             int count = 0;
-            for (var item : list) if (item.getAsJsonObject().has("isCompleted") && item.getAsJsonObject().get("isCompleted").getAsBoolean()) count++;
+            for (var item : list) if (item.getAsJsonObject().has("isCompleted") &&
+                item.getAsJsonObject().get("isCompleted").getAsBoolean()) count++;
             return count;
         } catch (Exception e) { return fallback; }
     }
@@ -403,7 +417,8 @@ public class AuthService {
             for (var item : list) {
                 JsonObject quest = item.getAsJsonObject();
                 boolean completed = quest.has("isCompleted") && quest.get("isCompleted").getAsBoolean();
-                String category = quest.has("category") && !quest.get("category").isJsonNull() ? quest.get("category").getAsString() : "";
+                String category = quest.has("category") && !quest.get("category").isJsonNull() ?
+                    quest.get("category").getAsString() : "";
                 if (!category.isBlank() && "DAILY".equalsIgnoreCase(category) && completed) count++;
             }
             return count;

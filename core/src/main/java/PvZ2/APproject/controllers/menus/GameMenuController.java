@@ -7,7 +7,6 @@ import PvZ2.APproject.models.App;
 import PvZ2.APproject.models.Level;
 import PvZ2.APproject.models.LevelData;
 import PvZ2.APproject.models.seasons.Season;
-import PvZ2.APproject.views.AppView;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -40,7 +39,7 @@ public class GameMenuController{
             Level currentLevel = new Level(level);
             currentLevel.setCurrentSeason(season);
             GameManagerController.getInstance().setCurrentLevel(currentLevel);
-            if (season != null) season.LevelStarted(currentLevel);
+            if (season != null) season.levelStarted(currentLevel);
             App.setCurrentMenu(Menu.CHOOSEPLANTS_MENU);
             return true;
         } else {

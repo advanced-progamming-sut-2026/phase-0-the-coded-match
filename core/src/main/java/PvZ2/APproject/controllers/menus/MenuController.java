@@ -46,7 +46,8 @@ public class MenuController {
         } else if (currentMenu == Menu.GAME_MENU || currentMenu == Menu.NEWS_MENU
                 || currentMenu == Menu.SETTINGS_MENU || currentMenu == Menu.PROFILE_MENU) {
             App.setCurrentMenu(Menu.MAIN_MENU);
-        } else if (currentMenu == Menu.COLLECTION_MENU || currentMenu == Menu.GREEN_HOUSE || currentMenu == Menu.TRAVEL_LOG
+        } else if (currentMenu == Menu.COLLECTION_MENU || currentMenu == Menu.GREEN_HOUSE ||
+            currentMenu == Menu.TRAVEL_LOG
                 || currentMenu == Menu.QUESTS) {
             App.setCurrentMenu(Menu.GAME_MENU);
         } else if (currentMenu == Menu.LEADERBOARD || currentMenu == Menu.BONUS_GAME) {
@@ -74,10 +75,13 @@ public class MenuController {
         }
         if (currentMenu == Menu.MAIN_MENU) {
             return targetMenu == Menu.GAME_MENU || targetMenu == Menu.SETTINGS_MENU || targetMenu == Menu.NEWS_MENU
-                    || targetMenu == Menu.PROFILE_MENU || targetMenu == Menu.LEADERBOARD || targetMenu == Menu.BONUS_GAME;
+                    || targetMenu == Menu.PROFILE_MENU || targetMenu == Menu.LEADERBOARD ||
+                targetMenu == Menu.BONUS_GAME;
         }
         if (currentMenu == Menu.GAME_MENU) {
-            return targetMenu == Menu.COLLECTION_MENU || targetMenu == Menu.GREEN_HOUSE || targetMenu == Menu.TRAVEL_LOG || targetMenu == Menu.LEADERBOARD || targetMenu == Menu.QUESTS || targetMenu == Menu.MINIGAMES;
+            return targetMenu == Menu.COLLECTION_MENU || targetMenu == Menu.GREEN_HOUSE ||
+                targetMenu == Menu.TRAVEL_LOG || targetMenu == Menu.LEADERBOARD || targetMenu == Menu.QUESTS ||
+                targetMenu == Menu.MINIGAMES;
         }
         if (currentMenu == Menu.GREEN_HOUSE) return targetMenu == Menu.SHOP;
         return false;

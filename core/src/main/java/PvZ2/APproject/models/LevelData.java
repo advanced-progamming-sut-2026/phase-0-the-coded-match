@@ -20,7 +20,8 @@ public class LevelData {
     private List<String> availablePlants;
     private List<String> lockedPlants;
     private List<String> protectedPlants;
-    private List<WavePatternData> wavePatterns; //i changed it from List to WavePatternData cause each level has multiple waves but starts from one pattern!!
+    private List<WavePatternData> wavePatterns;
+    //i changed it from List to WavePatternData cause each level has multiple waves but starts from one pattern!!
     private GameMap map;
 
     public String getId() {

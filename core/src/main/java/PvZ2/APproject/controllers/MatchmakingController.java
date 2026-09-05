@@ -14,10 +14,13 @@ public final class MatchmakingController {
     private MatchmakingController() {}
 
     public static String findRandom(int stage) { return send(MessageType.FIND_RANDOM_MATCH, stage, null); }
-    public static String findPlayer(String username, int stage) { return send(MessageType.FIND_PLAYER, stage, username); }
+    public static String findPlayer(String username, int stage) {
+        return send(MessageType.FIND_PLAYER, stage, username); }
 
-    public static String accept(String invitationId) { return simple(MessageType.ACCEPT_MATCH, "invitationId", invitationId); }
-    public static String reject(String invitationId) { return simple(MessageType.REJECT_MATCH, "invitationId", invitationId); }
+    public static String accept(String invitationId) { return simple(MessageType.ACCEPT_MATCH,
+        "invitationId", invitationId); }
+    public static String reject(String invitationId) { return simple(MessageType.REJECT_MATCH,
+        "invitationId", invitationId); }
 
     public static synchronized void setInvitationListener(Consumer<Response> listener) {
         invitationListener = listener;
@@ -37,7 +40,8 @@ public final class MatchmakingController {
     }
 
     private static String send(MessageType type, int stage, String username) {
-        if (App.getCurrentUser() == null || !App.getNetworkClient().isConnected()) return "Error: server is not connected";
+        if (App.getCurrentUser() == null || !App.getNetworkClient().isConnected())
+            return "Error: server is not connected";
         try {
             Request request = new Request(type);
             request.put("stage", String.valueOf(Math.max(1, Math.min(3, stage))));

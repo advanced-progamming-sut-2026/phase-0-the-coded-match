@@ -26,7 +26,9 @@ public class AppView {
 //            if (input.matches(Commands.SHOW_MENU.getPattern())) {
 //                MenuController.showCurrentMenu(message);
 //                System.out.println(message[0]);
-//            } else if (input.matches(Commands.ENTER_MENU.getPattern()) && !input.matches(Commands.ENTER_SEASON.getPattern()) && !input.matches(Commands.ENTER_LEVEL.getPattern())) {
+//            } else if (input.matches(Commands.ENTER_MENU.getPattern()) &&
+//            !input.matches(Commands.ENTER_SEASON.getPattern()) &&
+//            !input.matches(Commands.ENTER_LEVEL.getPattern())) {
 //                System.out.println(MenuController.enterMenu(input));
 //            } else if (input.matches(Commands.EXIT_MENU.getPattern())) {
 //                MenuController.exitMenu();

@@ -85,13 +85,10 @@ public final class VaseBreaker extends MiniGame {
         List<VaseContentHolder> pool = new ArrayList<>();
         PlantRepository plants = PlantRepository.getInstance();
         ZombieRepository zombies = ZombieRepository.getInstance();
-
         int startCol;
         int endCol = 8;
-
         switch (stage) {
             case 1:
-                // stage 1 (easy) 15 vases col 6-8
                 startCol = 6;
                 addVasesToPool(pool, 2, VaseType.BASIC_VASE, null, null);
                 addVasesToPool(pool, 4, VaseType.BASIC_VASE, null, zombies.findByDisplayName("Default"));
@@ -99,9 +96,7 @@ public final class VaseBreaker extends MiniGame {
                 addVasesToPool(pool, 5, VaseType.BASIC_VASE, plants.findByName("peashooter"), null);
                 addVasesToPool(pool, 1, VaseType.GARGANTUAR_VASE, null, zombies.findByDisplayName("gargantuar"));
                 break;
-
             case 2:
-                // stage 2 (medium) 20 vases col 5-8
                 startCol = 5;
                 addVasesToPool(pool, 3, VaseType.BASIC_VASE, plants.findByName("cactus"), null);
                 addVasesToPool(pool, 5, VaseType.BASIC_VASE, plants.findByName("peashooter") , null);
@@ -111,9 +106,7 @@ public final class VaseBreaker extends MiniGame {
                 addVasesToPool(pool, 1, VaseType.BASIC_VASE, null, zombies.findByDisplayName("Buckethead Zombie"));
                 addVasesToPool(pool, 1, VaseType.GARGANTUAR_VASE, null, zombies.findByDisplayName("gargantuar"));
                 break;
-
             case 3:
-                // stage 3 (hard) 25 vases col 4-8
                 startCol = 4;
                 addVasesToPool(pool, 10, VaseType.BASIC_VASE, plants.findByName("peashooter"), null);
                 addVasesToPool(pool, 4, VaseType.PLANT_VASE, plants.findByName("squash"), null);
@@ -121,33 +114,26 @@ public final class VaseBreaker extends MiniGame {
                 addVasesToPool(pool, 4, VaseType.BASIC_VASE, null, zombies.findByDisplayName("Buckethead Zombie"));
                 addVasesToPool(pool, 2, VaseType.GARGANTUAR_VASE, null, zombies.findByDisplayName("gargantuar"));
                 break;
-
             default:
                 throw new IllegalArgumentException("Invalid Vasebreaker stage: " + stage);
         }
-
-
         Collections.shuffle(pool);
-
-
         int poolIndex = 0;
         int rows = getGameMap().getRows();
         for (int col = startCol; col <= endCol; col++) {
             for (int row = 1; row <= rows; row++) {
                 if (poolIndex >= pool.size()) break;
-
                 VaseContentHolder item = pool.get(poolIndex++);
                 Vase vase = new Vase(col, row, item.type, item.plant, item.zombie);
                 activeVases.add(vase);
                 Tile tile = getGameMap().getTile(col, row); //
-                if (tile != null) {
-                    tile.setVase(vase);
-                }
+                if (tile != null) {tile.setVase(vase);}
             }
         }
     }
 
-    private void addVasesToPool(List<VaseContentHolder> pool, int count, VaseType type, PlantData plant, ZombieData zombie) {
+    private void addVasesToPool(List<VaseContentHolder> pool, int count, VaseType type, PlantData plant,
+                                ZombieData zombie) {
         for (int i = 0; i < count; i++) {
             pool.add(new VaseContentHolder(type, plant, zombie));
         }

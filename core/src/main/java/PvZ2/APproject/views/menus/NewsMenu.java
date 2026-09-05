@@ -40,11 +40,9 @@ public class NewsMenu extends BaseScreen {
             App.setCurrentMenu(Menu.MAIN_MENU);
             game.setScreen(new MainMenu(game));
         });
-
         Table newsList = new Table();
         newsList.top().left();
         List<News> items = NewsMenuController.getAllNewsForUi();
-
         if (items.isEmpty()) {
             Label empty = new Label("No news yet", skin, "medium_outline");
             empty.setAlignment(Align.center);
@@ -65,7 +63,8 @@ public class NewsMenu extends BaseScreen {
                 newsList.add(headingLabel).width(620).left().padTop(10).padBottom(5).row();
                 newsList.add(body).width(620).left().padBottom(10).row();
                 if (i > 0) {
-                    Label separator = new Label("------------------------------------------------------------", skin, "default");
+                    Label separator = new Label("------------------------------------------------------------",
+                        skin, "default");
                     newsList.add(separator).width(620).center().padBottom(4).row();
                 }
                 index--;

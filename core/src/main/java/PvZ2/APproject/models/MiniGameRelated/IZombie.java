@@ -1,7 +1,6 @@
 package PvZ2.APproject.models.MiniGameRelated;
 
 import PvZ2.APproject.controllers.MiniGameController;
-import PvZ2.APproject.controllers.PlantController;
 import PvZ2.APproject.enums.Commands;
 import PvZ2.APproject.enums.LevelType;
 import PvZ2.APproject.models.GameMapRelated.GameMap;
@@ -128,10 +127,11 @@ public final class IZombie extends MiniGame {
 
     private void setPlant( String name, int column, int row) {
         if (PlantRepository.getInstance().findByName(name) == null) return;
-        getGameMap().getTile(column, row).setPlant(new Plant(PlantRepository.getInstance().findByName(name), column, row, 1));
+        getGameMap().getTile(column, row).setPlant(new Plant(PlantRepository.getInstance().findByName(name),
+            column, row, 1));
     }
 
-    public void Update() {
+    public void update() {
         for (String key : new ArrayList<>(zombieCooldowns.keySet())) {
             int value = Math.max(0, zombieCooldowns.getOrDefault(key, 0) - 1);
             zombieCooldowns.put(key, value);
@@ -154,7 +154,8 @@ public final class IZombie extends MiniGame {
         Pattern pattern = Pattern.compile(Commands.PLACE_ZOMBIE.getPattern());
         Matcher matcher = pattern.matcher(input);
         if (!matcher.matches()) return "invalid command";
-        return placeZombie(matcher.group("name"), Integer.parseInt(matcher.group("x")), Integer.parseInt(matcher.group("y")));
+        return placeZombie(matcher.group("name"), Integer.parseInt(matcher.group("x")),
+            Integer.parseInt(matcher.group("y")));
     }
 
     public String placeZombie(String zombieName, int col, int row) {

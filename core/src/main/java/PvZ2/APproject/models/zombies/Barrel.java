@@ -64,7 +64,8 @@ public class Barrel implements Update {
         plant.setCurrentHp(0);
         if (GameManagerController.getInstance().getCurrentLevel() == null) return;
         GameManagerController.getInstance().getCurrentLevel().getActivePlants().remove(plant);
-        Tile tile = GameManagerController.getInstance().getCurrentLevel().getGameMap().getTile(plant.getX(), plant.getY());
+        Tile tile = GameManagerController.getInstance().getCurrentLevel().getGameMap().getTile(plant.getX(),
+            plant.getY());
         if (tile != null) {
             if (tile.getPlant() == plant) tile.removePlant();
             if (tile.getLilyPadPlant() == plant) tile.setLilyPadPlant(null);

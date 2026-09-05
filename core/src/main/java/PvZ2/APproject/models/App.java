@@ -4,8 +4,6 @@ import PvZ2.APproject.client.MessageType;
 import PvZ2.APproject.client.NetworkClient;
 import PvZ2.APproject.client.Request;
 import PvZ2.APproject.client.Response;
-import PvZ2.APproject.controllers.GameManagerController;
-import PvZ2.APproject.controllers.QuestController;
 import PvZ2.APproject.controllers.SeasonController;
 import PvZ2.APproject.controllers.menus.SignupMenuController;
 import PvZ2.APproject.enums.Gender;
@@ -17,12 +15,8 @@ import PvZ2.APproject.models.plants.PlantRepository;
 import PvZ2.APproject.models.seasons.Season;
 import PvZ2.APproject.models.seasons.SeasonData;
 import PvZ2.APproject.models.seasons.SeasonRepository;
-import PvZ2.APproject.models.zombies.Zombie;
 import PvZ2.APproject.models.zombies.ZombieData;
-import PvZ2.APproject.models.zombies.ZombieRepository;
 
-import java.io.Reader;
-import java.io.Writer;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.IdentityHashMap;
@@ -45,8 +39,8 @@ public class App {
     private static List<Season> allSeasons = new ArrayList<>();
     private static List<ZombieData> allZombies = new ArrayList<>();
     private static List<Lawnmower> allLawnMowers = new ArrayList<>();
-    private static final Map<Season, Boolean> defaultSeasonUnlocks = new IdentityHashMap<>();
-    private static final Map<LevelData, Boolean> defaultLevelUnlocks = new IdentityHashMap<>();
+    private static final Map<Season, Boolean> DEFAULT_SEASON_UNLOCKS = new IdentityHashMap<>();
+    private static final Map<LevelData, Boolean> DEFAULT_LEVEL_UNLOCKS = new IdentityHashMap<>();
 
 
 /// Phase 3 implementation ///
@@ -101,7 +95,8 @@ public class App {
             try {
                 User serverUser = new Gson().fromJson(stateJson, User.class);
                 if (serverUser != null) {
-                    serverUser.setPassword(PvZ2.APproject.controllers.menus.SignupMenuController.hashPassword(loginPassword));
+                    serverUser.setPassword(PvZ2.APproject.controllers.menus.SignupMenuController
+                        .hashPassword(loginPassword));
                     serverUser.setStayLoggedIn(currentUser != null && currentUser.isStayLoggedIn());
                     setCurrentUser(serverUser);
                     return;
@@ -118,10 +113,14 @@ public class App {
         if (data.containsKey("username")) currentUser.setUsername(data.get("username"));
         if (data.containsKey("nickname")) currentUser.setNickname(data.get("nickname"));
         if (data.containsKey("email")) currentUser.setEmail(data.get("email"));
-        if (data.containsKey("coins")) currentUser.setCoinsCount(parseInt(data.get("coins"), currentUser.getCoinsCount()));
-        if (data.containsKey("gems")) currentUser.setGemsCount(parseInt(data.get("gems"), currentUser.getGemsCount()));
-        if (data.containsKey("minigamesWon")) currentUser.setMinigamesWonCount(parseInt(data.get("minigamesWon"), currentUser.getMinigamesWonCount()));
-        if (data.containsKey("highestPoint")) currentUser.setHighestPointAchieved(parseInt(data.get("highestPoint"), currentUser.getHighestPointAchieved()));
+        if (data.containsKey("coins")) currentUser.setCoinsCount(parseInt(data.get("coins"),
+            currentUser.getCoinsCount()));
+        if (data.containsKey("gems")) currentUser.setGemsCount(parseInt(data.get("gems"),
+            currentUser.getGemsCount()));
+        if (data.containsKey("minigamesWon")) currentUser.setMinigamesWonCount(parseInt(data.get("minigamesWon"),
+            currentUser.getMinigamesWonCount()));
+        if (data.containsKey("highestPoint")) currentUser.setHighestPointAchieved(parseInt(data.get("highestPoint"),
+            currentUser.getHighestPointAchieved()));
     }
 
     private static int parseInt(String value, int fallback) {
@@ -147,12 +146,12 @@ public class App {
 
     public static void initialize() {
         allSeasons = new ArrayList<>(SeasonController.getInstance().getActiveSeasons());
-        defaultSeasonUnlocks.clear();
-        defaultLevelUnlocks.clear();
+        DEFAULT_SEASON_UNLOCKS.clear();
+        DEFAULT_LEVEL_UNLOCKS.clear();
         for (Season season : allSeasons) {
-            defaultSeasonUnlocks.put(season, season.isUnlocked());
+            DEFAULT_SEASON_UNLOCKS.put(season, season.isUnlocked());
             if (season.getLevels() != null) {
-                for (LevelData level : season.getLevels()) defaultLevelUnlocks.put(level, level.isUnlocked());
+                for (LevelData level : season.getLevels()) DEFAULT_LEVEL_UNLOCKS.put(level, level.isUnlocked());
             }
         }
         for (User user : users) user.ensureDefaults();
@@ -182,10 +181,10 @@ public class App {
 
     private static void resetSeasonProgress() {
         for (Season season : allSeasons) {
-            season.setUnlocked(defaultSeasonUnlocks.getOrDefault(season, season.getData().isUnlocked()));
+            season.setUnlocked(DEFAULT_SEASON_UNLOCKS.getOrDefault(season, season.getData().isUnlocked()));
             if (season.getLevels() != null) {
                 for (LevelData level : season.getLevels()) {
-                    level.setUnlocked(defaultLevelUnlocks.getOrDefault(level, level.isUnlocked()));
+                    level.setUnlocked(DEFAULT_LEVEL_UNLOCKS.getOrDefault(level, level.isUnlocked()));
                 }
             }
         }
@@ -328,7 +327,8 @@ public class App {
 
     public static List<PlantData> getLockedPlants() {
         List<PlantData> lockedPlants = new ArrayList<>();
-        List<String> unlockedPlants = currentUser == null ? List.of() : currentUser.getCollection().getAvailablePlantsIds();
+        List<String> unlockedPlants = currentUser == null ? List.of() :
+            currentUser.getCollection().getAvailablePlantsIds();
         for (PlantData plant : PlantRepository.getInstance().getAllPlants()) {
             if (!unlockedPlants.contains(plant.getId())) {
                 lockedPlants.add(plant);

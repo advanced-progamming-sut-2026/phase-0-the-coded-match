@@ -35,8 +35,10 @@ public class ExplodeAbility implements PlantAbilityHandler {
                 : Math.abs(zombie.getX() - plant.getX());
             if (rowInRange && distance <= 1.5) zombie.takeDamage(damage, plant);
         }
-        for (int row = Math.max(1, plant.getY() - 1); row <= Math.min(level.getGameMap().getRows(), plant.getY() + 1); row++) {
-            for (int col = Math.max(1, plant.getX() - 1); col <= Math.min(level.getGameMap().getColumns(), plant.getX() + 1); col++) {
+        for (int row = Math.max(1, plant.getY() - 1); row <= Math.min(level.getGameMap().getRows(), plant.getY() + 1);
+             row++) {
+            for (int col = Math.max(1, plant.getX() - 1); col <= Math.min(level.getGameMap().getColumns(), plant.getX()
+                + 1); col++) {
                 Tile tile = level.getGameMap().getTile(col, row);
                 if (tile.isGrave()) tile.takeDamage(damage);
             }

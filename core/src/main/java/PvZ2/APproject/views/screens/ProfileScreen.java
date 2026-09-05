@@ -50,7 +50,8 @@ public class ProfileScreen extends BaseScreen {
         wrapper.add(nicknameTable).width(470).height(62).row();
 
         Table stats = new Table();
-        stats.add(statCard("GAMES PLAYED", App.getCurrentUser().getGamesPlayedCount())).width(145).height(90).padRight(10);
+        stats.add(statCard("GAMES PLAYED", App.getCurrentUser().getGamesPlayedCount())).width(145).
+            height(90).padRight(10);
         stats.add(statCard("LEVELS", App.getCurrentUser().getLevelsCount())).width(145).height(90).padRight(10);
         stats.add(statCard("MEOW POINTS", App.getCurrentUser().getMeowPoints())).width(145).height(90);
         wrapper.add(stats).padTop(8).padBottom(12).row();

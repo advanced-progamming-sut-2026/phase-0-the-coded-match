@@ -35,7 +35,7 @@ public class ZombossData extends ZombieData {
     }
 
     @Override
-    public int getHP() {
+    public int getHp() {
         return 9000;
     }
 

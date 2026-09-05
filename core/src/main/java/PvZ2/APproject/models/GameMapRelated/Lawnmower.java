@@ -7,7 +7,7 @@ public class Lawnmower {
 
     public Lawnmower(int row) { this.row = row; }
     public void trigger() { triggered = true; }
-    public boolean HasBeenUsed() { return hasBeenUsed; }
+    public boolean hasBeenUsed() { return hasBeenUsed; }
     public void setHasBeenUsed(boolean used) { hasBeenUsed = used; }
     public boolean isTriggered() { return triggered; }
     public int getRow(){ return row; }

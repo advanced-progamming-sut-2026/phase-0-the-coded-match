@@ -53,14 +53,16 @@ public class SettingsScreen extends BaseScreen {
             settings.setMusicVolume(value);
             MusicManager.updateVolume();
         }, 84f);
-        addVolumeRow(settingsTable, "SOUND EFFECTS", settings.getSoundEffectsVolume(), settings::setSoundEffectsVolume, 84f);
+        addVolumeRow(settingsTable, "SOUND EFFECTS", settings.getSoundEffectsVolume(),
+            settings::setSoundEffectsVolume, 84f);
     }
 
     private void addNumberRow(Table table, String title, int max, int selected, IntSetting setting, float rowHeight) {
         addNumberRow(table, title, max, selected, setting, rowHeight, 0f);
     }
 
-    private void addNumberRow(Table table, String title, int max, int selected, IntSetting setting, float rowHeight, float topPad) {
+    private void addNumberRow(Table table, String title, int max, int selected, IntSetting setting,
+                              float rowHeight, float topPad) {
         Label label = new Label(title, skin, "medium_outline");
         label.setAlignment(Align.left);
         Table buttons = new Table();
@@ -86,7 +88,8 @@ public class SettingsScreen extends BaseScreen {
         table.row().height(rowHeight);
     }
 
-    private void addToggleRow(Table table, String title, boolean currentValue, BooleanConsumer setter, float rowHeight) {
+    private void addToggleRow(Table table, String title, boolean currentValue, BooleanConsumer setter, float rowHeight)
+    {
         Label label = new Label(title, skin, "medium_outline");
         label.setAlignment(Align.left);
 

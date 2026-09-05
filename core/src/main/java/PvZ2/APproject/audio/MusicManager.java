@@ -30,7 +30,8 @@ public final class MusicManager {
         if (level instanceof IZombie) { play("29."); return; }
         if (level instanceof Zombotany) { play("16."); return; }
         if (level instanceof Beghouled) { play("25."); return; }
-        if (level == null || level.getCurrentSeason() == null || level.getCurrentSeason().getType() == null) { play("20."); return; }
+        if (level == null || level.getCurrentSeason() == null || level.getCurrentSeason().getType() == null)
+        { play("20."); return; }
         SeasonType type = level.getCurrentSeason().getType();
         switch (type) {
             case ANCIENT_EGYPT -> play("20.");

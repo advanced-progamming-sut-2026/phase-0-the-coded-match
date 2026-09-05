@@ -27,7 +27,6 @@ import PvZ2.APproject.models.zombies.*;
 
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -39,7 +38,7 @@ public class GameManagerController {
     private Level currentLevel;
     private boolean gameFinished;
     private static boolean cooldownRemoved;
-    private static final Map<String, Integer> plantCooldowns = new HashMap<>();
+    private static final Map<String, Integer> PLANT_COOLDOWNS = new HashMap<>();
     private static boolean isGameEnded = false;
 
     public static GameManagerController getInstance() {
@@ -66,11 +65,11 @@ public class GameManagerController {
     }
 
     public Map<String, Integer> getPlantCooldowns() {
-        return plantCooldowns;
+        return PLANT_COOLDOWNS;
     }
 
     public void setPlantCooldowns(String plant, int time){
-        plantCooldowns.put(plant, time);
+        PLANT_COOLDOWNS.put(plant, time);
     }
 
     public void setCurrentLevel(Level level) {
@@ -78,7 +77,7 @@ public class GameManagerController {
         gameFinished = false;
         isGameEnded = false;
         cooldownRemoved = false;
-        plantCooldowns.clear();
+        PLANT_COOLDOWNS.clear();
     }
 
     public String updateObjects(float delta) {
@@ -117,7 +116,7 @@ public class GameManagerController {
             currentLevel.getSpecialLevelStrategy().update(currentLevel);
         }
         if (currentLevel instanceof IZombie game) {
-            game.Update();
+            game.update();
         } else if (currentLevel instanceof WallNutBowling game) {
             game.tick();
         } else if (currentLevel instanceof Zombotany game) {
@@ -135,9 +134,9 @@ public class GameManagerController {
         if (cooldownRemoved) {
             return;
         }
-        for (String plantName : plantCooldowns.keySet()) {
-            int remaining = Math.max(0, plantCooldowns.get(plantName) - 1);
-            plantCooldowns.put(plantName, remaining);
+        for (String plantName : PLANT_COOLDOWNS.keySet()) {
+            int remaining = Math.max(0, PLANT_COOLDOWNS.get(plantName) - 1);
+            PLANT_COOLDOWNS.put(plantName, remaining);
         }
     }
 
@@ -270,7 +269,7 @@ public class GameManagerController {
     public void updateSeason(float delta){
         Season season = currentLevel.getCurrentSeason();
         if (season != null) {
-            season.Update(currentLevel, delta);
+            season.update(currentLevel, delta);
         }
     }
 
@@ -345,7 +344,7 @@ public class GameManagerController {
         for (String plantName : currentLevel.getChosenPlants()) {
             PlantData data = repository.findByName(plantName);
             if (data == null) continue;
-            int cooldown = plantCooldowns.getOrDefault(data.getName().toLowerCase(), 0);
+            int cooldown = PLANT_COOLDOWNS.getOrDefault(data.getName().toLowerCase(), 0);
             builder.append(data.getDisplayName()).append(" | cost: ").append(data.getSunCost());
             if (cooldownRemoved || cooldown == 0) {
                 builder.append(" | ready");
@@ -380,7 +379,8 @@ public class GameManagerController {
         builder.append("zombies:\n");
         for (Zombie zombie : currentLevel.getActiveZombies()) {
             if ((int) Math.round(zombie.getX()) == x && zombie.getY() == y) {
-                builder.append(zombie.getData().getDisplayName()).append(" hp: ").append(zombie.getCurrentHp()).append('\n');
+                builder.append(zombie.getData().getDisplayName()).append(" hp: ").
+                    append(zombie.getCurrentHp()).append('\n');
             }
         }
         return builder;
@@ -457,19 +457,12 @@ public class GameManagerController {
     }
 
     public void updateProjectiles() {
-        if (currentLevel == null || currentLevel.getActiveProjectiles() == null) {
-            return;
-        }
+        if (currentLevel == null || currentLevel.getActiveProjectiles() == null) {return;}
         Iterator<Projectile> iterator = currentLevel.getActiveProjectiles().iterator();
         while (iterator.hasNext()) {
             Projectile projectile = iterator.next();
-            if (projectile.isDestroyed()) {
-                iterator.remove();
-                continue;
-            }
-            projectile.move();
-            boolean hit = false;
-            Plant creator = projectile.getCreatorPlantCategory();
+            if (projectile.isDestroyed()) {iterator.remove();continue;}
+            projectile.move();boolean hit = false;Plant creator = projectile.getCreatorPlantCategory();
             if (creator != null) {
                 for (Zombie zombie : currentLevel.getActiveZombies().toArray(new Zombie[0])) {
                     if (projectile.checkZombieCollision(zombie)) {
@@ -597,7 +590,8 @@ public class GameManagerController {
         PlantData data = PlantRepository.getInstance().findByName(plantName);
         Tile tile = level.getGameMap().getTile(x, y);
         if (data == null) return "plant type does not exist";
-        if (tile == null || tile.getPlant() != null || level.hasUnbrokenVaseAt(x, y)) return "cannot plant on this tile";
+        if (tile == null || tile.getPlant() != null || level.hasUnbrokenVaseAt(x, y))
+            return "cannot plant on this tile";
         if (!level.consumeSeedPacket(plantName)) return "seed packet is not available";
         Plant plant = new Plant(data, x, y, 1);
         level.getActivePlants().add(plant);
