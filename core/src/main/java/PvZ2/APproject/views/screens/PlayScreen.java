@@ -534,12 +534,12 @@ public class PlayScreen extends BaseScreen {
 
     public void createPlantBoxes() {
         if (currentLevel instanceof VaseBreaker || currentLevel instanceof IZombie || currentLevel instanceof WallNutBowling || currentLevel instanceof Beghouled) return;
-        float x = 14f;
-        float width = 96f;
-        float gap = 3f;
+        float x = 8f;
+        float width = 122f;
+        float gap = 4f;
         int count = Math.max(1, currentLevel.getChosenPlants().size());
-        float height = Math.min(88f, (VIRTUAL_HEIGHT - 92f - gap * (count - 1)) / count);
-        float y = VIRTUAL_HEIGHT - height - 8f;
+        float height = Math.min(78f, (VIRTUAL_HEIGHT - 64f - gap * (count - 1)) / count);
+        float y = VIRTUAL_HEIGHT - height - 6f;
         for (String plantName : currentLevel.getChosenPlants()) {
             PlantData plantData = PlantRepository.getInstance().findByName(plantName);
             if(plantData == null){
@@ -1122,6 +1122,7 @@ public class PlayScreen extends BaseScreen {
             float width = nut.getNutType() == BowlingNutType.GIANT_WALLNUT ? 96f : 70f;
             float height = nut.getNutType() == BowlingNutType.GIANT_WALLNUT ? 115f : 88f;
             actor.setSize(width, height);
+            actor.setRotation((float) (-(nut.getXCoordinate() - 1.0) * 240.0));
             actor.setPosition(BOARD_X + (float) (nut.getXCoordinate() - 1) * TILE_WIDTH + (TILE_WIDTH - width) / 2f,
                 BOARD_Y + (float) (nut.getYCoordinate() - 1) * TILE_HEIGHT + (TILE_HEIGHT - height) / 2f);
         }

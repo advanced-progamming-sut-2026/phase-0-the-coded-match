@@ -47,14 +47,14 @@ public class ProjectileView extends Actor {
         super.act(delta);
         setPosition(
             PlayScreen.BOARD_X + ((float) projectile.getxCoordinate() - 1f) * PlayScreen.TILE_WIDTH + PlayScreen.TILE_WIDTH * 0.5f,
-            PlayScreen.BOARD_Y + ((float) projectile.getyCoordinate() - 1f) * PlayScreen.TILE_HEIGHT + PlayScreen.TILE_HEIGHT * 0.5f
+            PlayScreen.BOARD_Y + ((float) projectile.getyCoordinate() - 1f) * PlayScreen.TILE_HEIGHT + PlayScreen.TILE_HEIGHT * 0.67f
         );
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
         if (loaded) {
-            player.draw(batch, pamPath, clip, playScreen.getStateTime(), getX(), getY(), 0.45f, 0.45f, true);
+            player.draw(batch, pamPath, clip, playScreen.getStateTime(), getX(), getY(), 0.52f, 0.52f, true);
         }
     }
 }

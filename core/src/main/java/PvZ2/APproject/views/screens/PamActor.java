@@ -4,6 +4,7 @@ import PvZ2.APproject.Main;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -74,7 +75,22 @@ public class PamActor extends Actor {
 
         float x = getX() + getWidth() / 2f;
         float y = getY() + getHeight() / 2f;
-        player.draw(batch, pamPath, clip, stateTime, x, y, scale, scale, true);
+        float rotation = getRotation();
+        if (rotation == 0f) {
+            player.draw(batch, pamPath, clip, stateTime, x, y, scale, scale, true);
+            return;
+        }
+        Matrix4 original = new Matrix4(batch.getTransformMatrix());
+        Matrix4 rotated = new Matrix4(original);
+        rotated.translate(x, y, 0f);
+        rotated.rotate(0f, 0f, 1f, rotation);
+        rotated.translate(-x, -y, 0f);
+        batch.setTransformMatrix(rotated);
+        try {
+            player.draw(batch, pamPath, clip, stateTime, x, y, scale, scale, true);
+        } finally {
+            batch.setTransformMatrix(original);
+        }
     }
 
     private void finishLoading() {
